@@ -1,0 +1,21 @@
+.mint-searchbar {
+  padding: 13px 20px;
+  background-color: rgb(255,215,59);
+  .mint-searchbar-inner {
+    box-sizing: border-box;
+    padding: 10px 10px;
+    border-radius: 10px;
+    height: 70px;
+    .mintui-search {
+      font-size: 40px;
+      margin-right: 20px;
+    }
+    input {
+      font-size: 30px;
+    }
+  }
+  .mint-searchbar-cancel {
+    color: #fff;
+    font-size: 30px;
+  }
+}

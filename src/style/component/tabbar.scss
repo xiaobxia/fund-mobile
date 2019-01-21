@@ -1,0 +1,28 @@
+.mint-tabbar {
+  border-top: 1px solid $border-color;
+  background-color: $body-color;
+  color: $lighter-text-color;
+  .mint-tab-item {
+    height: 90px;
+    padding: 5px 0;
+    &.is-selected {
+      background-color: $body-color;
+      .mint-tab-item-icon, .mint-tab-item-label {
+        color: $active-color;
+      }
+    }
+  }
+  .mint-tab-item-icon {
+    margin: 0 auto;
+    width: 65px;
+    height: 65px;
+    font-size: 50px;
+  }
+  .mint-tab-item-label {
+    font-size: 20px;
+    color: $light-text-color;
+    p {
+      margin: 0;
+    }
+  }
+}

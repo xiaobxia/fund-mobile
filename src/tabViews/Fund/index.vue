@@ -78,7 +78,7 @@
           <div class="bottom">幅度策略</div>
         </div>
       </div>
-      <div class="img-card" @click="toPath('/page/averageStrategy')">
+      <div class="img-card" @click="toPath('/page/averageIndex')">
         <!--<img src="../../assets/800_600_dribbble_icons.jpg" alt="">-->
         <div class="container">
           <div class="content">

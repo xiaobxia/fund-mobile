@@ -42,6 +42,7 @@
 import storageUtil from '@/util/storageUtil.js'
 import Mine from '@/tabViews/Mine/index.vue'
 import Index from '@/tabViews/Index/index.vue'
+import Fund from '@/tabViews/Fund/index.vue'
 
 export default {
   name: 'App',
@@ -67,7 +68,7 @@ export default {
       }
     }
   },
-  components: {Index, Mine},
+  components: {Index, Mine, Fund},
   mounted () {
     this.initPage()
     setInterval(() => {
@@ -109,16 +110,20 @@ export default {
             isLogin: false
           })
           const user = storageUtil.getUserInfo()
+          this.ifChecked = true
           if (user.isLogin !== true) {
             this.$router.push('/page/login')
           }
         } else {
+          this.$http.get('userFund/getUserFundAccountInfo').then((res) => {
+            storageUtil.initUserFundAccountInfo(res.data)
+            this.ifChecked = true
+          })
           storageUtil.initUserInfo({
             ...data.data,
             isLogin: true
           })
         }
-        this.ifChecked = true
       })
     },
     checkSubPath (path) {

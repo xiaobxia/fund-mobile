@@ -1,0 +1,58 @@
+.index-detail {
+  .index-rate {
+    padding: 20px;
+    text-align: center;
+    font-size: 30px;
+  }
+  .tag-info {
+    padding: 20px;
+    font-size: 26px;
+    text-align: center;
+    span {
+      margin-right: 40px;
+    }
+    i {
+      margin-right: 10px;
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border-radius: 20px;
+    }
+    .lock-info {
+      i {
+        background-color: $red-color;
+      }
+    }
+  }
+  .simple {
+    i {
+      margin: 0;
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border-radius: 20px;
+    }
+    .buysell {
+      margin: 8px 0 0 0;
+      span {
+        display: inline-block;
+        width: 33%;
+        text-align: center;
+        &:first-child{
+          text-align: left;
+        }
+        &:last-child{
+          text-align: right;
+        }
+      }
+    }
+  }
+  .today-info-wrap{
+    padding: 30px;
+    .item{
+      font-size: 30px;
+      display: inline-block;
+      width: 48%;
+    }
+  }
+}

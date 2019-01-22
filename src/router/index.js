@@ -40,6 +40,26 @@ const routers = [
     component: lazyLoading('MyProportion')
   },
   {
+    name: 'MyFund',
+    path: '/page/myFund',
+    component: lazyLoading('MyFund')
+  },
+  {
+    name: 'FundDetail',
+    path: '/page/fundDetail',
+    component: lazyLoading('FundDetail')
+  },
+  {
+    name: 'OperatingInfo',
+    path: '/page/operatingInfo',
+    component: lazyLoading('OperatingInfo')
+  },
+  {
+    name: 'IndexDetail',
+    path: '/page/indexDetail',
+    component: lazyLoading('IndexDetail')
+  },
+  {
     name: '404',
     path: '*',
     component: lazyLoading('NotMatch')

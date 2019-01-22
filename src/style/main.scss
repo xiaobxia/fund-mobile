@@ -19,6 +19,10 @@
 @import "tabViews/mine";
 @import "page/login";
 @import "page/my-proportion";
+@import "page/my-fund";
+@import "page/fund-detail";
+@import "page/operating-info";
+@import "page/index-detail";
 
 body {
   margin: 0;
@@ -85,6 +89,16 @@ body {
 
 .has-back {
   background-color: rgb(231,244,250);
+}
+
+.lock-tag {
+  background-color: $red-color;
+}
+.position-tag {
+  background-color: $purple-color
+}
+.dingtou-tag {
+  background-color: #aaa;
 }
 
 ul {

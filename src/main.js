@@ -32,7 +32,6 @@ Vue.prototype.formatFundName = function (name, len) {
   len = len || 12
   if (name.length > len) {
     const lastChart = name.substr(name.length - 1)
-    console.log(lastChart)
     if (lastChart === 'A' || lastChart === 'C') {
       return name.substr(0, (len - 2)) + '...' + lastChart
     }
@@ -42,16 +41,8 @@ Vue.prototype.formatFundName = function (name, len) {
   }
 }
 
-Vue.prototype.countDifferenceRate = function (numerator, denominator) {
-  return numberUtil.countDifferenceRate(numerator, denominator)
-}
-
-Vue.prototype.countDifferenceRate = function (numerator, denominator) {
-  return numberUtil.countDifferenceRate(numerator, denominator)
-}
-
-Vue.prototype.keepTwoDecimals = function (number) {
-  return numberUtil.keepTwoDecimals(number)
+for (let key in numberUtil) {
+  Vue.prototype[key] = numberUtil[key]
 }
 
 /* eslint-disable no-new */

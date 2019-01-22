@@ -1,0 +1,53 @@
+.fund-detail {
+  .info-wrap {
+    color: $light-text-color;
+    padding: 30px 0;
+    font-size: 34px;
+    span {
+      padding-left: 30px;
+      font-size: 34px;
+    }
+    &.green {
+      background-color: $green-color;
+      color: #fff;
+    }
+    &.red {
+      background-color: $red-color;
+      color: #fff;
+    }
+  }
+  .item {
+    display: inline-block;
+    width: 49%;
+    box-sizing: border-box;
+  }
+  .warn {
+    color: $red-color;
+  }
+  .theme-wrap {
+    padding: 20px 30px;
+    font-size: 30px;
+    span {
+
+    }
+    button {
+      float: right;
+      width: auto;
+      height: auto;
+    }
+  }
+  .theme-list {
+    margin: 0;
+    padding: 0;
+    font-size: 30px;
+    .theme-item {
+      display: block;
+      margin: 0;
+      padding: 20px 30px;
+      border-bottom: 1px solid $border-color;
+      text-align: center;
+    }
+  }
+  .mint-popup-bottom {
+  }
+}

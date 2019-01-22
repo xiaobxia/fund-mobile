@@ -35,13 +35,15 @@
 import Http from '@/util/httpUtil.js'
 import numberUtil from '@/util/numberUtil.js'
 import indexInfoUtilXiong from '@/util/indexInfoUtilXiong.js'
+import indexInfoUtilJian from '@/util/indexInfoUtilJian.js'
 import stockDataUtil from '@/util/stockDataUtil.js'
 import fundAccountUtil from '@/util/fundAccountUtil.js'
 
 const codeMap = indexInfoUtilXiong.codeMap
-const InfoUtil = indexInfoUtilXiong.Util
-const fnMap = indexInfoUtilXiong.fnMap
 const formatData = indexInfoUtilXiong.formatData
+
+let InfoUtil = indexInfoUtilXiong.Util
+let fnMap = indexInfoUtilXiong.fnMap
 
 const zoom = window.adaptive.zoom
 const baseFontSize = 22
@@ -106,7 +108,8 @@ export default {
       sameList: [],
       list: [],
       indexChangeRatio: 0,
-      pointType: ''
+      pointType: '',
+      type: 'xiong'
     }
   },
 
@@ -177,6 +180,15 @@ export default {
     }
   },
   mounted () {
+    const query = this.$router.history.current.query
+    this.type = query.type
+    if (query.type === 'jian') {
+      InfoUtil = indexInfoUtilJian.Util
+      fnMap = indexInfoUtilJian.fnMap
+    } else {
+      InfoUtil = indexInfoUtilXiong.Util
+      fnMap = indexInfoUtilXiong.fnMap
+    }
     this.initPage()
   },
 

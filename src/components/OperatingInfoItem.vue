@@ -10,9 +10,6 @@
         <span v-if="positionWarn === 'danger'" class="danger-tag">危仓</span>
         <span v-if="positionWarn === 'warn'" class="warn-tag">高仓</span>
         <span style="float: right" :class="numberClass(rate)">{{rate}}%</span>
-        <!--<span style="float: right" v-if="indexInfo.stable" class="stable-tag">稳定</span>-->
-        <!--<span style="float: right" v-if="indexInfo.noLong" class="no-long-tag">短期</span>-->
-        <!--<span style="float: right" v-if="indexInfo.incomeHighRate" class="incomeHighRate-tag">高增</span>-->
       </h3>
       <p class="explain">
             <span v-for="(subItem, index) in buySellList" :key="subItem + index"

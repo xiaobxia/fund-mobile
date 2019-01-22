@@ -250,9 +250,9 @@ export default {
           this.firstClass[item.key] = buySellList[0]
           this.rateMap[item.key] = numberUtil.keepTwoDecimals(recentNetValue[0].netChangeRatio)
           if (this.type === 'jian') {
-            storageUtil.setXiong(item.key, buySellList[0])
-          } else {
             storageUtil.setJian(item.key, buySellList[0])
+          } else {
+            storageUtil.setXiong(item.key, buySellList[0])
           }
         }
       })

@@ -90,6 +90,11 @@ const routers = [
     component: lazyLoading('Market')
   },
   {
+    name: 'Schedule',
+    path: '/page/schedule',
+    component: lazyLoading('Schedule')
+  },
+  {
     name: '404',
     path: '*',
     component: lazyLoading('NotMatch')

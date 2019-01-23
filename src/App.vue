@@ -43,6 +43,7 @@ import storageUtil from '@/util/storageUtil.js'
 import Mine from '@/tabViews/Mine/index.vue'
 import Index from '@/tabViews/Index/index.vue'
 import Fund from '@/tabViews/Fund/index.vue'
+import ConfigCenter from '@/tabViews/ConfigCenter/index.vue'
 
 export default {
   name: 'App',
@@ -68,7 +69,7 @@ export default {
       }
     }
   },
-  components: {Index, Mine, Fund},
+  components: {Index, Mine, Fund, ConfigCenter},
   mounted () {
     this.initPage()
     setInterval(() => {

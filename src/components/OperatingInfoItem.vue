@@ -27,17 +27,16 @@
         <p v-if="rate <= -3">是否有利空？是就先不接，标记利空，不是也不要接太多</p>
       </div>
       <div class="left-tag">
-        <span v-if="lowSell && hasCount > 0" class="low-sell top"><i class="fas fa-long-arrow-alt-down"></i></span>
+        <span v-if="flagTrue === 'sell' && hasCount > 0" class="low-sell top"><i class="fas fa-long-arrow-alt-down"></i></span>
+        <span v-if="flagTrue === 'buy' && hasCount > 0" class="up-buy top"><i class="fas fa-long-arrow-alt-up"></i></span>
         <span v-if="ifStepUp" class="up-tag red-text mid"><i class="fas fa-level-up-alt"></i></span>
         <span v-if="ifStepDown" class="down-tag green-text mid"><i class="fas fa-level-down-alt"></i></span>
         <span v-if="changeMarket" class="change-tag bottom"><i class="fas fa-exchange-alt"></i></span>
       </div>
       <div class="right-tag">
         <span v-if="lock" class="lock-tag top"></span>
-        <span class="bottom buysell">
-          <i v-if="otherBuySell === 'buy'" class="red-text fas fa-shopping-cart"></i>
-          <i v-if="otherBuySell === 'sell'" class="green-text fas fa-sign-out-alt"></i>
-        </span>
+        <span v-if="indexAverage > 0" class="up-tag red-text mid"><i class="fas fa-angle-double-up"></i></span>
+        <span v-if="indexAverage < 0" class="down-tag green-text mid"><i class="fas fa-angle-double-up"></i></span>
       </div>
     </div>
   </mt-cell-swipe>
@@ -91,10 +90,7 @@ export default {
       type: Boolean,
       default: false
     },
-    lowSell: {
-      type: Boolean,
-      default: false
-    },
+    flagTrue: String,
     marketWarn: {
       type: String
     },
@@ -110,13 +106,6 @@ export default {
     changeMarket () {
       return storageUtil.getChangeMarket(this.indexInfo.key) || false
     },
-    otherBuySell () {
-      if (this.type === '简') {
-        return storageUtil.getXiong(this.indexInfo.key)
-      } else {
-        return storageUtil.getJian(this.indexInfo.key)
-      }
-    },
     otherBuySellList () {
       if (this.type === '简') {
         return storageUtil.getXiongBuySellList(this.indexInfo.key)
@@ -129,6 +118,9 @@ export default {
     },
     ifStepDown () {
       return operatingTooltip.ifStepDown(this.netChangeRatioList, this.closeList)
+    },
+    indexAverage () {
+      return storageUtil.getAverage(this.indexInfo.key) || 0
     }
   },
   mounted () {

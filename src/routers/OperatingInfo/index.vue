@@ -29,7 +29,7 @@
         :marketWarn="marketWarnMap[item.key]"
         :positionWarn="positionWarnMap[item.key]"
         :netChangeRatioList="netChangeRatioMap[item.key]"
-        :lowSell="lowSellMap[item.key]"
+        :flagTrue="flagTrueMap[item.key]"
         :closeList="closeListMap[item.key]"
         :type="typeName"
       />
@@ -64,7 +64,7 @@ export default {
     let buySellMap = {}
     let netChangeRatioMap = {}
     let closeListMap = {}
-    let lowSellMap = {}
+    let flagTrueMap = {}
     let list = []
     let firstClass = {}
     let marketWarnMap = {}
@@ -83,7 +83,7 @@ export default {
       netChangeRatioMap[key] = []
       firstClass[key] = ''
       marketWarnMap[key] = ''
-      lowSellMap[key] = false
+      flagTrueMap[key] = ''
       positionWarnMap[key] = ''
       rateMap[key] = 0
       lockMap[codeMap[key].name] = false
@@ -101,7 +101,7 @@ export default {
       lockMap,
       hasCount,
       marketWarnMap,
-      lowSellMap,
+      flagTrueMap,
       positionWarnMap,
       myAsset: userFundAccountInfo.pre_asset,
       // 持有金额，不计入定投
@@ -244,15 +244,13 @@ export default {
           this.positionWarnMap[item.key] = operatingTooltip.getPositionWarn(item, this.myAsset, this.totalSum, this.hasCount[item.name])
           this.buySellMap[item.key] = buySellList
           this.closeListMap[item.key] = closeList
-          this.lowSellMap[item.key] = operatingTooltip.ifLowSell(buySellList, closeList)
+          this.flagTrueMap[item.key] = operatingTooltip.ifFlagTrue(buySellList, closeList)
           this.netChangeRatioMap[item.key] = netChangeRatioList
           this.firstClass[item.key] = buySellList[0]
           this.rateMap[item.key] = numberUtil.keepTwoDecimals(recentNetValue[0].netChangeRatio)
           if (this.type === 'jian') {
-            storageUtil.setJian(item.key, buySellList[0])
             storageUtil.setJianBuySellList(item.key, buySellList)
           } else {
-            storageUtil.setXiong(item.key, buySellList[0])
             storageUtil.setXiongBuySellList(item.key, buySellList)
           }
         }

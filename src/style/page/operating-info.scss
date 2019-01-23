@@ -226,11 +226,16 @@
     display: block;
     background-color: $red-color;
   }
-  .low-sell {
+  .low-sell, .up-buy {
     width: 20px;
     height: 30px;
     display: block;
+  }
+  .low-sell {
     color: $green-color;
+  }
+  .up-buy {
+    color: $red-color;
   }
   .buysell {
     width: 20px;

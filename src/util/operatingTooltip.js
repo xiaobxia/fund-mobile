@@ -60,10 +60,13 @@ const operatingTooltip = {
     }
     return ''
   },
-  // 是否低于卖出信号时的点位
-  ifLowSell (buySellList, closeList) {
+  // 是否低于卖出信号时的点位,高于买入时的点位
+  ifFlagTrue (buySellList, closeList) {
     let firstFlag = ''
     let flagIndex = 0
+    if (buySellList[0] !== '') {
+      return ''
+    }
     for (let i = 1; i < buySellList.length; i++) {
       if (buySellList[i] !== '') {
         firstFlag = buySellList[i]
@@ -73,10 +76,15 @@ const operatingTooltip = {
     }
     if (firstFlag === 'sell') {
       if (closeList[flagIndex] > closeList[0]) {
-        return true
+        return 'sell'
       }
     }
-    return false
+    if (firstFlag === 'buy') {
+      if (closeList[flagIndex] < closeList[0]) {
+        return 'buy'
+      }
+    }
+    return ''
   },
   ifStepUp (netChangeRatioList, closeList) {
     if (netChangeRatioList[0] < 0 && netChangeRatioList[1] > 0 && netChangeRatioList[2] < 0 && netChangeRatioList[3] > 0) {

@@ -95,6 +95,31 @@ const routers = [
     component: lazyLoading('Schedule')
   },
   {
+    name: 'DataConfig',
+    path: '/page/dataConfig',
+    component: lazyLoading('DataConfig')
+  },
+  {
+    name: 'Principle',
+    path: '/page/principle',
+    component: lazyLoading('Principle')
+  },
+  {
+    name: 'MyAsset',
+    path: '/page/myAsset',
+    component: lazyLoading('MyAsset')
+  },
+  {
+    name: 'GoodBad',
+    path: '/page/goodBad',
+    component: lazyLoading('GoodBad')
+  },
+  {
+    name: 'MyFundAdd',
+    path: '/page/myFundAdd',
+    component: lazyLoading('MyFundAdd')
+  },
+  {
     name: '404',
     path: '*',
     component: lazyLoading('NotMatch')

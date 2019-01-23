@@ -1,0 +1,77 @@
+.my-fund-add {
+  .strategy-wrap {
+    padding: 20px 30px;
+    font-size: 30px;
+    span {
+
+    }
+    button {
+      float: right;
+      width: auto;
+      height: auto;
+    }
+  }
+  .strategy-list {
+    margin: 0;
+    padding: 0;
+    font-size: 30px;
+    .strategy-item {
+      display: block;
+      margin: 0;
+      padding: 20px 30px;
+      border-bottom: 1px solid $border-color;
+      text-align: center;
+    }
+  }
+  .mint-popup-bottom {
+  }
+  .infoP {
+    padding-left: 30px;
+    font-size: 30px;
+  }
+  .position_record_list {
+    margin-bottom: 20px;
+    padding: 30px;
+    font-size: 30px;
+    p{
+      display: inline-block;
+      margin: 0;
+      padding: 5px 0;
+      font-size: 30px;
+    }
+    i {
+      margin-left: 10px;
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border-radius: 20px;
+    }
+    .lock-tag {
+      background-color: $red-color;
+    }
+  }
+  .sell-list {
+    padding: 30px;
+    font-size: 30px;
+    p{
+      display: block;
+      margin: 0;
+      padding: 5px 0;
+      font-size: 30px;
+    }
+  }
+  .shares-info-list {
+    margin-bottom: 100px;
+    padding: 30px;
+    font-size: 30px;
+    p{
+      display: block;
+      margin: 0;
+      padding: 5px 0;
+      font-size: 30px;
+      span {
+        float: right;
+      }
+    }
+  }
+}

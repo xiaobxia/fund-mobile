@@ -31,10 +31,8 @@
 </template>
 
 <script>
-import Http from '@/util/httpUtil.js'
 import qs from 'qs'
 import moment from 'moment'
-import numberUtil from '@/util/numberUtil.js'
 import storageUtil from '@/util/storageUtil.js'
 import stockDataUtil from '@/util/stockDataUtil.js'
 
@@ -197,7 +195,7 @@ export default {
         asset += hasCount
       }
       income = parseInt((income / 100) * 0.95)
-      return numberUtil.countRate(income, asset)
+      return this.countRate(income, asset)
     },
     incomeRelativeRate () {
       if (this.myAsset === 0) {
@@ -208,14 +206,14 @@ export default {
         income += this.rateInfo[key] * (this.hasCount[codeMap[key].name] || 0)
       }
       income = parseInt((income / 100) * 0.95)
-      return numberUtil.countRate(income, this.myAsset)
+      return this.countRate(income, this.myAsset)
     }
   },
   beforeDestroy () {
     clearInterval(this.timer)
   },
   mounted () {
-    Http.get('fund/getUserFundsNormal').then((data) => {
+    this.$http.get('fund/getUserFundsNormal').then((data) => {
       if (data.success) {
         const list = data.data.list
         for (let i = 0; i < list.length; i++) {
@@ -240,7 +238,7 @@ export default {
   methods: {
     initPage () {
       // 最新的
-      Http.get('fund/getUserNetValue').then((res) => {
+      this.$http.get('userFund/getUserLastNetValue').then((res) => {
         const nowNetValue = res.data.record
         if (nowNetValue) {
           this.lastNetValue = nowNetValue
@@ -276,9 +274,8 @@ export default {
               shares: this.fundShares,
               net_value_date: moment().format('YYYY-MM-DD')
             }
-            let url = moment(netValueDate).isSame(this.tradeTime, 'day') ? 'fund/updateUserNetValue' : 'fund/addUserNetValue'
-            Http.post(url, form).then((data) => {
-            })
+            let url = moment(netValueDate).isSame(this.tradeTime, 'day') ? 'userFund/updateUserNetValue' : 'userFund/addUserNetValue'
+            this.$http.post(url, form)
           }
         }
       }
@@ -287,7 +284,7 @@ export default {
       return qs.stringify(query)
     },
     queryData (item) {
-      return Http.getWithCache(`webData/${stockDataUtil.getTodayUrl()}`, {
+      return this.$http.getWithCache(`webData/${stockDataUtil.getTodayUrl()}`, {
         code: item.code
       }, {interval: 30}).then((data) => {
         if (data.success) {
@@ -296,7 +293,7 @@ export default {
           }
           const netChangeRatio = parseFloat(data.data.netChangeRatio)
           this.sortRate[item.key] = netChangeRatio
-          this.rateInfo[item.key] = numberUtil.keepTwoDecimals(netChangeRatio)
+          this.rateInfo[item.key] = this.keepTwoDecimals(netChangeRatio)
           let lastRateJson = storageUtil.getIndexRate(item.key)
           // 上次的数据
           let indexRateInfo = ''

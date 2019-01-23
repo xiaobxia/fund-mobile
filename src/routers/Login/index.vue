@@ -14,7 +14,6 @@
 </template>
 
 <script>
-import Http from '@/util/httpUtil.js'
 import md5 from 'md5'
 import storageUtil from '@/util/storageUtil.js'
 import Toast from '@/common/toast.js'
@@ -35,7 +34,7 @@ export default {
     initPage () {
     },
     loginHandler () {
-      Http.post('auth/login', {account: this.account, password: md5(this.password), platform: 'pc'}).then((data) => {
+      this.$http.post('auth/login', {account: this.account, password: md5(this.password), platform: 'pc'}).then((data) => {
         if (data.success) {
           window._token = data.data.token
           localStorage.setItem('token', data.data.token)

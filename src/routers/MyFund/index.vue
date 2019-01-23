@@ -29,7 +29,6 @@
 
 <script>
 import moment from 'moment'
-import Http from '@/util/httpUtil.js'
 import MyFundCard from '@/components/MyFundCard.vue'
 import fundAccountUtil from '@/util/fundAccountUtil.js'
 import indexInfoUtil from '@/util/indexInfoUtilXiong.js'
@@ -123,7 +122,7 @@ export default {
       }
       dataMap['其他'] = []
       dataMap['定投'] = []
-      Http.get('userFund/getUserFunds').then((res) => {
+      this.$http.get('userFund/getUserFunds').then((res) => {
         const list = res.data.list
         let lockCostSum = 0
         let lockValuationSum = 0
@@ -170,7 +169,7 @@ export default {
     },
     queryStockData () {
       // 沪深300
-      Http.getWithCache(`webData/${stockDataUtil.getTodayUrl()}`, {
+      this.$http.getWithCache(`webData/${stockDataUtil.getTodayUrl()}`, {
         code: 'sh000300'
       }, {interval: 60}).then((data) => {
         if (data.success) {
@@ -178,7 +177,7 @@ export default {
         }
       })
       // 创业板
-      Http.getWithCache(`webData/${stockDataUtil.getTodayUrl()}`, {
+      this.$http.getWithCache(`webData/${stockDataUtil.getTodayUrl()}`, {
         code: 'sz399006'
       }, {interval: 60}).then((data) => {
         if (data.success) {
@@ -186,7 +185,7 @@ export default {
         }
       })
       // 上证50
-      Http.getWithCache(`webData/${stockDataUtil.getTodayUrl()}`, {
+      this.$http.getWithCache(`webData/${stockDataUtil.getTodayUrl()}`, {
         code: 'sh000016'
       }, {interval: 60}).then((data) => {
         if (data.success) {

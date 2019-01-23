@@ -16,7 +16,6 @@
   </div>
 </template>
 <script>
-import Http from '@/util/httpUtil.js'
 import indexInfoUtilXiong from '@/util/indexInfoUtilXiong.js'
 
 const codeMap = indexInfoUtilXiong.codeMap
@@ -43,7 +42,7 @@ export default{
   },
   methods: {
     queryRecord () {
-      Http.get('userFund/getUserFunds').then((data) => {
+      this.$http.get('userFund/getUserFunds').then((data) => {
         if (data.success) {
           const list = data.data.list
           let totalSum = 0

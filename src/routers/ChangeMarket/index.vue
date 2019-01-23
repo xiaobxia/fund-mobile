@@ -29,7 +29,6 @@
 </template>
 
 <script>
-import Http from '@/util/httpUtil.js'
 import changeMarket from '@/util/changeMarket.js'
 import stockDataUtil from '@/util/stockDataUtil.js'
 import storageUtil from '@/util/storageUtil.js'
@@ -77,7 +76,7 @@ export default {
       }
     },
     queryData (item) {
-      Http.getWithCache(`webData/${stockDataUtil.getAllUrl()}`, {
+      this.$http.getWithCache(`webData/${stockDataUtil.getAllUrl()}`, {
         code: item.code,
         days: 10
       }, {interval: 60}).then((data) => {

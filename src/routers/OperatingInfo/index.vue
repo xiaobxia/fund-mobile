@@ -40,11 +40,9 @@
 </template>
 
 <script>
-import Http from '@/util/httpUtil.js'
 import indexInfoUtilXiong from '@/util/indexInfoUtilXiong.js'
 import indexInfoUtilJian from '@/util/indexInfoUtilJian.js'
 import qs from 'qs'
-import numberUtil from '@/util/numberUtil.js'
 import storageUtil from '@/util/storageUtil.js'
 import stockDataUtil from '@/util/stockDataUtil.js'
 import operatingTooltip from '@/util/operatingTooltip.js'
@@ -163,11 +161,11 @@ export default {
   methods: {
     initPage () {
       let indexList = this.list
-      Http.get('userFund/getUserNetValueNowMonthRate').then((res) => {
+      this.$http.get('userFund/getUserNetValueNowMonthRate').then((res) => {
         this.nowMonthRate = res.data.rate
       })
       Promise.all([
-        Http.get('userFund/getUserFunds').then((data) => {
+        this.$http.get('userFund/getUserFunds').then((data) => {
           if (data.success) {
             const list = data.data.list
             let totalSum = 0
@@ -207,7 +205,7 @@ export default {
       return qs.stringify(query)
     },
     queryData (item) {
-      Http.getWithCache(`webData/${stockDataUtil.getAllUrl()}`, {
+      this.$http.getWithCache(`webData/${stockDataUtil.getAllUrl()}`, {
         code: item.code,
         days: 10
       }, {interval: 60}).then((data) => {
@@ -251,7 +249,7 @@ export default {
           this.flagTrueMap[item.key] = operatingTooltip.ifFlagTrue(buySellList, closeList)
           this.netChangeRatioMap[item.key] = netChangeRatioList
           this.firstClass[item.key] = buySellList[0]
-          this.rateMap[item.key] = numberUtil.keepTwoDecimals(recentNetValue[0].netChangeRatio)
+          this.rateMap[item.key] = this.keepTwoDecimals(recentNetValue[0].netChangeRatio)
           if (this.type === 'jian') {
             storageUtil.setJianBuySellList(item.key, buySellList)
           } else {

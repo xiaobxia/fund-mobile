@@ -41,8 +41,6 @@
 </template>
 
 <script>
-import Http from '@/util/httpUtil.js'
-import numberUtil from '@/util/numberUtil.js'
 import fundAccountUtil from '@/util/fundAccountUtil.js'
 import moment from 'moment'
 import Toast from '@/common/toast.js'
@@ -104,7 +102,7 @@ export default {
       this.type = query.type
       const code = this.$router.history.current.query.code
       // 判断是否有持仓
-      Http.get('userFund/getUserFund', {
+      this.$http.get('userFund/getUserFund', {
         code: code
       }).then((res) => {
         if (res.success === true && res.data.code) {
@@ -119,9 +117,6 @@ export default {
           }
         }
       })
-    },
-    countRate (a, b) {
-      return numberUtil.countDifferenceRate(a || 1, b || 1)
     },
     toPath (path) {
       this.$router.push(path)
@@ -155,7 +150,7 @@ export default {
     },
     updateFundTheme (theme) {
       const code = this.$router.history.current.query.code
-      Http.post('fund/updateFundTheme', {theme, code})
+      this.$http.post('fund/updateFundTheme', {theme, code})
     },
     themeChangeHandler () {
       this.popupVisible = true

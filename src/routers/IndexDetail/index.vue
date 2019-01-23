@@ -32,8 +32,6 @@
 </template>
 
 <script>
-import Http from '@/util/httpUtil.js'
-import numberUtil from '@/util/numberUtil.js'
 import indexInfoUtilXiong from '@/util/indexInfoUtilXiong.js'
 import indexInfoUtilJian from '@/util/indexInfoUtilJian.js'
 import stockDataUtil from '@/util/stockDataUtil.js'
@@ -196,7 +194,7 @@ export default {
     initPage () {
       const query = this.$router.history.current.query
       this.queryData = Object.assign({}, query)
-      Http.get(`webData/${stockDataUtil.getAllUrl()}`, {
+      this.$http.get(`webData/${stockDataUtil.getAllUrl()}`, {
         code: query.code,
         days: 200
       }).then((data) => {
@@ -209,7 +207,7 @@ export default {
             wave: parseFloat(query.wave)
           })
           const infoList = info.list
-          this.indexChangeRatio = numberUtil.keepTwoDecimals(infoList[0].netChangeRatio) || 0
+          this.indexChangeRatio = this.keepTwoDecimals(infoList[0].netChangeRatio) || 0
           const recentNetValue = infoList
           this.netValue = infoList
           // 近的在前
@@ -272,7 +270,7 @@ export default {
     },
     queryRecord () {
       const query = this.$router.history.current.query
-      Http.get('userFund/getFundsByThemeWithUserFund', {theme: query.name}).then((res) => {
+      this.$http.get('userFund/getFundsByThemeWithUserFund', {theme: query.name}).then((res) => {
         let funds = res.data.list
         funds.sort((a, b) => {
           return b.change_ratio - a.change_ratio

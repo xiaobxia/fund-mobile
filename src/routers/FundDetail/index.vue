@@ -107,13 +107,15 @@ export default {
       }).then((res) => {
         if (res.success === true && res.data.code) {
           const userFund = res.data
-          this.canSellInfo = fundAccountUtil.getUnLockInfo(userFund)
           this.currentFund = userFund
           this.filterTheme = userFund.theme || '未设置'
-          this.type = 'edit'
-          this.queryData = {
-            type: 'edit',
-            code
+          if (userFund.position_record) {
+            this.canSellInfo = fundAccountUtil.getUnLockInfo(userFund)
+            this.type = 'edit'
+            this.queryData = {
+              type: 'edit',
+              code
+            }
           }
         }
       })

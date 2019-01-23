@@ -11,15 +11,6 @@
           <div class="bottom">定投策略</div>
         </div>
       </div>
-      <!--<div class="img-card" @click="toPath('/page/filterFund')">-->
-        <!--&lt;!&ndash;<img src="../../assets/800_600_dribbble_icons.jpg" alt="">&ndash;&gt;-->
-        <!--<div class="container">-->
-          <!--<div class="content">-->
-            <!--<i class="fas fa-filter"></i>-->
-          <!--</div>-->
-          <!--<div class="bottom">筛选基金</div>-->
-        <!--</div>-->
-      <!--</div>-->
       <div class="img-card" @click="toPath('/page/market')">
         <div class="container">
           <div class="content">
@@ -68,16 +59,6 @@
           <div class="bottom">今日指数</div>
         </div>
       </div>
-      <div class="img-card" @click="toPath('/page/strategy')">
-        <!--<img src="../../assets/800_600_dribbble_icons.jpg" alt="">-->
-        <div class="container">
-          <div class="content">
-            <img src="../../assets/策略-选中.png" alt="">
-            <!--<i class="fab fa-sellsy"></i>-->
-          </div>
-          <div class="bottom">幅度策略</div>
-        </div>
-      </div>
       <div class="img-card" @click="toPath('/page/averageIndex')">
         <!--<img src="../../assets/800_600_dribbble_icons.jpg" alt="">-->
         <div class="container">
@@ -86,15 +67,6 @@
             <!--<i class="fas fa-balance-scale"></i>-->
           </div>
           <div class="bottom">均线策略</div>
-        </div>
-      </div>
-      <div class="img-card" @click="toPath('/page/rank')">
-        <div class="container">
-          <div class="content">
-            <img src="../../assets/排行榜.png" alt="">
-            <!--<i class="fas fa-sort-amount-up"></i>-->
-          </div>
-          <div class="bottom">近期排行</div>
         </div>
       </div>
       <div class="img-card" @click="toPath('/page/indexDifference')">
@@ -107,15 +79,6 @@
           <div class="bottom">差价策略</div>
         </div>
       </div>
-      <!--<div class="img-card" @click="toPath('/page/plate')">-->
-        <!--&lt;!&ndash;<img src="../../assets/timg.jpg" alt="">&ndash;&gt;-->
-        <!--<div class="container">-->
-          <!--<div class="content">-->
-            <!--<i class="fas fa-th"></i>-->
-          <!--</div>-->
-          <!--<div class="bottom">板块走势</div>-->
-        <!--</div>-->
-      <!--</div>-->
     </div>
   </div>
 </template>

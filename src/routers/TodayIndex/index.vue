@@ -31,7 +31,6 @@
 </template>
 
 <script>
-import qs from 'qs'
 import moment from 'moment'
 import storageUtil from '@/util/storageUtil.js'
 import stockDataUtil from '@/util/stockDataUtil.js'
@@ -144,7 +143,7 @@ const codeMap = {
   }
 }
 export default {
-  name: 'OperatingInfo',
+  name: 'TodayIndex',
   data () {
     const userFundAccountInfo = storageUtil.getUserFundAccountInfo()
     let list = []
@@ -213,7 +212,7 @@ export default {
     clearInterval(this.timer)
   },
   mounted () {
-    this.$http.get('fund/getUserFundsNormal').then((data) => {
+    this.$http.get('userFund/getUserFunds').then((data) => {
       if (data.success) {
         const list = data.data.list
         for (let i = 0; i < list.length; i++) {
@@ -259,7 +258,7 @@ export default {
       const hour = d.getHours()
       const minute = d.getMinutes
       // 10点开始，15点结束
-      if ((hour >= 10 && hour < 15) || (hour === 15 && minute < 10)) {
+      if ((hour >= 10 && hour < 15) || (hour === 15 && minute < 30)) {
         // 和交易日是同一天
         if (moment().isSame(this.tradeTime, 'day')) {
           const netValueDate = this.lastNetValue.net_value_date
@@ -279,9 +278,6 @@ export default {
           }
         }
       }
-    },
-    qsStringify (query) {
-      return qs.stringify(query)
     },
     queryData (item) {
       return this.$http.getWithCache(`webData/${stockDataUtil.getTodayUrl()}`, {

@@ -70,6 +70,26 @@ const routers = [
     component: lazyLoading('ChangeMarket')
   },
   {
+    name: 'TodayIndex',
+    path: '/page/todayIndex',
+    component: lazyLoading('TodayIndex')
+  },
+  {
+    name: 'FixedInvestment',
+    path: '/page/fixedInvestment',
+    component: lazyLoading('FixedInvestment')
+  },
+  {
+    name: 'IndexDifference',
+    path: '/page/indexDifference',
+    component: lazyLoading('IndexDifference')
+  },
+  {
+    name: 'Market',
+    path: '/page/market',
+    component: lazyLoading('Market')
+  },
+  {
     name: '404',
     path: '*',
     component: lazyLoading('NotMatch')

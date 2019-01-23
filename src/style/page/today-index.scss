@@ -1,0 +1,45 @@
+.today-index {
+  .mint-cell {
+    border-radius: 20px;
+    border: none;
+    margin-bottom: 10px;
+  }
+  .income-info {
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    font-size: 30px;
+  }
+  .mint-cell-wrapper {
+    overflow: visible;
+  }
+  .btn-list-wrap {
+    .main-btn {
+      display: inline-block;
+    }
+  }
+  .mint-cell h3 {
+    position: relative;
+  }
+  .has-count {
+    position: absolute;
+    left: 30%;
+  }
+  .income {
+    position: absolute;
+    left: 60%;
+  }
+  .rate-info-icon {
+    position: absolute;
+    left: -25px;
+    top: 0;
+    height: 100%;
+    width: 30px;
+    .up{
+      color: $red-color;
+    }
+    .down{
+      color: $green-color;
+    }
+  }
+}

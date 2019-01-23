@@ -15,15 +15,23 @@
       </div>
       <div class="item">
         <span class="label">涨概率：</span>
-        <span class="green-text">{{upFinalRate}}%</span>
+        <span class="red-text">{{upFinalRate}}%</span>
       </div>
       <div class="item">
         <span class="label">跌概率：</span>
         <span class="green-text">{{downFinalRate}}%</span>
       </div>
       <div class="item">
+        <span class="label">昨日买信号：</span>
+        <span class="red-text">{{countRate(lastDayBuy[0], lastDayBuy[1])}}%</span>
+      </div>
+      <div class="item">
+        <span class="label">昨日卖信号：</span>
+        <span class="green-text">{{countRate(lastDaySell[0], lastDaySell[1])}}%</span>
+      </div>
+      <div class="item">
         <span class="label">买金额：</span>
-        <span class="green-text">{{buyOne}}</span>
+        <span class="red-text">{{buyOne}}</span>
       </div>
     </div>
     <div class="warn-wrap">
@@ -167,6 +175,18 @@ export default {
     type: {
       type: String,
       default: '简'
+    },
+    lastDaySell: {
+      type: Array,
+      default: function () {
+        return [0, 0]
+      }
+    },
+    lastDayBuy: {
+      type: Array,
+      default: function () {
+        return [0, 0]
+      }
     }
   },
   computed: {

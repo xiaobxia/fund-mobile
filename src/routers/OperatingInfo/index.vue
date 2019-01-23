@@ -13,6 +13,8 @@
         :countDownNumber="countDownNumber"
         :sellCountLastDay="sellCountLastDay"
         :buyCountLastDay="buyCountLastDay"
+        :lastDayBuy="lastDayBuy"
+        :lastDaySell="lastDaySell"
         :nowMonthRate="nowMonthRate"
         :myAsset="myAsset"
         :type="typeName"
@@ -107,7 +109,9 @@ export default {
       // 持有金额，不计入定投
       totalSum: 10000,
       marketStatus,
-      nowMonthRate: 0
+      nowMonthRate: 0,
+      lastDayBuy: [0, 0],
+      lastDaySell: [0, 0]
     }
   },
   components: {OperatingInfoItem, OperatingWarn},
@@ -252,6 +256,18 @@ export default {
             storageUtil.setJianBuySellList(item.key, buySellList)
           } else {
             storageUtil.setXiongBuySellList(item.key, buySellList)
+          }
+          if (buySellList[1] === 'buy') {
+            this.lastDayBuy[1]++
+            if (closeList[0] > closeList[1]) {
+              this.lastDayBuy[0]++
+            }
+          }
+          if (buySellList[1] === 'sell') {
+            this.lastDaySell[1]++
+            if (closeList[0] < closeList[1]) {
+              this.lastDaySell[0]++
+            }
           }
         }
       })

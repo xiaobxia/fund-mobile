@@ -1,0 +1,120 @@
+<template>
+  <div class="operating-info">
+    <mt-header title="变盘策略" :fixed="true">
+      <mt-button slot="left" @click="backHandler">
+        <i class="fas fa-chevron-left"></i>
+      </mt-button>
+    </mt-header>
+    <div class="main-body">
+      <div class="count-wrap">
+        <div class="item">
+          <span class="label">信号数：</span>
+          <span class="red-text">{{changeCount}}</span>
+        </div>
+      </div>
+      <mt-cell-swipe v-for="(item) in list" :key="item.code">
+        <div slot="title">
+          <h3>
+            {{item.name}}
+            <span style="float: right" :class="numberClass(rateInfo[item.key])">{{rateInfo[item.key]}}%</span>
+          </h3>
+          <p class="explain">
+            <span v-for="(subItem, index) in allInfo[item.key]" :key="index"
+                  :class="subItem === true? 'active': ''">{{subItem}}</span>
+          </p>
+        </div>
+      </mt-cell-swipe>
+    </div>
+  </div>
+</template>
+
+<script>
+import Http from '@/util/httpUtil.js'
+import changeMarket from '@/util/changeMarket.js'
+import stockDataUtil from '@/util/stockDataUtil.js'
+import storageUtil from '@/util/storageUtil.js'
+
+const codeMap = changeMarket.codeMap
+const InfoUtil = changeMarket.Util
+const fnMap = changeMarket.fnMap
+const formatData = changeMarket.formatData
+export default {
+  name: 'ChangeMarket',
+  data () {
+    let allInfo = {}
+    let list = []
+    let rateInfo = {}
+    for (let key in codeMap) {
+      list.push({
+        key: key,
+        code: codeMap[key].code,
+        name: codeMap[key].name,
+        threshold: codeMap[key].threshold,
+        wave: codeMap[key].wave,
+        rate: codeMap[key].rate,
+        sortRate: 0
+      })
+      allInfo[key] = []
+      rateInfo[key] = 0
+    }
+    return {
+      list: list,
+      allInfo: allInfo,
+      rateInfo: rateInfo,
+      changeCount: 0
+    }
+  },
+  computed: {
+  },
+  mounted () {
+    this.initPage()
+  },
+  methods: {
+    initPage () {
+      let list = this.list
+      for (let i = 0; i < list.length; i++) {
+        this.queryData(list[i])
+      }
+    },
+    queryData (item) {
+      Http.getWithCache(`webData/${stockDataUtil.getAllUrl()}`, {
+        code: item.code,
+        days: 10
+      }, {interval: 60}).then((data) => {
+        if (data.success) {
+          const list = data.data.list
+          const info = formatData(list)
+          const infoUtil = new InfoUtil(item)
+          const recentNetValue = info.list
+          let infoList = []
+          // 近的在前
+          for (let i = 0; i < 5; i++) {
+            const nowRecord = recentNetValue[i]
+            const oneDayRecord = recentNetValue[i + 1]
+            const twoDayRecord = recentNetValue[i + 2]
+            let flag = infoUtil[fnMap[item.key]](nowRecord, oneDayRecord, twoDayRecord)
+            if ((flag === true) || (flag !== false && flag.flag === true)) {
+              infoList[i] = true
+            } else {
+              infoList[i] = false
+            }
+          }
+          if (infoList[0]) {
+            this.changeCount = this.changeCount + 1
+          }
+          storageUtil.setChangeMarket(item.key, infoList[0])
+          this.allInfo[item.key] = infoList
+          this.rateInfo[item.key] = this.keepTwoDecimals(recentNetValue[0].netChangeRatio)
+        }
+      })
+    },
+    backHandler () {
+      this.$router.history.go(-1)
+    }
+  }
+}
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped>
+</style>

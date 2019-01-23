@@ -6,8 +6,7 @@
       </mt-button>
     </mt-header>
     <div class="main-body">
-      <mt-cell-swipe v-for="(item) in list" :key="item.code"
-                     >
+      <mt-cell-swipe v-for="(item) in list" :key="item.code">
         <div slot="title">
           <h3>
             {{item.name}}
@@ -22,8 +21,8 @@
 <script>
 import Http from '@/util/httpUtil.js'
 import indexInfoUtilXiong from '@/util/indexInfoUtilXiong.js'
-import qs from 'qs'
 import stockDataUtil from '@/util/stockDataUtil.js'
+import storageUtil from '@/util/storageUtil.js'
 
 const codeMap = indexInfoUtilXiong.codeMap
 
@@ -32,7 +31,6 @@ export default {
   data () {
     let diffInfo = {}
     let list = []
-    let rateInfo = {}
     for (let key in codeMap) {
       list.push({
         key: key,
@@ -43,13 +41,11 @@ export default {
         rate: codeMap[key].rate,
         sortRate: 0
       })
-      rateInfo[key] = 0
+      diffInfo[key] = 0
     }
     return {
       list: list,
-      diffInfo: diffInfo,
-      rateInfo: rateInfo,
-      changeCount: 0
+      diffInfo: diffInfo
     }
   },
   computed: {
@@ -64,9 +60,6 @@ export default {
         this.queryData(list[i])
       }
     },
-    qsStringify (query) {
-      return qs.stringify(query)
-    },
     queryData (item) {
       Http.getWithCache(`webData/${stockDataUtil.getAllUrl()}`, {
         code: item.code,
@@ -74,7 +67,6 @@ export default {
       }, {interval: 60}).then((data) => {
         if (data.success) {
           const list = data.data.list
-          console.log(list)
           let now = 0
           let last = 0
           // 近的在前
@@ -84,8 +76,9 @@ export default {
           for (let j = 1; j < 6; j++) {
             last += parseFloat(list[j].kline.close)
           }
-          this.diffInfo[item.key] = this.countDifferenceRate(now / 5, last / 5)
-          this.rateInfo[item.key] = this.keepTwoDecimals(list[0].kline.netChangeRatio)
+          const diff = this.countDifferenceRate(now / 5, last / 5)
+          this.diffInfo[item.key] = diff
+          storageUtil.setAverage(item.key, diff)
         }
       })
     },

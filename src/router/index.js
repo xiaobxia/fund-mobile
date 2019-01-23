@@ -65,6 +65,11 @@ const routers = [
     component: lazyLoading('AverageIndex')
   },
   {
+    name: 'ChangeMarket',
+    path: '/page/changeMarket',
+    component: lazyLoading('ChangeMarket')
+  },
+  {
     name: '404',
     path: '*',
     component: lazyLoading('NotMatch')

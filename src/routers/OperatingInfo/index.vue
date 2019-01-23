@@ -61,7 +61,6 @@ export default {
   name: 'OperatingInfo',
   data () {
     const userFundAccountInfo = storageUtil.getUserFundAccountInfo()
-    console.log(userFundAccountInfo)
     let buySellMap = {}
     let netChangeRatioMap = {}
     let closeListMap = {}
@@ -251,8 +250,10 @@ export default {
           this.rateMap[item.key] = numberUtil.keepTwoDecimals(recentNetValue[0].netChangeRatio)
           if (this.type === 'jian') {
             storageUtil.setJian(item.key, buySellList[0])
+            storageUtil.setJianBuySellList(item.key, buySellList)
           } else {
             storageUtil.setXiong(item.key, buySellList[0])
+            storageUtil.setXiongBuySellList(item.key, buySellList)
           }
         }
       })

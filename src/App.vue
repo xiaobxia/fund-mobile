@@ -81,8 +81,6 @@ export default {
       this.checkSubPath(this.$router.history.current.path)
       // 刷新的时候before和after都不会执行
       this.$router.beforeEach((transition, from, next) => {
-        console.log('before')
-        console.log(transition)
         if (this.checkAuthPath(transition)) {
           const user = storageUtil.getUserInfo()
           this.checkUser(user, transition)
@@ -92,7 +90,6 @@ export default {
       })
       // after只有真正进入了页面才会执行
       this.$router.afterEach((transition) => {
-        console.log('after')
         // 验证路由过去是否需要登录状态
         if (this.checkAuthPath(transition)) {
           const user = storageUtil.getUserInfo()

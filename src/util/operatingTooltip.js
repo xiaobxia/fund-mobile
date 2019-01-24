@@ -117,6 +117,13 @@ const operatingTooltip = {
       }
     }
     return false
+  },
+  // 上涨分数
+  upFinalRate () {
+
+  },
+  downFinalRate () {
+
   }
 }
 export default operatingTooltip

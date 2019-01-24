@@ -81,6 +81,13 @@ const storageUtil = {
       }
     }
   },
+  setUserFundAccountInfo: function (key, value) {
+    let config = this.getUserFundAccountInfo()
+    config[key] = value
+    window._userFundAccountInfo = config
+    localStorage.setItem('userFundAccountInfo', JSON.stringify(config))
+    return config
+  },
   initUserFundAccountInfo: function (info) {
     window._userFundAccountInfo = info
     localStorageSetItem('userFundAccountInfo', JSON.stringify(info))

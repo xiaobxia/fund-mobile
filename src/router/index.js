@@ -120,6 +120,26 @@ const routers = [
     component: lazyLoading('MyFundAdd')
   },
   {
+    name: 'IncomeAll',
+    path: '/page/incomeAll',
+    component: lazyLoading('IncomeAll')
+  },
+  {
+    name: 'MyNetValueLine',
+    path: '/page/myNetValueLine',
+    component: lazyLoading('MyNetValueLine')
+  },
+  {
+    name: 'MyNetValueRecord',
+    path: '/page/myNetValueRecord',
+    component: lazyLoading('MyNetValueRecord')
+  },
+  {
+    name: 'MyNetValueAdd',
+    path: '/page/myNetValueAdd',
+    component: lazyLoading('MyNetValueAdd')
+  },
+  {
     name: '404',
     path: '*',
     component: lazyLoading('NotMatch')

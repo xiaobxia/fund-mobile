@@ -16,6 +16,7 @@
 @import "component/bottom-bar";
 @import "component/search";
 @import "component/indicator";
+@import "component/table";
 @import "tabViews/mine";
 @import "page/login";
 @import "page/my-proportion";
@@ -28,6 +29,7 @@
 @import "page/principle";
 @import "page/my-fund-add";
 @import "page/good-bad";
+@import "page/my-net-value-line";
 
 body {
   margin: 0;
@@ -126,4 +128,9 @@ ul {
   p {
     font-size: 40px;
   }
+}
+
+input[type="text" i]:disabled {
+  background-color: #fff;
+  color: #aaa;
 }

@@ -1,18 +1,3 @@
-function getIndex (target, filterModel) {
-  for (let i = 0; i < target.length; i++) {
-    const item = target[i]
-    let same = true
-    for (let key in filterModel) {
-      if (filterModel[key] !== item[key]) {
-        same = false
-        break
-      }
-    }
-    if (same) {
-      return i
-    }
-  }
-}
 const arrayUtil = {
   findObjectItem (array, keyName, keyValue) {
     for (let k = 0, len = array.length; k < len; k++) {
@@ -20,6 +5,14 @@ const arrayUtil = {
         return array[k]
       }
     }
+  },
+  findIndex (array, keyName, keyValue) {
+    for (let k = 0, len = array.length; k < len; k++) {
+      if (array[k][keyName] === keyValue) {
+        return k
+      }
+    }
+    return 0
   },
   removeObjectItem (array, keyName, keyValue) {
     for (let i = 0; i < array.length; i++) {
@@ -30,11 +23,12 @@ const arrayUtil = {
       }
     }
   },
-  findIndex (target, filterModel) {
-    return getIndex(target, filterModel)
-  },
-  findOne (target, filterModel) {
-    return target[getIndex(target, filterModel)]
+  copy (list) {
+    let temp = []
+    for (let i = 0; i < list.length; i++) {
+      temp[i] = list[i]
+    }
+    return temp
   }
 }
 

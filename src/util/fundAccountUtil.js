@@ -5,15 +5,6 @@ const fundAccountUtil = {
   ifFixedInvestment: function (item) {
     return item.strategy && item.strategy !== '1'
   },
-  // 是否是阶梯仓位
-  ifPosition (item) {
-    if (item['position_record']) {
-      if (JSON.parse(item['position_record']).length > 1) {
-        return true
-      }
-    }
-    return false
-  },
   // 获取锁仓的仓位信息
   getLockInfo (item) {
     let data = {

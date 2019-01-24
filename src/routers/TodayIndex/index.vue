@@ -241,6 +241,10 @@ export default {
         const nowNetValue = res.data.record
         if (nowNetValue) {
           this.lastNetValue = nowNetValue
+          storageUtil.setUserFundAccountInfo('last_asset', nowNetValue.asset)
+          storageUtil.setUserFundAccountInfo('last_net_value', nowNetValue.net_value)
+          storageUtil.setUserFundAccountInfo('last_net_value_date', nowNetValue.net_value_date)
+          storageUtil.setUserFundAccountInfo('last_shares', nowNetValue.shares)
         }
       })
       let queryList = []
@@ -256,9 +260,9 @@ export default {
     updateMyNetValue () {
       const d = new Date()
       const hour = d.getHours()
-      const minute = d.getMinutes
+      const minute = d.getMinutes()
       // 10点开始，15点结束
-      if ((hour >= 10 && hour < 15) || (hour === 15 && minute < 30)) {
+      if ((hour >= 10 && hour < 16) || (hour === 16 && minute < 30)) {
         // 和交易日是同一天
         if (moment().isSame(this.tradeTime, 'day')) {
           const netValueDate = this.lastNetValue.net_value_date

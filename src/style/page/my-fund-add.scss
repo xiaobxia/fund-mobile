@@ -1,14 +1,21 @@
 .my-fund-add {
-  .strategy-wrap {
+  .strategy-wrap, .edit-type-wrap {
     padding: 20px 30px;
     font-size: 30px;
-    span {
-
-    }
     button {
       float: right;
       width: auto;
       height: auto;
+    }
+  }
+  .edit-type-wrap {
+    border-bottom: 20px solid #eee;
+  }
+  .position-record {
+    border: 10px solid #eee;
+    border-bottom: 0;
+    &:last-child {
+      border-bottom: 10px solid #eee;
     }
   }
   .strategy-list {
@@ -25,52 +32,22 @@
   }
   .mint-popup-bottom {
   }
-  .infoP {
-    padding-left: 30px;
-    font-size: 30px;
+  .content {
+    padding: 0 30px;
   }
   .position_record_list {
-    margin-bottom: 20px;
-    padding: 30px;
-    font-size: 30px;
-    p{
-      display: inline-block;
-      margin: 0;
-      padding: 5px 0;
+    padding: 0 10px;
+    div {
+      padding: 10px;
+      border: 10px solid #eee;
+      border-bottom: 0;
       font-size: 30px;
-    }
-    i {
-      margin-left: 10px;
-      display: inline-block;
-      width: 20px;
-      height: 20px;
-      border-radius: 20px;
-    }
-    .lock-tag {
-      background-color: $red-color;
-    }
-  }
-  .sell-list {
-    padding: 30px;
-    font-size: 30px;
-    p{
-      display: block;
-      margin: 0;
-      padding: 5px 0;
-      font-size: 30px;
-    }
-  }
-  .shares-info-list {
-    margin-bottom: 100px;
-    padding: 30px;
-    font-size: 30px;
-    p{
-      display: block;
-      margin: 0;
-      padding: 5px 0;
-      font-size: 30px;
-      span {
-        float: right;
+      &:last-child {
+        border-bottom: 10px solid #eee;
+      }
+      &.lock{
+        color: #fff;
+        background-color: $red-color-back-3;
       }
     }
   }

@@ -55,8 +55,6 @@ const formatData = indexInfoUtilXiong.formatData
 let InfoUtil = indexInfoUtilXiong.Util
 let fnMap = indexInfoUtilXiong.fnMap
 
-const marketStatus = storageUtil.getMarketStatus('question_1') || '强'
-
 export default {
   name: 'OperatingInfo',
   data () {
@@ -106,7 +104,6 @@ export default {
       myAsset: userFundAccountInfo.pre_asset,
       // 持有金额，不计入定投
       totalSum: 10000,
-      marketStatus,
       nowMonthRate: 0,
       lastDayBuy: [0, 0],
       lastDaySell: [0, 0]

@@ -12,7 +12,7 @@
           <p class="explain">{{item.describe}}</p>
         </div>
         <div class="right-wrap">
-          <mt-switch v-model="item.value" @change="stateChangeHandler(item.key)"></mt-switch>
+          <mt-switch v-model="item.open" @change="stateChangeHandler(item.name)"></mt-switch>
         </div>
       </mt-cell-swipe>
     </div>
@@ -39,19 +39,16 @@ export default {
       this.$http.get('schedule/all').then((data) => {
         Indicator.close()
         let list = data.data.list
-        list.forEach((item) => {
-          item.value = item.value === 'open'
-        })
         this.scheduleList = list
       })
     },
-    stateChangeHandler (key) {
+    stateChangeHandler (name) {
       const item = this.scheduleList.find((item) => {
-        return item.key === key
+        return item.name === name
       })
       this.$http.post('schedule/changeStatus', {
-        name: item.key,
-        open: item.value ? 'open' : 'close'
+        name: item.name,
+        open: item.open ? 'open' : 'close'
       }).then((data) => {
         if (data.success) {
           this.initPage()

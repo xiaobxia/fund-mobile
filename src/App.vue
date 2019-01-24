@@ -10,7 +10,7 @@
         <fund v-if="tabSelect === 'fund'"/>
         <configCenter v-if="tabSelect === 'configCenter'"/>
         <mine v-if="tabSelect === 'mine'"/>
-        <square v-if="tabSelect === 'square'"></square>
+        <div v-if="tabSelect === 'square'"></div>
         <mt-tabbar v-model="tabSelect" :fixed="true">
           <mt-tab-item id="fund">
             <img src="./assets/fund.png" alt="" slot="icon">

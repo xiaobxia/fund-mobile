@@ -1,7 +1,6 @@
 <template>
   <div>
-    <mt-header title="配置中心" :fixed="true"/>
-    <div class="main-body has-bar">
+    <div class="has-bar">
       <div class="img-card" @click="toPath('/page/schedule')">
         <!--<img src="../../assets/timg.jpg" alt="">-->
         <div class="container">

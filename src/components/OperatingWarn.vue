@@ -23,11 +23,11 @@
       </div>
       <div class="item">
         <span class="label">昨日买信号：</span>
-        <span class="red-text">{{countRate(lastDayBuy[0], lastDayBuy[1])}}%</span>
+        <span class="red-text">{{lastDayBuy[0]}}/{{lastDayBuy[1]}}</span>
       </div>
       <div class="item">
         <span class="label">昨日卖信号：</span>
-        <span class="green-text">{{countRate(lastDaySell[0], lastDaySell[1])}}%</span>
+        <span class="green-text">{{lastDaySell[0]}}/{{lastDaySell[1]}}</span>
       </div>
       <div class="item">
         <span class="label">买金额：</span>
@@ -47,6 +47,7 @@
 
 <script>
 import storageUtil from '@/util/storageUtil.js'
+import operatingTooltip from '@/util/operatingTooltip.js'
 
 export default {
   name: 'OperatingWarn',
@@ -168,10 +169,6 @@ export default {
       type: Number,
       default: 0
     },
-    myAsset: {
-      type: Number,
-      default: 100000
-    },
     type: {
       type: String,
       default: '简'
@@ -235,25 +232,7 @@ export default {
       return downRate
     },
     buyOne () {
-      const flag = this.type === '熊' ? 1 : 0.7
-      const base = flag * this.myAsset / 16000
-      let b = 1
-      if (this.upFinalRate >= 60) {
-        b = 1.2
-      }
-      if (this.upFinalRate >= 70) {
-        b = 1.4
-      }
-      if (this.upFinalRate >= 80) {
-        b = 1.6
-      }
-      if (this.upFinalRate >= 90) {
-        b = 1.8
-      }
-      if (this.upFinalRate >= 100) {
-        b = 2
-      }
-      return Math.round(base * b) * 100
+      return operatingTooltip.getBuyNumber(this.type, this.upFinalRate)
     }
   },
   mounted () {

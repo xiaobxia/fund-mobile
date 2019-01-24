@@ -16,7 +16,6 @@
         :lastDayBuy="lastDayBuy"
         :lastDaySell="lastDaySell"
         :nowMonthRate="nowMonthRate"
-        :myAsset="myAsset"
         :type="typeName"
       />
       <operating-info-item
@@ -28,10 +27,8 @@
         :rate="rateMap[item.key]"
         :buySellList="buySellMap[item.key]"
         :lock="lockMap[item.name]"
-        :marketWarn="marketWarnMap[item.key]"
-        :positionWarn="positionWarnMap[item.key]"
+        :totalSum="totalSum"
         :netChangeRatioList="netChangeRatioMap[item.key]"
-        :flagTrue="flagTrueMap[item.key]"
         :closeList="closeListMap[item.key]"
         :type="typeName"
       />
@@ -45,7 +42,6 @@ import indexInfoUtilJian from '@/util/indexInfoUtilJian.js'
 import qs from 'qs'
 import storageUtil from '@/util/storageUtil.js'
 import stockDataUtil from '@/util/stockDataUtil.js'
-import operatingTooltip from '@/util/operatingTooltip.js'
 import OperatingInfoItem from '@/components/OperatingInfoItem.vue'
 import OperatingWarn from '@/components/OperatingWarn.vue'
 
@@ -58,15 +54,11 @@ let fnMap = indexInfoUtilXiong.fnMap
 export default {
   name: 'OperatingInfo',
   data () {
-    const userFundAccountInfo = storageUtil.getUserFundAccountInfo()
     let buySellMap = {}
     let netChangeRatioMap = {}
     let closeListMap = {}
-    let flagTrueMap = {}
     let list = []
     let firstClass = {}
-    let marketWarnMap = {}
-    let positionWarnMap = {}
     let rateMap = {}
     let lockMap = {}
     let hasCount = {}
@@ -80,9 +72,6 @@ export default {
       closeListMap[key] = []
       netChangeRatioMap[key] = []
       firstClass[key] = ''
-      marketWarnMap[key] = ''
-      flagTrueMap[key] = ''
-      positionWarnMap[key] = ''
       rateMap[key] = 0
       lockMap[codeMap[key].name] = false
       hasCount[codeMap[key].name] = 0
@@ -98,10 +87,6 @@ export default {
       rateMap,
       lockMap,
       hasCount,
-      marketWarnMap,
-      flagTrueMap,
-      positionWarnMap,
-      myAsset: userFundAccountInfo.pre_asset,
       // 持有金额，不计入定投
       totalSum: 10000,
       nowMonthRate: 0,
@@ -238,12 +223,8 @@ export default {
           /**
            * 生成市场风险提示
            */
-          const netChangeRatio = recentNetValue[0].netChangeRatio
-          this.marketWarnMap[item.key] = operatingTooltip.getMarketWarn(netChangeRatio, buySellList)
-          this.positionWarnMap[item.key] = operatingTooltip.getPositionWarn(item, this.myAsset, this.totalSum, this.hasCount[item.name])
           this.buySellMap[item.key] = buySellList
           this.closeListMap[item.key] = closeList
-          this.flagTrueMap[item.key] = operatingTooltip.ifFlagTrue(buySellList, closeList)
           this.netChangeRatioMap[item.key] = netChangeRatioList
           this.firstClass[item.key] = buySellList[0]
           this.rateMap[item.key] = this.keepTwoDecimals(recentNetValue[0].netChangeRatio)

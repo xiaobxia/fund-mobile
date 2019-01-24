@@ -64,6 +64,10 @@ export default {
       type: Number,
       default: 0
     },
+    totalSum: {
+      type: Number,
+      default: 0
+    },
     rate: {
       type: Number,
       default: 0
@@ -90,19 +94,18 @@ export default {
       type: Boolean,
       default: false
     },
-    flagTrue: String,
-    marketWarn: {
-      type: String
-    },
-    positionWarn: {
-      type: String
-    },
     type: {
       type: String,
       default: '简'
     }
   },
   computed: {
+    marketWarn () {
+      return operatingTooltip.getMarketWarn(this.rate, this.buySellList)
+    },
+    positionWarn () {
+      return operatingTooltip.getPositionWarn(this.indexInfo, this.totalSum, this.hasCount)
+    },
     changeMarket () {
       return storageUtil.getChangeMarket(this.indexInfo.key) || false
     },
@@ -121,6 +124,9 @@ export default {
     },
     indexAverage () {
       return storageUtil.getAverage(this.indexInfo.key) || 0
+    },
+    flagTrue () {
+      return operatingTooltip.ifFlagTrue(this.buySellList, this.closeList)
     }
   },
   mounted () {

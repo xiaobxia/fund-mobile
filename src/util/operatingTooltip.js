@@ -251,7 +251,6 @@ const operatingTooltip = {
         downRate += 20
         upRate -= 20
       } else if (sellCount > one) {
-        console.log('in')
         downRate += 10
         upRate -= 10
       }

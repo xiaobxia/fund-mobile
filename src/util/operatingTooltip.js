@@ -8,7 +8,7 @@ function getStandard () {
 }
 
 function getBuyBase (type, upFinalRate) {
-  const flag = type === '熊' ? 1 : 0.7
+  const flag = type === '熊' ? 1 : 0.8
   const base = flag * getStandard()
   let b = 1
   if (upFinalRate >= 60) {

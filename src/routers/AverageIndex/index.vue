@@ -69,13 +69,13 @@ export default {
           let now = 0
           let last = 0
           // 近的在前
-          for (let i = 0; i < 5; i++) {
+          for (let i = 0; i < 8; i++) {
             now += parseFloat(list[i].kline.close)
           }
-          for (let j = 1; j < 6; j++) {
+          for (let j = 1; j < 9; j++) {
             last += parseFloat(list[j].kline.close)
           }
-          const diff = this.countDifferenceRate(now / 5, last / 5)
+          const diff = this.countDifferenceRate(now / 8, last / 8)
           this.diffInfo[item.key] = diff
           storageUtil.setAverage(item.key, diff)
         }

@@ -68,69 +68,8 @@ export default {
         ifOperatingTime = true
       }
     }
-
-    let upRate = 50
-    let downRate = 50
-    // 是否要护盘
-    if (question3 === '是') {
-      upRate += 10
-      downRate -= 10
-    }
-    // 市场强弱
-    if (question1 === '强') {
-      upRate += 10
-      downRate -= 10
-    }
-    if (question1 === '弱') {
-      upRate -= 10
-      downRate += 10
-    }
-    // 市场是否有利好
-    if (question2 === '利好') {
-      upRate += 10
-      downRate -= 10
-    }
-    if (question2 === '利空') {
-      upRate -= 10
-      downRate += 10
-    }
-    // 是否有上涨意愿
-    if (question5 === '是') {
-      upRate += 10
-      downRate -= 10
-    }
-    if (question5 === '否') {
-      upRate -= 10
-      downRate += 10
-    }
-    // 乐观悲观，特殊情况再加10
-    if (question6 === '乐观') {
-      upRate += 10
-      if (question4 === '是') {
-        upRate += 10
-      }
-    }
-    if (question6 === '悲观') {
-      downRate += 10
-      if (question4 === '否') {
-        downRate += 10
-      }
-    }
-    // 缩量，特殊情况再加10
-    if (question7 === '是') {
-      if (question4 === '是') {
-        upRate += 10
-      }
-    }
-    if (question7 === '是') {
-      if (question4 === '否') {
-        downRate += 10
-      }
-    }
     return {
       ifOperatingTime,
-      upRate,
-      downRate,
       question1,
       question2,
       question3,
@@ -188,48 +127,10 @@ export default {
   },
   computed: {
     upFinalRate () {
-      let one = 12
-      let two = 18
-      let upRate = this.upRate
-      if (this.question7 === '否') {
-        if (this.buyCount > one) {
-          if (this.buyCount > two) {
-            upRate += 20
-          } else {
-            upRate += 10
-          }
-        }
-        if (this.sellCount > one) {
-          if (this.sellCount > two) {
-            upRate -= 20
-          } else {
-            upRate -= 10
-          }
-        }
-      }
-      return upRate
+      return operatingTooltip.upDownFinalRate(this.buyCount, this.sellCount).upRate
     },
     downFinalRate () {
-      let one = 12
-      let two = 18
-      let downRate = this.downRate
-      if (this.question7 === '否') {
-        if (this.buyCount > one) {
-          if (this.buyCount > two) {
-            downRate -= 20
-          } else {
-            downRate -= 10
-          }
-        }
-        if (this.sellCount > one) {
-          if (this.sellCount > two) {
-            downRate += 20
-          } else {
-            downRate += 10
-          }
-        }
-      }
-      return downRate
+      return operatingTooltip.upDownFinalRate(this.buyCount, this.sellCount).downRate
     },
     buyOne () {
       return operatingTooltip.getBuyNumber(this.type, this.upFinalRate)

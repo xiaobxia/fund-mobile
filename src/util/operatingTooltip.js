@@ -7,29 +7,44 @@ function getStandard () {
   return asset / 160
 }
 
+function getBuyBase (type, upFinalRate) {
+  const flag = type === '熊' ? 1 : 0.7
+  const base = flag * getStandard()
+  let b = 1
+  if (upFinalRate >= 60) {
+    b = 1.2
+  }
+  if (upFinalRate >= 70) {
+    b = 1.4
+  }
+  if (upFinalRate >= 80) {
+    b = 1.6
+  }
+  if (upFinalRate >= 90) {
+    b = 1.8
+  }
+  if (upFinalRate >= 100) {
+    b = 2
+  }
+  return base * b
+}
+
 const operatingTooltip = {
   // 建议购买金额
   getBuyNumber (type, upFinalRate) {
-    const flag = type === '熊' ? 1 : 0.7
-    const base = flag * getStandard()
-    let b = 1
-    if (upFinalRate >= 60) {
-      b = 1.2
+    // 标准到百
+    return Math.round(getBuyBase(type, upFinalRate) / 100) * 100
+  },
+  getBuyItem (type, upFinalRate, averageIndex) {
+    let a = 1
+    if (averageIndex > 1) {
+      a = 1.2
     }
-    if (upFinalRate >= 70) {
-      b = 1.4
-    }
-    if (upFinalRate >= 80) {
-      b = 1.6
-    }
-    if (upFinalRate >= 90) {
-      b = 1.8
-    }
-    if (upFinalRate >= 100) {
-      b = 2
+    if (averageIndex < -1) {
+      a = 0.8
     }
     // 标准到百
-    return Math.round(base * b / 100) * 100
+    return Math.round(getBuyBase(type, upFinalRate) * a / 100) * 100
   },
   // 根据市场强弱提示那些本该买卖，而没有进行的
   getShouldDo (netChangeRatioList, buySellList, closeList) {
@@ -147,12 +162,104 @@ const operatingTooltip = {
     }
     return false
   },
-  // 上涨分数
-  upFinalRate () {
-
-  },
-  downFinalRate () {
-
+  // 上涨，下跌分数
+  upDownFinalRate (buyCount, sellCount) {
+    const question1 = storageUtil.getMarketStatus('question_1')
+    const question2 = storageUtil.getMarketStatus('question_2')
+    const question3 = storageUtil.getMarketStatus('question_3')
+    const question4 = storageUtil.getMarketStatus('question_4')
+    const question5 = storageUtil.getMarketStatus('question_5')
+    const question6 = storageUtil.getMarketStatus('question_6')
+    const question7 = storageUtil.getMarketStatus('question_7')
+    let upRate = 50
+    let downRate = 50
+    // 是否要护盘
+    if (question3 === '是') {
+      upRate += 10
+      downRate -= 10
+    }
+    // 市场强弱
+    if (question1 === '强') {
+      upRate += 10
+      downRate -= 10
+    }
+    if (question1 === '弱') {
+      upRate -= 10
+      downRate += 10
+    }
+    // 市场是否有利好
+    if (question2 === '利好') {
+      upRate += 10
+      downRate -= 10
+    }
+    if (question2 === '利空') {
+      upRate -= 10
+      downRate += 10
+    }
+    // 是否有上涨意愿
+    if (question5 === '是') {
+      upRate += 10
+      downRate -= 10
+    }
+    if (question5 === '否') {
+      upRate -= 10
+      downRate += 10
+    }
+    // 乐观悲观，特殊情况再加10
+    if (question6 === '乐观') {
+      upRate += 10
+      if (question4 === '是') {
+        upRate += 10
+      }
+    }
+    if (question6 === '悲观') {
+      downRate += 10
+      if (question4 === '否') {
+        downRate += 10
+      }
+    }
+    // 缩量，特殊情况再加10
+    if (question7 === '是') {
+      if (question4 === '是') {
+        upRate += 10
+      }
+    }
+    if (question7 === '是') {
+      if (question4 === '否') {
+        downRate += 10
+      }
+    }
+    // 信号分
+    let one = 6
+    let two = 12
+    let tree = 18
+    if (question7 === '否') {
+      if (buyCount > tree) {
+        upRate += 30
+        downRate -= 30
+      } else if (buyCount > two) {
+        upRate += 20
+        downRate -= 20
+      } else if (buyCount > one) {
+        upRate += 10
+        downRate -= 10
+      }
+      if (sellCount > tree) {
+        downRate += 30
+        upRate -= 30
+      } else if (sellCount > two) {
+        downRate += 20
+        upRate -= 20
+      } else if (sellCount > one) {
+        console.log('in')
+        downRate += 10
+        upRate -= 10
+      }
+    }
+    return {
+      upRate,
+      downRate
+    }
   }
 }
 export default operatingTooltip

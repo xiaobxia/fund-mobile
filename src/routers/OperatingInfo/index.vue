@@ -28,6 +28,8 @@
         :buySellList="buySellMap[item.key]"
         :lock="lockMap[item.name]"
         :totalSum="totalSum"
+        :buyCount="buyCount"
+        :sellCount="sellCount"
         :netChangeRatioList="netChangeRatioMap[item.key]"
         :closeList="closeListMap[item.key]"
         :type="typeName"

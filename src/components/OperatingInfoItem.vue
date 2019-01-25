@@ -9,6 +9,7 @@
         <span v-if="hasCount" class="has-count">{{hasCount}}</span>
         <span v-if="positionWarn === 'danger'" class="danger-tag">危仓</span>
         <span v-if="positionWarn === 'warn'" class="warn-tag">高仓</span>
+        <span class="buy-info">买金额:{{buyItem}}</span>
         <span style="float: right" :class="numberClass(rate)">{{rate}}%</span>
       </h3>
       <p class="explain">
@@ -60,6 +61,14 @@ export default {
       }
     },
     toUrl: String,
+    buyCount: {
+      type: Number,
+      default: 0
+    },
+    sellCount: {
+      type: Number,
+      default: 0
+    },
     hasCount: {
       type: Number,
       default: 0
@@ -127,6 +136,15 @@ export default {
     },
     flagTrue () {
       return operatingTooltip.ifFlagTrue(this.buySellList, this.closeList)
+    },
+    upFinalRate () {
+      return operatingTooltip.upDownFinalRate(this.buyCount, this.sellCount).upRate
+    },
+    downFinalRate () {
+      return operatingTooltip.upDownFinalRate(this.buyCount, this.sellCount).downRate
+    },
+    buyItem () {
+      return operatingTooltip.getBuyItem(this.type, this.upFinalRate, this.indexAverage)
     }
   },
   mounted () {

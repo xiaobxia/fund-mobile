@@ -10,7 +10,7 @@
         <fund v-if="tabSelect === 'fund'"/>
         <configCenter v-if="tabSelect === 'configCenter'"/>
         <mine v-if="tabSelect === 'mine'"/>
-        <div v-if="tabSelect === 'square'"></div>
+        <square v-if="tabSelect === 'square'"></square>
         <mt-tabbar v-model="tabSelect" :fixed="true">
           <mt-tab-item id="fund">
             <img src="./assets/fund.png" alt="" slot="icon">
@@ -44,6 +44,7 @@ import Mine from '@/tabViews/Mine/index.vue'
 import Index from '@/tabViews/Index/index.vue'
 import Fund from '@/tabViews/Fund/index.vue'
 import ConfigCenter from '@/tabViews/ConfigCenter/index.vue'
+import Square from '@/tabViews/Square/index.vue'
 
 export default {
   name: 'App',
@@ -69,7 +70,7 @@ export default {
       }
     }
   },
-  components: {Index, Mine, Fund, ConfigCenter},
+  components: {Index, Mine, Fund, ConfigCenter, Square},
   mounted () {
     this.initPage()
     setInterval(() => {

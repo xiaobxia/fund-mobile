@@ -140,6 +140,16 @@ const routers = [
     component: lazyLoading('MyNetValueAdd')
   },
   {
+    name: 'Search',
+    path: '/page/search',
+    component: lazyLoading('Search')
+  },
+  {
+    name: 'AddFund',
+    path: '/page/addFund',
+    component: lazyLoading('AddFund')
+  },
+  {
     name: '404',
     path: '*',
     component: lazyLoading('NotMatch')

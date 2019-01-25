@@ -1,6 +1,6 @@
 <template>
   <mt-cell-swipe :to="toUrl"
-                 :class="['operating-info-item',buySellList[0], hasCount > 0 ? 'has':'no-has', 'should-' + marketWarn, lock ?'lock':'no-lock']">
+                 :class="['operating-info-item',buySellList[0], hasCount > 0 ? 'has':'no-has', 'should-' + shouldDo, lock ?'lock':'no-lock']">
     <div slot="title">
       <h3>
         {{indexInfo.name}}
@@ -100,11 +100,11 @@ export default {
     }
   },
   computed: {
-    marketWarn () {
-      return operatingTooltip.getMarketWarn(this.rate, this.buySellList)
+    shouldDo () {
+      return operatingTooltip.getShouldDo(this.netChangeRatioList, this.buySellList, this.closeList)
     },
     positionWarn () {
-      return operatingTooltip.getPositionWarn(this.indexInfo, this.totalSum, this.hasCount)
+      return operatingTooltip.getPositionWarn(this.indexInfo, this.hasCount)
     },
     changeMarket () {
       return storageUtil.getChangeMarket(this.indexInfo.key) || false
@@ -135,7 +135,3 @@ export default {
   }
 }
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-</style>

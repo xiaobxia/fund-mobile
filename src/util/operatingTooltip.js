@@ -32,46 +32,75 @@ const operatingTooltip = {
     return Math.round(base * b / 100) * 100
   },
   // 根据市场强弱提示那些本该买卖，而没有进行的
-  getMarketWarn (netChangeRatio, buySellList) {
-    let marketWarn = ''
-    if (buySellList[0] === '') {
-      let marketStatus = storageUtil.getMarketStatus('question_1') || '强'
-      for (let i = 1; i < buySellList.length; i++) {
-        if (buySellList[i] === 'buy') {
-          if (marketStatus === '略强' && netChangeRatio > 0) {
-            marketWarn = 'buy'
+  getShouldDo (netChangeRatioList, buySellList, closeList) {
+    let ifBuy = false
+    let ifSell = false
+    let firstFlag = ''
+    let firstFlagIndex = 0
+    // 首先今天是没有出信号的
+    if (buySellList[0] !== '') {
+      return ''
+    }
+    // 获取之后的第一个信号
+    for (let i = 1; i < buySellList.length; i++) {
+      if (buySellList[i] !== '') {
+        firstFlagIndex = i
+        firstFlag = buySellList[i]
+        break
+      }
+    }
+    // 今天没信号，之前有卖出，并且连续跌2天及以上，那就提示卖出
+    if (firstFlag === 'sell') {
+      if (firstFlagIndex >= 2) {
+        let allDown = true
+        for (let i = 0; i < firstFlagIndex; i++) {
+          if (netChangeRatioList[i] > 0) {
+            allDown = false
+            break
           }
-          if (marketStatus === '强' && netChangeRatio > 0) {
-            marketWarn = 'buy'
-          }
-          break
         }
-        if (buySellList[i] === 'sell') {
-          if (['略弱', '弱'].indexOf(marketStatus) !== -1 && netChangeRatio < 0) {
-            marketWarn = 'sell'
-          }
-          break
+        if (allDown) {
+          ifSell = true
         }
       }
     }
-    return marketWarn
+    // 今天没信号，之前有买入，并且连续涨2天及以上，那就提示买入
+    if (firstFlag === 'buy') {
+      if (firstFlagIndex >= 2) {
+        let allUp = true
+        for (let i = 0; i < firstFlagIndex; i++) {
+          if (netChangeRatioList[i] < 0) {
+            allUp = false
+            break
+          }
+        }
+        if (allUp) {
+          ifBuy = true
+        }
+      }
+    }
+    if (ifSell) {
+      return 'sell'
+    }
+    if (ifBuy) {
+      return 'buy'
+    }
+    return ''
   },
   // 根据仓位提示，仓位是否合适
-  getPositionWarn (item, totalSum, hasCount) {
+  getPositionWarn (item, hasCount) {
     const userFundAccountInfo = storageUtil.getUserFundAccountInfo()
     const asset = userFundAccountInfo.last_asset
     // 如果是混合指数宽限1.5倍
     let mix = (item.mix ? 1.5 : 1) * 0.9
     let assetLevelOne = (asset / 15) * mix
-    let totalLevelOne = (totalSum / 6) * mix
     // 如果大于总资产的1/15，大于持仓的1/6，那就是危险
-    if ((hasCount >= assetLevelOne) || (hasCount >= totalLevelOne)) {
+    if (hasCount >= assetLevelOne) {
       return 'danger'
     }
     let assetLevelTwo = (asset / 25) * mix
-    let totalLevelTwo = (totalSum / 10) * mix
     // 如果大于总资产的1/25，大于持仓的1/10，那就需要警示
-    if ((hasCount >= assetLevelTwo) || (hasCount >= totalLevelTwo)) {
+    if (hasCount >= assetLevelTwo) {
       return 'warn'
     }
     return ''

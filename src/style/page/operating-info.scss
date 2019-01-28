@@ -85,6 +85,8 @@
     &.should-sell {
       background-color: $green-color-back;
     }
+  }
+  .mint-cell {
     &.should-buy {
       background-color: $red-color-back;
     }

@@ -37,8 +37,12 @@ const operatingTooltip = {
   },
   getBuyItem (type, upFinalRate, averageIndex) {
     let a = 1
+    // 现阶段不适合
+    // if (averageIndex > 1) {
+    //   a = 1.2
+    // }
     if (averageIndex > 1) {
-      a = 1.2
+      a = 0.8
     }
     if (averageIndex < -1) {
       a = 0.8

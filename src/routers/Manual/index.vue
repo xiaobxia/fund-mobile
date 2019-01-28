@@ -1,5 +1,5 @@
 <template>
-  <div class="my-fund-add">
+  <div class="page-manual">
     <mt-header title="手动" :fixed="true">
       <mt-button slot="left" @click="backHandler">
         <i class="fas fa-chevron-left"></i>

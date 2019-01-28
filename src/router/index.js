@@ -150,6 +150,11 @@ const routers = [
     component: lazyLoading('AddFund')
   },
   {
+    name: 'Manual',
+    path: '/page/manual',
+    component: lazyLoading('Manual')
+  },
+  {
     name: '404',
     path: '*',
     component: lazyLoading('NotMatch')

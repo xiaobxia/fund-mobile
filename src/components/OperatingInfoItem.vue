@@ -99,6 +99,24 @@ export default {
         return [0, 0, 0, 0, 0]
       }
     },
+    buySellListLarge: {
+      type: Array,
+      default: function () {
+        return ['', '', '', '', '', '', '', '']
+      }
+    },
+    netChangeRatioListLarge: {
+      type: Array,
+      default: function () {
+        return [0, 0, 0, 0, 0, 0, 0, 0]
+      }
+    },
+    closeListLarge: {
+      type: Array,
+      default: function () {
+        return [0, 0, 0, 0, 0, 0, 0, 0]
+      }
+    },
     lock: {
       type: Boolean,
       default: false

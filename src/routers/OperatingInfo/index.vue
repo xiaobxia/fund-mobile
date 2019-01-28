@@ -25,13 +25,16 @@
         :toUrl="'/page/indexDetail?'+qsStringify({type, ...item})"
         :hasCount="hasCount[item.name]"
         :rate="rateMap[item.key]"
-        :buySellList="buySellMap[item.key]"
         :lock="lockMap[item.name]"
         :totalSum="totalSum"
         :buyCount="buyCount"
         :sellCount="sellCount"
+        :buySellList="buySellMap[item.key]"
         :netChangeRatioList="netChangeRatioMap[item.key]"
         :closeList="closeListMap[item.key]"
+        :buySellListLarge="buySellLargeMap[item.key]"
+        :netChangeRatioListLarge="netChangeRatioLargeMap[item.key]"
+        :closeListLarge="closeListLargeMap[item.key]"
         :type="typeName"
       />
     </div>
@@ -57,8 +60,11 @@ export default {
   name: 'OperatingInfo',
   data () {
     let buySellMap = {}
+    let buySellLargeMap = {}
     let netChangeRatioMap = {}
+    let netChangeRatioLargeMap = {}
     let closeListMap = {}
+    let closeListLargeMap = {}
     let list = []
     let firstClass = {}
     let rateMap = {}
@@ -71,8 +77,11 @@ export default {
         goodBad: storageUtil.getGoodBad(codeMap[key].name) || '无'
       })
       buySellMap[key] = []
+      buySellLargeMap[key] = []
       closeListMap[key] = []
+      closeListLargeMap[key] = []
       netChangeRatioMap[key] = []
+      netChangeRatioLargeMap[key] = []
       firstClass[key] = ''
       rateMap[key] = 0
       lockMap[codeMap[key].name] = false
@@ -83,8 +92,11 @@ export default {
       typeName: '简',
       list: list,
       buySellMap,
+      buySellLargeMap,
       netChangeRatioMap,
+      netChangeRatioLargeMap,
       closeListMap,
+      closeListLargeMap,
       firstClass,
       rateMap,
       lockMap,
@@ -204,12 +216,26 @@ export default {
           let buySellList = []
           let netChangeRatioList = []
           let closeList = []
-          for (let i = 0; i < 8; i++) {
+          let buySellListLarge = []
+          let netChangeRatioListLarge = []
+          let closeListLarge = []
+          for (let i = 0; i < 10; i++) {
             const nowRecord = recentNetValue[i]
             const oneDayRecord = recentNetValue[i + 1]
             const twoDayRecord = recentNetValue[i + 2]
             let buyFlag = infoUtil[fnMap[item.key + 'Buy']](nowRecord, oneDayRecord, twoDayRecord)
             let sellFlag = infoUtil[fnMap[item.key + 'Sell']](nowRecord, oneDayRecord, twoDayRecord)
+            if (i <= 7) {
+              netChangeRatioListLarge[i] = recentNetValue[i].netChangeRatio
+              closeListLarge[i] = recentNetValue[i].close
+              if ((buyFlag === true) || (buyFlag !== false && buyFlag.flag === true)) {
+                buySellListLarge[i] = 'buy'
+              } else if ((sellFlag === true) || (sellFlag !== false && sellFlag.flag === true)) {
+                buySellListLarge[i] = 'sell'
+              } else {
+                buySellListLarge[i] = ''
+              }
+            }
             if (i < 5) {
               netChangeRatioList[i] = recentNetValue[i].netChangeRatio
               closeList[i] = recentNetValue[i].close
@@ -228,12 +254,17 @@ export default {
           this.buySellMap[item.key] = buySellList
           this.closeListMap[item.key] = closeList
           this.netChangeRatioMap[item.key] = netChangeRatioList
+          this.buySellLargeMap[item.key] = buySellListLarge
+          this.closeListLargeMap[item.key] = closeListLarge
+          this.netChangeRatioLargeMap[item.key] = netChangeRatioListLarge
           this.firstClass[item.key] = buySellList[0]
           this.rateMap[item.key] = this.keepTwoDecimals(recentNetValue[0].netChangeRatio)
           if (this.type === 'jian') {
             storageUtil.setJianBuySellList(item.key, buySellList)
+            storageUtil.setJianBuySellListLarge(item.key, buySellListLarge)
           } else {
             storageUtil.setXiongBuySellList(item.key, buySellList)
+            storageUtil.setXiongBuySellListLarge(item.key, buySellListLarge)
           }
           if (buySellList[1] === 'buy') {
             this.lastDayBuy[1]++

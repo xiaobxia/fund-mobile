@@ -294,6 +294,52 @@ const storageUtil = {
     window._xiongBuySellList = config
     localStorage.setItem('xiongBuySellList', JSON.stringify(config))
     return config
+  },
+  getJianBuySellListLarge: function (key) {
+    let config = {}
+    if (window._jianBuySellListLarge) {
+      config = window._jianBuySellListLarge
+    } else {
+      const jianBuySellListLargeString = localStorage.getItem('jianBuySellListLarge')
+      if (jianBuySellListLargeString) {
+        config = JSON.parse(jianBuySellListLargeString)
+      }
+      window._jianBuySellListLarge = config
+    }
+    if (key) {
+      return JSON.parse(config[key] || '["","","","","","","",""]')
+    }
+    return config
+  },
+  setJianBuySellListLarge: function (key, value) {
+    let config = this.getJianBuySellListLarge()
+    config[key] = JSON.stringify(value)
+    window._jianBuySellListLarge = config
+    localStorage.setItem('jianBuySellListLarge', JSON.stringify(config))
+    return config
+  },
+  getXiongBuySellListLarge: function (key) {
+    let config = {}
+    if (window._xiongBuySellListLarge) {
+      config = window._xiongBuySellListLarge
+    } else {
+      const xiongBuySellListLargeString = localStorage.getItem('xiongBuySellListLarge')
+      if (xiongBuySellListLargeString) {
+        config = JSON.parse(xiongBuySellListLargeString)
+      }
+      window._xiongBuySellListLarge = config
+    }
+    if (key) {
+      return JSON.parse(config[key] || '["","","","","","","",""]')
+    }
+    return config
+  },
+  setXiongBuySellListLarge: function (key, value) {
+    let config = this.getXiongBuySellListLarge()
+    config[key] = JSON.stringify(value)
+    window._xiongBuySellListLarge = config
+    localStorage.setItem('xiongBuySellListLarge', JSON.stringify(config))
+    return config
   }
 }
 

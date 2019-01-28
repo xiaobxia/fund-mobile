@@ -27,7 +27,6 @@
 </template>
 
 <script>
-import Http from '@/util/httpUtil.js'
 import {MessageBox} from 'mint-ui'
 import Toast from '@/common/toast.js'
 import moment from 'moment'
@@ -73,7 +72,7 @@ export default {
     deleteHandler () {
       MessageBox.confirm('确定执行此操作?').then(action => {
         if (action === 'confirm') {
-          Http.get('fund/deleteUserNetValue', {net_value_date: this.form.net_value_date}).then((data) => {
+          this.$http.get('userFund/deleteUserNetValue', {net_value_date: this.form.net_value_date}).then((data) => {
             if (data.success) {
               Toast.success('操作成功')
               this.$router.history.go(-1)
@@ -88,7 +87,7 @@ export default {
       if (this.type === 'add') {
         this.form.asset = this.myAsset + parseFloat(this.income)
       }
-      Http.post(this.type === 'add' ? 'fund/addUserNetValue' : 'fund/updateUserNetValue', this.form).then((data) => {
+      this.$http.post(this.type === 'add' ? 'userFund/addUserNetValue' : 'userFund/updateUserNetValue', this.form).then((data) => {
         if (data.success) {
           Toast.success('操作成功')
           this.$router.history.go(-1)

@@ -340,6 +340,29 @@ const storageUtil = {
     window._xiongBuySellListLarge = config
     localStorage.setItem('xiongBuySellListLarge', JSON.stringify(config))
     return config
+  },
+  getIndexAttitude: function (key) {
+    let config = {}
+    if (window._indexAttitude) {
+      config = window._indexAttitude
+    } else {
+      const indexAttitudeString = localStorage.getItem('indexAttitude')
+      if (indexAttitudeString) {
+        config = JSON.parse(indexAttitudeString)
+      }
+      window._indexAttitude = config
+    }
+    if (key) {
+      return config[key]
+    }
+    return config
+  },
+  setIndexAttitude: function (key, value) {
+    let config = this.getIndexAttitude()
+    config[key] = value
+    window._indexAttitude = config
+    localStorage.setItem('indexAttitude', JSON.stringify(config))
+    return config
   }
 }
 

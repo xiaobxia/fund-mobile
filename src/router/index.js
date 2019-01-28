@@ -155,6 +155,11 @@ const routers = [
     component: lazyLoading('Manual')
   },
   {
+    name: 'IndexAttitude',
+    path: '/page/indexAttitude',
+    component: lazyLoading('IndexAttitude')
+  },
+  {
     name: '404',
     path: '*',
     component: lazyLoading('NotMatch')

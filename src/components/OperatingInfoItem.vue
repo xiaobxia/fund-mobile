@@ -37,7 +37,7 @@
       <div class="right-tag">
         <span v-if="lock" class="lock-tag top"></span>
         <span v-if="indexAverage > 0" class="up-tag red-text mid"><i class="fas fa-angle-double-up"></i></span>
-        <span v-if="indexAverage < 0" class="down-tag green-text mid"><i class="fas fa-angle-double-up"></i></span>
+        <span v-if="indexAverage < 0" class="down-tag green-text mid"><i class="fas fa-angle-double-down"></i></span>
       </div>
     </div>
   </mt-cell-swipe>
@@ -162,7 +162,8 @@ export default {
       return operatingTooltip.upDownFinalRate(this.buyCount, this.sellCount).downRate
     },
     buyItem () {
-      return operatingTooltip.getBuyItem(this.type, this.upFinalRate, this.indexAverage)
+      const indexAttitude = storageUtil.getIndexAttitude(this.indexInfo.key) || '中性'
+      return operatingTooltip.getBuyItem(this.type, this.upFinalRate, this.indexAverage, indexAttitude)
     }
   },
   mounted () {

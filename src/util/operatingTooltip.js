@@ -35,7 +35,20 @@ const operatingTooltip = {
     // 标准到百
     return Math.round(getBuyBase(type, upFinalRate) / 100) * 100
   },
-  getBuyItem (type, upFinalRate, averageIndex) {
+  getBuyItem (type, upFinalRate, averageIndex, indexAttitude) {
+    let b = 1
+    if (indexAttitude === '强多') {
+      b = 1.2
+    }
+    if (indexAttitude === '偏多') {
+      b = 1.1
+    }
+    if (indexAttitude === '偏空') {
+      b = 0.9
+    }
+    if (indexAttitude === '强空') {
+      b = 0.8
+    }
     let a = 1
     // 现阶段不适合
     // if (averageIndex > 1) {
@@ -48,7 +61,7 @@ const operatingTooltip = {
       a = 0.8
     }
     // 标准到百
-    return Math.round(getBuyBase(type, upFinalRate) * a / 100) * 100
+    return Math.round(getBuyBase(type, upFinalRate) * a * b / 100) * 100
   },
   // 根据市场强弱提示那些本该买卖，而没有进行的
   getShouldDo (netChangeRatioList, buySellList, closeList) {

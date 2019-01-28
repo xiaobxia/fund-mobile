@@ -117,6 +117,7 @@ export default {
           this.$http.get('userFund/getUserFundAccountInfo').then((res) => {
             storageUtil.initUserFundAccountInfo(res.data)
             this.ifChecked = true
+            this.otherDataInit()
           })
           storageUtil.initUserInfo({
             ...data.data,
@@ -183,6 +184,14 @@ export default {
           }
         }
       }
+    },
+    otherDataInit () {
+      this.$http.get('market/getIndexAttitude').then((res) => {
+        let list = res.data
+        list.map((item) => {
+          storageUtil.setIndexAttitude(item.key, item.value)
+        })
+      })
     }
   }
 }

@@ -203,7 +203,7 @@ export default {
     queryData (item) {
       this.$http.getWithCache(`webData/${stockDataUtil.getAllUrl()}`, {
         code: item.code,
-        days: 10
+        days: 12
       }, {interval: 60}).then((data) => {
         if (data.success) {
           const list = data.data.list

@@ -59,7 +59,7 @@ export default {
       Promise.all([
         this.$http.get(`webData/${stockDataUtil.getAllUrl()}`, {
           code: 'sz399006',
-          days: 10
+          days: 12
         }).then((data) => {
           if (data.success) {
             const list = data.data.list
@@ -68,7 +68,7 @@ export default {
         }),
         this.$http.get(`webData/${stockDataUtil.getAllUrl()}`, {
           code: 'sh000016',
-          days: 10
+          days: 12
         }).then((data) => {
           if (data.success) {
             const list = data.data.list

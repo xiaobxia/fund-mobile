@@ -13,11 +13,11 @@
         <p class="explain">
           <span class="item">持仓成本：{{parseInt(item.costSum)}}</span>
           <span class="item">持仓金额：{{item.sum}}</span>
-          <span class="item">估算金额：{{item.valuationSum}}</span>
           <span class="item">估算收益：<span
             :class="numberClass(keepTwoDecimals(item.valuationSum-item.sum))">{{keepTwoDecimals(item.valuationSum-item.sum)}}</span></span>
+          <span class="item">估算金额：{{item.valuationSum}}</span>
           <span class="item">总收益：<span
-            :class="numberClass(keepTwoDecimals(item.valuationSum-item.costSum))">{{numberClass(keepTwoDecimals(item.valuationSum-item.costSum))}}</span></span>
+            :class="numberClass(keepTwoDecimals(item.valuationSum-item.costSum))">{{keepTwoDecimals(item.valuationSum-item.costSum)}}</span></span>
           <span class="item">总收益率：<span
             :class="numberClass(countDifferenceRate(item.valuationSum, item.costSum))">{{countDifferenceRate(item.valuationSum, item.costSum)}}%</span></span>
         </p>

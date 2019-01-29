@@ -14,7 +14,7 @@
         <span class="item">基金代码：{{currentFund.code}}</span>
         <span class="item">基金净值：{{currentFund.net_value}}</span>
         <span class="item">估算净值：{{currentFund.valuation}}</span>
-        <span class="item">估算涨幅：{{countRate(currentFund.valuation, currentFund.net_value)}}%</span>
+        <span class="item">估算涨幅：{{currentFund.change_ratio}}%</span>
         <span class="item">买入费率：{{currentFund.buy_rate_one}}</span>
         <span class="item">卖出费率：{{currentFund.sell_rate_two}}</span>
         <span v-if="type==='edit'"  class="item">可卖金额：{{parseInt(canSellInfo.sum || 0)}}</span>
@@ -81,11 +81,9 @@ export default {
 
   computed: {
     infoColor () {
-      if (this.currentFund.valuation && this.currentFund.net_value) {
-        let rate = this.countRate(this.currentFund.valuation, this.currentFund.net_value)
-        if (rate === 0) {
-          return ''
-        }
+      let rate = 0
+      if (this.currentFund.change_ratio) {
+        rate = this.currentFund.change_ratio
         return rate < 0 ? 'green' : 'red'
       } else {
         return ''

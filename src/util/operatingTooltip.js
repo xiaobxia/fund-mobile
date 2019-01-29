@@ -11,6 +11,16 @@ function getBuyBase (type, upFinalRate) {
   const flag = type === '熊' ? 1 : 0.8
   const base = flag * getStandard()
   let b = 1
+  if (upFinalRate <= 40) {
+    b = 0.9
+  }
+  if (upFinalRate <= 30) {
+    b = 0.8
+  }
+  if (upFinalRate <= 20) {
+    b = 0.7
+  }
+  // 增
   if (upFinalRate >= 60) {
     b = 1.2
   }

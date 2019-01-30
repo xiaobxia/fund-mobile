@@ -273,7 +273,7 @@ export default {
       this.$http.get('userFund/getFundsByThemeWithUserFund', {theme: query.name}).then((res) => {
         let funds = res.data.list
         funds.sort((a, b) => {
-          return b.change_ratio - a.change_ratio
+          return (a.buy_rate_one + a.sell_rate_two) - (b.buy_rate_one + b.sell_rate_two)
         })
         this.list = funds
       })

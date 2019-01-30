@@ -171,7 +171,7 @@ export default {
       // 沪深300
       this.$http.getWithCache(`webData/${stockDataUtil.getTodayUrl()}`, {
         code: 'sh000300'
-      }, {interval: 60}).then((data) => {
+      }, {interval: 30}).then((data) => {
         if (data.success) {
           this.hushenChangeRatio = data.data.netChangeRatio
         }
@@ -179,7 +179,7 @@ export default {
       // 创业板
       this.$http.getWithCache(`webData/${stockDataUtil.getTodayUrl()}`, {
         code: 'sz399006'
-      }, {interval: 60}).then((data) => {
+      }, {interval: 30}).then((data) => {
         if (data.success) {
           this.chuangyeChangeRatio = data.data.netChangeRatio
         }
@@ -187,7 +187,7 @@ export default {
       // 上证50
       this.$http.getWithCache(`webData/${stockDataUtil.getTodayUrl()}`, {
         code: 'sh000016'
-      }, {interval: 60}).then((data) => {
+      }, {interval: 30}).then((data) => {
         if (data.success) {
           this.wulinChangeRatio = data.data.netChangeRatio
         }

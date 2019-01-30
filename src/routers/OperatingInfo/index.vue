@@ -204,7 +204,7 @@ export default {
       this.$http.getWithCache(`webData/${stockDataUtil.getAllUrl()}`, {
         code: item.code,
         days: 12
-      }, {interval: 60}).then((data) => {
+      }, {interval: 30}).then((data) => {
         if (data.success) {
           const list = data.data.list
           const recentNetValue = formatData(list).list

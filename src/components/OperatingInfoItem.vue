@@ -163,7 +163,8 @@ export default {
     },
     buyItem () {
       const indexAttitude = storageUtil.getIndexAttitude(this.indexInfo.key) || '中性'
-      return operatingTooltip.getBuyItem(this.type, this.upFinalRate, this.indexAverage, indexAttitude)
+      const indexDiff = storageUtil.getIndexDiff(this.indexInfo.key) || 1
+      return operatingTooltip.getBuyItem(this.type, this.upFinalRate, this.indexAverage, indexAttitude, indexDiff)
     }
   },
   mounted () {

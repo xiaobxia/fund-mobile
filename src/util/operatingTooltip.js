@@ -45,7 +45,7 @@ const operatingTooltip = {
     // 标准到百
     return Math.round(getBuyBase(type, upFinalRate) / 100) * 100
   },
-  getBuyItem (type, upFinalRate, averageIndex, indexAttitude) {
+  getBuyItem (type, upFinalRate, averageIndex, indexAttitude, indexDiff) {
     let b = 1
     if (indexAttitude === '强多') {
       b = 1.2
@@ -71,7 +71,7 @@ const operatingTooltip = {
       a = 0.8
     }
     // 标准到百
-    return Math.round(getBuyBase(type, upFinalRate) * a * b / 100) * 100
+    return Math.round(getBuyBase(type, upFinalRate) * a * b * (indexDiff || 1) / 100) * 100
   },
   // 根据市场强弱提示那些本该买卖，而没有进行的
   getShouldDo (netChangeRatioList, buySellList, closeList) {

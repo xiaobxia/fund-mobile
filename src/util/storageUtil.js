@@ -363,6 +363,29 @@ const storageUtil = {
     window._indexAttitude = config
     localStorage.setItem('indexAttitude', JSON.stringify(config))
     return config
+  },
+  getIndexDiff: function (key) {
+    let config = {}
+    if (window._indexDiff) {
+      config = window._indexDiff
+    } else {
+      const indexDiffString = localStorage.getItem('indexDiff')
+      if (indexDiffString) {
+        config = JSON.parse(indexDiffString)
+      }
+      window._indexDiff = config
+    }
+    if (key) {
+      return config[key]
+    }
+    return config
+  },
+  setIndexDiff: function (key, value) {
+    let config = this.getIndexDiff()
+    config[key] = value
+    window._indexDiff = config
+    localStorage.setItem('indexDiff', JSON.stringify(config))
+    return config
   }
 }
 

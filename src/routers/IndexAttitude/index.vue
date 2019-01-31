@@ -56,15 +56,9 @@ export default {
       })
       setTimeout(() => {
         storageUtil.setIndexAttitude(item.key, item.value)
-        let newList = []
-        this.list.map((item) => {
-          newList.push({
-            key: item.key,
-            value: item.value
-          })
-        })
         this.$http.post('market/updateIndexAttitude', {
-          value: JSON.stringify(newList)
+          key: item.key,
+          value: item.value
         })
       }, 100)
     },

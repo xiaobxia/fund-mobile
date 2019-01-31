@@ -212,7 +212,10 @@ export default {
         }
       }
     })
-    this.initPage()
+    this.$http.get('userFund/getUserNetValueNowMonthRate').then((res) => {
+      this.nowMonthRate = res.data.rate
+      this.initPage()
+    })
   },
   methods: {
     initPage () {
@@ -237,6 +240,26 @@ export default {
           const netChangeRatio = parseFloat(data.data.rate)
           this.sortRate[item.key] = netChangeRatio
           this.rateInfo[item.key] = this.keepTwoDecimals(netChangeRatio)
+          const diff = netChangeRatio - this.nowMonthRate
+          if (diff < 2 && diff >= 1) {
+            storageUtil.setIndexDiff(item.key, 1.1)
+          }
+          if (diff < 3 && diff >= 2) {
+            storageUtil.setIndexDiff(item.key, 1.2)
+          }
+          if (diff < 4 && diff >= 3) {
+            storageUtil.setIndexDiff(item.key, 1.3)
+          }
+          // 分割
+          if (diff > -2 && diff <= -1) {
+            storageUtil.setIndexDiff(item.key, 0.9)
+          }
+          if (diff > -3 && diff <= -2) {
+            storageUtil.setIndexDiff(item.key, 0.8)
+          }
+          if (diff > -4 && diff <= -3) {
+            storageUtil.setIndexDiff(item.key, 0.7)
+          }
         }
       })
     },

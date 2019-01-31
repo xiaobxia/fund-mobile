@@ -4,7 +4,7 @@ import storageUtil from '@/util/storageUtil.js'
 function getStandard () {
   const userFundAccountInfo = storageUtil.getUserFundAccountInfo()
   const asset = userFundAccountInfo.last_asset
-  return asset / 160
+  return asset / (24 * 6)
 }
 
 function getBuyBase (type, upFinalRate) {

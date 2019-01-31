@@ -117,24 +117,52 @@ export default {
   watch: {
     question_1 (val) {
       storageUtil.setMarketStatus('question_1', val)
+      this.$http.post('market/updateMarketQuestion', {
+        key: 'question_1',
+        value: val
+      })
     },
     question_2 (val) {
       storageUtil.setMarketStatus('question_2', val)
+      this.$http.post('market/updateMarketQuestion', {
+        key: 'question_2',
+        value: val
+      })
     },
     question_3 (val) {
       storageUtil.setMarketStatus('question_3', val)
+      this.$http.post('market/updateMarketQuestion', {
+        key: 'question_3',
+        value: val
+      })
     },
     question_4 (val) {
       storageUtil.setMarketStatus('question_4', val)
+      this.$http.post('market/updateMarketQuestion', {
+        key: 'question_4',
+        value: val
+      })
     },
     question_5 (val) {
       storageUtil.setMarketStatus('question_5', val)
+      this.$http.post('market/updateMarketQuestion', {
+        key: 'question_5',
+        value: val
+      })
     },
     question_6 (val) {
       storageUtil.setMarketStatus('question_6', val)
+      this.$http.post('market/updateMarketQuestion', {
+        key: 'question_6',
+        value: val
+      })
     },
     question_7 (val) {
       storageUtil.setMarketStatus('question_7', val)
+      this.$http.post('market/updateMarketQuestion', {
+        key: 'question_7',
+        value: val
+      })
     }
   },
   computed: {},

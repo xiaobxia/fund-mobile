@@ -192,6 +192,12 @@ export default {
           storageUtil.setIndexAttitude(item.key, item.value)
         })
       })
+      this.$http.get('market/getMarketQuestion').then((res) => {
+        let list = res.data
+        list.map((item) => {
+          storageUtil.setMarketStatus(item.key, item.value)
+        })
+      })
     }
   }
 }

@@ -73,6 +73,54 @@ const operatingTooltip = {
     // 标准到百
     return Math.round(getBuyBase(type, upFinalRate) * a * b * (indexDiff || 1) / 100) * 100
   },
+  getSellItem (type, downFinalRate, averageIndex, indexAttitude, indexDiff) {
+    let base = 0
+    if (indexAttitude === '强多') {
+      base -= 20
+    }
+    if (indexAttitude === '偏多') {
+      base -= 10
+    }
+    if (indexAttitude === '偏空') {
+      base += 10
+    }
+    if (indexAttitude === '强空') {
+      base += 20
+    }
+    if (averageIndex > 1) {
+      base += 20
+    }
+    if (averageIndex < -1) {
+      base += 20
+    }
+    if (downFinalRate <= 40) {
+      base -= 10
+    }
+    if (downFinalRate <= 30) {
+      base -= 20
+    }
+    if (downFinalRate <= 20) {
+      base -= 30
+    }
+    // 增
+    if (downFinalRate >= 60) {
+      base += 10
+    }
+    if (downFinalRate >= 70) {
+      base += 20
+    }
+    if (downFinalRate >= 80) {
+      base += 30
+    }
+    if (downFinalRate >= 90) {
+      base += 40
+    }
+    if (downFinalRate >= 100) {
+      base += 50
+    }
+    indexDiff = indexDiff || 1
+    base += (100 - (indexDiff * 100))
+  },
   // 根据市场强弱提示那些本该买卖，而没有进行的
   getShouldDo (netChangeRatioList, buySellList, closeList) {
     let ifBuy = false

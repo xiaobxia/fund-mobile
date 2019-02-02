@@ -130,6 +130,11 @@ const codeMap = {
   'qiche': {
     code: 'sz399432',
     name: '汽车'
+  },
+  'yiqian': {
+    code: 'sh000852',
+    name: '1000',
+    mix: true
   }
 }
 export default {

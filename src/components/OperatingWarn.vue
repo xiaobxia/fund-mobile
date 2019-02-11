@@ -35,6 +35,7 @@
       </div>
     </div>
     <div class="warn-wrap">
+      <p v-if="isChunJie" class="red-text">春节前后配置创业板和传媒电子计算机</p>
       <p v-if="ifOperatingTime" class="red-text">操作前应该去标记市场状况</p>
       <p v-if="sellCountLastDay >= 10">市场大量卖出却没有跌，可以认为市场强</p>
       <p v-if="buyCountLastDay >= 10">该涨不涨那市场就定为弱，一次可以忍，两次不行</p>
@@ -46,6 +47,7 @@
 </template>
 
 <script>
+import moment from 'moment'
 import storageUtil from '@/util/storageUtil.js'
 import operatingTooltip from '@/util/operatingTooltip.js'
 
@@ -137,6 +139,11 @@ export default {
     }
   },
   mounted () {
+    // 是否是春节前后
+    isChunJie () {
+      // 2020-01-19 2020-02-07
+      return moment().isAfter('2020-01-19') && moment().isBefore('2020-02-07')
+    }
   },
   methods: {
   }

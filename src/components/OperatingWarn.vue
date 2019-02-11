@@ -35,6 +35,7 @@
       </div>
     </div>
     <div class="warn-wrap">
+      <p v-if="isGuoqing" class="red-text">国庆前后配置创业板和传媒电子计算机</p>
       <p v-if="isChunJie" class="red-text">春节前后配置创业板和传媒电子计算机</p>
       <p v-if="ifOperatingTime" class="red-text">操作前应该去标记市场状况</p>
       <p v-if="sellCountLastDay >= 10">市场大量卖出却没有跌，可以认为市场强</p>
@@ -139,10 +140,13 @@ export default {
     }
   },
   mounted () {
-    // 是否是春节前后
     isChunJie () {
+      // 是否是春节前后
       // 2020-01-19 2020-02-07
       return moment().isAfter('2020-01-19') && moment().isBefore('2020-02-07')
+    },
+    isGuoqing () {
+      return moment().isAfter('2020-09-23') && moment().isBefore('2020-10-11')
     }
   },
   methods: {

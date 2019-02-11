@@ -4,7 +4,7 @@
     <div slot="title">
       <h3>
         {{indexInfo.name}}
-        <i v-if="indexInfo.goodBad === '利空'" class="good-bad-tag fas fa-ban"></i>
+        <i v-if="indexInfo.goodBad === '利空' || ifBad" class="good-bad-tag fas fa-ban"></i>
         <span v-if="hasCount > 0" :class="['has-icon', buySellList[0]]"><i class="fas fa-hand-holding-usd"></i></span>
         <span v-if="hasCount" class="has-count">{{hasCount}}</span>
         <span v-if="positionWarn === 'danger'" class="danger-tag">危仓</span>
@@ -165,6 +165,9 @@ export default {
       const indexAttitude = storageUtil.getIndexAttitude(this.indexInfo.key) || '中性'
       const indexDiff = storageUtil.getIndexDiff(this.indexInfo.key) || 1
       return operatingTooltip.getBuyItem(this.type, this.upFinalRate, this.indexAverage, indexAttitude, indexDiff)
+    },
+    ifBad () {
+      return operatingTooltip.ifBad(this.netChangeRatioList, this.buySellList, this.closeList)
     }
   },
   mounted () {

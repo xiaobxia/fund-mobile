@@ -353,6 +353,34 @@ const operatingTooltip = {
       upRate,
       downRate
     }
+  },
+  // 是否有利空
+  ifBad (netChangeRatioList, buySellList, closeList) {
+    // 连续出两个买入信号，结果还是跌的，警示，置位有利空，之后可以通过观察，自己解除利空
+    let firstFlag = ''
+    let firstFlagIndex = 0
+    // 今天之后的第一个信号
+    for (let i = 1; i < buySellList.length; i++) {
+      if (buySellList[i] !== '') {
+        firstFlagIndex = i
+        firstFlag = buySellList[i]
+        break
+      }
+    }
+    // 连续出两个买入信号
+    if (firstFlag === 'buy' && buySellList[firstFlagIndex + 1] === 'buy') {
+      let allDown = true
+      for (let i = 0; i < (firstFlagIndex + 1); i++) {
+        if (netChangeRatioList[i] > 0) {
+          allDown = false
+          break
+        }
+      }
+      if (allDown) {
+        return true
+      }
+    }
+    return false
   }
 }
 export default operatingTooltip

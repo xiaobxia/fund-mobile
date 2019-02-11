@@ -169,6 +169,25 @@ const operatingTooltip = {
         }
       }
     }
+    // 今天没信号，之前有卖出，卖出信号第二天涨了，但是涨得少，之后都跌了也应该卖出
+    if (firstFlag === 'sell') {
+      if (firstFlagIndex >= 3) {
+        const changeRatio = netChangeRatioList[firstFlagIndex - 1]
+        // 卖出信号第二天涨了，但是涨得少
+        if (changeRatio > 0 && changeRatio < 0.7) {
+          let allDown = true
+          for (let i = 0; i < (firstFlagIndex - 1); i++) {
+            if (netChangeRatioList[i] > 0) {
+              allDown = false
+              break
+            }
+          }
+          if (allDown) {
+            ifSell = true
+          }
+        }
+      }
+    }
     if (ifSell) {
       return 'sell'
     }

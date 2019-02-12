@@ -162,8 +162,11 @@ export default {
       return operatingTooltip.upDownFinalRate(this.buyCount, this.sellCount).downRate
     },
     buyItem () {
-      const indexAttitude = storageUtil.getIndexAttitude(this.indexInfo.key) || '中性'
+      let indexAttitude = storageUtil.getIndexAttitude(this.indexInfo.key) || '中性'
       const indexDiff = storageUtil.getIndexDiff(this.indexInfo.key) || 1
+      if (this.indexInfo.attach && indexAttitude === '中性') {
+        indexAttitude = storageUtil.getIndexAttitude(this.indexInfo.attach) || '中性'
+      }
       return operatingTooltip.getBuyItem(this.type, this.upFinalRate, this.indexAverage, indexAttitude, indexDiff)
     },
     ifBad () {

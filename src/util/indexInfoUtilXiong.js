@@ -3,7 +3,7 @@
  */
 import numberUtil from './numberUtil'
 
-function ifMatch (raw, target) {
+function ifMatch(raw, target) {
   let match = true
   for (let key in target) {
     if (target[key] !== raw[key]) {
@@ -15,7 +15,7 @@ function ifMatch (raw, target) {
 }
 
 const buyModel = {
-  // 全绿,最有可能翻转的模型
+  //全绿,最有可能翻转的模型
   one: {
     ifSessionDown: true,
     ifSessionDownHigh: true,
@@ -43,7 +43,7 @@ const baseModel = {
   ifSessionDownCloseHigh: false
 }
 
-function extend (raw, target) {
+function extend(raw, target) {
   let obj = {}
   for (let key in raw) {
     obj[key] = raw[key]
@@ -54,7 +54,7 @@ function extend (raw, target) {
   return obj
 }
 
-function Util (config) {
+function Util(config) {
   this.threshold = config.threshold
   this.rate = config.rate
   this.wave = config.wave
@@ -79,20 +79,20 @@ Util.prototype = {
     flag.ifHighPreCloseDownHigh = this.ifHighPreCloseDownHigh(record)
     return flag
   },
-  // 是否高开
+  //是否高开
   ifUpOpen: function (record) {
     const preClose = record.preClose
     const open = record.open
     return open >= preClose
   },
-  // 是否开盘高幅度
+  //是否开盘高幅度
   ifOpenHigh: function (record) {
     const rate = this.rate
     const preClose = record.preClose
     const open = record.open
     return Math.abs(numberUtil.countDifferenceRate(open, preClose)) >= rate
   },
-  // 是否上涨
+  //是否上涨
   ifUpClose: function (record) {
     return record.netChangeRatio > 0
   },
@@ -4351,7 +4351,7 @@ Util.prototype = {
       }
     }
     if (ifMatch(today,
-      {'ifUpOpen': false, 'ifOpenHigh': false, 'ifUpClose': false, 'ifCloseHigh': true, 'ifSessionDown': true, 'ifSessionDownHigh': true, 'ifSessionUpClose': false, 'ifSessionUpCloseHigh': false, 'ifSessionUp': false, 'ifSessionUpHigh': false, 'ifSessionDownClose': true, 'ifSessionDownCloseHigh': true}
+    {'ifUpOpen': false, 'ifOpenHigh': false, 'ifUpClose': false, 'ifCloseHigh': true, 'ifSessionDown': true, 'ifSessionDownHigh': true, 'ifSessionUpClose': false, 'ifSessionUpCloseHigh': false, 'ifSessionUp': false, 'ifSessionUpHigh': false, 'ifSessionDownClose': true, 'ifSessionDownCloseHigh': true}
     )) {
       if (ifMatch(lastDay,
         {'ifUpOpen': false, 'ifOpenHigh': false, 'ifUpClose': false, 'ifCloseHigh': true, 'ifSessionDown': true, 'ifSessionDownHigh': true, 'ifSessionUpClose': false, 'ifSessionUpCloseHigh': false, 'ifSessionUp': false, 'ifSessionUpHigh': false, 'ifSessionDownClose': true, 'ifSessionDownCloseHigh': true}
@@ -6913,6 +6913,7 @@ const codeMap = {
   'jungong': {
     code: 'sz399959',
     name: '军工',
+    attach: 'chuangye',
     threshold: 0.93,
     wave: 0.9716906474820142,
     rate: 0.8817687074829932,
@@ -6924,6 +6925,7 @@ const codeMap = {
   'yiyao': {
     code: 'sh000037',
     name: '医药',
+    attach: 'chuangye',
     threshold: 0.94,
     rate: 0.9339416058394158,
     wave: 0.9391726618705037,
@@ -6959,6 +6961,7 @@ const codeMap = {
   'jisuanji': {
     code: 'sz399363',
     name: '计算机',
+    attach: 'chuangye',
     threshold: 1.04,
     rate: 1.0100719424460431,
     wave: 1.06308,
@@ -6972,6 +6975,7 @@ const codeMap = {
   'baijiu': {
     code: 'sz399997',
     name: '白酒',
+    attach: 'wulin',
     threshold: 1.21,
     rate: 1.07016,
     wave: 1.3559459459459462,
@@ -6985,6 +6989,7 @@ const codeMap = {
   'xinxi': {
     code: 'sh000993',
     name: '信息',
+    attach: 'chuangye',
     threshold: 1.03,
     rate: 1.0703999999999998,
     wave: 0.9838741721854306,
@@ -6998,6 +7003,7 @@ const codeMap = {
   'xiaofei': {
     code: 'sh000990',
     name: '消费',
+    attach: 'wulin',
     threshold: 0.98,
     rate: 0.9984756097560976,
     wave: 0.9562179487179483,
@@ -7009,6 +7015,7 @@ const codeMap = {
   'baoxian': {
     code: 'sz399809',
     name: '保险',
+    attach: 'wulin',
     threshold: 1,
     wave: 1.022290322580645,
     rate: 0.9797972972972975,
@@ -7033,6 +7040,7 @@ const codeMap = {
   'chuanmei': {
     code: 'sz399971',
     name: '传媒',
+    attach: 'chuangye',
     threshold: 0.86,
     rate: 0.8374025974025976,
     wave: 0.8754518072289161,
@@ -7044,6 +7052,7 @@ const codeMap = {
   'dianzi': {
     code: 'sz399811',
     name: '电子',
+    attach: 'chuangye',
     threshold: 0.9,
     rate: 0.8832450331125826,
     wave: 0.9248263888888891,
@@ -7056,6 +7065,7 @@ const codeMap = {
   'yiliao': {
     code: 'sz399989',
     name: '医疗',
+    attach: 'chuangye',
     threshold: 0.97,
     wave: 1.0519615384615388,
     rate: 0.8889999999999998,
@@ -7069,6 +7079,7 @@ const codeMap = {
   'shengwu': {
     code: 'sz399441',
     name: '生物',
+    attach: 'chuangye',
     threshold: 0.89,
     rate: 0.8235460992907802,
     wave: 0.9630645161290321,
@@ -7116,6 +7127,7 @@ const codeMap = {
   'yinhang': {
     code: 'sz399986',
     name: '银行',
+    attach: 'wulin',
     threshold: 0.7,
     rate: 0.6845000000000002,
     wave: 0.7059375,
@@ -7128,6 +7140,7 @@ const codeMap = {
   'dichan': {
     code: 'sz399393',
     name: '地产',
+    attach: 'wulin',
     threshold: 0.94,
     rate: 0.9072847682119207,
     wave: 0.9646258503401361,
@@ -7254,11 +7267,11 @@ const IndexInfoUtilXiong = {
         countList: [],
         count2: 0,
         countList2: []
-      })
+      });
     }
     list.forEach((item, index) => {
-      let value = Math.abs(numberUtil.countDifferenceRate(item.kline.close, item.kline.preClose))
-      let value2 = Math.abs(numberUtil.countDifferenceRate(item.kline.high, item.kline.low))
+      let value = Math.abs(numberUtil.countDifferenceRate(item.kline.close, item.kline.preClose));
+      let value2 = Math.abs(numberUtil.countDifferenceRate(item.kline.high, item.kline.low));
       for (let i = 0; i < xData.length; i++) {
         if (value >= xData[i].number && xData[i + 1] && value < xData[i + 1].number) {
           xData[i].count++
@@ -7273,20 +7286,20 @@ const IndexInfoUtilXiong = {
           break
         }
       }
-    })
+    });
     let all = 0
     let count = 0
     let all2 = 0
     let count2 = 0
     for (let k = 0; k < xData.length; k++) {
       if (xData[k].count >= 5) {
-        count = count + xData[k].count
+        count = count + xData[k].count;
         for (let c = 0; c < xData[k].countList.length; c++) {
           all = all + xData[k].countList[c]
         }
       }
       if (xData[k].count2 >= 5) {
-        count2 = count2 + xData[k].count2
+        count2 = count2 + xData[k].count2;
         for (let b = 0; b < xData[k].countList2.length; b++) {
           all2 = all2 + xData[k].countList2[b]
         }

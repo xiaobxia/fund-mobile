@@ -137,17 +137,17 @@ export default {
     },
     buyOne () {
       return operatingTooltip.getBuyNumber(this.type, this.upFinalRate)
-    }
-  },
-  mounted () {
+    },
     isChunJie () {
       // 是否是春节前后
       // 2020-01-19 2020-02-07
       return moment().isAfter('2020-01-19') && moment().isBefore('2020-02-07')
     },
     isGuoqing () {
-      return moment().isAfter('2020-09-23') && moment().isBefore('2020-10-11')
+      return moment().isAfter('2019-09-23') && moment().isBefore('2019-10-11')
     }
+  },
+  mounted () {
   },
   methods: {
   }

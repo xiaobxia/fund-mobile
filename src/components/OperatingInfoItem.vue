@@ -5,6 +5,7 @@
       <h3>
         {{indexInfo.name}}
         <i v-if="indexInfo.goodBad === '利空' || ifBad" class="good-bad-tag fas fa-ban"></i>
+        <i v-if="ifForceSell" class="good-bad-tag fa fa-battery-quarter"></i>
         <span v-if="hasCount > 0" :class="['has-icon', buySellList[0]]"><i class="fas fa-hand-holding-usd"></i></span>
         <span v-if="hasCount" class="has-count">{{hasCount}}</span>
         <span v-if="getLossWarn" class="danger-tag">巨亏</span>
@@ -179,6 +180,18 @@ export default {
     },
     ifBad () {
       return operatingTooltip.ifBad(this.netChangeRatioList, this.buySellList, this.closeList)
+    },
+    ifForceSell () {
+      // 联合两边的
+      let buySell = []
+      for (let i = 0; i < 5; i++) {
+        if (this.buySellList[i] !== '') {
+          buySell.push(this.buySellList[i])
+        } else {
+          buySell.push(this.otherBuySellList[i])
+        }
+      }
+      return operatingTooltip.ifForceSell(this.netChangeRatioList, buySell, this.closeList)
     }
   },
   mounted () {

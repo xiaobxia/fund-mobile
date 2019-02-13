@@ -1,4 +1,5 @@
 import storageUtil from '@/util/storageUtil.js'
+import numberUtil from './numberUtil'
 
 // 操作的标准
 function getStandard () {
@@ -385,6 +386,45 @@ const operatingTooltip = {
       }
       if (allDown) {
         return true
+      }
+    }
+    return false
+  },
+  ifForceSell (netChangeRatioList, buySellList, closeList) {
+    // 首先今天是卖出信号
+    if (buySellList[0] === 'sell') {
+      let firstFlag = ''
+      let firstFlagIndex = 0
+      for (let i = 1; i < buySellList.length; i++) {
+        if (buySellList[i] !== '') {
+          firstFlagIndex = i
+          firstFlag = buySellList[i]
+          break
+        }
+      }
+      // 上一个信号也是卖出
+      if (firstFlag === 'sell') {
+        const diff = closeList[0] - closeList[firstFlagIndex]
+        // 现在这个点比上一个低
+        if (diff < 0) {
+          return true
+        } else {
+          // 中间一定间隔2天
+          if (firstFlagIndex < 3) {
+            return false
+          }
+          const rate = numberUtil.countDifferenceRate(closeList[0], closeList[firstFlagIndex])
+          // 没怎么涨
+          if (rate < 1) {
+            for (let i = 0; i < firstFlagIndex; i++) {
+              // 不能有大幅度的涨幅
+              if (netChangeRatioList[i] > 0.8) {
+                return false
+              }
+            }
+            return true
+          }
+        }
       }
     }
     return false

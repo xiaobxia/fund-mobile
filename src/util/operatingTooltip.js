@@ -214,6 +214,13 @@ const operatingTooltip = {
     }
     return ''
   },
+  getLossWarn (hasCount, costCount) {
+    const userFundAccountInfo = storageUtil.getUserFundAccountInfo()
+    const asset = userFundAccountInfo.last_asset
+    const loss = (asset / 25) * 0.04
+    const diff = hasCount - costCount
+    return diff < -loss
+  },
   // 是否低于卖出信号时的点位,高于买入时的点位
   ifFlagTrue (buySellList, closeList) {
     let firstFlag = ''

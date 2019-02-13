@@ -7,6 +7,7 @@
         <i v-if="indexInfo.goodBad === '利空' || ifBad" class="good-bad-tag fas fa-ban"></i>
         <span v-if="hasCount > 0" :class="['has-icon', buySellList[0]]"><i class="fas fa-hand-holding-usd"></i></span>
         <span v-if="hasCount" class="has-count">{{hasCount}}</span>
+        <span v-if="getLossWarn" class="danger-tag">巨亏</span>
         <span v-if="positionWarn === 'danger'" class="danger-tag">危仓</span>
         <span v-if="positionWarn === 'warn'" class="warn-tag">高仓</span>
         <span class="buy-info">买金额:{{buyItem}}</span>
@@ -73,6 +74,10 @@ export default {
       type: Number,
       default: 0
     },
+    costCount: {
+      type: Number,
+      default: 0
+    },
     totalSum: {
       type: Number,
       default: 0
@@ -132,6 +137,9 @@ export default {
     },
     positionWarn () {
       return operatingTooltip.getPositionWarn(this.indexInfo, this.hasCount)
+    },
+    getLossWarn () {
+      return operatingTooltip.getLossWarn(this.hasCount, this.costCount)
     },
     changeMarket () {
       return storageUtil.getChangeMarket(this.indexInfo.key) || false

@@ -24,6 +24,7 @@
         :indexInfo="item"
         :toUrl="'/page/indexDetail?'+qsStringify({type, ...item})"
         :hasCount="hasCount[item.name]"
+        :costCount="costCount[item.name]"
         :rate="rateMap[item.key]"
         :lock="lockMap[item.name]"
         :totalSum="totalSum"
@@ -70,6 +71,7 @@ export default {
     let rateMap = {}
     let lockMap = {}
     let hasCount = {}
+    let costCount = {}
     for (let key in codeMap) {
       list.push({
         ...codeMap[key],
@@ -86,6 +88,7 @@ export default {
       rateMap[key] = 0
       lockMap[codeMap[key].name] = false
       hasCount[codeMap[key].name] = 0
+      costCount[codeMap[key].name] = 0
     }
     return {
       type: 'jian',
@@ -101,6 +104,7 @@ export default {
       rateMap,
       lockMap,
       hasCount,
+      costCount,
       // 持有金额，不计入定投
       totalSum: 10000,
       nowMonthRate: 0,
@@ -184,6 +188,12 @@ export default {
                     this.hasCount[item.theme] += sum
                   } else {
                     this.hasCount[item.theme] = sum
+                  }
+                  const costSum = parseInt(item.costSum)
+                  if (this.costCount[item.theme]) {
+                    this.costCount[item.theme] += costSum
+                  } else {
+                    this.costCount[item.theme] = costSum
                   }
                 }
               }

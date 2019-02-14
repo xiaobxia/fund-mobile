@@ -1,11 +1,13 @@
 import storageUtil from '@/util/storageUtil.js'
 const allDataList = {
   '东方': 'getStockAllDongfang',
-  '腾讯': 'getStockAllTenxun'
+  '腾讯': 'getStockAllTenxun',
+  '雪球': 'getStockAllXueqiu'
 }
 const todayDataList = {
   '东方': 'getStockTodayDongfang',
-  '腾讯': 'getStockTodayTenxun'
+  '腾讯': 'getStockTodayTenxun',
+  '雪球': 'getStockTodayXueqiu'
 }
 
 function getWay () {

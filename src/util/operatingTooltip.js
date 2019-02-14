@@ -175,7 +175,7 @@ const operatingTooltip = {
       if (firstFlagIndex >= 3) {
         const changeRatio = netChangeRatioList[firstFlagIndex - 1]
         // 卖出信号第二天涨了，但是涨得少
-        if (changeRatio > 0 && changeRatio < 0.7) {
+        if (changeRatio > 0 && changeRatio < 0.5) {
           let allDown = true
           for (let i = 0; i < (firstFlagIndex - 1); i++) {
             if (netChangeRatioList[i] > 0) {

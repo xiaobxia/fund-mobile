@@ -15,8 +15,9 @@
         <span class="item">锁仓收益：<span :class="numberClass(lockIncomeRatio)">{{lockIncomeRatio}}%</span></span>
         <span class="item">估算收益：<span :class="numberClass(valuationInfo)">{{parseInt(valuationInfo)}}</span></span>
         <span class="item">估算比率：<span :class="numberClass(todayIncomeRatio)">{{todayIncomeRatio}}%</span></span>
-        <span class="item">相对波动：<span :class="numberClass(relativeRate)">{{relativeRate}}%</span></span>
         <span class="item">最新购买：{{parseInt(lastBuy)}}</span>
+        <span class="item">新买波动：<span :class="numberClass(lastBuyChangeRatio)">{{lastBuyChangeRatio}}%</span></span>
+        <span class="item">净值波动：<span :class="numberClass(relativeRate)">{{relativeRate}}%</span></span>
         <span class="item">沪深300：<span :class="numberClass(hushenChangeRatio)">{{hushenChangeRatio}}%</span></span>
         <span class="item">创业板：<span :class="numberClass(chuangyeChangeRatio)">{{chuangyeChangeRatio}}%</span></span>
         <span class="item">上证50：<span :class="numberClass(wulinChangeRatio)">{{wulinChangeRatio}}%</span></span>
@@ -74,7 +75,8 @@ export default {
       fundNumber: 0,
       lockCostSum: 0,
       lastTradingDay: userFundAccountInfo.pre_net_value_date,
-      lastBuy: 0
+      lastBuy: 0,
+      lastBuyChangeRatio: 0
     }
   },
   components: {MyFundCard},
@@ -128,6 +130,7 @@ export default {
         let lockValuationSum = 0
         let costTotalSum = 0
         let lastBuy = 0
+        let lastBuyValuation = 0
         let valuationTotalSum = 0
         let totalSum = 0
         list.forEach((item) => {
@@ -135,7 +138,9 @@ export default {
           totalSum += item.sum
           costTotalSum += item.costSum
           // 处于锁仓
-          lastBuy += fundAccountUtil.getLastBuy(item).costSum
+          const lastBuyInfo = fundAccountUtil.getLastBuy(item)
+          lastBuy += lastBuyInfo.costSum
+          lastBuyValuation += lastBuyInfo.valuationSum
           const lockInfo = fundAccountUtil.getLockInfo(item)
           lockCostSum += lockInfo.costSum
           lockValuationSum += lockInfo.valuationSum
@@ -160,6 +165,7 @@ export default {
         }
         this.lastUpdateValuationTime = moment(list[0].valuation_date).format('YYYY-MM-DD HH:mm:ss')
         this.lastBuy = lastBuy
+        this.lastBuyChangeRatio = this.countDifferenceRate(lastBuyValuation, lastBuy)
         this.fundNumber = list.length
         this.lockCostSum = lockCostSum
         this.lockIncomeRatio = this.countDifferenceRate(lockValuationSum, lockCostSum)

@@ -23,6 +23,9 @@
         <span v-if="type==='edit'"  class="item">1/4：{{parseInt((canSellInfo.shares || 0)/4)}}</span>
         <span v-if="type==='edit'"  class="item">1/3：{{parseInt((canSellInfo.shares || 0)/3)}}</span>
         <span v-if="type==='edit'"  class="item">1/2：{{parseInt((canSellInfo.shares || 0)/2)}}</span>
+        <span v-if="type==='edit'"  class="item">2/3：{{parseInt((canSellInfo.shares || 0)*2/3)}}</span>
+        <span v-if="type==='edit'"  class="item">3/4：{{parseInt((canSellInfo.shares || 0)*3/4)}}</span>
+        <span v-if="type==='edit'"  class="item">4/5：{{parseInt((canSellInfo.shares || 0)*4/5)}}</span>
         <span>估值时间：{{formatDate(currentFund.valuation_date)}}</span>
       </div>
       <div class="theme-wrap">

@@ -20,9 +20,10 @@
               <span style="float: right" :class="numberClass(item.rate)">{{item.rate}}%</span>
             </h3>
             <p class="explain">
-              <span class="item">资产：{{item.asset}}</span>
-              <span class="item">份额：{{item.shares}}</span>
-              <span class="item">净值：{{item.net_value}}</span>
+              <span class="item">资产：<span>{{item.asset}}</span></span>
+              <span class="item">份额：<span>{{item.shares}}</span></span>
+              <span class="item">净值：<span>{{item.net_value}}</span></span>
+              <span class="item">盈亏：<span :class="numberClass(countIncome(item.asset))">{{countIncome(item.asset)}}</span></span>
             </p>
           </div>
         </mt-cell-swipe>
@@ -34,10 +35,12 @@
 import Http from '@/util/httpUtil.js'
 import qs from 'qs'
 import numberUtil from '@/util/numberUtil.js'
+import storageUtil from '@/util/storageUtil.js'
 
 export default{
   name: 'MyNetValueRecord',
   data () {
+    const userFundAccountInfo = storageUtil.getUserFundAccountInfo()
     return {
       queryData: {
         current: 1,
@@ -45,7 +48,8 @@ export default{
       },
       size: 50,
       list: [],
-      loading: true
+      loading: true,
+      fundAssetCost: userFundAccountInfo.fund_asset_cost || 100
     }
   },
   computed: {
@@ -85,6 +89,9 @@ export default{
     },
     addHandler () {
       this.$router.push({path: '/page/myNetValueAdd', query: {type: 'add'}})
+    },
+    countIncome (asset) {
+      return asset - this.fundAssetCost
     }
   }
 }

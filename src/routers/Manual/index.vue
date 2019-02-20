@@ -21,7 +21,7 @@
 import {Indicator} from 'mint-ui'
 
 export default {
-  name: 'MyAsset',
+  name: 'Manual',
   data () {
     return {
     }

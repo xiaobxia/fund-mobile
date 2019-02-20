@@ -38,6 +38,7 @@
       <p v-if="isGuoqing" class="red-text">国庆前后配置创业板和传媒电子计算机</p>
       <p v-if="isChunJie" class="red-text">春节前后配置创业板和传媒电子计算机</p>
       <p v-if="ifOperatingTime" class="red-text">操作前应该去标记市场状况</p>
+      <p>昨天大量卖出，今天少量卖出，那就高仓减半，出信号的减1/3</p>
       <p v-if="sellCountLastDay >= 10">市场大量卖出却没有跌，可以认为市场强</p>
       <p v-if="buyCountLastDay >= 10">该涨不涨那市场就定为弱，一次可以忍，两次不行</p>
       <p v-if="question1 === '弱'">买入只看熊，熊里的卖出一定卖</p>

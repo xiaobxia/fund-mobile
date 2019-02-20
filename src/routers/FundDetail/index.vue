@@ -179,6 +179,10 @@ export default {
           rate: 1 / 2
         },
         {
+          name: '3/5',
+          rate: 3 / 5
+        },
+        {
           name: '2/3',
           rate: 2 / 3
         },

@@ -179,6 +179,7 @@ export default {
       }
       return operatingTooltip.getBuyItem(this.type, this.upFinalRate, this.indexAverage, indexAttitude, indexDiff)
     },
+    // 连续两个买入信号以后还在跌
     ifBad () {
       return operatingTooltip.ifBad(this.netChangeRatioList, this.buySellList, this.closeList)
     },

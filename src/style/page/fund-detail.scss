@@ -7,6 +7,14 @@
       padding-left: 30px;
       font-size: 34px;
     }
+    .shares-list-wrap {
+      padding: 0 30px;
+      span {
+        display: inline-block;
+        width: 44%;
+        padding: 0;
+      }
+    }
     &.green {
       background-color: $green-color;
       color: #fff;

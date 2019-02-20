@@ -41,7 +41,7 @@ export default {
     },
     clearHandler () {
       for (let key in localStorage) {
-        if (key.startsWith('webData')) {
+        if (key.startsWith('fundMobile-cache-webData')) {
           localStorage.removeItem(key)
         }
       }

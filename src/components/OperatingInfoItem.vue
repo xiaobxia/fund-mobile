@@ -6,6 +6,7 @@
         {{indexInfo.name}}
         <i v-if="indexInfo.goodBad === '利空' || ifBad" class="good-bad-tag fas fa-ban"></i>
         <i v-if="ifForceSell" class="good-bad-tag fa fa-battery-quarter"></i>
+        <i v-if="shouldDo === 'sell' && ifSlowDecline" class="good-bad-tag fas fa-feather"></i>
         <span v-if="hasCount > 0" :class="['has-icon', buySellList[0]]"><i class="fas fa-hand-holding-usd"></i></span>
         <span v-if="hasCount" class="has-count">{{hasCount}}</span>
         <span v-if="getLossWarn" class="danger-tag">巨亏</span>
@@ -192,6 +193,17 @@ export default {
         }
       }
       return operatingTooltip.ifForceSell(this.netChangeRatioList, buySell, this.closeList)
+    },
+    ifSlowDecline () {
+      const a = this.netChangeRatioList[0]
+      const b = this.netChangeRatioList[1]
+      const c = -0.5
+      if (a < 0 && b < 0) {
+        if (a > c && b > c) {
+          return true
+        }
+      }
+      return false
     }
   },
   mounted () {

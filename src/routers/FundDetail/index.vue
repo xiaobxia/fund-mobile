@@ -20,7 +20,7 @@
         <span v-if="type==='edit'"  class="item">可卖金额：{{parseInt(canSellInfo.sum || 0)}}</span>
         <span v-if="type==='edit'"  class="item">可卖份额：{{parseInt(canSellInfo.shares || 0)}}</span>
         <div class="shares-list-wrap">
-          <div v-if="type==='edit'" v-for="(item, index) in countSharesList(canSellInfo.shares)" :key="index">{{item.name}}: <span>份额 {{item.shares}}</span><span>金额 {{item.sum}}</span></div>
+          <div v-if="type==='edit'" v-for="(item, index) in countSharesList(canSellInfo.shares)" :key="index">{{item.name}}: <span>份额 {{item.shares}}</span><span>金额 {{item.sum}}</span><span>剩余 {{item.surplus}}</span></div>
         </div>
         <div>估值时间：{{formatDate(currentFund.valuation_date)}}</div>
       </div>
@@ -70,6 +70,7 @@ export default {
         valuation_date: ''
       },
       queryData: {},
+      shares: 0,
       type: 'add',
       filterTheme: '',
       filterList,
@@ -105,6 +106,7 @@ export default {
         if (res.success === true && res.data.code) {
           const userFund = res.data
           this.currentFund = userFund
+          this.shares = userFund.shares
           this.filterTheme = userFund.theme || '未设置'
           if (userFund.position_record) {
             this.canSellInfo = fundAccountUtil.getUnLockInfo(userFund)
@@ -198,6 +200,7 @@ export default {
       sharesList.map((item) => {
         item.shares = parseInt(shares * item.rate)
         item.sum = parseInt(shares * item.rate * this.currentFund.valuation)
+        item.surplus = parseInt((this.shares - shares * item.rate) * this.currentFund.valuation)
       })
       return sharesList
     }

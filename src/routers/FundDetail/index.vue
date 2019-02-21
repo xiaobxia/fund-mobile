@@ -20,7 +20,11 @@
         <span v-if="type==='edit'"  class="item">可卖金额：{{parseInt(canSellInfo.sum || 0)}}</span>
         <span v-if="type==='edit'"  class="item">可卖份额：{{parseInt(canSellInfo.shares || 0)}}</span>
         <div class="shares-list-wrap">
-          <div v-if="type==='edit'" v-for="(item, index) in countSharesList(canSellInfo.shares)" :key="index">{{item.name}}: <span>份额 {{item.shares}}</span><span>金额 {{item.sum}}</span><span>剩余 {{item.surplus}}</span></div>
+          <div v-if="type==='edit'" v-for="(item, index) in countSharesList(canSellInfo.shares)" :key="index">
+            <div>{{item.name}}</div>
+            <div>
+              <span>份额 {{item.shares}}</span><span>金额 {{item.sum}}</span><span>剩余 {{item.surplus}}</span></div>
+            </div>
         </div>
         <div>估值时间：{{formatDate(currentFund.valuation_date)}}</div>
       </div>
@@ -195,6 +199,10 @@ export default {
         {
           name: '4/5',
           rate: 4 / 5
+        },
+        {
+          name: '1/1',
+          rate: 1
         }
       ]
       sharesList.map((item) => {

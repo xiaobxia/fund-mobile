@@ -23,19 +23,19 @@ function getBuyBase (type, upFinalRate) {
   }
   // 增
   if (upFinalRate >= 60) {
-    b = 1.2
+    b = 1.1
   }
   if (upFinalRate >= 70) {
-    b = 1.4
+    b = 1.2
   }
   if (upFinalRate >= 80) {
-    b = 1.6
+    b = 1.3
   }
   if (upFinalRate >= 90) {
-    b = 1.8
+    b = 1.4
   }
   if (upFinalRate >= 100) {
-    b = 2
+    b = 1.5
   }
   return base * b
 }
@@ -47,18 +47,19 @@ const operatingTooltip = {
     return Math.round(getBuyBase(type, upFinalRate) / 100) * 100
   },
   getBuyItem (type, upFinalRate, averageIndex, indexAttitude, indexDiff) {
-    let b = 1
+    let indexAttitudeRate = 1
+    // 指数态度
     if (indexAttitude === '强多') {
-      b = 1.2
+      indexAttitudeRate = 1.2
     }
     if (indexAttitude === '偏多') {
-      b = 1.1
+      indexAttitudeRate = 1.1
     }
     if (indexAttitude === '偏空') {
-      b = 0.9
+      indexAttitudeRate = 0.9
     }
     if (indexAttitude === '强空') {
-      b = 0.8
+      indexAttitudeRate = 0.8
     }
     let a = 1
     // 现阶段不适合
@@ -72,7 +73,7 @@ const operatingTooltip = {
       a = 0.8
     }
     // 标准到百
-    return Math.round(getBuyBase(type, upFinalRate) * a * b * (indexDiff || 1) / 100) * 100
+    return Math.round(getBuyBase(type, upFinalRate) * a * indexAttitudeRate * (indexDiff || 1) / 100) * 100
   },
   getSellItem (type, downFinalRate, averageIndex, indexAttitude, indexDiff) {
     let base = 0

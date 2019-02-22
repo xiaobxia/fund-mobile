@@ -245,26 +245,16 @@ export default {
           const netChangeRatio = parseFloat(data.data.rate)
           this.sortRate[item.key] = netChangeRatio
           this.rateInfo[item.key] = this.keepTwoDecimals(netChangeRatio)
+          // 指数大我多少
           const diff = netChangeRatio - this.nowMonthRate
-          if (diff < 2 && diff >= 1) {
-            storageUtil.setIndexDiff(item.key, 1.1)
+          let indexDiff = 1
+          if (diff > 0 && diff <= 10) {
+            indexDiff = (0.3 * diff / 10) + 1
           }
-          if (diff < 3 && diff >= 2) {
-            storageUtil.setIndexDiff(item.key, 1.2)
+          if (diff < 0 && diff >= -6) {
+            indexDiff = (0.3 * diff / 6) + 1
           }
-          if (diff < 4 && diff >= 3) {
-            storageUtil.setIndexDiff(item.key, 1.3)
-          }
-          // 分割
-          if (diff > -2 && diff <= -1) {
-            storageUtil.setIndexDiff(item.key, 0.9)
-          }
-          if (diff > -3 && diff <= -2) {
-            storageUtil.setIndexDiff(item.key, 0.8)
-          }
-          if (diff > -4 && diff <= -3) {
-            storageUtil.setIndexDiff(item.key, 0.7)
-          }
+          storageUtil.setIndexDiff(item.key, indexDiff)
         }
       })
     },

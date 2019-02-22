@@ -53,7 +53,7 @@
         <mt-radio
           align="right"
           v-model="question_5"
-          :options="['是', '否']">
+          :options="['是', '一般','否']">
         </mt-radio>
       </div>
       <div class="question">

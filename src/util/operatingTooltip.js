@@ -203,13 +203,13 @@ const operatingTooltip = {
     const userFundAccountInfo = storageUtil.getUserFundAccountInfo()
     const asset = userFundAccountInfo.last_asset
     // 如果是混合指数宽限1.5倍
-    let mix = (item.mix ? 1.5 : 1) * 0.9
-    let assetLevelOne = (asset / 15) * mix
+    let mix = item.mix ? 1.5 : 1
+    let assetLevelOne = asset / (25 * 0.65)
     // 如果大于总资产的1/15，大于持仓的1/6，那就是危险
     if (hasCount >= assetLevelOne) {
       return 'danger'
     }
-    let assetLevelTwo = (asset / 25) * mix
+    let assetLevelTwo = asset / (25 * 0.85)
     // 如果大于总资产的1/25，大于持仓的1/10，那就需要警示
     if (hasCount >= assetLevelTwo) {
       return 'warn'

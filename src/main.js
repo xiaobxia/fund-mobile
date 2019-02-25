@@ -41,6 +41,10 @@ Vue.prototype.formatFundName = function (name, len) {
   }
 }
 
+Vue.prototype.keep100 = function (number) {
+  return Math.round(number / 100) * 100
+}
+
 for (let key in numberUtil) {
   Vue.prototype[key] = numberUtil[key]
 }

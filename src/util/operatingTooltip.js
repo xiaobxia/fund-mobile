@@ -198,18 +198,27 @@ const operatingTooltip = {
     }
     return ''
   },
-  // 根据仓位提示，仓位是否合适
-  getPositionWarn (item, hasCount) {
+  getPositionWarnNumber (item) {
     const userFundAccountInfo = storageUtil.getUserFundAccountInfo()
     const asset = userFundAccountInfo.last_asset
     // 如果是混合指数宽限1.5倍
     let mix = item.mix ? 1.5 : 1
-    let assetLevelOne = asset / (25 * 0.65)
+    let assetLevelOne = mix * asset / (25 * 0.65)
+    let assetLevelTwo = mix * asset / (25 * 0.85)
+    return {
+      assetLevelOne,
+      assetLevelTwo
+    }
+  },
+  // 根据仓位提示，仓位是否合适
+  getPositionWarn (item, hasCount) {
+    const positionWarnNumber = this.getPositionWarnNumber(item)
+    let assetLevelOne = positionWarnNumber.assetLevelOne
     // 如果大于总资产的1/15，大于持仓的1/6，那就是危险
     if (hasCount >= assetLevelOne) {
       return 'danger'
     }
-    let assetLevelTwo = asset / (25 * 0.85)
+    let assetLevelTwo = positionWarnNumber.assetLevelTwo
     // 如果大于总资产的1/25，大于持仓的1/10，那就需要警示
     if (hasCount >= assetLevelTwo) {
       return 'warn'

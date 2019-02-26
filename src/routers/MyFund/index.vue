@@ -170,6 +170,10 @@ export default {
         this.lockCostSum = lockCostSum
         this.lockIncomeRatio = this.countDifferenceRate(lockValuationSum, lockCostSum)
         this.todayIncomeRatio = this.countDifferenceRate(valuationTotalSum, totalSum)
+      }).then(() => {
+        setTimeout(() => {
+          this.addFundPosition()
+        }, 1000 * 3)
       })
       this.queryStockData()
     },
@@ -198,6 +202,22 @@ export default {
           this.wulinChangeRatio = data.data.netChangeRatio
         }
       })
+    },
+    addFundPosition () {
+      const userFundAccountInfo = storageUtil.getUserFundAccountInfo()
+      // 是交易日
+      if (userFundAccountInfo.market_open) {
+        const d = new Date()
+        const hour = d.getHours()
+        // 下午3点以后
+        if (hour > 15) {
+          const position = this.countRate(this.info.totalSum, this.myAsset)
+          this.$http.post('userFund/addUserFundPosition', {
+            date: moment().format('YYYY-MM-DD'),
+            position
+          })
+        }
+      }
     },
     backHandler () {
       this.$router.history.go(-1)

@@ -206,11 +206,11 @@ export default {
     addFundPosition () {
       const userFundAccountInfo = storageUtil.getUserFundAccountInfo()
       // 是交易日
-      if (userFundAccountInfo.market_open) {
+      if (userFundAccountInfo.market_open === true) {
         const d = new Date()
         const hour = d.getHours()
         // 下午3点以后
-        if (hour > 15) {
+        if (hour >= 15) {
           const position = this.countRate(this.info.totalSum, this.myAsset)
           this.$http.post('userFund/addUserFundPosition', {
             date: moment().format('YYYY-MM-DD'),

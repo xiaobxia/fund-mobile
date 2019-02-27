@@ -111,7 +111,7 @@ export default {
       }
       if (this.editType === '赎回') {
         fundShares = this.form.fundShares - this.sellForm.shares
-        fundAssetCost = parseInt(this.form.fundAssetCost * (fundShares / this.form.fundShares))
+        fundAssetCost = this.form.fundAssetCost * (fundShares / this.form.fundShares)
       }
       Http.post('userFund/updateUserFundAssetInfo', {
         fundAssetCost: numberUtil.keepTwoDecimals(fundAssetCost),

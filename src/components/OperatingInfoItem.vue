@@ -181,13 +181,19 @@ export default {
       let warnNumber = operatingTooltip.getPositionWarnNumber(this.indexInfo, this.hasCount)
       let assetLevelOne = warnNumber.assetLevelOne
       let assetLevelTwo = warnNumber.assetLevelTwo
-      if (buyNumber > assetLevelOne) {
-        return this.keep100(assetLevelOne - this.hasCount)
-      }
+      // 大于高仓
       if (buyNumber > assetLevelTwo) {
-        return this.keep100(assetLevelTwo - this.hasCount + (buyNumber - assetLevelTwo) / 2)
+        // 超出高仓的部分需要减半
+        const addNumber = (buyNumber - assetLevelTwo) / 2
+        // 减半了还大于危仓
+        if ((assetLevelTwo + addNumber) > assetLevelOne) {
+          return this.keep100(assetLevelOne - this.hasCount)
+        } else {
+          return this.keep100(assetLevelTwo + addNumber - this.hasCount)
+        }
+      } else {
+        return this.keep100(buyNumber - this.hasCount)
       }
-      return this.keep100(buyNumber - this.hasCount)
       // return operatingTooltip.getBuyItem(this.type, this.upFinalRate, this.indexAverage, indexAttitude, indexDiff)
     },
     // 连续两个买入信号以后还在跌

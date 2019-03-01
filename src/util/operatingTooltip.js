@@ -190,6 +190,30 @@ const operatingTooltip = {
         }
       }
     }
+    // 今天没信号，之前有卖出，之后只有一天涨了（但不是今天）而且涨的很少也应该卖出
+    if (firstFlag === 'sell') {
+      if (firstFlagIndex >= 3) {
+        // 今天是跌的
+        if (netChangeRatioList[0] < 0) {
+          let upCount = 0
+          let upIndex = 0
+          for (let i = 0; i < firstFlagIndex; i++) {
+            if (netChangeRatioList[i] > 0) {
+              upCount++
+              upIndex = i
+            }
+          }
+          // 只有一天是上涨的
+          if (upCount === 1) {
+            const changeRatio = netChangeRatioList[upIndex]
+            // 但是涨得少
+            if (changeRatio > 0 && changeRatio < 0.5) {
+              ifSell = true
+            }
+          }
+        }
+      }
+    }
     if (ifSell) {
       return 'sell'
     }

@@ -209,8 +209,9 @@ export default {
       if (userFundAccountInfo.market_open === true) {
         const d = new Date()
         const hour = d.getHours()
-        // 下午3点以后
-        if (hour >= 15) {
+        const minute = d.getMinutes()
+        // 10点半以后
+        if (hour >= 10 && minute >= 30) {
           const position = this.countRate(this.info.totalSum, this.myAsset)
           this.$http.post('userFund/addUserFundPosition', {
             date: moment().format('YYYY-MM-DD'),

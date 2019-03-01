@@ -6,7 +6,7 @@
       </mt-button>
     </mt-header>
     <div class="main-body">
-      <mt-cell-swipe v-for="(item) in list" :key="item.code"  :class="item.mix ? 'has-back':''">
+      <mt-cell-swipe v-for="(item) in list" :key="item.code"  :class="{'has-back': item.mix, my: item.key==='my'}">
         <div slot="title">
           <h3>
             <span class="name">{{item.name}}</span>
@@ -135,6 +135,9 @@ const codeMap = {
     code: 'sh000852',
     name: '1000',
     mix: true
+  },
+  'my': {
+    name: '我'
   }
 }
 export default {
@@ -218,6 +221,9 @@ export default {
       }
     })
     this.$http.get('userFund/getUserNetValueNowMonthRate').then((res) => {
+      const netChangeRatio = res.data.rate
+      this.sortRate['my'] = netChangeRatio
+      this.rateInfo['my'] = this.keepTwoDecimals(netChangeRatio)
       this.nowMonthRate = res.data.rate
       this.initPage()
     })
@@ -235,6 +241,9 @@ export default {
       })
     },
     queryData (item) {
+      if (!item.code) {
+        return true
+      }
       return this.$http.getWithCache(`stock/getStockPriceNowMonthRate`, {
         code: item.code
       }, {interval: 30}).then((data) => {

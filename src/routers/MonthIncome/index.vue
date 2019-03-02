@@ -6,11 +6,12 @@
       </mt-button>
     </mt-header>
     <div class="main-body">
-      <mt-cell-swipe v-for="(item) in list" :key="item.code"  :class="{'has-back': item.mix, my: item.key==='my'}">
+      <mt-cell-swipe v-for="(item, index) in list" :key="item.code"  :class="{'has-back': item.mix, my: item.key==='my'}">
         <div slot="title">
           <h3>
             <span class="name">{{item.name}}</span>
             <span v-if="hasCount[item.name]" class="has-count">{{hasCount[item.name]}}</span>
+            <span class="paiming">{{index + 1}}</span>
             <span style="float: right" :class="numberClass(rateInfo[item.key])">{{rateInfo[item.key]}}%</span>
           </h3>
         </div>

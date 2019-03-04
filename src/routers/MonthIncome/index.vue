@@ -171,37 +171,6 @@ export default {
       fundShares: userFundAccountInfo.fund_shares
     }
   },
-  computed: {
-    income () {
-      let income = 0
-      for (let key in this.rateInfo) {
-        income += this.rateInfo[key] * (this.hasCount[codeMap[key].name] || 0)
-      }
-      return parseInt((income / 100) * 0.95)
-    },
-    incomeRate () {
-      let income = 0
-      let asset = 0
-      for (let key in this.rateInfo) {
-        let hasCount = (this.hasCount[codeMap[key].name] || 0)
-        income += this.rateInfo[key] * hasCount
-        asset += hasCount
-      }
-      income = parseInt((income / 100) * 0.95)
-      return this.countRate(income, asset)
-    },
-    incomeRelativeRate () {
-      if (this.myAsset === 0) {
-        return 0
-      }
-      let income = 0
-      for (let key in this.rateInfo) {
-        income += this.rateInfo[key] * (this.hasCount[codeMap[key].name] || 0)
-      }
-      income = parseInt((income / 100) * 0.95)
-      return this.countRate(income, this.myAsset)
-    }
-  },
   beforeDestroy () {
   },
   mounted () {

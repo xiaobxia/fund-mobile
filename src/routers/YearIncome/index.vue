@@ -6,11 +6,12 @@
       </mt-button>
     </mt-header>
     <div class="main-body">
-      <mt-cell-swipe v-for="(item) in list" :key="item.code"  :class="{'has-back': item.mix, my: item.key==='my'}">
+      <mt-cell-swipe v-for="(item, index) in list" :key="item.code"  :class="{'has-back': item.mix, my: item.key==='my'}">
         <div slot="title">
           <h3>
             <span class="name">{{item.name}}</span>
             <span v-if="hasCount[item.name]" class="has-count">{{hasCount[item.name]}}</span>
+            <span class="paiming">{{index + 1}}</span>
             <span style="float: right" :class="numberClass(rateInfo[item.key])">{{rateInfo[item.key]}}%</span>
           </h3>
         </div>
@@ -141,7 +142,7 @@ const codeMap = {
   }
 }
 export default {
-  name: 'YearIncome',
+  name: 'MonthIncome',
   data () {
     const userFundAccountInfo = storageUtil.getUserFundAccountInfo()
     let list = []
@@ -170,8 +171,6 @@ export default {
       fundShares: userFundAccountInfo.fund_shares
     }
   },
-  computed: {
-  },
   beforeDestroy () {
   },
   mounted () {
@@ -191,7 +190,7 @@ export default {
         }
       }
     })
-    this.$http.get('userFund/getUserNetValueNowMonthRate').then((res) => {
+    this.$http.get('userFund/getUserNetValueNowYearRate').then((res) => {
       const netChangeRatio = res.data.rate
       this.sortRate['my'] = netChangeRatio
       this.rateInfo['my'] = this.keepTwoDecimals(netChangeRatio)

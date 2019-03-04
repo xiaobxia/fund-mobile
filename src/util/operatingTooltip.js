@@ -227,7 +227,9 @@ const operatingTooltip = {
     const asset = userFundAccountInfo.last_asset
     // 如果是混合指数宽限1.5倍
     let mix = item.mix ? 1.5 : 1
+    // 危险
     let assetLevelOne = mix * asset / (25 * 0.65)
+    // 提示
     let assetLevelTwo = mix * asset / (25 * 0.85)
     return {
       assetLevelOne,

@@ -165,6 +165,11 @@ const routers = [
     component: lazyLoading('MonthIncome')
   },
   {
+    name: 'YearIncome',
+    path: '/page/yearIncome',
+    component: lazyLoading('YearIncome')
+  },
+  {
     name: '404',
     path: '*',
     component: lazyLoading('NotMatch')

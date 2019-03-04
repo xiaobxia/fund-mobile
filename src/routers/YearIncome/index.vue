@@ -168,7 +168,8 @@ export default {
       hasCount,
       myAsset: userFundAccountInfo.pre_asset,
       tradeTime: '',
-      fundShares: userFundAccountInfo.fund_shares
+      fundShares: userFundAccountInfo.fund_shares,
+      nowYearRate: 0
     }
   },
   beforeDestroy () {
@@ -194,7 +195,7 @@ export default {
       const netChangeRatio = res.data.rate
       this.sortRate['my'] = netChangeRatio
       this.rateInfo['my'] = this.keepTwoDecimals(netChangeRatio)
-      this.nowMonthRate = res.data.rate
+      this.nowYearRate = res.data.rate
       this.initPage()
     })
   },
@@ -224,6 +225,16 @@ export default {
           const netChangeRatio = parseFloat(data.data.rate)
           this.sortRate[item.key] = netChangeRatio
           this.rateInfo[item.key] = this.keepTwoDecimals(netChangeRatio)
+          // 指数大我多少
+          const diff = netChangeRatio - this.nowYearRate
+          let indexDiff = 1
+          if (diff > 0 && diff <= 30) {
+            indexDiff = (0.3 * diff / 30) + 1
+          }
+          if (diff < 0 && diff >= -30) {
+            indexDiff = (0.3 * diff / 30) + 1
+          }
+          storageUtil.setIndexYearDiff(item.key, indexDiff)
         }
       })
     },

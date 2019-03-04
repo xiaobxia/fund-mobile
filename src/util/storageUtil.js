@@ -386,6 +386,29 @@ const storageUtil = {
     window._indexDiff = config
     localStorage.setItem('indexDiff', JSON.stringify(config))
     return config
+  },
+  getIndexYearDiff: function (key) {
+    let config = {}
+    if (window._indexYearDiff) {
+      config = window._indexYearDiff
+    } else {
+      const indexYearDiffString = localStorage.getItem('indexYearDiff')
+      if (indexYearDiffString) {
+        config = JSON.parse(indexYearDiffString)
+      }
+      window._indexYearDiff = config
+    }
+    if (key) {
+      return config[key]
+    }
+    return config
+  },
+  setIndexYearDiff: function (key, value) {
+    let config = this.getIndexYearDiff()
+    config[key] = value
+    window._indexYearDiff = config
+    localStorage.setItem('indexYearDiff', JSON.stringify(config))
+    return config
   }
 }
 

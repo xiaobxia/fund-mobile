@@ -174,10 +174,11 @@ export default {
     buyItem () {
       let indexAttitude = storageUtil.getIndexAttitude(this.indexInfo.key) || '中性'
       const indexDiff = storageUtil.getIndexDiff(this.indexInfo.key) || 1
+      const indexYearDiff = storageUtil.getIndexYearDiff(this.indexInfo.key) || 1
       if (this.indexInfo.attach && indexAttitude === '中性') {
         indexAttitude = storageUtil.getIndexAttitude(this.indexInfo.attach) || '中性'
       }
-      let buyNumber = this.hasCount + operatingTooltip.getBuyItem(this.type, this.upFinalRate, this.indexAverage, indexAttitude, indexDiff)
+      let buyNumber = this.hasCount + operatingTooltip.getBuyItem(this.type, this.upFinalRate, this.indexAverage, indexAttitude, indexDiff * indexYearDiff)
       let warnNumber = operatingTooltip.getPositionWarnNumber(this.indexInfo, this.hasCount)
       let assetLevelOne = warnNumber.assetLevelOne
       let assetLevelTwo = warnNumber.assetLevelTwo
@@ -194,7 +195,6 @@ export default {
       } else {
         return this.keep100(buyNumber - this.hasCount)
       }
-      // return operatingTooltip.getBuyItem(this.type, this.upFinalRate, this.indexAverage, indexAttitude, indexDiff)
     },
     // 连续两个买入信号以后还在跌
     ifBad () {

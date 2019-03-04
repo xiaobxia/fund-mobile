@@ -175,10 +175,13 @@ export default {
       let indexAttitude = storageUtil.getIndexAttitude(this.indexInfo.key) || '中性'
       const indexDiff = storageUtil.getIndexDiff(this.indexInfo.key) || 1
       const indexYearDiff = storageUtil.getIndexYearDiff(this.indexInfo.key) || 1
+      const monthFactorList = [1.1, 1.2, 1.1, 1, 0.9, 0.8, 1.1, 1.1, 1, 1.1, 0.9, 0.8]
+      const d = new Date()
+      const factor = monthFactorList[d.getMonth() + 1] * indexDiff * indexYearDiff
       if (this.indexInfo.attach && indexAttitude === '中性') {
         indexAttitude = storageUtil.getIndexAttitude(this.indexInfo.attach) || '中性'
       }
-      let buyNumber = this.hasCount + operatingTooltip.getBuyItem(this.type, this.upFinalRate, this.indexAverage, indexAttitude, indexDiff * indexYearDiff)
+      let buyNumber = this.hasCount + operatingTooltip.getBuyItem(this.type, this.upFinalRate, this.indexAverage, indexAttitude, factor)
       let warnNumber = operatingTooltip.getPositionWarnNumber(this.indexInfo, this.hasCount)
       let assetLevelOne = warnNumber.assetLevelOne
       let assetLevelTwo = warnNumber.assetLevelTwo

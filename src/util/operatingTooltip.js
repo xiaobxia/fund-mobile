@@ -429,6 +429,7 @@ const operatingTooltip = {
     }
     return false
   },
+  // 强制卖出
   ifForceSell (netChangeRatioList, buySellList, closeList) {
     // 首先今天是卖出信号
     if (buySellList[0] === 'sell') {

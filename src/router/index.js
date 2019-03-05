@@ -170,6 +170,11 @@ const routers = [
     component: lazyLoading('YearIncome')
   },
   {
+    name: 'PositionConfig',
+    path: '/page/positionConfig',
+    component: lazyLoading('PositionConfig')
+  },
+  {
     name: '404',
     path: '*',
     component: lazyLoading('NotMatch')

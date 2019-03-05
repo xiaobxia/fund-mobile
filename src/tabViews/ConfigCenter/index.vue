@@ -65,6 +65,15 @@
           <div class="bottom">手动更新</div>
         </div>
       </div>
+      <div class="img-card" @click="toPath('/page/positionConfig')">
+        <div class="container">
+          <div class="content">
+            <img src="../../assets/仓位.png" alt="">
+            <!--<i class="fas fa-book"></i>-->
+          </div>
+          <div class="bottom">仓位配置</div>
+        </div>
+      </div>
     </div>
   </div>
 </template>

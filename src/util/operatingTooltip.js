@@ -3,10 +3,14 @@ import numberUtil from './numberUtil'
 
 const indexNumber = 25
 
+function getUserAsset () {
+  const userFundAccountInfo = storageUtil.getUserFundAccountInfo()
+  return userFundAccountInfo.last_asset
+}
+
 // 操作的标准
 function getStandard () {
-  const userFundAccountInfo = storageUtil.getUserFundAccountInfo()
-  const asset = userFundAccountInfo.last_asset
+  const asset = getUserAsset()
   return asset / (indexNumber * 5)
 }
 
@@ -225,14 +229,13 @@ const operatingTooltip = {
     return ''
   },
   getPositionWarnNumber (item) {
-    const userFundAccountInfo = storageUtil.getUserFundAccountInfo()
-    const asset = userFundAccountInfo.last_asset
+    const asset = getUserAsset()
     // 如果是混合指数宽限1.5倍
     let mix = item.mix ? 1.5 : 1
     // 危险
-    let positionDangerLine = mix * asset / (indexNumber * 0.65)
+    let positionDangerLine = mix * asset * (20 / 13) / indexNumber
     // 提示
-    let positionWarnLine = mix * asset / (indexNumber * 0.85)
+    let positionWarnLine = mix * asset * (20 / 17) / indexNumber
     return {
       positionDangerLine,
       positionWarnLine
@@ -253,8 +256,7 @@ const operatingTooltip = {
   },
   // 损失提示，防止单一品种损失过多
   getLossWarn (hasCount, costCount) {
-    const userFundAccountInfo = storageUtil.getUserFundAccountInfo()
-    const asset = userFundAccountInfo.last_asset
+    const asset = getUserAsset()
     const loss = (asset / indexNumber) * 0.04
     const diff = hasCount - costCount
     return diff < -loss

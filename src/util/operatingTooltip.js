@@ -5,7 +5,8 @@ const indexNumber = 25
 
 function getUserAsset () {
   const userFundAccountInfo = storageUtil.getUserFundAccountInfo()
-  return userFundAccountInfo.last_asset
+  const position = storageUtil.getAppConfig('position') || 100
+  return userFundAccountInfo.last_asset * position / 100
 }
 
 // 操作的标准

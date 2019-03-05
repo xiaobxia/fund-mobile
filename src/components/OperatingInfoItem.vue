@@ -183,17 +183,17 @@ export default {
       }
       let buyNumber = this.hasCount + operatingTooltip.getBuyItem(this.type, this.upFinalRate, this.indexAverage, indexAttitude, factor)
       let warnNumber = operatingTooltip.getPositionWarnNumber(this.indexInfo, this.hasCount)
-      let assetLevelOne = warnNumber.assetLevelOne
-      let assetLevelTwo = warnNumber.assetLevelTwo
+      let positionDangerLine = warnNumber.positionDangerLine
+      let positionWarnLine = warnNumber.positionWarnLine
       // 大于高仓
-      if (buyNumber > assetLevelTwo) {
+      if (buyNumber > positionWarnLine) {
         // 超出高仓的部分需要减半
-        const addNumber = (buyNumber - assetLevelTwo) / 2
+        const addNumber = (buyNumber - positionWarnLine) / 2
         // 减半了还大于危仓
-        if ((assetLevelTwo + addNumber) > assetLevelOne) {
-          return this.keep100(assetLevelOne - this.hasCount)
+        if ((positionWarnLine + addNumber) > positionDangerLine) {
+          return this.keep100(positionDangerLine - this.hasCount)
         } else {
-          return this.keep100(assetLevelTwo + addNumber - this.hasCount)
+          return this.keep100(positionWarnLine + addNumber - this.hasCount)
         }
       } else {
         return this.keep100(buyNumber - this.hasCount)

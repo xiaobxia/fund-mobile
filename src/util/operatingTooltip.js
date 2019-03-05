@@ -1,11 +1,13 @@
 import storageUtil from '@/util/storageUtil.js'
 import numberUtil from './numberUtil'
 
+const indexNumber = 25
+
 // 操作的标准
 function getStandard () {
   const userFundAccountInfo = storageUtil.getUserFundAccountInfo()
   const asset = userFundAccountInfo.last_asset
-  return asset / (24 * 5)
+  return asset / (indexNumber * 5)
 }
 
 function getBuyBase (type, upFinalRate) {
@@ -228,33 +230,32 @@ const operatingTooltip = {
     // 如果是混合指数宽限1.5倍
     let mix = item.mix ? 1.5 : 1
     // 危险
-    let assetLevelOne = mix * asset / (25 * 0.65)
+    let positionDangerLine = mix * asset / (indexNumber * 0.65)
     // 提示
-    let assetLevelTwo = mix * asset / (25 * 0.85)
+    let positionWarnLine = mix * asset / (indexNumber * 0.85)
     return {
-      assetLevelOne,
-      assetLevelTwo
+      positionDangerLine,
+      positionWarnLine
     }
   },
   // 根据仓位提示，仓位是否合适
   getPositionWarn (item, hasCount) {
     const positionWarnNumber = this.getPositionWarnNumber(item)
-    let assetLevelOne = positionWarnNumber.assetLevelOne
-    // 如果大于总资产的1/15，大于持仓的1/6，那就是危险
-    if (hasCount >= assetLevelOne) {
+    let positionDangerLine = positionWarnNumber.positionDangerLine
+    if (hasCount >= positionDangerLine) {
       return 'danger'
     }
-    let assetLevelTwo = positionWarnNumber.assetLevelTwo
-    // 如果大于总资产的1/25，大于持仓的1/10，那就需要警示
-    if (hasCount >= assetLevelTwo) {
+    let positionWarnLine = positionWarnNumber.positionWarnLine
+    if (hasCount >= positionWarnLine) {
       return 'warn'
     }
     return ''
   },
+  // 损失提示，防止单一品种损失过多
   getLossWarn (hasCount, costCount) {
     const userFundAccountInfo = storageUtil.getUserFundAccountInfo()
     const asset = userFundAccountInfo.last_asset
-    const loss = (asset / 25) * 0.04
+    const loss = (asset / indexNumber) * 0.04
     const diff = hasCount - costCount
     return diff < -loss
   },

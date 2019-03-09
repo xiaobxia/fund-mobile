@@ -166,7 +166,6 @@ export default {
       rateInfo: rateInfo,
       sortRate,
       hasCount,
-      myAsset: userFundAccountInfo.pre_asset,
       tradeTime: '',
       fundShares: userFundAccountInfo.fund_shares,
       nowMonthRate: 0

@@ -72,8 +72,7 @@ export default {
       firstClass,
       rateInfo: rateInfo,
       hasInfo,
-      hasCount,
-      myAsset: userFundAccountInfo.pre_asset
+      hasCount
     }
   },
   computed: {

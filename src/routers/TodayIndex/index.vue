@@ -177,7 +177,7 @@ export default {
       timer: null,
       hasCount,
       indexRateInfo,
-      myAsset: userFundAccountInfo.pre_asset,
+      todayAsset: userFundAccountInfo.today_asset,
       preAssetCost: userFundAccountInfo.pre_asset_cost,
       assetCost: userFundAccountInfo.fund_asset_cost,
       tradeTime: '',
@@ -210,10 +210,10 @@ export default {
         income += this.rateInfo[key] * (this.hasCount[codeMap[key].name] || 0)
       }
       income = parseInt((income / 100) * 0.95)
-      return this.countRate(income, this.myAsset)
+      return this.countRate(income, this.todayAsset)
     },
     incomeDiff () {
-      if (this.myAsset === 0) {
+      if (this.todayAsset === 0) {
         return 0
       }
       let income = 0
@@ -225,7 +225,7 @@ export default {
       }
       income = parseInt((income / 100) * 0.95)
       let rate = this.countRate(income, asset)
-      return parseInt((asset - this.myAsset) * rate / 100)
+      return parseInt((asset - this.todayAsset) * rate / 100)
     }
   },
   beforeDestroy () {
@@ -293,7 +293,7 @@ export default {
             }
             income = parseInt((income / 100) * 0.95)
             let form = {
-              asset: (this.assetCost + (this.myAsset - this.preAssetCost) + income),
+              asset: (this.todayAsset + income),
               shares: this.fundShares,
               asset_cost: this.assetCost,
               net_value_date: moment().format('YYYY-MM-DD')

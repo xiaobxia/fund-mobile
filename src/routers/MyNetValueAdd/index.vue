@@ -41,7 +41,7 @@ export default {
     return {
       type: 'add',
       form: {},
-      myAsset: userFundAccountInfo.pre_asset,
+      todayAsset: userFundAccountInfo.today_asset,
       preAssetCost: userFundAccountInfo.pre_asset_cost,
       assetCost: userFundAccountInfo.fund_asset_cost,
       income: 0,
@@ -90,7 +90,7 @@ export default {
     },
     okHandler () {
       if (this.type === 'add') {
-        this.form.asset = this.assetCost + (this.myAsset - this.preAssetCost) + parseFloat(this.income)
+        this.form.asset = this.todayAsset + parseFloat(this.income)
       }
       this.$http.post(this.type === 'add' ? 'userFund/addUserNetValue' : 'userFund/updateUserNetValue', this.form).then((data) => {
         if (data.success) {

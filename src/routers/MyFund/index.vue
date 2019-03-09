@@ -66,7 +66,7 @@ export default {
       timer: null,
       todayIncomeRatio: 0,
       lockIncomeRatio: 0,
-      myAsset: userFundAccountInfo.pre_asset,
+      todayAsset: userFundAccountInfo.today_asset,
       cardInfo,
       hushenChangeRatio: 0,
       wulinChangeRatio: 0,
@@ -92,7 +92,7 @@ export default {
     // 仓位信息
     myPosition () {
       if (this.info.totalSum) {
-        return this.countRate(this.info.totalSum, this.myAsset)
+        return this.countRate(this.info.totalSum, this.todayAsset)
       } else {
         return 0
       }
@@ -101,7 +101,7 @@ export default {
     relativeRate () {
       if (this.info.valuationTotalSum && this.info.totalSum) {
         const income = this.keepTwoDecimals(this.info.valuationTotalSum - this.info.totalSum)
-        return this.countRate(income, this.myAsset)
+        return this.countRate(income, this.todayAsset)
       } else {
         return 0
       }
@@ -212,7 +212,7 @@ export default {
         const minute = d.getMinutes()
         // 10点半以后
         if (hour >= 10 && minute >= 30) {
-          const position = this.countRate(this.info.totalSum, this.myAsset)
+          const position = this.countRate(this.info.totalSum, this.todayAsset)
           this.$http.post('userFund/addUserFundPosition', {
             date: moment().format('YYYY-MM-DD'),
             position

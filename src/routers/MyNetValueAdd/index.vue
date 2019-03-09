@@ -12,11 +12,13 @@
       <template v-if="type==='edit'">
           <mt-field label="资产" placeholder="请输入资产" v-model="form.asset"></mt-field>
           <mt-field label="份额" placeholder="请输入份额" v-model="form.shares"></mt-field>
+          <mt-field label="资产成本" placeholder="请输入资产成本" v-model="form.asset_cost"></mt-field>
           <mt-field label="净值日期" placeholder="请输入净值日期" v-model="form.net_value_date"></mt-field>
       </template>
       <template v-if="type==='add'">
           <mt-field label="盈亏" placeholder="请输入盈亏" v-model="income"></mt-field>
           <mt-field label="份额" placeholder="请输入份额" v-model="form.shares"></mt-field>
+          <mt-field label="资产成本" placeholder="请输入资产成本" v-model="form.asset_cost"></mt-field>
           <mt-field label="净值日期" placeholder="请输入净值日期" v-model="form.net_value_date"></mt-field>
       </template>
     </div>
@@ -40,6 +42,8 @@ export default {
       type: 'add',
       form: {},
       myAsset: userFundAccountInfo.pre_asset,
+      preAssetCost: userFundAccountInfo.pre_asset_cost,
+      assetCost: userFundAccountInfo.fund_asset_cost,
       income: 0,
       fundShares: userFundAccountInfo.fund_shares,
       selected: storageUtil.getAppConfig('netValueAddSelected') || '1'
@@ -63,6 +67,7 @@ export default {
       this.type = query.type
       this.form = Object.assign({
         shares: this.fundShares,
+        asset_cost: this.assetCost,
         net_value_date: moment().format('YYYY-MM-DD')
       }, query)
     },
@@ -85,7 +90,7 @@ export default {
     },
     okHandler () {
       if (this.type === 'add') {
-        this.form.asset = this.myAsset + parseFloat(this.income)
+        this.form.asset = this.assetCost + (this.myAsset - this.preAssetCost) + parseFloat(this.income)
       }
       this.$http.post(this.type === 'add' ? 'userFund/addUserNetValue' : 'userFund/updateUserNetValue', this.form).then((data) => {
         if (data.success) {

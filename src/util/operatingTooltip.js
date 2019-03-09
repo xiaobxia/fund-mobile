@@ -74,7 +74,13 @@ const operatingTooltip = {
     //   a = 1.2
     // }
     if (averageIndex > 1) {
-      a = 0.8
+      a = 1.1
+    }
+    if (averageIndex < 1 && averageIndex > 0) {
+      a = 1
+    }
+    if (averageIndex > -1 && averageIndex < 0) {
+      a = 0.9
     }
     if (averageIndex < -1) {
       a = 0.8

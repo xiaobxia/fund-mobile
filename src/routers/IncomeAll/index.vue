@@ -99,7 +99,7 @@ export default {
       this.$http.get('userFund/getUserIncomeInfo').then((res) => {
         const data = res.data
         const startDate = data.first_net_value_date
-        this.allRate.my = this.countDifferenceRate(data.last_asset, data.first_asset)
+        this.allRate.my = this.countDifferenceRate(data.last_net_value, data.first_net_value)
         for (let key in webDataMap) {
           queryList.push(this.$http.get(`stock/getStockPriceRateByLocal`, {
             code: webDataMap[key].code,

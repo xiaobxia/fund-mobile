@@ -178,6 +178,8 @@ export default {
       hasCount,
       indexRateInfo,
       myAsset: userFundAccountInfo.pre_asset,
+      preAssetCost: userFundAccountInfo.pre_asset_cost,
+      assetCost: userFundAccountInfo.fund_asset_cost,
       tradeTime: '',
       fundShares: userFundAccountInfo.fund_shares,
       lastNetValue: {}
@@ -291,8 +293,9 @@ export default {
             }
             income = parseInt((income / 100) * 0.95)
             let form = {
-              asset: this.myAsset + income,
+              asset: (this.assetCost + (this.myAsset - this.preAssetCost) + income),
               shares: this.fundShares,
+              asset_cost: this.assetCost,
               net_value_date: moment().format('YYYY-MM-DD')
             }
             let url = moment(netValueDate).isSame(this.tradeTime, 'day') ? 'userFund/updateUserNetValue' : 'userFund/addUserNetValue'

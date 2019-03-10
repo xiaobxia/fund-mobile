@@ -175,7 +175,7 @@ export default {
       let indexAttitude = storageUtil.getIndexAttitude(this.indexInfo.key) || '中性'
       const indexDiff = storageUtil.getIndexDiff(this.indexInfo.key) || 1
       const indexYearDiff = storageUtil.getIndexYearDiff(this.indexInfo.key) || 1
-      const monthFactorList = [1.1, 1.2, 1, 1, 0.9, 0.8, 1.1, 1.1, 1, 1.1, 0.9, 0.8]
+      const monthFactorList = [1.1, 1.2, 1, 1, 0.9, 0.8, 1, 1.1, 1, 1.1, 0.9, 0.8]
       const d = new Date()
       const factor = monthFactorList[d.getMonth() + 1] * indexDiff * indexYearDiff
       if (this.indexInfo.attach && indexAttitude === '中性') {

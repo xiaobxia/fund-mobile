@@ -1,12 +1,28 @@
 import storageUtil from '@/util/storageUtil.js'
 import numberUtil from './numberUtil'
 
+// 指数数量
 const indexNumber = 25
 
+// 获取当天账户资产
 function getUserAsset () {
   const userFundAccountInfo = storageUtil.getUserFundAccountInfo()
   const position = storageUtil.getAppConfig('position') || 100
-  return userFundAccountInfo.last_asset * position / 100
+  return userFundAccountInfo.today_asset * position / 100
+}
+
+// 资产择时因子
+function assetMarketTimeFactor () {
+  const d = new Date()
+  // 清明节前配置少一点
+  let factor = 1
+  if (moment().isAfter('2019-03-24') && moment().isBefore('2019-04-05')) {
+    factor = factor * 0.8
+  }
+  // 按月分配
+  const monthFactorList = [1.1, 1.2, 1, 1, 0.9, 0.8, 1, 1.1, 1, 1.1, 0.9, 0.8]
+  factor = factor * monthFactorList[d.getMonth() + 1]
+  return factor
 }
 
 // 操作的标准

@@ -26,14 +26,14 @@ function assetMarketTimeFactor () {
 }
 
 // 操作的标准
-function getStandard () {
+function operateStandard () {
   const asset = getUserAsset()
   return asset / (indexNumber * 5)
 }
 
 function getBuyBase (type, upFinalRate) {
   const flag = type === '熊' ? 1 : 0.8
-  const base = flag * getStandard()
+  const base = flag * operateStandard()
   let b = 1
   if (upFinalRate <= 40) {
     b = 0.9

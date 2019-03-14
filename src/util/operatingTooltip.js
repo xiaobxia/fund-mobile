@@ -31,36 +31,12 @@ function operateStandard () {
   return asset / (indexNumber * 5)
 }
 
-function getBuyBase (type, upFinalRate) {
-  const flag = type === '熊' ? 1 : 0.8
-  const base = flag * operateStandard()
-  let b = 1
-  if (upFinalRate <= 40) {
-    b = 0.9
-  }
-  if (upFinalRate <= 30) {
-    b = 0.8
-  }
-  if (upFinalRate <= 20) {
-    b = 0.7
-  }
-  // 增
-  if (upFinalRate >= 60) {
-    b = 1.1
-  }
-  if (upFinalRate >= 70) {
-    b = 1.2
-  }
-  if (upFinalRate >= 80) {
-    b = 1.3
-  }
-  if (upFinalRate >= 90) {
-    b = 1.4
-  }
-  if (upFinalRate >= 100) {
-    b = 1.5
-  }
-  return base * b
+function getBuyBase (type, marketInfo) {
+  let finalFactor = type === '熊' ? 1 : 0.8
+  // 买卖信号因子
+  let buySellFactor = 0.5 * ((marketInfo.buyFlagCount - marketInfo.sellFlagCount) / indexNumber)
+  finalFactor = finalFactor * buySellFactor
+  return finalFactor * operateStandard()
 }
 
 const operatingTooltip = {

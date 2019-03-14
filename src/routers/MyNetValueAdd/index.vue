@@ -41,8 +41,6 @@ export default {
     return {
       type: 'add',
       form: {},
-      todayAsset: userFundAccountInfo.today_asset,
-      preAssetCost: userFundAccountInfo.pre_asset_cost,
       assetCost: userFundAccountInfo.fund_asset_cost,
       income: 0,
       fundShares: userFundAccountInfo.fund_shares,

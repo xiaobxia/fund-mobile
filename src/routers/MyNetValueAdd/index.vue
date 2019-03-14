@@ -10,13 +10,13 @@
     </mt-header>
     <div class="main-body">
       <template v-if="type==='edit'">
-          <mt-field label="资产" placeholder="请输入资产" v-model="form.asset"></mt-field>
+        <mt-field label="总盈亏" placeholder="请输入总盈亏" v-model="income"></mt-field>
           <mt-field label="份额" placeholder="请输入份额" v-model="form.shares"></mt-field>
           <mt-field label="资产成本" placeholder="请输入资产成本" v-model="form.asset_cost"></mt-field>
           <mt-field label="净值日期" placeholder="请输入净值日期" v-model="form.net_value_date"></mt-field>
       </template>
       <template v-if="type==='add'">
-          <mt-field label="盈亏" placeholder="请输入盈亏" v-model="income"></mt-field>
+          <mt-field label="总盈亏" placeholder="请输入总盈亏" v-model="income"></mt-field>
           <mt-field label="份额" placeholder="请输入份额" v-model="form.shares"></mt-field>
           <mt-field label="资产成本" placeholder="请输入资产成本" v-model="form.asset_cost"></mt-field>
           <mt-field label="净值日期" placeholder="请输入净值日期" v-model="form.net_value_date"></mt-field>
@@ -70,6 +70,9 @@ export default {
         asset_cost: this.assetCost,
         net_value_date: moment().format('YYYY-MM-DD')
       }, query)
+      if (query.asset_cost && query.asset) {
+        this.income = parseFloat(query.asset) - parseFloat(query.asset_cost)
+      }
     },
     backHandler () {
       this.$router.history.go(-1)
@@ -89,9 +92,7 @@ export default {
       })
     },
     okHandler () {
-      if (this.type === 'add') {
-        this.form.asset = this.todayAsset + parseFloat(this.income)
-      }
+      this.form.asset = this.form.asset_cost + parseFloat(this.income)
       this.$http.post(this.type === 'add' ? 'userFund/addUserNetValue' : 'userFund/updateUserNetValue', this.form).then((data) => {
         if (data.success) {
           Toast.success('操作成功')

@@ -41,7 +41,6 @@
 <script>
 import moment from 'moment'
 import storageUtil from '@/util/storageUtil.js'
-import operatingTooltip from '@/util/operatingTooltip.js'
 
 export default {
   name: 'OperatingWarn',

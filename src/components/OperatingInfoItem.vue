@@ -5,9 +5,8 @@
       <h3>
         {{indexInfo.name}}
         <i v-if="indexInfo.goodBad === '利空' || ifBad" class="good-bad-tag fas fa-ban"></i>
-        <i v-if="ifForceSell" class="good-bad-tag fa fa-battery-quarter"></i>
-        <i v-if="shouldDo === 'sell' && ifSlowDecline" class="good-bad-tag fas fa-feather"></i>
-        <span v-if="hasCount > 0" :class="['has-icon', buySellList[0]]"><i class="fas fa-hand-holding-usd"></i></span>
+        <i v-if="ifWeak" class="good-bad-tag fa fa-battery-quarter"></i>
+        <i v-if="ifSpeedUpDown" class="good-bad-tag fas fa-rocket"></i>
         <span v-if="hasCount" class="has-count">{{hasCount}}</span>
         <span v-if="getLossWarn" class="danger-tag">巨亏</span>
         <span v-if="positionWarn === 'danger'" class="danger-tag">危仓</span>
@@ -29,10 +28,12 @@
       </p>
       <div class="other-text">
         <p v-if="rate <= -3">是否有利空？是就先不接，标记利空，不是也不要接太多</p>
+        <p v-if="ifWeak">进入弱势期,卖出信号不多那就应该减仓</p>
+        <p v-if="ifSpeedUpDown">下跌在加速</p>
       </div>
       <div class="left-tag">
-        <span v-if="flagTrue === 'sell' && hasCount > 0" class="low-sell top"><i class="fas fa-long-arrow-alt-down"></i></span>
-        <span v-if="flagTrue === 'buy' && hasCount > 0" class="up-buy top"><i class="fas fa-long-arrow-alt-up"></i></span>
+        <span v-if="buySellFlagTrue === 'sell' && hasCount > 0" class="low-sell top"><i class="fas fa-long-arrow-alt-down"></i></span>
+        <span v-if="buySellFlagTrue === 'buy' && hasCount > 0" class="up-buy top"><i class="fas fa-long-arrow-alt-up"></i></span>
         <span v-if="ifStepUp" class="up-tag red-text mid"><i class="fas fa-level-up-alt"></i></span>
         <span v-if="ifStepDown" class="down-tag green-text mid"><i class="fas fa-level-down-alt"></i></span>
         <span v-if="changeMarket" class="change-tag bottom"><i class="fas fa-exchange-alt"></i></span>
@@ -162,8 +163,8 @@ export default {
     indexAverage () {
       return storageUtil.getAverage(this.indexInfo.key) || 0
     },
-    flagTrue () {
-      return operatingTooltip.ifFlagTrue(this.buySellList, this.closeList)
+    buySellFlagTrue () {
+      return operatingTooltip.ifBuySellFlagTrue(this.buySellList, this.closeList)
     },
     buyItem () {
       return operatingTooltip.getIndexBuyNumber(
@@ -180,7 +181,8 @@ export default {
     ifBad () {
       return operatingTooltip.ifBad(this.netChangeRatioList, this.buySellList, this.closeList)
     },
-    ifForceSell () {
+    // 是否进入弱势期
+    ifWeak () {
       // 联合两边的
       let buySell = []
       for (let i = 0; i < 5; i++) {
@@ -190,18 +192,11 @@ export default {
           buySell.push(this.otherBuySellList[i])
         }
       }
-      return operatingTooltip.ifForceSell(this.netChangeRatioList, buySell, this.closeList)
+      return operatingTooltip.ifWeak(this.netChangeRatioList, buySell, this.closeList)
     },
-    ifSlowDecline () {
-      const a = this.netChangeRatioList[0]
-      const b = this.netChangeRatioList[1]
-      const c = -0.5
-      if (a < 0 && b < 0) {
-        if (a > c && b > c) {
-          return true
-        }
-      }
-      return false
+    // 是否加速下跌
+    ifSpeedUpDown () {
+      return operatingTooltip.ifSpeedUpDown(this.netChangeRatioList)
     }
   },
   mounted () {

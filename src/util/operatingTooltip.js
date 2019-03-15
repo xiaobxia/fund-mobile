@@ -328,13 +328,13 @@ const operatingTooltip = {
     const asset = getUserAsset()
     // 如果是混合指数宽限1.5倍
     let mix = item.mix ? 1.5 : 1
-    // 危险
-    let positionDangerLine = mix * asset * (20 / 13) / indexNumber
-    // 提示
-    let positionWarnLine = mix * asset * (20 / 17) / indexNumber
+    const indexAssetStandard = mix * asset / indexNumber
+    const indexRedistributionStandard = indexAssetStandard / 2
     return {
-      positionDangerLine,
-      positionWarnLine
+      // 危险
+      positionDangerLine: indexRedistributionStandard * 3,
+      // 提示
+      positionWarnLine: indexAssetStandard
     }
   },
   // 根据仓位提示，仓位是否合适
@@ -358,7 +358,7 @@ const operatingTooltip = {
     return diff < -loss
   },
   // 是否低于卖出信号时的点位,高于买入时的点位
-  ifFlagTrue (buySellList, closeList) {
+  ifBuySellFlagTrue (buySellList, closeList) {
     let firstFlag = ''
     let flagIndex = 0
     if (buySellList[0] !== '') {
@@ -427,8 +427,8 @@ const operatingTooltip = {
     }
     return false
   },
-  // 强制卖出
-  ifForceSell (netChangeRatioList, buySellList, closeList) {
+  // 是否进入弱势期
+  ifWeak (netChangeRatioList, buySellList, closeList) {
     // 首先今天是卖出信号
     if (buySellList[0] === 'sell') {
       let firstFlag = ''
@@ -463,6 +463,17 @@ const operatingTooltip = {
             return true
           }
         }
+      }
+    }
+    return false
+  },
+  // 是否加速下跌
+  ifSpeedUpDown (netChangeRatioList) {
+    const a = netChangeRatioList[0]
+    const b = netChangeRatioList[1]
+    if (a < 0 && b < 0) {
+      if (a < b) {
+        return true
       }
     }
     return false

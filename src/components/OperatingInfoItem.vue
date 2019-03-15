@@ -3,7 +3,7 @@
                  :class="['operating-info-item',buySellList[0], hasCount > 0 ? 'has':'no-has', 'should-' + shouldDo, lock ?'lock':'no-lock']">
     <div slot="title">
       <h3>
-        {{indexInfo.name}}
+        <span class="index-name">{{indexInfo.name}}</span>
         <i v-if="indexInfo.goodBad === '利空' || ifBad" class="good-bad-tag fas fa-ban"></i>
         <i v-if="ifWeak" class="good-bad-tag fa fa-battery-quarter"></i>
         <i v-if="ifSpeedUpDown" class="good-bad-tag fas fa-rocket"></i>

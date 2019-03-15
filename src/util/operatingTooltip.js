@@ -477,6 +477,16 @@ const operatingTooltip = {
       }
     }
     return false
+  },
+  // 是否过热
+  ifOverheated (positionWarn, buySellList) {
+    let flag = false
+    if (positionWarn) {
+      if (buySellList[0] === 'sell' && buySellList[1] === 'sell') {
+        flag = true
+      }
+    }
+    return flag
   }
 }
 export default operatingTooltip

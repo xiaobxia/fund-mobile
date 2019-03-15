@@ -226,14 +226,7 @@ export default {
           this.rateInfo[item.key] = this.keepTwoDecimals(netChangeRatio)
           // 指数大我多少
           const diff = netChangeRatio - this.nowYearRate
-          let indexDiff = 1
-          if (diff > 0 && diff <= 30) {
-            indexDiff = (0.3 * diff / 30) + 1
-          }
-          if (diff < 0 && diff >= -30) {
-            indexDiff = (0.3 * diff / 30) + 1
-          }
-          storageUtil.setIndexYearDiff(item.key, indexDiff)
+          storageUtil.setIndexYearDiff(item.key, diff)
         }
       })
     },

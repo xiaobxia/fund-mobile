@@ -14,24 +14,12 @@
         <span class="green-text">{{countDownNumber}}</span>
       </div>
       <div class="item">
-        <span class="label">涨概率：</span>
-        <span class="red-text">{{upFinalRate}}%</span>
-      </div>
-      <div class="item">
-        <span class="label">跌概率：</span>
-        <span class="green-text">{{downFinalRate}}%</span>
-      </div>
-      <div class="item">
         <span class="label">昨日买信号：</span>
         <span class="red-text">{{lastDayBuy[0]}}/{{lastDayBuy[1]}}</span>
       </div>
       <div class="item">
         <span class="label">昨日卖信号：</span>
         <span class="green-text">{{lastDaySell[0]}}/{{lastDaySell[1]}}</span>
-      </div>
-      <div class="item">
-        <span class="label">买金额：</span>
-        <span class="red-text">{{buyOne}}</span>
       </div>
     </div>
     <div class="warn-wrap">
@@ -132,15 +120,6 @@ export default {
     }
   },
   computed: {
-    upFinalRate () {
-      return operatingTooltip.upDownFinalRate(this.buyCount, this.sellCount).upRate
-    },
-    downFinalRate () {
-      return operatingTooltip.upDownFinalRate(this.buyCount, this.sellCount).downRate
-    },
-    buyOne () {
-      return operatingTooltip.getBuyNumber(this.type, this.upFinalRate)
-    },
     isChunJie () {
       // 是否是春节前后
       // 2020-01-19 2020-02-07

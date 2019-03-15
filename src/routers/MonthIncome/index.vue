@@ -226,16 +226,7 @@ export default {
           this.rateInfo[item.key] = this.keepTwoDecimals(netChangeRatio)
           // 指数大我多少
           const diff = netChangeRatio - this.nowMonthRate
-          let indexDiff = 1
-          // 大我15以内，越大比例越高
-          if (diff > 0 && diff <= 15) {
-            indexDiff = (0.3 * diff / 15) + 1
-          }
-          // 小我15以内，越小比例越小
-          if (diff < 0 && diff >= -15) {
-            indexDiff = (0.3 * diff / 15) + 1
-          }
-          storageUtil.setIndexDiff(item.key, indexDiff)
+          storageUtil.setIndexDiff(item.key, diff)
         }
       })
     },

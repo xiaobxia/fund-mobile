@@ -1,5 +1,6 @@
 import storageUtil from '@/util/storageUtil.js'
 import numberUtil from './numberUtil'
+import moment from 'moment'
 
 // 指数数量
 const indexNumber = 25
@@ -9,6 +10,69 @@ function getUserAsset () {
   const userFundAccountInfo = storageUtil.getUserFundAccountInfo()
   const position = storageUtil.getAppConfig('position') || 100
   return userFundAccountInfo.today_asset * position / 100
+}
+
+function assetMarketStateFactor () {
+  // 市场强弱情况
+  const question1 = storageUtil.getMarketStatus('question_1')
+  // 消息面情况
+  const question2 = storageUtil.getMarketStatus('question_2')
+  // 是否要护盘
+  const question3 = storageUtil.getMarketStatus('question_3')
+  // 明天是否是特殊的时间点
+  const question4 = storageUtil.getMarketStatus('question_4')
+  // 是否有上涨的意愿
+  const question5 = storageUtil.getMarketStatus('question_5')
+  // 是否悲观
+  const question6 = storageUtil.getMarketStatus('question_6')
+  // 是否缩量
+  const question7 = storageUtil.getMarketStatus('question_7')
+  let factor = 1
+  let question1Factor = 1
+  if (question1 === '强') {
+    question1Factor = 1.1
+  }
+  if (question1 === '略强') {
+    question1Factor = 1.05
+  }
+  if (question1 === '略弱') {
+    question1Factor = 0.95
+  }
+  if (question1 === '弱') {
+    question1Factor = 0.9
+  }
+  factor = factor * question1Factor
+
+  let question2Factor = 1
+  if (question2 === '利好') {
+    question2Factor = 1.1
+  }
+  if (question2 === '利空') {
+    question2Factor = 0.9
+  }
+  factor = factor * question2Factor
+
+  let question3Factor = 1
+  if (question3 === '是') {
+    question3Factor = 1.1
+  }
+  factor = factor * question3Factor
+
+  let question4Factor = 1
+  if (question4 === '是') {
+    question4Factor = 1.1
+  }
+  factor = factor * question4Factor
+
+  let question6Factor = 1
+  if (question6 === '乐观') {
+    question6Factor = 1.1
+  }
+  if (question6 === '悲观') {
+    question6Factor = 0.9
+  }
+  factor = factor * question6Factor
+  return factor
 }
 
 // 资产择时因子
@@ -31,102 +95,135 @@ function operateStandard () {
   return asset / (indexNumber * 5)
 }
 
+// 基于市场的购买基准
 function getBuyBase (type, marketInfo) {
   let finalFactor = type === '熊' ? 1 : 0.8
   // 买卖信号因子
   let buySellFactor = 0.5 * ((marketInfo.buyFlagCount - marketInfo.sellFlagCount) / indexNumber)
-  finalFactor = finalFactor * buySellFactor
+  finalFactor = finalFactor * (1 + buySellFactor)
+  // 市场状况
+  let marketStateFactor = assetMarketStateFactor()
+  finalFactor = finalFactor * marketStateFactor
+  // 市场择时
+  let marketTimeFactor = assetMarketTimeFactor()
+  finalFactor = finalFactor * marketTimeFactor
+  // 结果
   return finalFactor * operateStandard()
 }
 
+// 指数态度因子
+function getIndexAttitudeFactor (indexKey, attach) {
+  let indexAttitude = storageUtil.getIndexAttitude(indexKey) || '中性'
+  // 有附属因素
+  if (attach && indexAttitude === '中性') {
+    indexAttitude = storageUtil.getIndexAttitude(attach) || '中性'
+  }
+  let indexAttitudeFactor = 1
+  // 指数态度
+  if (indexAttitude === '强多') {
+    indexAttitudeFactor = 1.2
+  }
+  if (indexAttitude === '偏多') {
+    indexAttitudeFactor = 1.1
+  }
+  if (indexAttitude === '偏空') {
+    indexAttitudeFactor = 0.9
+  }
+  if (indexAttitude === '强空') {
+    indexAttitudeFactor = 0.8
+  }
+  return indexAttitudeFactor
+}
+
+// 指数平均因子
+function getIndexAverageFactor (indexKey) {
+  let indexAverage = storageUtil.getAverage(indexKey) || 0
+  let factor = 1
+  if (indexAverage > 0) {
+    // 越靠近1越大
+    factor = 1.1 - (0.1 * Math.abs(1 - indexAverage))
+  }
+  if (indexAverage < 0) {
+    // 越靠近-1越小
+    factor = 0.9 + (0.1 * Math.abs(1 + indexAverage))
+  }
+  return factor
+}
+
+// 月收益跟随因子
+function getIndexMonthDiffFactor (indexKey) {
+  const indexDiff = storageUtil.getIndexDiff(indexKey) || 0
+  let factor = 1
+  // 理论上当月最高和最低的票差不会超多30
+  if (indexDiff > 0) {
+    // 越靠近7.5越大
+    factor = 1.2 - (0.2 * (Math.abs(7.5 - indexDiff) / 7.5))
+  }
+  if (indexDiff < 0) {
+    // 越靠近-7.5越小
+    factor = 0.8 + (0.2 * (Math.abs(7.5 + indexDiff) / 7.5))
+  }
+  return factor
+}
+
+// 年收益跟随因子
+function getIndexYearDiffFactor (indexKey) {
+  const indexDiff = storageUtil.getIndexYearDiff(indexKey) || 0
+  let factor = 1
+  // 理论上当年最高和最低的票差不会超多50
+  if (indexDiff > 0) {
+    // 越靠近7.5越大
+    factor = 1.2 - (0.2 * (Math.abs(12.5 - indexDiff) / 12.5))
+  }
+  if (indexDiff < 0) {
+    // 越靠近-7.5越小
+    factor = 0.8 + (0.2 * (Math.abs(12.5 + indexDiff) / 12.5))
+  }
+  return factor
+}
+
+function getLevelBuyNumber (hasCount, wantAsset, indexRedistributionStandard, level, all) {
+  let a = wantAsset - (indexRedistributionStandard * level)
+  if (a > 0) {
+    a = 0
+  }
+  let b = hasCount - (indexRedistributionStandard * (level - 1))
+  if (b < 0) {
+    b = 0
+  }
+  let finalBuy = indexRedistributionStandard - b + a
+  if (finalBuy < 0) {
+    finalBuy = 0
+  }
+  return (all - level + 1) * (finalBuy) / all
+}
+
+// 买入金额再分配
+function buyNumberRedistribution (indexItem, hasCount, buyNumber) {
+  const asset = getUserAsset()
+  const mix = indexItem.mix ? 1.5 : 1
+  const indexAssetStandard = mix * asset / indexNumber
+  const indexRedistributionStandard = indexAssetStandard / 2
+  let wantAsset = hasCount + buyNumber
+  let finalBuyNumber = 0
+  finalBuyNumber += getLevelBuyNumber(hasCount, wantAsset, indexRedistributionStandard, 1, 4)
+  finalBuyNumber += getLevelBuyNumber(hasCount, wantAsset, indexRedistributionStandard, 2, 4)
+  finalBuyNumber += getLevelBuyNumber(hasCount, wantAsset, indexRedistributionStandard, 3, 4)
+  finalBuyNumber += getLevelBuyNumber(hasCount, wantAsset, indexRedistributionStandard, 4, 4)
+  return finalBuyNumber
+}
+
 const operatingTooltip = {
-  // 建议购买金额
-  getBuyNumber (type, upFinalRate) {
+  getIndexBuyNumber (type, indexItem, marketInfo, hasCount) {
     // 标准到百
-    return Math.round(getBuyBase(type, upFinalRate) / 100) * 100
-  },
-  getBuyItem (type, upFinalRate, averageIndex, indexAttitude, indexDiff) {
-    let indexAttitudeRate = 1
-    // 指数态度
-    if (indexAttitude === '强多') {
-      indexAttitudeRate = 1.2
-    }
-    if (indexAttitude === '偏多') {
-      indexAttitudeRate = 1.1
-    }
-    if (indexAttitude === '偏空') {
-      indexAttitudeRate = 0.9
-    }
-    if (indexAttitude === '强空') {
-      indexAttitudeRate = 0.8
-    }
-    let a = 1
-    // 现阶段不适合
-    // if (averageIndex > 1) {
-    //   a = 1.2
-    // }
-    if (averageIndex > 1) {
-      a = 1.1
-    }
-    if (averageIndex < 1 && averageIndex > 0) {
-      a = 1
-    }
-    if (averageIndex > -1 && averageIndex < 0) {
-      a = 0.9
-    }
-    if (averageIndex < -1) {
-      a = 0.8
-    }
-    // 标准到百
-    return Math.round(getBuyBase(type, upFinalRate) * a * indexAttitudeRate * (indexDiff || 1) / 100) * 100
-  },
-  getSellItem (type, downFinalRate, averageIndex, indexAttitude, indexDiff) {
-    let base = 0
-    if (indexAttitude === '强多') {
-      base -= 20
-    }
-    if (indexAttitude === '偏多') {
-      base -= 10
-    }
-    if (indexAttitude === '偏空') {
-      base += 10
-    }
-    if (indexAttitude === '强空') {
-      base += 20
-    }
-    if (averageIndex > 1) {
-      base += 20
-    }
-    if (averageIndex < -1) {
-      base += 20
-    }
-    if (downFinalRate <= 40) {
-      base -= 10
-    }
-    if (downFinalRate <= 30) {
-      base -= 20
-    }
-    if (downFinalRate <= 20) {
-      base -= 30
-    }
-    // 增
-    if (downFinalRate >= 60) {
-      base += 10
-    }
-    if (downFinalRate >= 70) {
-      base += 20
-    }
-    if (downFinalRate >= 80) {
-      base += 30
-    }
-    if (downFinalRate >= 90) {
-      base += 40
-    }
-    if (downFinalRate >= 100) {
-      base += 50
-    }
-    indexDiff = indexDiff || 1
-    base += (100 - (indexDiff * 100))
+    let buyBase = getBuyBase(type, marketInfo)
+    let indexAttitudeFactor = getIndexAttitudeFactor(indexItem.key, indexItem.attach)
+    let indexAverageFactor = getIndexAverageFactor(indexItem.key)
+    let indexMonthDiffFactor = getIndexMonthDiffFactor(indexItem.key)
+    let indexYearDiffFactor = getIndexYearDiffFactor(indexItem.key)
+    let buyNumber = buyBase * indexAttitudeFactor * indexAverageFactor * indexMonthDiffFactor * indexYearDiffFactor
+    let finalBuyNumber = buyNumberRedistribution(indexItem, hasCount, buyNumber)
+    return Math.round(finalBuyNumber / 100) * 100
   },
   // 根据市场强弱提示那些本该买卖，而没有进行的
   getShouldDo (netChangeRatioList, buySellList, closeList) {
@@ -301,104 +398,6 @@ const operatingTooltip = {
       }
     }
     return false
-  },
-  // 上涨，下跌分数
-  upDownFinalRate (buyCount, sellCount) {
-    const question1 = storageUtil.getMarketStatus('question_1')
-    const question2 = storageUtil.getMarketStatus('question_2')
-    const question3 = storageUtil.getMarketStatus('question_3')
-    const question4 = storageUtil.getMarketStatus('question_4')
-    const question5 = storageUtil.getMarketStatus('question_5')
-    const question6 = storageUtil.getMarketStatus('question_6')
-    const question7 = storageUtil.getMarketStatus('question_7')
-    let upRate = 50
-    let downRate = 50
-    // 是否要护盘
-    if (question3 === '是') {
-      upRate += 10
-      downRate -= 10
-    }
-    // 市场强弱
-    if (question1 === '强') {
-      upRate += 10
-      downRate -= 10
-    }
-    if (question1 === '弱') {
-      upRate -= 10
-      downRate += 10
-    }
-    // 市场是否有利好
-    if (question2 === '利好') {
-      upRate += 10
-      downRate -= 10
-    }
-    if (question2 === '利空') {
-      upRate -= 10
-      downRate += 10
-    }
-    // 是否有上涨意愿
-    if (question5 === '是') {
-      upRate += 10
-      downRate -= 10
-    }
-    if (question5 === '否') {
-      upRate -= 10
-      downRate += 10
-    }
-    // 乐观悲观，特殊情况再加10
-    if (question6 === '乐观') {
-      upRate += 10
-      if (question4 === '是') {
-        upRate += 10
-      }
-    }
-    if (question6 === '悲观') {
-      downRate += 10
-      if (question4 === '否') {
-        downRate += 10
-      }
-    }
-    // 缩量，特殊情况再加10
-    if (question7 === '是') {
-      if (question4 === '是') {
-        upRate += 10
-      }
-    }
-    if (question7 === '是') {
-      if (question4 === '否') {
-        downRate += 10
-      }
-    }
-    // 信号分
-    let one = 6
-    let two = 12
-    let tree = 18
-    if (question7 === '否') {
-      if (buyCount > tree) {
-        upRate += 30
-        downRate -= 30
-      } else if (buyCount > two) {
-        upRate += 20
-        downRate -= 20
-      } else if (buyCount > one) {
-        upRate += 10
-        downRate -= 10
-      }
-      if (sellCount > tree) {
-        downRate += 30
-        upRate -= 30
-      } else if (sellCount > two) {
-        downRate += 20
-        upRate -= 20
-      } else if (sellCount > one) {
-        downRate += 10
-        upRate -= 10
-      }
-    }
-    return {
-      upRate,
-      downRate
-    }
   },
   // 是否有利空
   ifBad (netChangeRatioList, buySellList, closeList) {

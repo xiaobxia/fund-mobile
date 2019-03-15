@@ -165,39 +165,16 @@ export default {
     flagTrue () {
       return operatingTooltip.ifFlagTrue(this.buySellList, this.closeList)
     },
-    upFinalRate () {
-      return operatingTooltip.upDownFinalRate(this.buyCount, this.sellCount).upRate
-    },
-    downFinalRate () {
-      return operatingTooltip.upDownFinalRate(this.buyCount, this.sellCount).downRate
-    },
     buyItem () {
-      let indexAttitude = storageUtil.getIndexAttitude(this.indexInfo.key) || '中性'
-      const indexDiff = storageUtil.getIndexDiff(this.indexInfo.key) || 1
-      const indexYearDiff = storageUtil.getIndexYearDiff(this.indexInfo.key) || 1
-      const monthFactorList = [1.1, 1.2, 1, 1, 0.9, 0.8, 1, 1.1, 1, 1.1, 0.9, 0.8]
-      const d = new Date()
-      const factor = monthFactorList[d.getMonth() + 1] * indexDiff * indexYearDiff
-      if (this.indexInfo.attach && indexAttitude === '中性') {
-        indexAttitude = storageUtil.getIndexAttitude(this.indexInfo.attach) || '中性'
-      }
-      let buyNumber = this.hasCount + operatingTooltip.getBuyItem(this.type, this.upFinalRate, this.indexAverage, indexAttitude, factor)
-      let warnNumber = operatingTooltip.getPositionWarnNumber(this.indexInfo, this.hasCount)
-      let positionDangerLine = warnNumber.positionDangerLine
-      let positionWarnLine = warnNumber.positionWarnLine
-      // 大于高仓
-      if (buyNumber > positionWarnLine) {
-        // 超出高仓的部分需要减半
-        const addNumber = (buyNumber - positionWarnLine) / 2
-        // 减半了还大于危仓
-        if ((positionWarnLine + addNumber) > positionDangerLine) {
-          return this.keep100(positionDangerLine - this.hasCount)
-        } else {
-          return this.keep100(positionWarnLine + addNumber - this.hasCount)
-        }
-      } else {
-        return this.keep100(buyNumber - this.hasCount)
-      }
+      return operatingTooltip.getIndexBuyNumber(
+        this.type,
+        this.indexInfo,
+        {
+          buyFlagCount: this.buyCount,
+          sellFlagCount: this.sellCount
+        },
+        this.hasCount
+      )
     },
     // 连续两个买入信号以后还在跌
     ifBad () {

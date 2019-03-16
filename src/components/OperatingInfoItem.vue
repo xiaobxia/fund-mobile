@@ -31,6 +31,7 @@
         <p v-if="rate <= -3">是否有利空？是就先不接，标记利空，不是也不要接太多</p>
         <p v-if="ifWeak">进入弱势期,卖出信号不多那就应该减仓</p>
         <p v-if="ifSpeedUpDown">下跌在加速</p>
+        <p v-if="ifBad">买入信号开始坑人</p>
         <p v-if="ifOverheated">过热危险，需要减仓</p>
       </div>
       <div class="left-tag">

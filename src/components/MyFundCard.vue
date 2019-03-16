@@ -28,7 +28,6 @@
   </div>
 </template>
 <script>
-import qs from 'qs'
 
 export default{
   name: 'MyFundCard',
@@ -36,14 +35,16 @@ export default{
     return {}
   },
   computed: {
+    // 模块持有金额
     totalCount () {
       let count = 0
       const listData = this.listData
       for (let i = 0; i < listData.length; i++) {
-        count += listData[i].costSum
+        count += listData[i].sum
       }
       return Math.round(count)
     },
+    // 模块的总波动
     totalChangeRatio () {
       let valuation = 0
       let sum = 0

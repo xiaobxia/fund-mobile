@@ -9,8 +9,7 @@
       <mt-cell-swipe v-for="(item) in list" :key="item.code" :class="[firstClass[item.key], hasInfo[item.name] ? 'has':'no-has']">
         <div slot="title">
           <h3>
-            {{item.name}}
-            <span v-if="hasInfo[item.name]" :class="['has-icon', firstInfo[item.key]]"><i class="fas fa-hand-holding-usd"></i></span>
+            <span class="index-name">{{item.name}}</span>
             <span v-if="hasCount[item.name]" class="has-count">{{hasCount[item.name]}}</span>
             <span style="float: right" :class="numberClass(rateInfo[item.key])">{{rateInfo[item.key]}}%</span>
           </h3>
@@ -26,20 +25,18 @@
 
 <script>
 import fixedInvestment from '@/util/fixedInvestment.js'
-import storageUtil from '@/util/storageUtil.js'
 import stockDataUtil from '@/util/stockDataUtil.js'
 
 const codeMap = fixedInvestment.codeMap
 const InfoUtil = fixedInvestment.Util
 const fnMap = fixedInvestment.fnMap
 const formatData = fixedInvestment.formatData
+
 export default {
   name: 'FixedInvestment',
   data () {
-    const userFundAccountInfo = storageUtil.getUserFundAccountInfo()
     let allInfo = {}
     let list = []
-    let firstInfo = {}
     let firstClass = {}
     let rateInfo = {}
     let hasInfo = {}
@@ -52,14 +49,9 @@ export default {
         mix: codeMap[key].mix,
         threshold: codeMap[key].threshold,
         wave: codeMap[key].wave,
-        rate: codeMap[key].rate,
-        noLong: codeMap[key].noLong,
-        incomeHighRate: codeMap[key].incomeHighRate,
-        stable: codeMap[key].stable,
-        goodBad: storageUtil.getGoodBad(codeMap[key].name) || '无'
+        rate: codeMap[key].rate
       })
       allInfo[key] = []
-      firstInfo[key] = ''
       firstClass[key] = ''
       rateInfo[key] = 0
       hasInfo[codeMap[key].name] = false
@@ -68,7 +60,6 @@ export default {
     return {
       list: list,
       allInfo: allInfo,
-      firstInfo: firstInfo,
       firstClass,
       rateInfo: rateInfo,
       hasInfo,
@@ -96,16 +87,15 @@ export default {
               if (item.strategy === '2') {
                 this.hasInfo[item.theme] = true
                 if (this.hasCount[item.theme]) {
-                  this.hasCount[item.theme] += parseInt(item.costSum)
+                  this.hasCount[item.theme] += parseInt(item.sum)
                 } else {
-                  this.hasCount[item.theme] = parseInt(item.costSum)
+                  this.hasCount[item.theme] = parseInt(item.sum)
                 }
               }
             }
           }
         }
       })
-      // this.queryData(list[0])
     },
     queryData (item) {
       this.$http.getWithCache(`webData/${stockDataUtil.getAllUrl()}`, {
@@ -153,7 +143,6 @@ export default {
             }
           }
           this.allInfo[item.key] = infoList
-          this.firstInfo[item.key] = classInfo
           let firstClass = ''
           if (infoList[0] === '买') {
             firstClass = 'buy'

@@ -13,6 +13,7 @@
         <span v-if="positionWarn === 'danger'" class="danger-tag">危仓</span>
         <span v-if="positionWarn === 'warn'" class="warn-tag">高仓</span>
         <span class="buy-info">买金额:{{indexBuyNumber}}</span>
+        <span class="buy-info">卖金额:{{indexSellNumber}}</span>
         <span style="float: right" :class="numberClass(rate)">{{rate}}%</span>
       </h3>
       <p class="explain">
@@ -177,6 +178,13 @@ export default {
           buyFlagCount: this.buyCount,
           sellFlagCount: this.sellCount
         },
+        this.hasCount
+      )
+    },
+    indexSellNumber () {
+      return operatingTooltip.getIndexSellNumber(
+        this.type,
+        this.indexInfo,
         this.hasCount
       )
     },

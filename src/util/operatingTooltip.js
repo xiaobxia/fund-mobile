@@ -227,7 +227,7 @@ function getLevelBuyNumber (hasCount, wantAsset, indexRedistributionStandard, le
       finalBuy = 0
     }
   }
-  return (6 - level + 1) * (finalBuy) / 6
+  return (5 - level + 1) * (finalBuy) / 5
 }
 
 // 买入金额再分配
@@ -284,7 +284,7 @@ function getLevelSellNumber (hasCount, sellNumber, indexRedistributionStandard, 
       }
     }
   }
-  return (level + 2) * (finalSell) / 6
+  return (level + 1) * (finalSell) / 5
 }
 // 卖出金额再分配
 function sellNumberRedistribution (indexItem, hasCount, sellNumber) {

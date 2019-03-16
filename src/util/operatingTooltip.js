@@ -324,6 +324,7 @@ const operatingTooltip = {
     }
     return ''
   },
+  // 仓位提示的警戒线
   getPositionWarnNumber (item) {
     const asset = getUserAsset()
     // 如果是混合指数宽限1.5倍
@@ -383,6 +384,7 @@ const operatingTooltip = {
     }
     return ''
   },
+  // 震荡着上升
   ifStepUp (netChangeRatioList, closeList) {
     if (netChangeRatioList[0] < 0 && netChangeRatioList[1] > 0 && netChangeRatioList[2] < 0 && netChangeRatioList[3] > 0) {
       if (closeList[0] > closeList[2] && closeList[1] > closeList[3]) {
@@ -391,6 +393,7 @@ const operatingTooltip = {
     }
     return false
   },
+  // 震荡着下降
   ifStepDown (netChangeRatioList, closeList) {
     if (netChangeRatioList[0] > 0 && netChangeRatioList[1] < 0 && netChangeRatioList[2] > 0 && netChangeRatioList[3] < 0) {
       if (closeList[0] < closeList[2] && closeList[1] < closeList[3]) {
@@ -399,9 +402,9 @@ const operatingTooltip = {
     }
     return false
   },
-  // 是否有利空
-  ifBad (netChangeRatioList, buySellList, closeList) {
-    // 连续出两个买入信号，结果还是跌的，警示，置位有利空，之后可以通过观察，自己解除利空
+  // 买入信号失效
+  ifBuyFlagInvalid (netChangeRatioList, buySellList) {
+    // 连续出两个买入信号，结果还是跌的，警示
     let firstFlag = ''
     let firstFlagIndex = 0
     // 今天之后的第一个信号

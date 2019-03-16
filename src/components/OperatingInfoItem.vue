@@ -4,7 +4,7 @@
     <div slot="title">
       <h3>
         <span class="index-name">{{indexInfo.name}}</span>
-        <i v-if="indexInfo.goodBad === '利空' || ifBad" class="good-bad-tag fas fa-ban"></i>
+        <i v-if="indexInfo.goodBad === '利空' || ifBuyFlagInvalid" class="good-bad-tag fas fa-ban"></i>
         <i v-if="ifWeak" class="good-bad-tag fa fa-battery-quarter"></i>
         <i v-if="ifSpeedUpDown" class="good-bad-tag fas fa-rocket"></i>
         <i v-if="ifOverheated" class="good-bad-tag fab fa-hotjar"></i>
@@ -31,7 +31,7 @@
         <p v-if="rate <= -3">是否有利空？是就先不接，标记利空，不是也不要接太多</p>
         <p v-if="ifWeak">进入弱势期,卖出信号不多那就应该减仓</p>
         <p v-if="ifSpeedUpDown">下跌在加速</p>
-        <p v-if="ifBad">买入信号开始坑人</p>
+        <p v-if="ifBuyFlagInvalid">买入信号开始坑人</p>
         <p v-if="ifOverheated">过热危险，需要减仓</p>
       </div>
       <div class="left-tag">
@@ -180,9 +180,9 @@ export default {
         this.hasCount
       )
     },
-    // 连续两个买入信号以后还在跌
-    ifBad () {
-      return operatingTooltip.ifBad(this.netChangeRatioList, this.buySellList, this.closeList)
+    // 买入信号失效，连续两个买入信号以后还在跌
+    ifBuyFlagInvalid () {
+      return operatingTooltip.ifBuyFlagInvalid(this.netChangeRatioList, this.buySellList)
     },
     // 是否进入弱势期
     ifWeak () {

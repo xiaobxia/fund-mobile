@@ -90,7 +90,7 @@ export default {
       })
     },
     okHandler () {
-      this.form.asset = this.form.asset_cost + parseFloat(this.income)
+      this.form.asset = parseFloat(this.form.asset_cost) + parseFloat(this.income)
       this.$http.post(this.type === 'add' ? 'userFund/addUserNetValue' : 'userFund/updateUserNetValue', this.form).then((data) => {
         if (data.success) {
           Toast.success('操作成功')

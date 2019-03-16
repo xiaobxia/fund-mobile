@@ -12,7 +12,7 @@
         <span v-if="getLossWarn" class="danger-tag">巨亏</span>
         <span v-if="positionWarn === 'danger'" class="danger-tag">危仓</span>
         <span v-if="positionWarn === 'warn'" class="warn-tag">高仓</span>
-        <span class="buy-info">买金额:{{buyItem}}</span>
+        <span class="buy-info">买金额:{{indexBuyNumber}}</span>
         <span style="float: right" :class="numberClass(rate)">{{rate}}%</span>
       </h3>
       <p class="explain">
@@ -169,7 +169,7 @@ export default {
     buySellFlagTrue () {
       return operatingTooltip.ifBuySellFlagTrue(this.buySellList, this.closeList)
     },
-    buyItem () {
+    indexBuyNumber () {
       return operatingTooltip.getIndexBuyNumber(
         this.type,
         this.indexInfo,

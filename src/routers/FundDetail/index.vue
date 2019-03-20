@@ -21,6 +21,13 @@
         <span v-if="type==='edit'"  class="item">可卖份额：{{parseInt(canSellInfo.shares || 0)}}</span>
         <div style="text-align: center">估值时间：{{formatDate(currentFund.valuation_date)}}</div>
         <div class="shares-list-wrap">
+          <div v-if="type==='edit'" v-for="(item, index) in countSharesListByMoney(canSellInfo.shares)" :key="index">
+            <div>{{item.name}}</div>
+            <div>
+              <span>份额 {{item.shares}}</span><span>金额 {{item.sum}}</span></div>
+          </div>
+        </div>
+        <div class="shares-list-wrap">
           <div v-if="type==='edit'" v-for="(item, index) in countSharesList(canSellInfo.shares)" :key="index">
             <div>{{item.name}}</div>
             <div>
@@ -179,6 +186,22 @@ export default {
         item.shares = parseInt(shares * item.rate)
         item.sum = parseInt(shares * item.rate * this.currentFund.valuation)
         item.surplus = parseInt((this.shares - shares * item.rate) * this.currentFund.valuation)
+      })
+      return sharesList
+    },
+    countSharesListByMoney (shares) {
+      shares = shares || 0
+      let sharesList = []
+      let number = 10
+      for (let i = 1; i < (number + 1); i++) {
+        sharesList.push({
+          name: i * 100,
+          money: i * 100
+        })
+      }
+      sharesList.map((item) => {
+        item.shares = parseInt(item.money / this.currentFund.valuation)
+        item.sum = item.money
       })
       return sharesList
     }

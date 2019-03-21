@@ -76,7 +76,8 @@ export default {
       lockCostSum: 0,
       lastTradingDay: userFundAccountInfo.pre_net_value_date,
       lastBuy: 0,
-      lastBuyChangeRatio: 0
+      lastBuyChangeRatio: 0,
+      myPosition: 0
     }
   },
   components: {MyFundCard},
@@ -85,14 +86,6 @@ export default {
     valuationInfo () {
       if (this.info.valuationTotalSum && this.info.totalSum) {
         return this.keepTwoDecimals(this.info.valuationTotalSum - this.info.totalSum)
-      } else {
-        return 0
-      }
-    },
-    // 仓位信息
-    myPosition () {
-      if (this.info.totalSum) {
-        return this.countRate(this.info.totalSum, this.todayAsset)
       } else {
         return 0
       }
@@ -163,6 +156,8 @@ export default {
           totalSum,
           costTotalSum
         }
+        this.myPosition = this.countRate(this.info.totalSum, this.todayAsset)
+        storageUtil.setAppConfig('nowPosition', parseFloat(this.myPosition))
         this.lastUpdateValuationTime = moment(list[0].valuation_date).format('YYYY-MM-DD HH:mm:ss')
         this.lastBuy = lastBuy
         this.lastBuyChangeRatio = this.countDifferenceRate(lastBuyValuation, lastBuy)

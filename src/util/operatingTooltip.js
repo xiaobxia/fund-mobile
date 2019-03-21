@@ -115,8 +115,8 @@ function getBuyBase (type, marketInfo) {
   finalFactor = finalFactor * marketTimeFactor
   // 仓位修正
   const position = storageUtil.getAppConfig('position') || 100
-  const myPosition = storageUtil.getAppConfig('myPosition') || 100
-  let positionFactor = position / myPosition
+  const nowPosition = storageUtil.getAppConfig('nowPosition') || 100
+  let positionFactor = position / nowPosition
   finalFactor = finalFactor * positionFactor
   // 结果
   return finalFactor * operateStandard()
@@ -133,8 +133,8 @@ function getSellBase () {
   finalFactor = finalFactor * (1 / marketTimeFactor)
   // 仓位修正
   const position = storageUtil.getAppConfig('position') || 100
-  const myPosition = storageUtil.getAppConfig('myPosition') || 100
-  let positionFactor = myPosition / position
+  const nowPosition = storageUtil.getAppConfig('nowPosition') || 100
+  let positionFactor = nowPosition / position
   finalFactor = finalFactor * positionFactor
   // 结果
   return finalFactor * operateStandard()

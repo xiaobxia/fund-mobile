@@ -607,7 +607,7 @@ const operatingTooltip = {
       if (buySellList[1] === 'sell') {
         // 今天涨幅低于0.5
         if (netChangeRatioList[0] < 0.5) {
-          return false
+          return true
         }
       }
     }

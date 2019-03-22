@@ -8,6 +8,7 @@
         <i v-if="ifWeak" class="good-bad-tag fa fa-battery-quarter"></i>
         <i v-if="ifSpeedUpDown" class="good-bad-tag fas fa-rocket"></i>
         <i v-if="ifOverheated" class="good-bad-tag fab fa-hotjar"></i>
+        <i v-if="ifUpSpeedDown" class="good-bad-tag fas fa-exclamation-triangle"></i>
         <span v-if="hasCount" class="has-count">{{hasCount}}</span>
         <span v-if="getLossWarn" class="danger-tag">巨亏</span>
         <span v-if="positionWarn === 'danger'" class="danger-tag">危仓</span>
@@ -34,6 +35,7 @@
         <p v-if="ifSpeedUpDown">下跌在加速</p>
         <p v-if="ifBuyFlagInvalid">买入信号开始坑人</p>
         <p v-if="ifOverheated">过热危险，需要减仓</p>
+        <p v-if="ifUpSpeedDown">卖出信号后转弱，需要减仓</p>
       </div>
       <div class="left-tag">
         <span v-if="buySellFlagTrue === 'sell' && hasCount > 0" class="low-sell top"><i class="fas fa-long-arrow-alt-down"></i></span>
@@ -212,6 +214,9 @@ export default {
     // 是否过热
     ifOverheated () {
       return operatingTooltip.ifOverheated(this.positionWarn, this.buySellList)
+    },
+    ifUpSpeedDown () {
+      return operatingTooltip.ifUpSpeedDown(this.netChangeRatioList, this.buySellList)
     }
   },
   mounted () {

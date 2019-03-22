@@ -598,6 +598,20 @@ const operatingTooltip = {
       }
     }
     return flag
+  },
+  // 是否后劲不足，卖出信号后一天涨幅低于0.5
+  ifUpSpeedDown (netChangeRatioList, buySellList) {
+    // 首先今天不是买入信号
+    if (buySellList[0] !== 'buy') {
+      // 昨天是卖出信号
+      if (buySellList[1] === 'sell') {
+        // 今天涨幅低于0.5
+        if (netChangeRatioList[0] < 0.5) {
+          return false
+        }
+      }
+    }
+    return false
   }
 }
 export default operatingTooltip

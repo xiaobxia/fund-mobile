@@ -91,7 +91,10 @@
       background-color: $red-color-back;
     }
   }
-  // 当天卖出信号
+  .has-count {
+    font-size: 24px;
+  }
+    // 当天卖出信号
   .mint-cell.sell {
     .has-count {
       color: $green-color;
@@ -107,21 +110,18 @@
     }
     background-color: $red-color-back-3;
   }
-  .warn-tag {
-    margin: 0 .25em;
-    font-size: 26px;
-    padding: 0 0.3em;
+  .operate-tag {
+    margin: 0;
+    font-size: 20px;
+    padding: 0 0.1em;
     border-radius: 4px;
-    vertical-align: top;
+    vertical-align: middle;
+  }
+  .warn-tag {
     border: 2px solid $yellow-color;
     color: $yellow-color;
   }
   .danger-tag {
-    margin: 0 .25em;
-    font-size: 26px;
-    padding: 0 0.3em;
-    border-radius: 4px;
-    vertical-align: top;
     border: 2px solid yellow;
     color: yellow;
   }
@@ -180,8 +180,8 @@
     color:  $red-color;
   }
   .good-bad-tag {
-    margin: 0 .25em;
-    font-size: 30px;
+    margin: 0;
+    font-size: 20px;
     color:  #d4237a;
   }
 
@@ -285,8 +285,9 @@
     }
   }
   .index-name {
+    font-size: 26px;
     display: inline-block;
-    min-width: 100px;
+    min-width: 80px;
   }
 }
 

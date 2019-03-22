@@ -10,11 +10,11 @@
         <i v-if="ifOverheated" class="good-bad-tag fab fa-hotjar"></i>
         <i v-if="ifUpSpeedDown" class="good-bad-tag fas fa-exclamation-triangle"></i>
         <span v-if="hasCount" class="has-count">{{hasCount}}</span>
-        <span v-if="getLossWarn" class="danger-tag">巨亏</span>
-        <span v-if="positionWarn === 'danger'" class="danger-tag">危仓</span>
-        <span v-if="positionWarn === 'warn'" class="warn-tag">高仓</span>
-        <span class="buy-info">买金额:{{indexBuyNumber}}</span>
-        <span class="buy-info">卖金额:{{indexSellNumber}}</span>
+        <span v-if="getLossWarn" class="danger-tag operate-tag">巨亏</span>
+        <span v-if="positionWarn === 'danger'" class="danger-tag operate-tag">危仓</span>
+        <span v-if="positionWarn === 'warn'" class="warn-tag operate-tag">高仓</span>
+        <span class="buy-info">买:{{indexBuyNumber}}</span>
+        <span class="buy-info">卖:{{indexSellNumber}}</span>
         <span style="float: right" :class="numberClass(rate)">{{rate}}%</span>
       </h3>
       <p class="explain">

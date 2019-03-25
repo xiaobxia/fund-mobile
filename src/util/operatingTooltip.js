@@ -84,6 +84,7 @@ function assetMarketStateFactor () {
 // 资产择时因子
 function assetMarketTimeFactor () {
   const d = new Date()
+  const year = d.getFullYear()
   // 清明节前配置少一点
   let factor = 1
   if (moment().isAfter('2019-03-24') && moment().isBefore('2019-04-05')) {
@@ -92,6 +93,31 @@ function assetMarketTimeFactor () {
   // 按月分配
   const monthFactorList = [1.1, 1.2, 1, 1, 0.9, 0.8, 1, 1.1, 1, 1.1, 0.9, 0.8]
   factor = factor * monthFactorList[d.getMonth() + 1]
+  // 季度末资金面紧张
+  if (moment().isAfter(`${year}-03-16`) && moment().isBefore(`${year}-03-23`)) {
+    factor = factor * 0.9
+  }
+  if (moment().isAfter(`${year}-03-22`) && moment().isBefore(`${year}-04-01`)) {
+    factor = factor * 0.85
+  }
+  if (moment().isAfter(`${year}-06-16`) && moment().isBefore(`${year}-06-23`)) {
+    factor = factor * 0.9
+  }
+  if (moment().isAfter(`${year}-06-22`) && moment().isBefore(`${year}-07-01`)) {
+    factor = factor * 0.85
+  }
+  if (moment().isAfter(`${year}-09-16`) && moment().isBefore(`${year}-09-23`)) {
+    factor = factor * 0.9
+  }
+  if (moment().isAfter(`${year}-09-22`) && moment().isBefore(`${year}-10-01`)) {
+    factor = factor * 0.85
+  }
+  if (moment().isAfter(`${year}-12-16`) && moment().isBefore(`${year}-12-23`)) {
+    factor = factor * 0.9
+  }
+  if (moment().isAfter(`${year}-12-22`) && moment().isBefore(`${year}-12-31`)) {
+    factor = factor * 0.85
+  }
   return factor
 }
 

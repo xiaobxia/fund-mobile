@@ -118,6 +118,10 @@ function assetMarketTimeFactor () {
   if (moment().isAfter(`${year}-12-22`) && moment().isBefore(`${year}-12-31`)) {
     factor = factor * 0.85
   }
+  // 419魔咒
+  if (moment().isAfter(`${year}-04-12`) && moment().isBefore(`${year}-04-22`)) {
+    factor = factor * 0.85
+  }
   return factor
 }
 

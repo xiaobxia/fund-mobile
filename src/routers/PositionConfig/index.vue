@@ -21,8 +21,9 @@ import Toast from '@/common/toast.js'
 export default {
   name: 'PositionConfig',
   data () {
+    const userFundAccountInfo = storageUtil.getUserFundAccountInfo()
     return {
-      position: 100
+      position: userFundAccountInfo.position_config || 100
     }
   },
   computed: {},
@@ -46,7 +47,15 @@ export default {
       }
     },
     okHandler () {
-      storageUtil.setAppConfig('position', parseFloat(this.position))
+      this.$http.post('market/updatePositionConfig', {
+        position: this.position
+      }).then((data) => {
+        if (data.success) {
+          Toast.success('操作成功')
+        } else {
+          Toast.error('操作失败')
+        }
+      })
     }
   }
 }

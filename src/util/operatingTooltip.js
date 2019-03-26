@@ -8,8 +8,7 @@ const indexNumber = 25
 // 获取当天账户资产
 function getUserAsset () {
   const userFundAccountInfo = storageUtil.getUserFundAccountInfo()
-  const position = storageUtil.getAppConfig('position') || 100
-  return userFundAccountInfo.today_asset * position / 100
+  return userFundAccountInfo.today_asset
 }
 
 function assetMarketStateFactor () {
@@ -133,6 +132,7 @@ function operateStandard () {
 
 // 基于市场的购买基准
 function getBuyBase (type, marketInfo) {
+  const userFundAccountInfo = storageUtil.getUserFundAccountInfo()
   let finalFactor = type === '熊' ? 1 : 0.8
   // 买卖信号因子
   let buySellFactor = 0.5 * ((marketInfo.buyFlagCount - marketInfo.sellFlagCount) / indexNumber)
@@ -144,7 +144,7 @@ function getBuyBase (type, marketInfo) {
   let marketTimeFactor = assetMarketTimeFactor()
   finalFactor = finalFactor * marketTimeFactor
   // 仓位修正
-  const position = storageUtil.getAppConfig('position') || 100
+  const position = userFundAccountInfo.position_config || 100
   const nowPosition = storageUtil.getAppConfig('nowPosition') || 100
   let positionFactor = position / nowPosition
   finalFactor = finalFactor * positionFactor
@@ -154,6 +154,7 @@ function getBuyBase (type, marketInfo) {
 
 // 基于市场的卖出基准
 function getSellBase () {
+  const userFundAccountInfo = storageUtil.getUserFundAccountInfo()
   let finalFactor = 1
   // 市场状况
   let marketStateFactor = assetMarketStateFactor()
@@ -162,10 +163,14 @@ function getSellBase () {
   let marketTimeFactor = assetMarketTimeFactor()
   finalFactor = finalFactor * (1 / marketTimeFactor)
   // 仓位修正
-  const position = storageUtil.getAppConfig('position') || 100
+  const position = userFundAccountInfo.position_config || 100
   const nowPosition = storageUtil.getAppConfig('nowPosition') || 100
   let positionFactor = nowPosition / position
+  console.log(positionFactor)
   finalFactor = finalFactor * positionFactor
+  console.log(finalFactor)
+  console.log(operateStandard())
+  console.log(finalFactor * operateStandard() * 5 / 3)
   // 结果
   // 卖的标准大一点
   return finalFactor * operateStandard() * 5 / 3

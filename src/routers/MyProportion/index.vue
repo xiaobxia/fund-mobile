@@ -48,19 +48,19 @@ export default{
           let totalSum = 0
           for (let i = 0; i < list.length; i++) {
             const item = list[i]
-            totalSum += item.costSum
+            totalSum += item.sum
             if (item.theme) {
               if (item.strategy === '1') {
                 if (this.distribution[item.theme]) {
-                  this.distribution[item.theme] += parseInt(item.costSum)
+                  this.distribution[item.theme] += parseInt(item.sum)
                 } else {
-                  this.distribution[item.theme] = parseInt(item.costSum)
+                  this.distribution[item.theme] = parseInt(item.sum)
                 }
               } else {
                 if (this.distribution['定投']) {
-                  this.distribution['定投'] += parseInt(item.costSum)
+                  this.distribution['定投'] += parseInt(item.sum)
                 } else {
-                  this.distribution['定投'] = parseInt(item.costSum)
+                  this.distribution['定投'] = parseInt(item.sum)
                 }
               }
             }

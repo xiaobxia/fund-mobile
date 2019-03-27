@@ -648,6 +648,20 @@ const operatingTooltip = {
       }
     }
     return false
+  },
+  // 下跌缓住，买入信号后一天跌幅低于0.5
+  ifDownSpeedDown (netChangeRatioList, buySellList) {
+    // 首先今天不是卖出信号
+    if (buySellList[0] !== 'sell') {
+      // 昨天是买入信号
+      if (buySellList[1] === 'buy') {
+        // 今天跌幅低于0.5
+        if (netChangeRatioList[0] > -0.5) {
+          return true
+        }
+      }
+    }
+    return false
   }
 }
 export default operatingTooltip

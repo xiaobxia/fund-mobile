@@ -36,6 +36,8 @@
         :buySellListLarge="buySellLargeMap[item.key]"
         :netChangeRatioListLarge="netChangeRatioLargeMap[item.key]"
         :closeListLarge="closeListLargeMap[item.key]"
+        :countUpNumber="countUpNumber"
+        :countDownNumber="countDownNumber"
         :type="typeName"
       />
     </div>

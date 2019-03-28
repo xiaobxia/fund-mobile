@@ -17,7 +17,7 @@
         <span class="item">估算涨幅：{{currentFund.change_ratio}}%</span>
         <span class="item">买入费率：{{currentFund.buy_rate_one}}</span>
         <span class="item">卖出费率：{{currentFund.sell_rate_two}}</span>
-        <span v-if="type==='edit'"  class="item">可卖金额：{{parseInt(canSellInfo.sum || 0)}}</span>
+        <span v-if="type==='edit'"  class="item">可卖金额：{{parseInt(canSellInfo.valuationSum || 0)}}</span>
         <span v-if="type==='edit'"  class="item">可卖份额：{{parseInt(canSellInfo.shares || 0)}}</span>
         <div style="text-align: center">估值时间：{{formatDate(currentFund.valuation_date)}}</div>
         <div class="shares-list-wrap">
@@ -200,8 +200,13 @@ export default {
         })
       }
       sharesList.map((item) => {
-        item.shares = parseInt(item.money / this.currentFund.valuation)
-        item.sum = item.money
+        const canSellShares = parseInt(this.canSellInfo.shares || 0)
+        const shares = parseInt(item.money / this.currentFund.valuation)
+        item.shares = shares
+        if (canSellShares < shares) {
+          item.shares = canSellShares
+        }
+        item.sum = parseInt(item.shares * this.currentFund.valuation)
       })
       return sharesList
     }

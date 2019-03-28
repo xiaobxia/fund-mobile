@@ -84,20 +84,19 @@ function assetMarketStateFactor () {
 function assetMarketTimeFactor () {
   const d = new Date()
   const year = d.getFullYear()
-  // 清明节前配置少一点
+  const day = d.getDate()
+  const month = d.getMonth()
   let factor = 1
-  if (moment().isAfter('2019-03-24') && moment().isBefore('2019-04-05')) {
-    factor = factor * 0.8
-  }
   // 按月分配
   const monthFactorList = [1.1, 1.2, 1, 1, 0.9, 0.8, 1, 1.1, 1, 1.1, 0.9, 0.8]
-  factor = factor * monthFactorList[d.getMonth() + 1]
+  factor = factor * monthFactorList[month]
   // 季度末资金面紧张
   if (moment().isAfter(`${year}-03-16`) && moment().isBefore(`${year}-03-23`)) {
     factor = factor * 0.9
   }
   if (moment().isAfter(`${year}-03-22`) && moment().isBefore(`${year}-04-01`)) {
-    factor = factor * 0.85
+    // 清明节前配置少一点
+    factor = factor * 0.8
   }
   if (moment().isAfter(`${year}-06-16`) && moment().isBefore(`${year}-06-23`)) {
     factor = factor * 0.9
@@ -117,10 +116,19 @@ function assetMarketTimeFactor () {
   if (moment().isAfter(`${year}-12-22`) && moment().isBefore(`${year}-12-31`)) {
     factor = factor * 0.85
   }
+  // 每个月的22日以后都是要谨慎的
+  const quarterList = [3, 6, 9, 12]
+  // 不能和季末叠加
+  if (quarterList.indexOf(month + 1) === -1) {
+    if (day >= 22 && day < 30) {
+      factor = factor * 0.85
+    }
+  }
   // 419魔咒
   if (moment().isAfter(`${year}-04-12`) && moment().isBefore(`${year}-04-22`)) {
     factor = factor * 0.85
   }
+  // 每个月的22以后就要谨慎
   return factor
 }
 
@@ -166,11 +174,7 @@ function getSellBase () {
   const position = userFundAccountInfo.position_config || 100
   const nowPosition = storageUtil.getAppConfig('nowPosition') || 100
   let positionFactor = nowPosition / position
-  console.log(positionFactor)
   finalFactor = finalFactor * positionFactor
-  console.log(finalFactor)
-  console.log(operateStandard())
-  console.log(finalFactor * operateStandard() * 5 / 3)
   // 结果
   // 卖的标准大一点
   return finalFactor * operateStandard() * 5 / 3

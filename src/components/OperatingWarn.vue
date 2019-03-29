@@ -29,6 +29,7 @@
       <p v-if="question1 === '强'" class="red-text">市场特别强势的时候，阴线策略应该看3天，一般强势看2天</p>
       <p v-if="question1 === '弱'" class="red-text">市场弱势的时候，阴线策略看1天</p>
       <p class="red-text">出做空信号，感觉盘面也不强，那就要缩仓</p>
+      <p v-if="ifLiuyi" class="red-text">小心六一</p>
       <p v-if="sellCountLastDay >= 10">市场大量卖出却没有跌，可以认为市场强</p>
       <p v-if="buyCountLastDay >= 10">该涨不涨那市场就定为弱，一次可以忍，两次不行</p>
       <p v-if="question1 === '弱'">买入只看熊，熊里的卖出一定卖</p>
@@ -126,6 +127,12 @@ export default {
     },
     isGuoqing () {
       return moment().isAfter('2019-09-23') && moment().isBefore('2019-10-11')
+    },
+    ifLiuyi () {
+      const d = new Date()
+      const day = d.getDate()
+      const month = d.getMonth() + 1
+      return month === 5 && day > 22
     }
   },
   mounted () {

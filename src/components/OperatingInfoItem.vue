@@ -10,6 +10,7 @@
         <i v-if="ifOverheated" class="good-bad-tag fab fa-hotjar"></i>
         <i v-if="ifDownSpeedDown" class="good-bad-tag fas fa-hands"></i>
         <i v-if="ifSingleUp" class="good-bad-tag fas fa-street-view"></i>
+        <i v-if="ifSingleDown" class="good-bad-tag fas fa-street-view"></i>
         <i v-if="ifUpSpeedDown" class="good-bad-tag fas fa-exclamation-triangle"></i>
         <span v-if="hasCount" class="has-count">{{hasCount}}</span>
         <span v-if="getLossWarn" class="danger-tag operate-tag">巨亏</span>
@@ -40,6 +41,7 @@
         <p v-if="ifUpSpeedDown">卖出信号后转弱，需要减仓</p>
         <p v-if="ifDownSpeedDown">跌势减弱，可以等等</p>
         <p v-if="ifSingleUp">下跌中一支独秀，需要减仓</p>
+        <p v-if="ifSingleDown">上涨中一支独秀，需要减仓</p>
       </div>
       <div class="left-tag">
         <span v-if="buySellFlagTrue === 'sell' && hasCount > 0" class="low-sell top"><i class="fas fa-long-arrow-alt-down"></i></span>
@@ -235,6 +237,9 @@ export default {
     },
     ifSingleUp () {
       return this.countUpNumber < 6 && this.rate > 0
+    },
+    ifSingleDown () {
+      return this.countDownNumber < 6 && this.rate < 0
     }
   },
   mounted () {

@@ -138,6 +138,27 @@ function operateStandard () {
   return asset / (indexNumber * 5)
 }
 
+// 指数择时因子
+function getIndexMarketTimeFactor (key) {
+  const d = new Date()
+  const month = d.getMonth() + 1
+  const day = d.getDate()
+  let factor = 1
+  // 4月炒周期
+  if (month === 4 || (month === 3 && day > 26)) {
+    if (['meitan', 'gangtie', 'youse'].indexOf(key) !== -1) {
+      factor = factor * 1.1
+    }
+  }
+  // 10月炒小票
+  if (month === 9 && day > 26) {
+    if (['chuangye', 'chuanmei', 'dianzi', 'jisuanji', 'xinxi'].indexOf(key) !== -1) {
+      factor = factor * 1.1
+    }
+  }
+  return factor
+}
+
 // 基于市场的购买基准
 function getBuyBase (type, marketInfo) {
   const userFundAccountInfo = storageUtil.getUserFundAccountInfo()
@@ -358,7 +379,8 @@ const operatingTooltip = {
     let indexAverageFactor = getIndexAverageFactor(indexItem.key)
     let indexMonthDiffFactor = getIndexMonthDiffFactor(indexItem.key)
     let indexYearDiffFactor = getIndexYearDiffFactor(indexItem.key)
-    let buyNumber = buyBase * indexAttitudeFactor * indexAverageFactor * indexMonthDiffFactor * indexYearDiffFactor
+    let indexMarketTimeFactor = getIndexMarketTimeFactor(indexItem.key)
+    let buyNumber = buyBase * indexAttitudeFactor * indexAverageFactor * indexMonthDiffFactor * indexYearDiffFactor * indexMarketTimeFactor
     let finalBuyNumber = buyNumberRedistribution(indexItem, hasCount, buyNumber)
     return Math.round(finalBuyNumber / 100) * 100
   },
@@ -369,7 +391,8 @@ const operatingTooltip = {
     let indexAverageFactor = getIndexAverageFactor(indexItem.key)
     let indexMonthDiffFactor = getIndexMonthDiffFactor(indexItem.key)
     let indexYearDiffFactor = getIndexYearDiffFactor(indexItem.key)
-    let sellNumber = sellBase * (1 / indexAttitudeFactor) * (1 / indexAverageFactor) * (1 / indexMonthDiffFactor) * (1 / indexYearDiffFactor)
+    let indexMarketTimeFactor = getIndexMarketTimeFactor(indexItem.key)
+    let sellNumber = sellBase * (1 / indexAttitudeFactor) * (1 / indexAverageFactor) * (1 / indexMonthDiffFactor) * (1 / indexYearDiffFactor) * (1 / indexMarketTimeFactor)
     let finalSellNumber = sellNumberRedistribution(indexItem, hasCount, sellNumber)
     return Math.round(finalSellNumber / 100) * 100
   },

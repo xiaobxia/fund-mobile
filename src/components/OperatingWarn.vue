@@ -23,7 +23,6 @@
       </div>
     </div>
     <div class="warn-wrap">
-      <p v-if="ifQingming" class="purple-text">清明节后几天都是涨的</p>
       <p v-if="isGuoqing" class="red-text">国庆前后配置创业板和传媒电子计算机</p>
       <p v-if="isChunJie" class="red-text">春节前后配置创业板和传媒电子计算机</p>
       <p v-if="ifOperatingTime" class="red-text">操作前应该去标记市场状况</p>
@@ -134,17 +133,6 @@ export default {
       const day = d.getDate()
       const month = d.getMonth() + 1
       return month === 5 && day > 22
-    },
-    ifQingming () {
-      const d = new Date()
-      const day = d.getDate()
-      const month = d.getMonth() + 1
-      if (month === 3 && day > 26) {
-        return true
-      } else if (month === 4 && day < 10) {
-        return true
-      }
-      return false
     }
   },
   mounted () {

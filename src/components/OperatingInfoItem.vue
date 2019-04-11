@@ -40,7 +40,7 @@
         <p v-if="ifOverheated">过热危险，需要减仓</p>
         <p v-if="ifUpSpeedDown">卖出信号后转弱，需要减仓</p>
         <p v-if="ifDownSpeedDown">跌势减弱，可以等等</p>
-        <p v-if="ifSingleUp">下跌中一支独秀，需要减仓</p>
+        <p v-if="ifSingleUp">下跌中一支独秀，需要减仓，特别是还出了卖出信号</p>
         <p v-if="ifSingleDown">上涨中一支独秀，需要减仓</p>
       </div>
       <div class="left-tag">

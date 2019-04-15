@@ -11,7 +11,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       "/fundServer": {
-        "target": "http://47.98.140.76:3020/"
+        "target": "http://47.98.140.76:3030/"
         // "target": "http://localhost:3020/"
       }
     },
@@ -59,7 +59,7 @@ module.exports = {
     assetsPathInCss: '../../',
     // assetsPublicPath: './',
     assetsPublicPath: './',
-    cdnPublicPath: 'http://pockgfa06.bkt.clouddn.com/',
+    cdnPublicPath: 'http://ppzbs5pin.bkt.clouddn.com/',
     ifCdn: true,
     /**
      * Source Maps

@@ -198,7 +198,7 @@ function getSellBase () {
   finalFactor = finalFactor * positionFactor
   // 结果
   // 卖的标准大一点
-  return finalFactor * operateStandard() * 5 / 3
+  return finalFactor * operateStandard() * 5 / 2
 }
 
 // 指数态度因子

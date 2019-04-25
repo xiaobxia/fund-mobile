@@ -11,7 +11,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       "/fundServer": {
-        "target": "http://47.98.140.76:3030/"
+        "target": "http://47.98.140.76:3020/"
         // "target": "http://localhost:3020/"
       }
     },

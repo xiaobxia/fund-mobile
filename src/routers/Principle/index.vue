@@ -76,6 +76,16 @@
           :options="['是', '否']">
         </mt-radio>
       </div>
+      <div class="question">
+        8.挣钱是否变吃力(并且卖出信号也变准了，吃力就仓位8成以下)？
+      </div>
+      <div class="answer">
+        <mt-radio
+          align="right"
+          v-model="question_8"
+          :options="['吃力', '不吃力']">
+        </mt-radio>
+      </div>
       <div class="suggest">
         <template v-if="['是'].indexOf(question_3) !== -1">
           <p>在需要护盘的下跌期，就不要再看创业板了，看50。</p>
@@ -111,7 +121,8 @@ export default {
       question_4: storageUtil.getMarketStatus('question_4') || '否',
       question_5: storageUtil.getMarketStatus('question_5') || '否',
       question_6: storageUtil.getMarketStatus('question_6') || '无',
-      question_7: storageUtil.getMarketStatus('question_7') || '否'
+      question_7: storageUtil.getMarketStatus('question_7') || '否',
+      question_8: storageUtil.getMarketStatus('question_8') || '不吃力'
     }
   },
   watch: {
@@ -161,6 +172,13 @@ export default {
       storageUtil.setMarketStatus('question_7', val)
       this.$http.post('market/updateMarketQuestion', {
         key: 'question_7',
+        value: val
+      })
+    },
+    question_8 (val) {
+      storageUtil.setMarketStatus('question_8', val)
+      this.$http.post('market/updateMarketQuestion', {
+        key: 'question_8',
         value: val
       })
     }

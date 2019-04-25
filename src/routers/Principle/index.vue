@@ -86,6 +86,16 @@
           :options="['吃力', '不吃力']">
         </mt-radio>
       </div>
+      <div class="question">
+        9.几乎都涨了，但是有几只没涨或涨的不多，出现弱势让减仓的信号？
+      </div>
+      <div class="answer">
+        <mt-radio
+          align="right"
+          v-model="question_9"
+          :options="['是', '否']">
+        </mt-radio>
+      </div>
       <div class="suggest">
         <template v-if="['是'].indexOf(question_3) !== -1">
           <p>在需要护盘的下跌期，就不要再看创业板了，看50。</p>
@@ -122,7 +132,8 @@ export default {
       question_5: storageUtil.getMarketStatus('question_5') || '否',
       question_6: storageUtil.getMarketStatus('question_6') || '无',
       question_7: storageUtil.getMarketStatus('question_7') || '否',
-      question_8: storageUtil.getMarketStatus('question_8') || '不吃力'
+      question_8: storageUtil.getMarketStatus('question_8') || '不吃力',
+      question_9: storageUtil.getMarketStatus('question_9') || '否'
     }
   },
   watch: {
@@ -179,6 +190,13 @@ export default {
       storageUtil.setMarketStatus('question_8', val)
       this.$http.post('market/updateMarketQuestion', {
         key: 'question_8',
+        value: val
+      })
+    },
+    question_9 (val) {
+      storageUtil.setMarketStatus('question_9', val)
+      this.$http.post('market/updateMarketQuestion', {
+        key: 'question_9',
         value: val
       })
     }

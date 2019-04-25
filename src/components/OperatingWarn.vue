@@ -23,6 +23,7 @@
       </div>
     </div>
     <div class="warn-wrap">
+      <p v-if="question9 === '是'" class="purple-text">今天的盘面很危险，大跌的概率超高！！</p>
       <p v-if="question8 === '吃力'" class="purple-text">挣钱变吃力，出现卖出信号一定得卖</p>
       <p v-if="ifLiuyi" class="purple-text">小心六一</p>
       <p v-if="isChunJie" class="purple-text">春节前后配置创业板和传媒电子计算机</p>
@@ -54,6 +55,7 @@ export default {
     const question6 = storageUtil.getMarketStatus('question_6')
     const question7 = storageUtil.getMarketStatus('question_7')
     const question8 = storageUtil.getMarketStatus('question_8')
+    const question9 = storageUtil.getMarketStatus('question_9')
 
     let ifOperatingTime = false
     const hour = new Date().getHours()
@@ -72,7 +74,8 @@ export default {
       question5,
       question6,
       question7,
-      question8
+      question8,
+      question9
     }
   },
   props: {

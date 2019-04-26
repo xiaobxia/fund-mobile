@@ -96,6 +96,9 @@
           :options="['是', '否']">
         </mt-radio>
       </div>
+      <div class="question">
+        10.出现该涨不涨？那就降低仓位配置的值
+      </div>
       <div class="suggest">
         <template v-if="['是'].indexOf(question_3) !== -1">
           <p>在需要护盘的下跌期，就不要再看创业板了，看50。</p>

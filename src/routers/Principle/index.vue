@@ -97,7 +97,10 @@
         </mt-radio>
       </div>
       <div class="question">
-        10.出现该涨不涨？那就降低仓位配置的值
+        10.出现该涨不涨？那就降低10仓位配置的值
+      </div>
+      <div class="question">
+        11.出现该跌不跌？那就增加10仓位配置的值
       </div>
       <div class="suggest">
         <template v-if="['是'].indexOf(question_3) !== -1">

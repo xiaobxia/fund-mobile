@@ -115,17 +115,11 @@ export default {
             const oneDayRecord = recentNetValue[i + 1]
             const twoDayRecord = recentNetValue[i + 2]
             let buyFlag = infoUtil[fnMap[item.key + 'Buy']](nowRecord, oneDayRecord, twoDayRecord)
-            let sellFlag = infoUtil[fnMap[item.key + 'Sell']](nowRecord, oneDayRecord, twoDayRecord)
             if (i < 5) {
               if ((buyFlag === true) || (buyFlag !== false && buyFlag.flag === true)) {
                 infoList[i] = '买'
                 if (classInfo === '') {
                   classInfo = 'buy'
-                }
-              } else if ((sellFlag === true) || (sellFlag !== false && sellFlag.flag === true)) {
-                infoList[i] = '卖'
-                if (classInfo === '') {
-                  classInfo = 'sell'
                 }
               } else {
                 infoList[i] = ''
@@ -135,10 +129,6 @@ export default {
                 if (classInfo === '') {
                   classInfo = 'buy'
                 }
-              } else if ((sellFlag === true) || (sellFlag !== false && sellFlag.flag === true)) {
-                if (classInfo === '') {
-                  classInfo = 'sell'
-                }
               }
             }
           }
@@ -146,9 +136,6 @@ export default {
           let firstClass = ''
           if (infoList[0] === '买') {
             firstClass = 'buy'
-          }
-          if (infoList[0] === '卖') {
-            firstClass = 'sell'
           }
           this.firstClass[item.key] = firstClass
           this.rateInfo[item.key] = this.keepTwoDecimals(recentNetValue[0].netChangeRatio)

@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import fixedInvestment from '@/util/fixedInvestment.js'
+import fixedInvestment from '@/util/platformFixedInvestment.js'
 import stockDataUtil from '@/util/stockDataUtil.js'
 
 const codeMap = fixedInvestment.codeMap

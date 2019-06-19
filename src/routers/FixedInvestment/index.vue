@@ -10,6 +10,7 @@
         <div slot="title">
           <h3>
             <span class="index-name">{{item.name}}</span>
+            <span :class="numberClass(averageDiff[item.key])">{{averageDiff[item.key]}}</span>
             <span>{{canBuy[item.key]}}</span>
             <span v-if="hasCount[item.name]" class="has-count">{{hasCount[item.name]}}</span>
             <span style="float: right" :class="numberClass(rateInfo[item.key])">{{rateInfo[item.key]}}%</span>
@@ -84,6 +85,7 @@ export default {
     let hasInfo = {}
     let hasCount = {}
     let canBuy = {}
+    let averageDiff = {}
     for (let key in codeMap) {
       list.push({
         key: key,
@@ -99,6 +101,7 @@ export default {
       hasInfo[codeMap[key].name] = false
       hasCount[codeMap[key].name] = 0
       canBuy[key] = 0
+      averageDiff[key] = 0
     }
     return {
       list: list,
@@ -106,7 +109,8 @@ export default {
       rateInfo: rateInfo,
       hasInfo,
       hasCount,
-      canBuy
+      canBuy,
+      averageDiff
     }
   },
   computed: {
@@ -168,6 +172,7 @@ export default {
               }
             }
           }
+          this.averageDiff[item.key] = this.countDifferenceRate(nowClose, averageMap[item.code])
           this.canBuy[item.key] = parseInt(getBuyRate(this.countDifferenceRate(nowClose, averageMap[item.code])) * (120000 / 162.5) / 10) * 10
           this.allInfo[item.key] = infoList
           this.rateInfo[item.key] = this.keepTwoDecimals(recentNetValue[0].netChangeRatio)

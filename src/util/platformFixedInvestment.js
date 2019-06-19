@@ -146,11 +146,20 @@ Util.prototype = {
         text: 'buy-101-0'
       }
     }
+    // 缩量，只适合牛市时使用
+    if (ifMatch(today,
+      {'ifUpOpen': false, 'ifOpenHigh': false, 'ifUpClose': false, 'ifCloseHigh': false}
+    )) {
+      return {
+        flag: true,
+        text: 'niu'
+      }
+    }
     return false
   },
   ifBuyWulin: function (record, oneDayRecord) {
     const today = this.getFlag(record, 2.1)
-// 无抵抗下跌的都要
+    // 无抵抗下跌的都要
     if (ifMatch(today,
       {'ifHighPreCloseDown': true}
     )) {
@@ -175,13 +184,22 @@ Util.prototype = {
       return {
         flag: true,
         text: 'buy-101-0'
+      }
+    }
+    // 缩量，只适合牛市时使用
+    if (ifMatch(today,
+      {'ifUpOpen': false, 'ifOpenHigh': false, 'ifUpClose': false, 'ifCloseHigh': false}
+    )) {
+      return {
+        flag: true,
+        text: 'niu'
       }
     }
     return false
   },
   ifBuySanbai: function (record, oneDayRecord) {
     const today = this.getFlag(record, 1.9)
-// 无抵抗下跌的都要
+    // 无抵抗下跌的都要
     if (ifMatch(today,
       {'ifHighPreCloseDown': true}
     )) {
@@ -206,6 +224,15 @@ Util.prototype = {
       return {
         flag: true,
         text: 'buy-101-0'
+      }
+    }
+    // 缩量，只适合牛市时使用
+    if (ifMatch(today,
+      {'ifUpOpen': false, 'ifOpenHigh': false, 'ifUpClose': false, 'ifCloseHigh': false}
+    )) {
+      return {
+        flag: true,
+        text: 'niu'
       }
     }
     return false
@@ -239,6 +266,15 @@ Util.prototype = {
         text: 'buy-101-0'
       }
     }
+    // 缩量，只适合牛市时使用
+    if (ifMatch(today,
+      {'ifUpOpen': false, 'ifOpenHigh': false, 'ifUpClose': false, 'ifCloseHigh': false}
+    )) {
+      return {
+        flag: true,
+        text: 'niu'
+      }
+    }
     return false
   },
   ifBuyYiqian: function (record, oneDayRecord) {
@@ -268,6 +304,15 @@ Util.prototype = {
       return {
         flag: true,
         text: 'buy-101-0'
+      }
+    }
+    // 缩量，只适合牛市时使用
+    if (ifMatch(today,
+      {'ifUpOpen': false, 'ifOpenHigh': false, 'ifUpClose': false, 'ifCloseHigh': false}
+    )) {
+      return {
+        flag: true,
+        text: 'niu'
       }
     }
     return false

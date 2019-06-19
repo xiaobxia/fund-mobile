@@ -6,16 +6,17 @@
       </mt-button>
     </mt-header>
     <div class="main-body">
-      <mt-cell-swipe v-for="(item) in list" :key="item.code" :class="[firstClass[item.key], hasInfo[item.name] ? 'has':'no-has']">
+      <mt-cell-swipe v-for="(item) in list" :key="item.code" :class="[hasInfo[item.name] ? 'has':'no-has']">
         <div slot="title">
           <h3>
             <span class="index-name">{{item.name}}</span>
+            <span>{{canBuy[item.key]}}</span>
             <span v-if="hasCount[item.name]" class="has-count">{{hasCount[item.name]}}</span>
             <span style="float: right" :class="numberClass(rateInfo[item.key])">{{rateInfo[item.key]}}%</span>
           </h3>
           <p class="explain">
             <span v-for="(subItem, index) in allInfo[item.key]" :key="subItem + index"
-                  :class="subItem === '买'?'buy':subItem === '卖'?'sell':''">{{subItem}}</span>
+                  :class="subItem === '买'?'buy':subItem === '牛市买'?'active':''">{{subItem}}</span>
           </p>
         </div>
       </mt-cell-swipe>
@@ -32,15 +33,57 @@ const InfoUtil = fixedInvestment.Util
 const fnMap = fixedInvestment.fnMap
 const formatData = fixedInvestment.formatData
 
+function getBuyRate (rate) {
+  if (rate >= 4 && rate < 8) {
+    return 0.9
+  }
+  if (rate >= 8 && rate < 12) {
+    return 0.8
+  }
+  if (rate >= 12 && rate < 16) {
+    return 0.7
+  }
+  if (rate >= 16 && rate < 20) {
+    return 0.6
+  }
+  if (rate >= 20) {
+    return 0.5
+  }
+  if (rate <= -4 && rate > -8) {
+    return 1.1
+  }
+  if (rate <= -8 && rate > -12) {
+    return 1.2
+  }
+  if (rate <= -12 && rate > -16) {
+    return 1.3
+  }
+  if (rate <= -16 && rate > -20) {
+    return 1.4
+  }
+  if (rate <= -20) {
+    return 1.5
+  }
+  return 1
+}
+
+const averageMap = {
+  'sh000852': 5169.89,
+  'sh000905': 4855.45,
+  'sh000300': 3447.624,
+  'sh000016': 2569.2,
+  'sz399006': 1462.85
+}
+
 export default {
   name: 'FixedInvestment',
   data () {
     let allInfo = {}
     let list = []
-    let firstClass = {}
     let rateInfo = {}
     let hasInfo = {}
     let hasCount = {}
+    let canBuy = {}
     for (let key in codeMap) {
       list.push({
         key: key,
@@ -52,18 +95,18 @@ export default {
         rate: codeMap[key].rate
       })
       allInfo[key] = []
-      firstClass[key] = ''
       rateInfo[key] = 0
       hasInfo[codeMap[key].name] = false
       hasCount[codeMap[key].name] = 0
+      canBuy[key] = 0
     }
     return {
       list: list,
       allInfo: allInfo,
-      firstClass,
       rateInfo: rateInfo,
       hasInfo,
-      hasCount
+      hasCount,
+      canBuy
     }
   },
   computed: {
@@ -108,7 +151,7 @@ export default {
           const infoUtil = new InfoUtil(item)
           const recentNetValue = info.list
           let infoList = []
-          let classInfo = ''
+          const nowClose = recentNetValue[0]['close']
           // 近的在前
           for (let i = 0; i < 8; i++) {
             const nowRecord = recentNetValue[i]
@@ -116,28 +159,17 @@ export default {
             const twoDayRecord = recentNetValue[i + 2]
             let buyFlag = infoUtil[fnMap[item.key + 'Buy']](nowRecord, oneDayRecord, twoDayRecord)
             if (i < 5) {
-              if ((buyFlag === true) || (buyFlag !== false && buyFlag.flag === true)) {
+              if (buyFlag.flag === true && buyFlag.text !== 'niu') {
                 infoList[i] = '买'
-                if (classInfo === '') {
-                  classInfo = 'buy'
-                }
+              } else if (buyFlag.flag === true && buyFlag.text === 'niu' && oneDayRecord['netChangeRatio'] < 0) {
+                infoList[i] = '牛市买'
               } else {
                 infoList[i] = ''
               }
-            } else {
-              if ((buyFlag === true) || (buyFlag !== false && buyFlag.flag === true)) {
-                if (classInfo === '') {
-                  classInfo = 'buy'
-                }
-              }
             }
           }
+          this.canBuy[item.key] = parseInt(getBuyRate(this.countDifferenceRate(nowClose, averageMap[item.code])) * (120000 / 162.5) / 10) * 10
           this.allInfo[item.key] = infoList
-          let firstClass = ''
-          if (infoList[0] === '买') {
-            firstClass = 'buy'
-          }
-          this.firstClass[item.key] = firstClass
           this.rateInfo[item.key] = this.keepTwoDecimals(recentNetValue[0].netChangeRatio)
         }
       })

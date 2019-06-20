@@ -68,14 +68,6 @@ function getBuyRate (rate) {
   return 1
 }
 
-const averageMap = {
-  'sh000852': 5169.89,
-  'sh000905': 4855.45,
-  'sh000300': 3447.624,
-  'sh000016': 2569.2,
-  'sz399006': 1462.85
-}
-
 export default {
   name: 'FixedInvestment',
   data () {
@@ -110,7 +102,14 @@ export default {
       hasInfo,
       hasCount,
       canBuy,
-      averageDiff
+      averageDiff,
+      averageMap: {
+        'sh000852': 5169.89,
+        'sh000905': 4855.45,
+        'sh000300': 3447.624,
+        'sh000016': 2569.2,
+        'sz399006': 1462.85
+      }
     }
   },
   computed: {
@@ -120,28 +119,35 @@ export default {
   },
   methods: {
     initPage () {
-      let list = this.list
-      for (let i = 0; i < list.length; i++) {
-        this.queryData(list[i])
-      }
-      this.$http.get('userFund/getUserFunds').then((data) => {
-        if (data.success) {
-          const list = data.data.list
-          for (let i = 0; i < list.length; i++) {
-            const item = list[i]
-            if (item.theme) {
-              // 只计入定投
-              if (item.strategy === '2') {
-                this.hasInfo[item.theme] = true
-                if (this.hasCount[item.theme]) {
-                  this.hasCount[item.theme] += parseInt(item.sum)
-                } else {
-                  this.hasCount[item.theme] = parseInt(item.sum)
+      this.$http.get('stock/getFixYearAverage').then((res) => {
+        const list = res.data
+        for (let i = 0; i < list.length; i++) {
+          this.averageMap[list[i].describe] = parseInt(list[i].value)
+        }
+      }).then(() => {
+        let list = this.list
+        for (let i = 0; i < list.length; i++) {
+          this.queryData(list[i])
+        }
+        this.$http.get('userFund/getUserFunds').then((data) => {
+          if (data.success) {
+            const list = data.data.list
+            for (let i = 0; i < list.length; i++) {
+              const item = list[i]
+              if (item.theme) {
+                // 只计入定投
+                if (item.strategy === '2') {
+                  this.hasInfo[item.theme] = true
+                  if (this.hasCount[item.theme]) {
+                    this.hasCount[item.theme] += parseInt(item.sum)
+                  } else {
+                    this.hasCount[item.theme] = parseInt(item.sum)
+                  }
                 }
               }
             }
           }
-        }
+        })
       })
     },
     queryData (item) {
@@ -172,8 +178,8 @@ export default {
               }
             }
           }
-          this.averageDiff[item.key] = this.countDifferenceRate(nowClose, averageMap[item.code])
-          this.canBuy[item.key] = parseInt(getBuyRate(this.countDifferenceRate(nowClose, averageMap[item.code])) * (120000 / 162.5) / 10) * 10
+          this.averageDiff[item.key] = this.countDifferenceRate(nowClose, this.averageMap[item.code])
+          this.canBuy[item.key] = parseInt(getBuyRate(this.countDifferenceRate(nowClose, this.averageMap[item.code])) * (120000 / 162.5) / 10) * 10
           this.allInfo[item.key] = infoList
           this.rateInfo[item.key] = this.keepTwoDecimals(recentNetValue[0].netChangeRatio)
         }

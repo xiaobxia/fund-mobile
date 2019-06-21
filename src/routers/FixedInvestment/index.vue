@@ -12,6 +12,7 @@
             <span class="index-name">{{item.name}}</span>
             <span :class="numberClass(averageDiff[item.key])">{{averageDiff[item.key]}}</span>
             <span>{{canBuy[item.key]}}</span>
+            <span class="green-text">{{canSell[item.key]}}</span>
             <span v-if="hasCount[item.name]" class="has-count">{{hasCount[item.name]}}</span>
             <span style="float: right" :class="numberClass(rateInfo[item.key])">{{rateInfo[item.key]}}%</span>
           </h3>
@@ -81,6 +82,7 @@ export default {
     let hasInfo = {}
     let hasCount = {}
     let canBuy = {}
+    let canSell = {}
     let averageDiff = {}
     let klineMap = {}
     for (let key in codeMap) {
@@ -98,6 +100,7 @@ export default {
       hasInfo[codeMap[key].name] = false
       hasCount[codeMap[key].name] = 0
       canBuy[key] = 0
+      canSell[key] = 0
       averageDiff[key] = 0
       klineMap[key] = [{}]
     }
@@ -108,6 +111,7 @@ export default {
       hasInfo,
       hasCount,
       canBuy,
+      canSell,
       averageDiff,
       averageMap: {
         'sh000852': 5169.89,
@@ -122,6 +126,13 @@ export default {
         'sh000300': 1.15,
         'sh000016': 1.3,
         'sz399006': 0.85
+      },
+      indexParamSell: {
+        'sh000852': 1.3,
+        'sh000905': 1,
+        'sh000300': 0.85,
+        'sh000016': 0.7,
+        'sz399006': 1.15
       },
       klineMap
     }
@@ -202,6 +213,7 @@ export default {
           this.klineMap[item.key] = kline
           this.averageDiff[item.key] = this.countDifferenceRate(nowClose, this.averageMap[item.code])
           this.canBuy[item.key] = parseInt(getBuyRate(this.countDifferenceRate(nowClose, this.averageMap[item.code])) * (120000 / 162.5) * this.indexParams[item.code] / 10) * 10
+          this.canSell[item.key] = parseInt(getBuyRate(-this.countDifferenceRate(nowClose, this.averageMap[item.code])) * (120000 / 162.5) * this.indexParamSell[item.code] / 10) * 10
           this.allInfo[item.key] = infoList
           this.rateInfo[item.key] = this.keepTwoDecimals(recentNetValue[0].netChangeRatio)
         }

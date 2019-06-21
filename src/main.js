@@ -28,6 +28,13 @@ Vue.prototype.numberClass = function (number) {
   return number < 0 ? 'green-text' : 'red-text'
 }
 
+Vue.prototype.numberBgClass = function (number) {
+  if (!number) {
+    return ''
+  }
+  return number < 0 ? 'green-bg' : 'red-bg'
+}
+
 Vue.prototype.formatFundName = function (name, len) {
   len = len || 12
   if (name.length > len) {

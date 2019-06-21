@@ -15,6 +15,10 @@
             <span v-if="hasCount[item.name]" class="has-count">{{hasCount[item.name]}}</span>
             <span style="float: right" :class="numberClass(rateInfo[item.key])">{{rateInfo[item.key]}}%</span>
           </h3>
+          <p class="netChange wn">
+            <span v-for="(subItem, index) in klineMap[item.key]" :key="index"
+                  :class="numberBgClass(subItem.netChangeRatio)">{{subItem.netChangeRatio}}%</span>
+          </p>
           <p class="explain">
             <span v-for="(subItem, index) in allInfo[item.key]" :key="subItem + index"
                   :class="subItem === '买'?'buy':subItem === '牛市买'?'active':''">{{subItem}}</span>
@@ -78,6 +82,7 @@ export default {
     let hasCount = {}
     let canBuy = {}
     let averageDiff = {}
+    let klineMap = {}
     for (let key in codeMap) {
       list.push({
         key: key,
@@ -94,6 +99,7 @@ export default {
       hasCount[codeMap[key].name] = 0
       canBuy[key] = 0
       averageDiff[key] = 0
+      klineMap[key] = [{}]
     }
     return {
       list: list,
@@ -109,7 +115,15 @@ export default {
         'sh000300': 3447.624,
         'sh000016': 2569.2,
         'sz399006': 1462.85
-      }
+      },
+      indexParams: {
+        'sh000852': 0.7,
+        'sh000905': 1,
+        'sh000300': 1.15,
+        'sh000016': 1.3,
+        'sz399006': 0.85
+      },
+      klineMap
     }
   },
   computed: {
@@ -162,6 +176,7 @@ export default {
           const recentNetValue = info.list
           let infoList = []
           const nowClose = recentNetValue[0]['close']
+          let kline = []
           // 近的在前
           for (let i = 0; i < 8; i++) {
             const nowRecord = recentNetValue[i]
@@ -169,6 +184,7 @@ export default {
             const twoDayRecord = recentNetValue[i + 2]
             let buyFlag = infoUtil[fnMap[item.key + 'Buy']](nowRecord, oneDayRecord, twoDayRecord)
             if (i < 5) {
+              kline.push(recentNetValue[i])
               if (buyFlag.flag === true && buyFlag.text !== 'niu') {
                 infoList[i] = '买'
               } else if (buyFlag.flag === true && buyFlag.text === 'niu' && oneDayRecord['netChangeRatio'] < 0) {
@@ -178,8 +194,10 @@ export default {
               }
             }
           }
+          console.log(kline)
+          this.klineMap[item.key] = kline
           this.averageDiff[item.key] = this.countDifferenceRate(nowClose, this.averageMap[item.code])
-          this.canBuy[item.key] = parseInt(getBuyRate(this.countDifferenceRate(nowClose, this.averageMap[item.code])) * (120000 / 162.5) / 10) * 10
+          this.canBuy[item.key] = parseInt(getBuyRate(this.countDifferenceRate(nowClose, this.averageMap[item.code])) * (120000 / 162.5) * this.indexParams[item.code] / 10) * 10
           this.allInfo[item.key] = infoList
           this.rateInfo[item.key] = this.keepTwoDecimals(recentNetValue[0].netChangeRatio)
         }

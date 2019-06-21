@@ -21,7 +21,7 @@
           </p>
           <p class="explain">
             <span v-for="(subItem, index) in allInfo[item.key]" :key="subItem + index"
-                  :class="subItem === '买'?'buy':subItem === '牛市买'?'active':''">{{subItem}}</span>
+                  :class="subItem === '买'?'buy':subItem === '牛市买'?'active':subItem === '卖'?'sell':''">{{subItem}}</span>
           </p>
         </div>
       </mt-cell-swipe>
@@ -183,18 +183,22 @@ export default {
             const oneDayRecord = recentNetValue[i + 1]
             const twoDayRecord = recentNetValue[i + 2]
             let buyFlag = infoUtil[fnMap[item.key + 'Buy']](nowRecord, oneDayRecord, twoDayRecord)
+            let sellFlag = infoUtil[fnMap[item.key + 'Sell']](nowRecord, oneDayRecord, twoDayRecord)
             if (i < 5) {
               kline.push(recentNetValue[i])
               if (buyFlag.flag === true && buyFlag.text !== 'niu') {
                 infoList[i] = '买'
               } else if (buyFlag.flag === true && buyFlag.text === 'niu' && oneDayRecord['netChangeRatio'] < 0) {
                 infoList[i] = '牛市买'
+              } else if (sellFlag.flag === true && sellFlag.text !== 'xiong') {
+                infoList[i] = '卖'
+              } else if (sellFlag.flag === true && sellFlag.text === 'xiong') {
+                infoList[i] = '熊卖'
               } else {
                 infoList[i] = ''
               }
             }
           }
-          console.log(kline)
           this.klineMap[item.key] = kline
           this.averageDiff[item.key] = this.countDifferenceRate(nowClose, this.averageMap[item.code])
           this.canBuy[item.key] = parseInt(getBuyRate(this.countDifferenceRate(nowClose, this.averageMap[item.code])) * (120000 / 162.5) * this.indexParams[item.code] / 10) * 10

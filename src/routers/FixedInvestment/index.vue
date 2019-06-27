@@ -22,7 +22,7 @@
           </p>
           <p class="explain">
             <span v-for="(subItem, index) in allInfo[item.key]" :key="subItem + index"
-                  :class="subItem === '买'?'buy':subItem === '牛市买'?'active':subItem === '卖'?'sell':''">{{subItem}}</span>
+                  :class="subItem === '买'?'buy':subItem === '牛市买'?'active-2':subItem === '卖'?'sell':''">{{subItem}}</span>
           </p>
         </div>
       </mt-cell-swipe>

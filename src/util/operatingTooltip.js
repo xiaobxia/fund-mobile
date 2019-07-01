@@ -3,7 +3,7 @@ import numberUtil from './numberUtil'
 import moment from 'moment'
 
 // 指数数量
-const indexNumber = 25
+const indexNumber = 24
 
 // 获取当天账户资产
 function getUserAsset () {

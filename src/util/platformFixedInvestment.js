@@ -202,7 +202,7 @@ Util.prototype = {
   },
   ifBuyWulin: function (record, oneDayRecord) {
     const today = this.getFlag(record, 2.1)
-// 无抵抗下跌的都要
+    // 无抵抗下跌的都要
     if (ifMatch(today,
       {'ifHighPreCloseDown': true}
     )) {

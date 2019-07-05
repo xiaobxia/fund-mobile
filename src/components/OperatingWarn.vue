@@ -23,6 +23,7 @@
       </div>
     </div>
     <div class="warn-wrap">
+      <p v-if="sellCount > 4" class="black-text">想要追也别在大涨的日子追，没有多少底仓的时候也不能追</p>
       <p v-if="question9 === '是'" class="purple-text">今天的盘面很危险，大跌的概率超高！！</p>
       <p v-if="question8 === '吃力'" class="purple-text">挣钱变吃力，出现卖出信号一定得卖</p>
       <p v-if="ifLiuyi" class="purple-text">小心六一</p>

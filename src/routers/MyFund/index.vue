@@ -8,9 +8,9 @@
     <div class="main-body">
       <div class="info-wrap">
         <span class="item">持仓金额：{{parseInt(info.totalSum)}}</span>
-        <span class="item">持仓成本：{{parseInt(info.costTotalSum)}}</span>
-        <span class="item">仓位信息：{{myPosition}}%</span>
         <span class="item">估算金额：{{parseInt(info.valuationTotalSum)}}</span>
+        <span class="item">仓位信息：{{myPosition}}%</span>
+        <span class="item">可卖金额：{{parseInt(canSellSum)}}</span>
         <span class="item">锁仓金额：{{parseInt(lockCostSum)}}</span>
         <span class="item">锁仓收益：<span :class="numberClass(lockIncomeRatio)">{{lockIncomeRatio}}%</span></span>
         <span class="item">估算收益：<span :class="numberClass(valuationInfo)">{{parseInt(valuationInfo)}}</span></span>
@@ -77,7 +77,8 @@ export default {
       lastTradingDay: userFundAccountInfo.pre_net_value_date,
       lastBuy: 0,
       lastBuyChangeRatio: 0,
-      myPosition: 0
+      myPosition: 0,
+      canSellSum: 0
     }
   },
   components: {MyFundCard},
@@ -126,6 +127,7 @@ export default {
         let lastBuyValuation = 0
         let valuationTotalSum = 0
         let totalSum = 0
+        let canSellSum = 0
         list.forEach((item) => {
           valuationTotalSum += item.valuationSum
           totalSum += item.sum
@@ -141,6 +143,7 @@ export default {
           if (item.strategy !== '1') {
             dataMap['定投'].push(item)
           } else {
+            canSellSum += item.canSellSum
             if (item.theme && dataMap[item.theme]) {
               dataMap[item.theme].push(item)
             } else {
@@ -156,6 +159,7 @@ export default {
           totalSum,
           costTotalSum
         }
+        this.canSellSum = canSellSum
         this.myPosition = this.countRate(this.info.totalSum, this.todayAsset)
         storageUtil.setAppConfig('nowPosition', parseFloat(this.myPosition))
         this.lastUpdateValuationTime = moment(list[0].valuation_date).format('YYYY-MM-DD HH:mm:ss')

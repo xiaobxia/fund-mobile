@@ -106,6 +106,9 @@
       }
     }
   }
+  .mint-cell.has.lock:not(.should-buy) {
+    background-color: $grey-color-back;
+  }
   // 本该买卖出，而未操作的提示
   .mint-cell.has.no-lock {
     &.should-sell {
@@ -125,7 +128,7 @@
     .has-count {
       color: $green-color;
     }
-    background-color: $green-color-back-3;
+    background-color: $green-color-back-3!important;
     &.no-has {
       background-color: #fff;
     }
@@ -134,7 +137,7 @@
     .has-count {
       color: $red-color;
     }
-    background-color: $red-color-back-3;
+    background-color: $red-color-back-3!important;
   }
   .operate-tag {
     margin: 0;

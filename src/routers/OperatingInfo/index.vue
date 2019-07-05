@@ -182,7 +182,11 @@ export default {
                       this.lockMap[item.theme] = true
                     }
                   } else {
-                    this.lockMap[item.theme] = false
+                    if (item.canSellSum < 200) {
+                      this.lockMap[item.theme] = true
+                    } else {
+                      this.lockMap[item.theme] = false
+                    }
                   }
                   // 拥有应该是现在的价值之和而不是成本
                   const sum = parseInt(item.sum)

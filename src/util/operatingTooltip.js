@@ -431,7 +431,7 @@ const operatingTooltip = {
     }
     // 今天没信号，之前有买入，并且连续涨2天及以上，那就提示买入
     if (firstFlag === 'buy') {
-      if (firstFlagIndex >= 2) {
+      if (firstFlagIndex >= 1) {
         let allUp = true
         for (let i = 0; i < firstFlagIndex; i++) {
           if (netChangeRatioList[i] < 0) {

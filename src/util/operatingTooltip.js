@@ -304,7 +304,7 @@ function getLevelBuyNumber (hasCount, wantAsset, indexRedistributionStandard, le
 // 买入金额再分配
 function buyNumberRedistribution (indexItem, hasCount, buyNumber) {
   const asset = getUserAsset()
-  const mix = indexItem.mix ? 1.5 : 1
+  const mix = indexItem.mix ? 1.25 : 1
   const indexAssetStandard = mix * asset / indexNumber
   const indexRedistributionStandard = indexAssetStandard / 2
   let wantAsset = hasCount + buyNumber
@@ -360,7 +360,7 @@ function getLevelSellNumber (hasCount, sellNumber, indexRedistributionStandard, 
 // 卖出金额再分配
 function sellNumberRedistribution (indexItem, hasCount, sellNumber) {
   const asset = getUserAsset()
-  const mix = indexItem.mix ? 1.5 : 1
+  const mix = indexItem.mix ? 1.25 : 1
   const indexAssetStandard = mix * asset / indexNumber
   const indexRedistributionStandard = indexAssetStandard / 2
   let finalSellNumber = 0
@@ -498,8 +498,8 @@ const operatingTooltip = {
   // 仓位提示的警戒线
   getPositionWarnNumber (item) {
     const asset = getUserAsset()
-    // 如果是混合指数宽限1.5倍
-    let mix = item.mix ? 1.5 : 1
+    // 如果是混合指数宽限1.25倍
+    let mix = item.mix ? 1.25 : 1
     const indexAssetStandard = mix * asset / indexNumber
     const indexRedistributionStandard = indexAssetStandard / 2
     return {

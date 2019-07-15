@@ -198,7 +198,7 @@ function getSellBase () {
   finalFactor = finalFactor * positionFactor
   // 结果
   // 卖的标准大一点
-  return finalFactor * operateStandard() * 5 / 2
+  return finalFactor * operateStandard() * 3 / 2
 }
 
 // 指数态度因子
@@ -272,33 +272,25 @@ function getIndexYearDiffFactor (indexKey) {
   return factor
 }
 
-function getLevelBuyNumber (hasCount, wantAsset, indexRedistributionStandard, level, all) {
-  let finalBuy = 0
-  if (level === all) {
-    let a = wantAsset - (indexRedistributionStandard * (level - 1))
-    if (a < 0) {
-      a = 0
-    }
-    let b = hasCount - (indexRedistributionStandard * (level - 1))
-    if (b < 0) {
-      b = 0
-    }
-    finalBuy = a - b
-  } else {
-    let a = wantAsset - (indexRedistributionStandard * level)
-    if (a > 0) {
-      a = 0
-    }
-    let b = hasCount - (indexRedistributionStandard * (level - 1))
-    if (b < 0) {
-      b = 0
-    }
-    finalBuy = indexRedistributionStandard - b + a
-    if (finalBuy < 0) {
-      finalBuy = 0
-    }
+function getBuyNumber (hasCount, rowBuy, indexRedistributionStandard) {
+  let a = hasCount + rowBuy
+  if (a > 2 * indexRedistributionStandard) {
+    a = 2 * indexRedistributionStandard
   }
-  return (5 - level + 1) * (finalBuy) / 5
+  let c = a - hasCount
+  let b = hasCount + (c / 2)
+  let d = 1
+  if (b <= indexRedistributionStandard) {
+    d = 0.5 + 0.5 * ((indexRedistributionStandard - b) / indexRedistributionStandard)
+  }
+  if (b > indexRedistributionStandard) {
+    d = 1 - 0.5 * ((b - indexRedistributionStandard) / indexRedistributionStandard)
+  }
+  let fBuy = d * c
+  if (fBuy + hasCount > 2 * indexRedistributionStandard) {
+    fBuy = 2 * indexRedistributionStandard - hasCount
+  }
+  return fBuy
 }
 
 // 买入金额再分配
@@ -307,55 +299,20 @@ function buyNumberRedistribution (indexItem, hasCount, buyNumber) {
   const mix = indexItem.mix ? 1.25 : 1
   const indexAssetStandard = mix * asset / indexNumber
   const indexRedistributionStandard = indexAssetStandard / 2
-  let wantAsset = hasCount + buyNumber
-  let finalBuyNumber = 0
-  finalBuyNumber += getLevelBuyNumber(hasCount, wantAsset, indexRedistributionStandard, 1, 4)
-  finalBuyNumber += getLevelBuyNumber(hasCount, wantAsset, indexRedistributionStandard, 2, 4)
-  finalBuyNumber += getLevelBuyNumber(hasCount, wantAsset, indexRedistributionStandard, 3, 4)
-  finalBuyNumber += getLevelBuyNumber(hasCount, wantAsset, indexRedistributionStandard, 4, 4)
-  return finalBuyNumber
+  return getBuyNumber(hasCount, buyNumber, indexRedistributionStandard)
 }
 
-function getLevelSellNumber (hasCount, sellNumber, indexRedistributionStandard, level, all) {
-  let finalSell = 0
-  if (level === all) {
-    let a = hasCount - (indexRedistributionStandard * (level - 1))
-    if (a < 0) {
-      finalSell = 0
-    } else {
-      let b = hasCount - sellNumber - (indexRedistributionStandard * (level - 1))
-      if (b < 0) {
-        finalSell = hasCount - (indexRedistributionStandard * (level - 1))
-      } else {
-        finalSell = sellNumber
-      }
-    }
-  } else {
-    let a = hasCount - (indexRedistributionStandard * (level - 1))
-    if (a < 0) {
-      finalSell = 0
-    } else {
-      if ((hasCount - sellNumber) > (indexRedistributionStandard * level)) {
-        finalSell = 0
-      } else {
-        let b = hasCount - sellNumber - (indexRedistributionStandard * (level - 1))
-        if (hasCount > (indexRedistributionStandard * level)) {
-          if (b < 0) {
-            finalSell = indexRedistributionStandard
-          } else {
-            finalSell = (indexRedistributionStandard * level) - (hasCount - sellNumber)
-          }
-        } else {
-          if (b < 0) {
-            finalSell = hasCount - (indexRedistributionStandard * (level - 1))
-          } else {
-            finalSell = sellNumber
-          }
-        }
-      }
-    }
+function getSellNumber (hasCount, rowSell, indexRedistributionStandard) {
+  let a = hasCount - rowSell
+  if (a < 0) {
+    a = 0
   }
-  return (level + 1) * (finalSell) / 5
+  // 要减的金额
+  let c = hasCount - a
+  // 中间位
+  let b = hasCount - (c / 2)
+  let d = 0.5 + 0.5 * (b / (2 * indexRedistributionStandard))
+  return d * c
 }
 // 卖出金额再分配
 function sellNumberRedistribution (indexItem, hasCount, sellNumber) {
@@ -363,12 +320,7 @@ function sellNumberRedistribution (indexItem, hasCount, sellNumber) {
   const mix = indexItem.mix ? 1.25 : 1
   const indexAssetStandard = mix * asset / indexNumber
   const indexRedistributionStandard = indexAssetStandard / 2
-  let finalSellNumber = 0
-  finalSellNumber += getLevelSellNumber(hasCount, sellNumber, indexRedistributionStandard, 1, 4)
-  finalSellNumber += getLevelSellNumber(hasCount, sellNumber, indexRedistributionStandard, 2, 4)
-  finalSellNumber += getLevelSellNumber(hasCount, sellNumber, indexRedistributionStandard, 3, 4)
-  finalSellNumber += getLevelSellNumber(hasCount, sellNumber, indexRedistributionStandard, 4, 4)
-  return finalSellNumber
+  return getSellNumber(hasCount, sellNumber, indexRedistributionStandard)
 }
 
 const operatingTooltip = {

@@ -281,10 +281,10 @@ function getBuyNumber (hasCount, rowBuy, indexRedistributionStandard) {
   let b = hasCount + (c / 2)
   let d = 1
   if (b <= indexRedistributionStandard) {
-    d = 0.5 + 0.5 * ((indexRedistributionStandard - b) / indexRedistributionStandard)
+    d = 0.4 + 0.6 * ((indexRedistributionStandard - b) / indexRedistributionStandard)
   }
   if (b > indexRedistributionStandard) {
-    d = 1 - 0.5 * ((b - indexRedistributionStandard) / indexRedistributionStandard)
+    d = 1 - 0.6 * ((b - indexRedistributionStandard) / indexRedistributionStandard)
   }
   let fBuy = d * c
   if (fBuy + hasCount > 2 * indexRedistributionStandard) {
@@ -299,6 +299,7 @@ function buyNumberRedistribution (indexItem, hasCount, buyNumber) {
   const mix = indexItem.mix ? 1.25 : 1
   const indexAssetStandard = mix * asset / indexNumber
   const indexRedistributionStandard = indexAssetStandard / 2
+  // return buyNumber
   return getBuyNumber(hasCount, buyNumber, indexRedistributionStandard)
 }
 
@@ -311,7 +312,7 @@ function getSellNumber (hasCount, rowSell, indexRedistributionStandard) {
   let c = hasCount - a
   // 中间位
   let b = hasCount - (c / 2)
-  let d = 0.5 + 0.5 * (b / (2 * indexRedistributionStandard))
+  let d = 0.34 + 0.66 * (b / (2 * indexRedistributionStandard))
   return d * c
 }
 // 卖出金额再分配
@@ -320,6 +321,7 @@ function sellNumberRedistribution (indexItem, hasCount, sellNumber) {
   const mix = indexItem.mix ? 1.25 : 1
   const indexAssetStandard = mix * asset / indexNumber
   const indexRedistributionStandard = indexAssetStandard / 2
+  // return sellNumber
   return getSellNumber(hasCount, sellNumber, indexRedistributionStandard)
 }
 

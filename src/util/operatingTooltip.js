@@ -273,20 +273,34 @@ function getIndexYearDiffFactor (indexKey) {
 }
 
 function getBuyNumber (hasCount, rowBuy, indexRedistributionStandard) {
+  function getY (x) {
+    if (x <= indexRedistributionStandard) {
+      return 0.33 + 0.42 * (x / indexRedistributionStandard)
+    } else {
+      return 0.75 - 0.42 * ((x - indexRedistributionStandard) / indexRedistributionStandard)
+    }
+  }
   let a = hasCount + rowBuy
   if (a > 2 * indexRedistributionStandard) {
     a = 2 * indexRedistributionStandard
   }
+  let fBuy = 0
   let c = a - hasCount
-  let b = hasCount + (c / 2)
   let d = 1
-  if (b <= indexRedistributionStandard) {
-    d = 0.2 + 0.8 * ((indexRedistributionStandard - b) / indexRedistributionStandard)
+  if (hasCount <= indexRedistributionStandard) {
+    if (a <= indexRedistributionStandard) {
+      d = (getY(hasCount) + getY(a)) / 2
+      fBuy = d * c
+    } else {
+      d = (getY(hasCount) + 1) / 2
+      fBuy += d * (indexRedistributionStandard - hasCount)
+      d = (getY(a) + 1) / 2
+      fBuy += d * (a - indexRedistributionStandard)
+    }
+  } else {
+    d = (getY(hasCount) + getY(a)) / 2
+    fBuy = d * c
   }
-  if (b > indexRedistributionStandard) {
-    d = 1 - 0.8 * ((b - indexRedistributionStandard) / indexRedistributionStandard)
-  }
-  let fBuy = d * c
   if (fBuy + hasCount > 2 * indexRedistributionStandard) {
     fBuy = 2 * indexRedistributionStandard - hasCount
   }

@@ -281,10 +281,10 @@ function getBuyNumber (hasCount, rowBuy, indexRedistributionStandard) {
   let b = hasCount + (c / 2)
   let d = 1
   if (b <= indexRedistributionStandard) {
-    d = 0.4 + 0.6 * ((indexRedistributionStandard - b) / indexRedistributionStandard)
+    d = 0.2 + 0.8 * ((indexRedistributionStandard - b) / indexRedistributionStandard)
   }
   if (b > indexRedistributionStandard) {
-    d = 1 - 0.6 * ((b - indexRedistributionStandard) / indexRedistributionStandard)
+    d = 1 - 0.8 * ((b - indexRedistributionStandard) / indexRedistributionStandard)
   }
   let fBuy = d * c
   if (fBuy + hasCount > 2 * indexRedistributionStandard) {

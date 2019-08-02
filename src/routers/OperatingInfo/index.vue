@@ -182,7 +182,7 @@ export default {
                       this.lockMap[item.theme] = true
                     }
                   } else {
-                    if (item.canSellSum < 200) {
+                    if (item.canSellSum < 100) {
                       this.lockMap[item.theme] = true
                     } else {
                       this.lockMap[item.theme] = false

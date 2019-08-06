@@ -175,7 +175,7 @@ function getBuyBase (type, marketInfo) {
   // 仓位修正
   const position = userFundAccountInfo.position_config || 100
   const nowPosition = storageUtil.getAppConfig('nowPosition') || 100
-  let positionFactor = position / nowPosition
+  let positionFactor = ((position - nowPosition) / 100) + 1
   finalFactor = finalFactor * positionFactor
   // 结果
   return finalFactor * operateStandard()
@@ -194,7 +194,7 @@ function getSellBase () {
   // 仓位修正
   const position = userFundAccountInfo.position_config || 100
   const nowPosition = storageUtil.getAppConfig('nowPosition') || 100
-  let positionFactor = nowPosition / position
+  let positionFactor = ((nowPosition - position) / 100) + 1
   finalFactor = finalFactor * positionFactor
   // 结果
   // 卖的标准大一点

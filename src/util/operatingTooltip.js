@@ -164,7 +164,7 @@ function getBuyBase (type, marketInfo) {
   const userFundAccountInfo = storageUtil.getUserFundAccountInfo()
   let finalFactor = type === '熊' ? 1 : 0.8
   // 买卖信号因子
-  let buySellFactor = 0.5 * ((marketInfo.buyFlagCount - marketInfo.sellFlagCount) / indexNumber)
+  let buySellFactor = 0.75 * ((marketInfo.buyFlagCount - marketInfo.sellFlagCount) / indexNumber)
   finalFactor = finalFactor * (1 + buySellFactor)
   // 市场状况
   let marketStateFactor = assetMarketStateFactor()
@@ -182,9 +182,12 @@ function getBuyBase (type, marketInfo) {
 }
 
 // 基于市场的卖出基准
-function getSellBase () {
+function getSellBase (type, marketInfo) {
   const userFundAccountInfo = storageUtil.getUserFundAccountInfo()
   let finalFactor = 1
+  // 买卖信号因子
+  let buySellFactor = 0.75 * ((marketInfo.sellFlagCount - marketInfo.buyFlagCount) / indexNumber)
+  finalFactor = finalFactor * (1 + buySellFactor)
   // 市场状况
   let marketStateFactor = assetMarketStateFactor()
   finalFactor = finalFactor * (1 / marketStateFactor)
@@ -352,9 +355,9 @@ const operatingTooltip = {
     let finalBuyNumber = buyNumberRedistribution(indexItem, hasCount, buyNumber)
     return Math.round(finalBuyNumber / 100) * 100
   },
-  getIndexSellNumber (type, indexItem, hasCount) {
+  getIndexSellNumber (type, indexItem, marketInfo, hasCount) {
     // 标准到百
-    let sellBase = getSellBase(type)
+    let sellBase = getSellBase(type, marketInfo)
     let indexAttitudeFactor = getIndexAttitudeFactor(indexItem.key, indexItem.attach)
     let indexAverageFactor = getIndexAverageFactor(indexItem.key)
     let indexMonthDiffFactor = getIndexMonthDiffFactor(indexItem.key)

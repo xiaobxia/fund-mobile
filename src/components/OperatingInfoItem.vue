@@ -203,6 +203,10 @@ export default {
       return operatingTooltip.getIndexSellNumber(
         this.type,
         this.indexInfo,
+        {
+          buyFlagCount: this.buyCount,
+          sellFlagCount: this.sellCount
+        },
         this.hasCount
       )
     },

@@ -3,7 +3,7 @@
  */
 import numberUtil from './numberUtil'
 
-function ifMatch (raw, target) {
+function ifMatch(raw, target) {
   let match = true
   for (let key in target) {
     if (target[key] !== raw[key]) {
@@ -14,7 +14,7 @@ function ifMatch (raw, target) {
   return match
 }
 
-function Util (config) {
+function Util(config) {
   this.threshold = config.threshold
   this.rate = config.rate
   this.wave = config.wave
@@ -39,20 +39,20 @@ Util.prototype = {
     flag.ifHighPreCloseDownHigh = this.ifHighPreCloseDownHigh(record)
     return flag
   },
-  // 是否高开
+  //是否高开
   ifUpOpen: function (record) {
     const preClose = record.preClose
     const open = record.open
     return open >= preClose
   },
-  // 是否开盘高幅度
+  //是否开盘高幅度
   ifOpenHigh: function (record) {
     const rate = this.rate
     const preClose = record.preClose
     const open = record.open
     return Math.abs(numberUtil.countDifferenceRate(open, preClose)) >= rate
   },
-  // 是否上涨
+  //是否上涨
   ifUpClose: function (record) {
     return record.netChangeRatio > 0
   },
@@ -5275,7 +5275,7 @@ Util.prototype = {
       }
     }
     if (ifMatch(today,
-      {'ifUpOpen': false, 'ifOpenHigh': false, 'ifUpClose': false, 'ifCloseHigh': true, 'ifSessionDown': true, 'ifSessionDownHigh': true, 'ifSessionUpClose': false, 'ifSessionUpCloseHigh': false, 'ifSessionUp': false, 'ifSessionUpHigh': false, 'ifSessionDownClose': true, 'ifSessionDownCloseHigh': true}
+    {'ifUpOpen': false, 'ifOpenHigh': false, 'ifUpClose': false, 'ifCloseHigh': true, 'ifSessionDown': true, 'ifSessionDownHigh': true, 'ifSessionUpClose': false, 'ifSessionUpCloseHigh': false, 'ifSessionUp': false, 'ifSessionUpHigh': false, 'ifSessionDownClose': true, 'ifSessionDownCloseHigh': true}
     )) {
       if (ifMatch(lastDay,
         {'ifUpOpen': false, 'ifOpenHigh': false, 'ifUpClose': false, 'ifCloseHigh': true, 'ifSessionDown': true, 'ifSessionDownHigh': true, 'ifSessionUpClose': false, 'ifSessionUpCloseHigh': false, 'ifSessionUp': false, 'ifSessionUpHigh': false, 'ifSessionDownClose': true, 'ifSessionDownCloseHigh': true}
@@ -8734,30 +8734,6 @@ const codeMap = {
     incomeHighRate: true,
     noLong: true
   },
-  'gangtie': {
-    code: 'sz399440',
-    name: '钢铁',
-    threshold: 0.84,
-    wave: 0.8545666666666663,
-    rate: 0.8308843537414968,
-    up: 135.67,
-    upDay: 135,
-    down: -163.66,
-    downDay: 130,
-    stable: true
-  },
-  'jungong': {
-    code: 'sz399959',
-    name: '军工',
-    attach: 'chuangye',
-    threshold: 0.93,
-    wave: 0.9716906474820142,
-    rate: 0.8817687074829932,
-    up: 138.31,
-    upDay: 129,
-    down: -165.67,
-    downDay: 136
-  },
   'yiyao': {
     code: 'sh000037',
     name: '医药',
@@ -8771,28 +8747,6 @@ const codeMap = {
     downDay: 144,
     incomeHighRate: true,
     noLong: true
-  },
-  'meitan': {
-    code: 'sz399998',
-    name: '煤炭',
-    threshold: 0.82,
-    wave: 0.8193571428571426,
-    rate: 0.8109589041095889,
-    up: 142.32,
-    upDay: 130,
-    down: -170.53,
-    downDay: 135
-  },
-  'youse': {
-    code: 'sh000823',
-    name: '有色',
-    threshold: 0.92,
-    wave: 0.8558865248226952,
-    rate: 0.9762650602409638,
-    up: 124.79,
-    upDay: 129,
-    down: -158.25,
-    downDay: 136
   },
   'jisuanji': {
     code: 'sz399363',
@@ -8808,43 +8762,18 @@ const codeMap = {
     incomeHighRate: true,
     noLong: true
   },
-  'xinxi': {
-    code: 'sh000993',
-    name: '信息',
+  'dianzi': {
+    code: 'sz399811',
+    name: '电子',
     attach: 'chuangye',
-    threshold: 1.03,
-    rate: 1.0703999999999998,
-    wave: 0.9838741721854306,
-    up: 144.75,
-    upDay: 117,
-    down: -180.78,
-    downDay: 148,
-    incomeHighRate: true,
+    threshold: 0.9,
+    rate: 0.8832450331125826,
+    wave: 0.9248263888888891,
+    up: 132.40,
+    upDay: 115,
+    down: -176.17,
+    downDay: 150,
     noLong: true
-  },
-  'xiaofei': {
-    code: 'sh000990',
-    name: '消费',
-    attach: 'wulin',
-    threshold: 0.98,
-    rate: 0.9984756097560976,
-    wave: 0.9562179487179483,
-    up: 144.33,
-    upDay: 124,
-    down: -165.08,
-    downDay: 141
-  },
-  'baoxian': {
-    code: 'sz399809',
-    name: '保险',
-    attach: 'wulin',
-    threshold: 1,
-    wave: 1.022290322580645,
-    rate: 0.9797972972972975,
-    up: 134.12,
-    upDay: 124,
-    down: -162.67,
-    downDay: 141
   },
   'wulin': {
     code: 'sh000016',
@@ -8859,93 +8788,6 @@ const codeMap = {
     downDay: 130,
     stable: true
   },
-  'chuanmei': {
-    code: 'sz399971',
-    name: '传媒',
-    attach: 'chuangye',
-    threshold: 0.86,
-    rate: 0.8374025974025976,
-    wave: 0.8754518072289161,
-    up: 119.45,
-    upDay: 123,
-    down: -154.27,
-    downDay: 142
-  },
-  'dianzi': {
-    code: 'sz399811',
-    name: '电子',
-    attach: 'chuangye',
-    threshold: 0.9,
-    rate: 0.8832450331125826,
-    wave: 0.9248263888888891,
-    up: 132.40,
-    upDay: 115,
-    down: -176.17,
-    downDay: 150,
-    noLong: true
-  },
-  'yiliao': {
-    code: 'sz399989',
-    name: '医疗',
-    attach: 'chuangye',
-    threshold: 0.97,
-    wave: 1.0519615384615388,
-    rate: 0.8889999999999998,
-    up: 188.00,
-    upDay: 126,
-    down: -198.96,
-    downDay: 139,
-    incomeHighRate: true,
-    stable: true
-  },
-  'shengwu': {
-    code: 'sz399441',
-    name: '生物',
-    attach: 'chuangye',
-    threshold: 0.89,
-    rate: 0.8235460992907802,
-    wave: 0.9630645161290321,
-    up: 156.94,
-    upDay: 130,
-    down: -179.35,
-    downDay: 135,
-    stable: true
-  },
-  'sanbai': {
-    code: 'sh000300',
-    name: '300',
-    threshold: 0.68,
-    rate: 0.6461783439490445,
-    wave: 0.7182926829268294,
-    mix: true,
-    up: 106.64,
-    upDay: 128,
-    down: -130.22,
-    downDay: 137
-  },
-  'wubai': {
-    code: 'sh000905',
-    name: '500',
-    threshold: 0.75,
-    wave: 0.6947452229299363,
-    rate: 0.7977976190476194,
-    mix: true,
-    up: 104.21,
-    upDay: 125,
-    down: -136.18,
-    downDay: 140
-  },
-  'zhengquan': {
-    code: 'sz399437',
-    name: '证券',
-    threshold: 0.83,
-    rate: 0.8198026315789474,
-    wave: 0.8370723684210525,
-    up: 125.78,
-    upDay: 124,
-    down: -154.60,
-    downDay: 141
-  },
   'yinhang': {
     code: 'sz399986',
     name: '银行',
@@ -8959,18 +8801,43 @@ const codeMap = {
     downDay: 136,
     stable: true
   },
-  'dichan': {
-    code: 'sz399393',
-    name: '地产',
+  'xiaofei': {
+    code: 'sh000990',
+    name: '消费',
     attach: 'wulin',
-    threshold: 0.94,
-    rate: 0.9072847682119207,
-    wave: 0.9646258503401361,
-    up: 152.86,
-    upDay: 123,
-    down: -175.12,
-    downDay: 142,
-    incomeHighRate: true
+    threshold: 0.98,
+    rate: 0.9984756097560976,
+    wave: 0.9562179487179483,
+    up: 144.33,
+    upDay: 124,
+    down: -165.08,
+    downDay: 141
+  },
+  'jungong': {
+    code: 'sz399959',
+    name: '军工',
+    attach: 'chuangye',
+    threshold: 0.93,
+    wave: 0.9716906474820142,
+    rate: 0.8817687074829932,
+    up: 138.31,
+    upDay: 129,
+    down: -165.67,
+    downDay: 136
+  },
+  'xinxi': {
+    code: 'sh000993',
+    name: '信息',
+    attach: 'chuangye',
+    threshold: 1.03,
+    rate: 1.0703999999999998,
+    wave: 0.9838741721854306,
+    up: 144.75,
+    upDay: 117,
+    down: -180.78,
+    downDay: 148,
+    incomeHighRate: true,
+    noLong: true
   },
   'jijian': {
     code: 'sz399995',
@@ -9014,6 +8881,139 @@ const codeMap = {
     threshold: 0.81,
     rate: 0.8312195121951221,
     wave: 0.7816081871345026
+  },
+  'chuanmei': {
+    code: 'sz399971',
+    name: '传媒',
+    attach: 'chuangye',
+    threshold: 0.86,
+    rate: 0.8374025974025976,
+    wave: 0.8754518072289161,
+    up: 119.45,
+    upDay: 123,
+    down: -154.27,
+    downDay: 142
+  },
+  'zhengquan': {
+    code: 'sz399437',
+    name: '证券',
+    threshold: 0.83,
+    rate: 0.8198026315789474,
+    wave: 0.8370723684210525,
+    up: 125.78,
+    upDay: 124,
+    down: -154.60,
+    downDay: 141
+  },
+  'youse': {
+    code: 'sh000823',
+    name: '有色',
+    threshold: 0.92,
+    wave: 0.8558865248226952,
+    rate: 0.9762650602409638,
+    up: 124.79,
+    upDay: 129,
+    down: -158.25,
+    downDay: 136
+  },
+  'dichan': {
+    code: 'sz399393',
+    name: '地产',
+    attach: 'wulin',
+    threshold: 0.94,
+    rate: 0.9072847682119207,
+    wave: 0.9646258503401361,
+    up: 152.86,
+    upDay: 123,
+    down: -175.12,
+    downDay: 142,
+    incomeHighRate: true
+  },
+  'yiliao': {
+    code: 'sz399989',
+    name: '医疗',
+    attach: 'chuangye',
+    threshold: 0.97,
+    wave: 1.0519615384615388,
+    rate: 0.8889999999999998,
+    up: 188.00,
+    upDay: 126,
+    down: -198.96,
+    downDay: 139,
+    incomeHighRate: true,
+    stable: true
+  },
+  'shengwu': {
+    code: 'sz399441',
+    name: '生物',
+    attach: 'chuangye',
+    threshold: 0.89,
+    rate: 0.8235460992907802,
+    wave: 0.9630645161290321,
+    up: 156.94,
+    upDay: 130,
+    down: -179.35,
+    downDay: 135,
+    stable: true
+  },
+  'wubai': {
+    code: 'sh000905',
+    name: '500',
+    threshold: 0.75,
+    wave: 0.6947452229299363,
+    rate: 0.7977976190476194,
+    mix: true,
+    up: 104.21,
+    upDay: 125,
+    down: -136.18,
+    downDay: 140
+  },
+  'gangtie': {
+    code: 'sz399440',
+    name: '钢铁',
+    threshold: 0.84,
+    wave: 0.8545666666666663,
+    rate: 0.8308843537414968,
+    up: 135.67,
+    upDay: 135,
+    down: -163.66,
+    downDay: 130,
+    stable: true
+  },
+  'meitan': {
+    code: 'sz399998',
+    name: '煤炭',
+    threshold: 0.82,
+    wave: 0.8193571428571426,
+    rate: 0.8109589041095889,
+    up: 142.32,
+    upDay: 130,
+    down: -170.53,
+    downDay: 135
+  },
+  'baoxian': {
+    code: 'sz399809',
+    name: '保险',
+    attach: 'wulin',
+    threshold: 1,
+    wave: 1.022290322580645,
+    rate: 0.9797972972972975,
+    up: 134.12,
+    upDay: 124,
+    down: -162.67,
+    downDay: 141
+  },
+  'sanbai': {
+    code: 'sh000300',
+    name: '300',
+    threshold: 0.68,
+    rate: 0.6461783439490445,
+    wave: 0.7182926829268294,
+    mix: true,
+    up: 106.64,
+    upDay: 128,
+    down: -130.22,
+    downDay: 137
   }
 }
 const fnMap = {
@@ -9088,11 +9088,11 @@ const IndexInfoUtilXiong = {
         countList: [],
         count2: 0,
         countList2: []
-      })
+      });
     }
     list.forEach((item, index) => {
-      let value = Math.abs(numberUtil.countDifferenceRate(item.kline.close, item.kline.preClose))
-      let value2 = Math.abs(numberUtil.countDifferenceRate(item.kline.high, item.kline.low))
+      let value = Math.abs(numberUtil.countDifferenceRate(item.kline.close, item.kline.preClose));
+      let value2 = Math.abs(numberUtil.countDifferenceRate(item.kline.high, item.kline.low));
       for (let i = 0; i < xData.length; i++) {
         if (value >= xData[i].number && xData[i + 1] && value < xData[i + 1].number) {
           xData[i].count++
@@ -9107,20 +9107,20 @@ const IndexInfoUtilXiong = {
           break
         }
       }
-    })
+    });
     let all = 0
     let count = 0
     let all2 = 0
     let count2 = 0
     for (let k = 0; k < xData.length; k++) {
       if (xData[k].count >= 5) {
-        count = count + xData[k].count
+        count = count + xData[k].count;
         for (let c = 0; c < xData[k].countList.length; c++) {
           all = all + xData[k].countList[c]
         }
       }
       if (xData[k].count2 >= 5) {
-        count2 = count2 + xData[k].count2
+        count2 = count2 + xData[k].count2;
         for (let b = 0; b < xData[k].countList2.length; b++) {
           all2 = all2 + xData[k].countList2[b]
         }

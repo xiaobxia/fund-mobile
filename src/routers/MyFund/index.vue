@@ -209,8 +209,7 @@ export default {
         const d = new Date()
         const hour = d.getHours()
         const minute = d.getMinutes()
-        // 10点半以后
-        if (hour >= 10 && minute >= 30) {
+        if (hour >= 10 && minute >= 10) {
           const position = this.countRate(this.info.totalSum, this.todayAsset)
           this.$http.post('userFund/addUserFundPosition', {
             date: moment().format('YYYY-MM-DD'),

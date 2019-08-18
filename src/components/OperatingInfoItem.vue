@@ -34,6 +34,7 @@
                   :class="subItem">{{subItem}}</span>
       </p>
       <div class="other-text">
+        <p class="purple-text" v-if="ifJigou">机构的票，卖出不要看简</p>
         <p v-if="rate <= -3">是否有利空？是就先不接，标记利空，不是也不要接太多</p>
         <p v-if="ifWeak">进入弱势期,卖出信号不多那就应该减仓</p>
         <p v-if="ifSpeedUpDown">下跌在加速</p>
@@ -64,6 +65,9 @@
 <script>
 import storageUtil from '@/util/storageUtil.js'
 import operatingTooltip from '@/util/operatingTooltip.js'
+
+const jigou = operatingTooltip.jigou
+
 export default {
   name: 'OperatingInfoItem',
   data () {
@@ -157,6 +161,9 @@ export default {
     }
   },
   computed: {
+    ifJigou () {
+      return jigou.indexOf(this.indexInfo.key) !== -1
+    },
     shouldDo () {
       return operatingTooltip.getShouldDo(this.netChangeRatioList, this.buySellList, this.closeList)
     },

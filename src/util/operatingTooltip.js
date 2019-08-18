@@ -2,6 +2,25 @@ import storageUtil from '@/util/storageUtil.js'
 import numberUtil from './numberUtil'
 import moment from 'moment'
 
+const jigou = [
+  'shengwu',
+  'yiliao',
+  'baijiu',
+  'yiyao'
+]
+
+// 机构对指数的影响
+function getIndexJigouFactor (key, buySell) {
+  if (jigou.indexOf(key) !== -1) {
+    if (buySell === 'buy') {
+      return 1.2
+    } else {
+      return 0.8
+    }
+  }
+  return 1
+}
+
 // 指数数量
 const indexNumber = 24
 
@@ -164,7 +183,7 @@ function getBuyBase (type, marketInfo) {
   const userFundAccountInfo = storageUtil.getUserFundAccountInfo()
   let finalFactor = type === '熊' ? 1 : 0.8
   // 买卖信号因子
-  let buySellFactor = 0.75 * ((marketInfo.buyFlagCount - marketInfo.sellFlagCount) / indexNumber)
+  let buySellFactor = 0.34 * ((marketInfo.buyFlagCount - marketInfo.sellFlagCount) / indexNumber)
   finalFactor = finalFactor * (1 + buySellFactor)
   // 市场状况
   let marketStateFactor = assetMarketStateFactor()
@@ -184,16 +203,16 @@ function getBuyBase (type, marketInfo) {
 // 基于市场的卖出基准
 function getSellBase (type, marketInfo) {
   const userFundAccountInfo = storageUtil.getUserFundAccountInfo()
-  let finalFactor = 1
+  let finalFactor = type === '熊' ? 1 : 0.8
   // 买卖信号因子
-  let buySellFactor = 0.75 * ((marketInfo.sellFlagCount - marketInfo.buyFlagCount) / indexNumber)
+  let buySellFactor = 0.34 * ((marketInfo.sellFlagCount - marketInfo.buyFlagCount) / indexNumber)
   finalFactor = finalFactor * (1 + buySellFactor)
   // 市场状况
   let marketStateFactor = assetMarketStateFactor()
-  finalFactor = finalFactor * (1 / marketStateFactor)
+  finalFactor = finalFactor * (2 - marketStateFactor)
   // 市场择时
   let marketTimeFactor = assetMarketTimeFactor()
-  finalFactor = finalFactor * (1 / marketTimeFactor)
+  finalFactor = finalFactor * (2 - marketTimeFactor)
   // 仓位修正
   const position = userFundAccountInfo.position_config || 100
   const nowPosition = storageUtil.getAppConfig('nowPosition') || 100
@@ -234,11 +253,11 @@ function getIndexAverageFactor (indexKey) {
   let factor = 1
   if (indexAverage > 0) {
     // 越靠近1越大
-    factor = 1.1 - (0.1 * Math.abs(1 - indexAverage))
+    factor = 1.2 - (0.2 * Math.abs(1 - indexAverage))
   }
   if (indexAverage < 0) {
     // 越靠近-1越小
-    factor = 0.9 + (0.1 * Math.abs(1 + indexAverage))
+    factor = 0.8 + (0.2 * Math.abs(1 + indexAverage))
   }
   return factor
 }
@@ -265,11 +284,11 @@ function getIndexYearDiffFactor (indexKey) {
   let factor = 1
   // 理论上当年最高和最低的票差不会超多50
   if (indexDiff > 0) {
-    // 越靠近7.5越大
+    // 越靠近12.5越大
     factor = 1.2 - (0.2 * (Math.abs(12.5 - indexDiff) / 12.5))
   }
   if (indexDiff < 0) {
-    // 越靠近-7.5越小
+    // 越靠近-12.5越小
     factor = 0.8 + (0.2 * (Math.abs(12.5 + indexDiff) / 12.5))
   }
   return factor
@@ -351,7 +370,8 @@ const operatingTooltip = {
     let indexMonthDiffFactor = getIndexMonthDiffFactor(indexItem.key)
     let indexYearDiffFactor = getIndexYearDiffFactor(indexItem.key)
     let indexMarketTimeFactor = getIndexMarketTimeFactor(indexItem.key)
-    let buyNumber = buyBase * indexAttitudeFactor * indexAverageFactor * indexMonthDiffFactor * indexYearDiffFactor * indexMarketTimeFactor
+    let indexJigouFactor = getIndexJigouFactor(indexItem.key, 'buy')
+    let buyNumber = buyBase * indexAttitudeFactor * indexAverageFactor * indexMonthDiffFactor * indexYearDiffFactor * indexMarketTimeFactor * indexJigouFactor
     let finalBuyNumber = buyNumberRedistribution(indexItem, hasCount, buyNumber)
     return Math.round(finalBuyNumber / 100) * 100
   },
@@ -363,7 +383,8 @@ const operatingTooltip = {
     let indexMonthDiffFactor = getIndexMonthDiffFactor(indexItem.key)
     let indexYearDiffFactor = getIndexYearDiffFactor(indexItem.key)
     let indexMarketTimeFactor = getIndexMarketTimeFactor(indexItem.key)
-    let sellNumber = sellBase * (1 / indexAttitudeFactor) * (1 / indexAverageFactor) * (1 / indexMonthDiffFactor) * (1 / indexYearDiffFactor) * (1 / indexMarketTimeFactor)
+    let indexJigouFactor = getIndexJigouFactor(indexItem.key, 'sell')
+    let sellNumber = sellBase * (2 - indexAttitudeFactor) * (2 - indexAverageFactor) * (2 - indexMonthDiffFactor) * (2 - indexYearDiffFactor) * (2 - indexMarketTimeFactor) * indexJigouFactor
     let finalSellNumber = sellNumberRedistribution(indexItem, hasCount, sellNumber)
     return Math.round(finalSellNumber / 100) * 100
   },
@@ -660,6 +681,7 @@ const operatingTooltip = {
       }
     }
     return false
-  }
+  },
+  jigou
 }
 export default operatingTooltip

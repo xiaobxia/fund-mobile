@@ -6,7 +6,8 @@ const jigou = [
   'shengwu',
   'yiliao',
   'baijiu',
-  'yiyao'
+  'yiyao',
+  'xiaofei'
 ]
 
 // 机构对指数的影响

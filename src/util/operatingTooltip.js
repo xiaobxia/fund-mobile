@@ -14,9 +14,9 @@ const jigou = [
 function getIndexJigouFactor (key, buySell) {
   if (jigou.indexOf(key) !== -1) {
     if (buySell === 'buy') {
-      return 1.2
+      return 1
     } else {
-      return 0.8
+      return 0.75
     }
   }
   return 1

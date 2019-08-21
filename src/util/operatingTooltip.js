@@ -111,44 +111,26 @@ function assetMarketTimeFactor () {
   const monthFactorList = [1.1, 1.2, 1, 1, 0.9, 0.8, 1, 1.1, 1, 1.1, 0.9, 0.8]
   factor = factor * monthFactorList[month]
   // 季度末资金面紧张
-  if (moment().isAfter(`${year}-03-16`) && moment().isBefore(`${year}-03-23`)) {
+  if (moment().isAfter(`${year}-03-16`) && moment().isBefore(`${year}-03-30`)) {
     factor = factor * 0.9
   }
-  if (moment().isAfter(`${year}-03-22`) && moment().isBefore(`${year}-04-01`)) {
-    // 清明节前配置少一点
-    factor = factor * 0.8
-  }
-  if (moment().isAfter(`${year}-06-16`) && moment().isBefore(`${year}-06-23`)) {
+  if (moment().isAfter(`${year}-06-16`) && moment().isBefore(`${year}-06-30`)) {
     factor = factor * 0.9
   }
-  if (moment().isAfter(`${year}-06-22`) && moment().isBefore(`${year}-07-01`)) {
-    factor = factor * 0.85
-  }
-  if (moment().isAfter(`${year}-09-16`) && moment().isBefore(`${year}-09-23`)) {
+  if (moment().isAfter(`${year}-09-16`) && moment().isBefore(`${year}-09-30`)) {
     factor = factor * 0.9
   }
-  if (moment().isAfter(`${year}-09-22`) && moment().isBefore(`${year}-10-01`)) {
-    factor = factor * 0.85
-  }
-  if (moment().isAfter(`${year}-12-16`) && moment().isBefore(`${year}-12-23`)) {
+  if (moment().isAfter(`${year}-12-16`) && moment().isBefore(`${year}-12-30`)) {
     factor = factor * 0.9
-  }
-  if (moment().isAfter(`${year}-12-22`) && moment().isBefore(`${year}-12-31`)) {
-    factor = factor * 0.85
   }
   // 每个月的22日以后都是要谨慎的
   const quarterList = [3, 6, 9, 12]
   // 不能和季末叠加
   if (quarterList.indexOf(month + 1) === -1) {
     if (day >= 22 && day < 30) {
-      factor = factor * 0.85
+      factor = factor * 0.9
     }
   }
-  // 419魔咒
-  if (moment().isAfter(`${year}-04-12`) && moment().isBefore(`${year}-04-22`)) {
-    factor = factor * 0.85
-  }
-  // 每个月的22以后就要谨慎
   return factor
 }
 
@@ -225,27 +207,9 @@ function getSellBase (type, marketInfo) {
 }
 
 // 指数态度因子
-function getIndexAttitudeFactor (indexKey, attach) {
-  let indexAttitude = storageUtil.getIndexAttitude(indexKey) || '中性'
-  // 有附属因素
-  if (attach && indexAttitude === '中性') {
-    indexAttitude = storageUtil.getIndexAttitude(attach) || '中性'
-  }
-  let indexAttitudeFactor = 1
-  // 指数态度
-  if (indexAttitude === '强多') {
-    indexAttitudeFactor = 1.2
-  }
-  if (indexAttitude === '偏多') {
-    indexAttitudeFactor = 1.1
-  }
-  if (indexAttitude === '偏空') {
-    indexAttitudeFactor = 0.9
-  }
-  if (indexAttitude === '强空') {
-    indexAttitudeFactor = 0.8
-  }
-  return indexAttitudeFactor
+function getIndexPositionFactor (indexKey) {
+  let indexPosition = storageUtil.getIndexPosition(indexKey) || 100
+  return indexPosition / 100
 }
 
 // 指数平均因子
@@ -298,9 +262,9 @@ function getIndexYearDiffFactor (indexKey) {
 function getBuyNumber (hasCount, rowBuy, indexRedistributionStandard) {
   function getY (x) {
     if (x <= indexRedistributionStandard) {
-      return 0.4 + 0.4 * (x / indexRedistributionStandard)
+      return 0.33 + 0.33 * (x / indexRedistributionStandard)
     } else {
-      return 0.8 - 0.4 * ((x - indexRedistributionStandard) / indexRedistributionStandard)
+      return 0.66 - 0.33 * ((x - indexRedistributionStandard) / indexRedistributionStandard)
     }
   }
   let a = hasCount + rowBuy
@@ -366,26 +330,26 @@ const operatingTooltip = {
   getIndexBuyNumber (type, indexItem, marketInfo, hasCount) {
     // 标准到百
     let buyBase = getBuyBase(type, marketInfo)
-    let indexAttitudeFactor = getIndexAttitudeFactor(indexItem.key, indexItem.attach)
+    let indexPositionFactor = getIndexPositionFactor(indexItem.key, indexItem.attach)
     let indexAverageFactor = getIndexAverageFactor(indexItem.key)
     let indexMonthDiffFactor = getIndexMonthDiffFactor(indexItem.key)
     let indexYearDiffFactor = getIndexYearDiffFactor(indexItem.key)
     let indexMarketTimeFactor = getIndexMarketTimeFactor(indexItem.key)
     let indexJigouFactor = getIndexJigouFactor(indexItem.key, 'buy')
-    let buyNumber = buyBase * indexAttitudeFactor * indexAverageFactor * indexMonthDiffFactor * indexYearDiffFactor * indexMarketTimeFactor * indexJigouFactor
+    let buyNumber = buyBase * indexPositionFactor * indexAverageFactor * indexMonthDiffFactor * indexYearDiffFactor * indexMarketTimeFactor * indexJigouFactor
     let finalBuyNumber = buyNumberRedistribution(indexItem, hasCount, buyNumber)
     return Math.round(finalBuyNumber / 100) * 100
   },
   getIndexSellNumber (type, indexItem, marketInfo, hasCount) {
     // 标准到百
     let sellBase = getSellBase(type, marketInfo)
-    let indexAttitudeFactor = getIndexAttitudeFactor(indexItem.key, indexItem.attach)
+    let indexPositionFactor = getIndexPositionFactor(indexItem.key, indexItem.attach)
     let indexAverageFactor = getIndexAverageFactor(indexItem.key)
     let indexMonthDiffFactor = getIndexMonthDiffFactor(indexItem.key)
     let indexYearDiffFactor = getIndexYearDiffFactor(indexItem.key)
     let indexMarketTimeFactor = getIndexMarketTimeFactor(indexItem.key)
     let indexJigouFactor = getIndexJigouFactor(indexItem.key, 'sell')
-    let sellNumber = sellBase * (2 - indexAttitudeFactor) * (2 - indexAverageFactor) * (2 - indexMonthDiffFactor) * (2 - indexYearDiffFactor) * (2 - indexMarketTimeFactor) * indexJigouFactor
+    let sellNumber = sellBase * (2 - indexPositionFactor) * (2 - indexAverageFactor) * (2 - indexMonthDiffFactor) * (2 - indexYearDiffFactor) * (2 - indexMarketTimeFactor) * indexJigouFactor
     let finalSellNumber = sellNumberRedistribution(indexItem, hasCount, sellNumber)
     return Math.round(finalSellNumber / 100) * 100
   },

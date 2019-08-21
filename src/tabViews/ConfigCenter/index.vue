@@ -38,24 +38,6 @@
           <div class="bottom">资产管理</div>
         </div>
       </div>
-      <div class="img-card" @click="toPath('/page/goodBad')">
-        <div class="container">
-          <div class="content">
-            <img src="../../assets/雷暴.png" alt="">
-            <!--<i class="fas fa-book"></i>-->
-          </div>
-          <div class="bottom">利好利空</div>
-        </div>
-      </div>
-      <div class="img-card" @click="toPath('/page/indexAttitude')">
-        <div class="container">
-          <div class="content">
-            <img src="../../assets/笑脸表情.png" alt="">
-            <!--<i class="fas fa-book"></i>-->
-          </div>
-          <div class="bottom">指数态度</div>
-        </div>
-      </div>
       <div class="img-card" @click="toPath('/page/manual')">
         <div class="container">
           <div class="content">

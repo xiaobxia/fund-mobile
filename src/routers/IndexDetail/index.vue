@@ -6,6 +6,8 @@
       </mt-button>
     </mt-header>
     <div class="main-body">
+      <mt-field label="指数仓位" placeholder="请输入" v-model="position"></mt-field>
+      <mt-button type="primary" @click="positionOkHandler" class="main-btn">完成</mt-button>
       <div class="content-body">
         <ve-line :mark-point="chartPoint" :yAxis="chartYAxis" :textStyle="chartTextStyle"
                  :height="chartHeight" :data="chartDataNetValue" :theme="lineTheme"
@@ -35,6 +37,7 @@
 import indexInfoUtilXiong from '@/util/indexInfoUtilXiong.js'
 import indexInfoUtilJian from '@/util/indexInfoUtilJian.js'
 import stockDataUtil from '@/util/stockDataUtil.js'
+import storageUtil from '@/util/storageUtil.js'
 import fundAccountUtil from '@/util/fundAccountUtil.js'
 
 const codeMap = indexInfoUtilXiong.codeMap
@@ -107,7 +110,8 @@ export default {
       list: [],
       indexChangeRatio: 0,
       pointType: '',
-      type: 'xiong'
+      type: 'xiong',
+      position: 100
     }
   },
 
@@ -194,6 +198,7 @@ export default {
     initPage () {
       const query = this.$router.history.current.query
       this.queryData = Object.assign({}, query)
+      this.position = storageUtil.getIndexPosition(query.key)
       this.$http.get(`webData/${stockDataUtil.getAllUrl()}`, {
         code: query.code,
         days: 200
@@ -283,6 +288,19 @@ export default {
     },
     backHandler () {
       this.$router.history.go(-1)
+    },
+    positionOkHandler () {
+      const query = this.$router.history.current.query
+      this.$http.post('market/updateIndexPosition', {
+        key: query.key,
+        value: this.position
+      }).then((data) => {
+        if (data.success) {
+          Toast.success('操作成功')
+        } else {
+          Toast.error('操作失败')
+        }
+      })
     }
   }
 }

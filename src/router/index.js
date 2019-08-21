@@ -110,11 +110,6 @@ const routers = [
     component: lazyLoading('MyAsset')
   },
   {
-    name: 'GoodBad',
-    path: '/page/goodBad',
-    component: lazyLoading('GoodBad')
-  },
-  {
     name: 'MyFundAdd',
     path: '/page/myFundAdd',
     component: lazyLoading('MyFundAdd')
@@ -153,11 +148,6 @@ const routers = [
     name: 'Manual',
     path: '/page/manual',
     component: lazyLoading('Manual')
-  },
-  {
-    name: 'IndexAttitude',
-    path: '/page/indexAttitude',
-    component: lazyLoading('IndexAttitude')
   },
   {
     name: 'MonthIncome',

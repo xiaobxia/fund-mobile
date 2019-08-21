@@ -4,7 +4,7 @@
     <div slot="title">
       <h3>
         <span class="index-name">{{indexInfo.name}}</span>
-        <i v-if="indexInfo.goodBad === '利空' || ifBuyFlagInvalid" class="good-bad-tag fas fa-ban"></i>
+        <i v-if="ifBuyFlagInvalid" class="good-bad-tag fas fa-ban"></i>
         <i v-if="ifTwoSell" class="good-bad-tag fab fa-sellcast"></i>
         <i v-if="ifWeak" class="good-bad-tag fa fa-battery-quarter"></i>
         <i v-if="ifSpeedUpDown" class="good-bad-tag fas fa-rocket"></i>

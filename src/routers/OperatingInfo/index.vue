@@ -77,8 +77,7 @@ export default {
     for (let key in codeMap) {
       list.push({
         ...codeMap[key],
-        key: key,
-        goodBad: storageUtil.getGoodBad(codeMap[key].name) || '无'
+        key: key
       })
       buySellMap[key] = []
       buySellLargeMap[key] = []

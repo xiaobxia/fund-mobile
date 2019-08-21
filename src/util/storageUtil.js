@@ -157,29 +157,6 @@ const storageUtil = {
     localStorage.setItem('marketStatus', JSON.stringify(config))
     return config
   },
-  getGoodBad: function (key) {
-    let config = {}
-    if (window._goodBad) {
-      config = window._goodBad
-    } else {
-      const goodBadString = localStorage.getItem('goodBad')
-      if (goodBadString) {
-        config = JSON.parse(goodBadString)
-      }
-      window._goodBad = config
-    }
-    if (key) {
-      return config[key]
-    }
-    return config
-  },
-  setGoodBad: function (key, value) {
-    let config = this.getGoodBad()
-    config[key] = value
-    window._goodBad = config
-    localStorage.setItem('goodBad', JSON.stringify(config))
-    return config
-  },
   getChangeMarket: function (key) {
     let config = {}
     if (window._changeMarket) {
@@ -341,27 +318,27 @@ const storageUtil = {
     localStorage.setItem('xiongBuySellListLarge', JSON.stringify(config))
     return config
   },
-  getIndexAttitude: function (key) {
+  getIndexPosition: function (key) {
     let config = {}
-    if (window._indexAttitude) {
-      config = window._indexAttitude
+    if (window._indexPosition) {
+      config = window._indexPosition
     } else {
-      const indexAttitudeString = localStorage.getItem('indexAttitude')
-      if (indexAttitudeString) {
-        config = JSON.parse(indexAttitudeString)
+      const indexPositionString = localStorage.getItem('indexPosition')
+      if (indexPositionString) {
+        config = JSON.parse(indexPositionString)
       }
-      window._indexAttitude = config
+      window._indexPosition = config
     }
     if (key) {
       return config[key]
     }
     return config
   },
-  setIndexAttitude: function (key, value) {
-    let config = this.getIndexAttitude()
+  setIndexPosition: function (key, value) {
+    let config = this.getIndexPosition()
     config[key] = value
-    window._indexAttitude = config
-    localStorage.setItem('indexAttitude', JSON.stringify(config))
+    window._indexPosition = config
+    localStorage.setItem('indexPosition', JSON.stringify(config))
     return config
   },
   getIndexDiff: function (key) {

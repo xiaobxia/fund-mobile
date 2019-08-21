@@ -18,6 +18,10 @@
             {{item.name}}
             <span style="float: right" :class="numberClass(rateInfo[item.key])">{{rateInfo[item.key]}}%</span>
           </h3>
+          <p class="netChange wn">
+            <span v-for="(subItem, index) in klineMap[item.key]" :key="index"
+                  :class="numberBgClass(subItem.netChangeRatio)">{{subItem.netChangeRatio}}%</span>
+          </p>
           <p class="explain">
             <span v-for="(subItem, index) in allInfo[item.key]" :key="index"
                   :class="subItem === true? 'active': ''">{{subItem}}</span>
@@ -43,6 +47,7 @@ export default {
     let allInfo = {}
     let list = []
     let rateInfo = {}
+    let klineMap = {}
     for (let key in codeMap) {
       list.push({
         key: key,
@@ -55,12 +60,14 @@ export default {
       })
       allInfo[key] = []
       rateInfo[key] = 0
+      klineMap[key] = [{}]
     }
     return {
       list: list,
       allInfo: allInfo,
       rateInfo: rateInfo,
-      changeCount: 0
+      changeCount: 0,
+      klineMap
     }
   },
   computed: {
@@ -86,8 +93,10 @@ export default {
           const infoUtil = new InfoUtil(item)
           const recentNetValue = info.list
           let infoList = []
+          let kline = []
           // 近的在前
           for (let i = 0; i < 5; i++) {
+            kline.push(recentNetValue[i])
             const nowRecord = recentNetValue[i]
             const oneDayRecord = recentNetValue[i + 1]
             const twoDayRecord = recentNetValue[i + 2]
@@ -101,6 +110,7 @@ export default {
           if (infoList[0]) {
             this.changeCount = this.changeCount + 1
           }
+          this.klineMap[item.key] = kline
           storageUtil.setChangeMarket(item.key, infoList[0])
           this.allInfo[item.key] = infoList
           this.rateInfo[item.key] = this.keepTwoDecimals(recentNetValue[0].netChangeRatio)

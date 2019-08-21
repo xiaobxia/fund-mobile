@@ -165,6 +165,11 @@ const routers = [
     component: lazyLoading('PositionConfig')
   },
   {
+    name: 'ManyDown',
+    path: '/page/manyDown',
+    component: lazyLoading('ManyDown')
+  },
+  {
     name: '404',
     path: '*',
     component: lazyLoading('NotMatch')

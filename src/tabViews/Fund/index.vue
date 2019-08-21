@@ -11,13 +11,13 @@
           <div class="bottom">定投策略</div>
         </div>
       </div>
-      <div class="img-card" @click="toPath('/page/market')">
+      <div class="img-card" @click="toPath('/page/manyDown')">
         <div class="container">
           <div class="content">
-            <img src="../../assets/行情.png" alt="">
+            <img src="../../assets/阴.png" alt="">
             <!--<i class="fab fa-cloudversify"></i>-->
           </div>
-          <div class="bottom">市场行情</div>
+          <div class="bottom">多阴策略</div>
         </div>
       </div>
       <div class="img-card" @click="toPath('/page/operatingInfo?type=jian')">

@@ -106,6 +106,18 @@
       }
     }
   }
+  .small {
+    .explain {
+      span {
+        width: 8%;
+      }
+    }
+    .netChange.wn {
+      span {
+        width: 8%;
+      }
+    }
+  }
   .mint-cell.has.lock:not(.should-buy) {
     background-color: $grey-color-back;
   }

@@ -18,7 +18,7 @@
           </p>
           <p class="explain">
             <span v-for="(subItem, index) in allInfo[item.key]" :key="subItem + index"
-                  :class="subItem ?'buy':''">{{subItem}}</span>
+                  :class="subItem?(subItem.indexOf('涨')?'buy':'sell'):''">{{subItem}}</span>
           </p>
         </div>
       </mt-cell-swipe>
@@ -38,6 +38,24 @@ function ifAllDown (list, start, day) {
   let rate = 0
   for (let i = 0; i < day; i++) {
     if (list[start + i].netChangeRatio > 0) {
+      return {
+        flag: false
+      }
+    } else {
+      rate += list[start + i].netChangeRatio
+    }
+  }
+  return {
+    flag,
+    rate
+  }
+}
+
+function ifAllUp (list, start, day) {
+  let flag = true
+  let rate = 0
+  for (let i = 0; i < day; i++) {
+    if (list[start + i].netChangeRatio < 0) {
       return {
         flag: false
       }
@@ -107,6 +125,7 @@ export default {
             if (i < 8) {
               kline.push(recentNetValue[i])
             }
+            // 连续跌
             if (ifAllDown(recentNetValue, i, 4).flag) {
               infoList[i] = 4
               if (ifAllDown(recentNetValue, i, 4).rate < -5) {
@@ -126,6 +145,10 @@ export default {
             }
             if (ifAllDown(recentNetValue, i, 8).flag) {
               infoList[i] = 8
+            }
+            // 连续涨
+            if (ifAllUp(recentNetValue, i, 4).flag) {
+              infoList[i] = '涨-4'
             }
           }
           this.klineMap[item.key] = kline

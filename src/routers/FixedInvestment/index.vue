@@ -22,7 +22,7 @@
           </p>
           <p class="explain">
             <span v-for="(subItem, index) in allInfo[item.key]" :key="subItem + index"
-                  :class="subItem === '买'?'buy':subItem === '牛市买'?'active-2':subItem === '卖'?'sell':''">{{subItem}}</span>
+                  :class="getClass(subItem)">{{subItem}}</span>
           </p>
         </div>
       </mt-cell-swipe>
@@ -71,6 +71,24 @@ function getBuyRate (rate) {
     return 1.5
   }
   return 1
+}
+
+function ifAllDown (list, start, day) {
+  let flag = true
+  let rate = 0
+  for (let i = 0; i < day; i++) {
+    if (list[start + i].netChangeRatio > 0) {
+      return {
+        flag: false
+      }
+    } else {
+      rate += list[start + i].netChangeRatio
+    }
+  }
+  return {
+    flag,
+    rate
+  }
 }
 
 export default {
@@ -146,6 +164,29 @@ export default {
     this.initPage()
   },
   methods: {
+    getClass (subItem) {
+      if (subItem.indexOf('买少') !== -1) {
+        return 'active-2 has-text'
+      }
+      if (subItem.indexOf('买') !== -1) {
+        return 'buy'
+      }
+      if (subItem.indexOf('跌多') !== -1) {
+        return 'buy'
+      }
+      if (subItem.indexOf('跌少') !== -1) {
+        return 'active-2 has-text'
+      }
+      if (subItem.indexOf('快跌') !== -1) {
+        return 'buy'
+      }
+      if (subItem.indexOf('慢跌') !== -1) {
+        return 'active-2 has-text'
+      }
+      if (subItem.indexOf('卖') !== -1) {
+        return 'sell'
+      }
+    },
     initPage () {
       this.$http.get('stock/getFixYearAverage').then((res) => {
         const list = res.data
@@ -181,7 +222,7 @@ export default {
     queryData (item) {
       this.$http.getWithCache(`webData/${stockDataUtil.getAllUrl()}`, {
         code: item.code,
-        days: 12
+        days: 16
       }, {interval: 30}).then((data) => {
         if (data.success) {
           const list = data.data.list
@@ -203,13 +244,34 @@ export default {
               if (buyFlag.flag === true && buyFlag.text !== 'niu') {
                 infoList[i] = '买'
               } else if (buyFlag.flag === true && buyFlag.text === 'niu' && oneDayRecord['netChangeRatio'] < 0) {
-                infoList[i] = '牛市买'
+                infoList[i] = '买少'
               } else if (sellFlag.flag === true && sellFlag.text !== 'xiong') {
                 infoList[i] = '卖'
               } else if (sellFlag.flag === true && sellFlag.text === 'xiong') {
-                infoList[i] = '熊卖'
+                infoList[i] = '卖少'
               } else {
                 infoList[i] = ''
+              }
+            }
+            if (infoList[i] === '') {
+              if (ifAllDown(recentNetValue, i, 4).flag) {
+                if (ifAllDown(recentNetValue, i, 4).rate < -5) {
+                  infoList[i] = '跌多'
+                } else {
+                  infoList[i] = '跌少'
+                }
+              }
+              if (ifAllDown(recentNetValue, i, 5).flag) {
+                infoList[i] = '跌多'
+              }
+            }
+            if (infoList[i] === '') {
+              if (ifAllDown(recentNetValue, i, 3).flag) {
+                if (ifAllDown(recentNetValue, i, 3).rate < -3.6) {
+                  infoList[i] = '快跌'
+                } else {
+                  infoList[i] = '慢跌'
+                }
               }
             }
           }

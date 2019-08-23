@@ -25,9 +25,9 @@
             <span v-for="(subItem, index) in buySellList" :key="subItem + index"
                   :class="subItem">{{subItem === 'buy'?'买':subItem === 'sell'?'卖':''}}</span>
       </p>
-      <p class="netChange">
+      <p class="netChange wn">
             <span v-for="(subItem, index) in netChangeRatioList" :key="index"
-                  :class="numberClass(subItem)"></span>
+                  :class="numberBgClass(subItem)">{{subItem}}%</span>
       </p>
       <p class="otherBuySellList">
             <span v-for="(subItem, index) in otherBuySellList" :key="index"

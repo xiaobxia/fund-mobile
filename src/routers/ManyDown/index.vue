@@ -18,7 +18,7 @@
           </p>
           <p class="explain">
             <span v-for="(subItem, index) in allInfo[item.key]" :key="subItem + index"
-                  :class="subItem?(subItem.indexOf('涨')?'buy':'sell'):''">{{subItem}}</span>
+                  :class="subItem?(subItem.indexOf('涨')?'buy':'sell'):''getClass(subItem)">{{subItem}}</span>
           </p>
         </div>
       </mt-cell-swipe>
@@ -103,6 +103,19 @@ export default {
     this.initPage()
   },
   methods: {
+    getClass (subItem) {
+      if (subItem) {
+        if (subItem.indexOf('涨') !== -1) {
+          return 'sell'
+        } else if (subItem.indexOf('牛') !== -1) {
+          return 'niu'
+        } else {
+          return 'buy'
+        }
+      } else {
+        return ''
+      }
+    },
     initPage () {
       let list = this.list
       for (let i = 0; i < list.length; i++) {
@@ -149,6 +162,9 @@ export default {
             // 连续涨
             if (ifAllUp(recentNetValue, i, 4).flag) {
               infoList[i] = '涨-4'
+            }
+            if (ifAllUp(recentNetValue, i, 5).flag) {
+              infoList[i] = '牛-5'
             }
           }
           this.klineMap[item.key] = kline

@@ -192,6 +192,12 @@ export default {
           storageUtil.setIndexPosition(item.key, parseInt(item.value))
         })
       })
+      this.$http.get('market/getIndexNiuXiong').then((res) => {
+        let list = res.data
+        list.map((item) => {
+          storageUtil.setIndexNiuXiong(item.key, item.value)
+        })
+      })
       this.$http.get('market/getMarketQuestion').then((res) => {
         let list = res.data
         list.map((item) => {

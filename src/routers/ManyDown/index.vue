@@ -18,7 +18,7 @@
           </p>
           <p class="explain">
             <span v-for="(subItem, index) in allInfo[item.key]" :key="subItem + index"
-                  :class="subItem?(subItem.indexOf('涨')?'buy':'sell'):''getClass(subItem)">{{subItem}}</span>
+                  :class="getClass(subItem)">{{subItem}}</span>
           </p>
         </div>
       </mt-cell-swipe>

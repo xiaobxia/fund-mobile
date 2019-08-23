@@ -19,6 +19,8 @@
         <span v-if="positionWarn === 'warn'" class="warn-tag operate-tag">高仓</span>
         <span class="buy-info">买:{{indexBuyNumber}}</span>
         <span class="buy-info">卖:{{indexSellNumber}}</span>
+        <span v-if="indexNiuXiong === '牛'" class="buy has-tag">{{indexNiuXiong}}</span>
+        <span v-if="indexNiuXiong === '熊'" class="sell has-tag">{{indexNiuXiong}}</span>
         <span style="float: right" :class="numberClass(rate)">{{rate}}%</span>
       </h3>
       <p class="explain">
@@ -191,6 +193,10 @@ export default {
     },
     indexAverage () {
       return storageUtil.getAverage(this.indexInfo.key) || 0
+    },
+    indexNiuXiong () {
+      const niuXiong = storageUtil.getIndexNiuXiong(this.indexInfo.key)
+      return niuXiong === '正常' ? '' : niuXiong
     },
     buySellFlagTrue () {
       return operatingTooltip.ifBuySellFlagTrue(this.buySellList, this.closeList)

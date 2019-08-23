@@ -341,6 +341,29 @@ const storageUtil = {
     localStorage.setItem('indexPosition', JSON.stringify(config))
     return config
   },
+  getIndexNiuXiong: function (key) {
+    let config = {}
+    if (window._indexNiuXiong) {
+      config = window._indexNiuXiong
+    } else {
+      const indexNiuXiongString = localStorage.getItem('indexNiuXiong')
+      if (indexNiuXiongString) {
+        config = JSON.parse(indexNiuXiongString)
+      }
+      window._indexNiuXiong = config
+    }
+    if (key) {
+      return config[key]
+    }
+    return config
+  },
+  setIndexNiuXiong: function (key, value) {
+    let config = this.getIndexNiuXiong()
+    config[key] = value
+    window._indexNiuXiong = config
+    localStorage.setItem('indexNiuXiong', JSON.stringify(config))
+    return config
+  },
   getIndexDiff: function (key) {
     let config = {}
     if (window._indexDiff) {

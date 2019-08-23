@@ -6,6 +6,10 @@
       </mt-button>
     </mt-header>
     <div class="main-body">
+      <div class="theme-wrap">
+        <span class="name">{{niuXiong}}</span>
+        <mt-button type="primary" @click="niuXiongChangeHandler">改变</mt-button>
+      </div>
       <mt-field label="指数仓位" placeholder="请输入" v-model="position"></mt-field>
       <mt-button type="primary" @click="positionOkHandler" class="main-btn">完成</mt-button>
       <div class="content-body">
@@ -30,6 +34,13 @@
         </mt-cell-swipe>
       </div>
     </div>
+    <mt-popup
+      v-model="popupVisible"
+      position="bottom">
+      <ul class="theme-list">
+        <li class="theme-item" v-for="(item) in filterList" :key="item" @click="onNiuXiongChangeHandler(item)">{{item || '正常'}}</li>
+      </ul>
+    </mt-popup>
   </div>
 </template>
 
@@ -38,6 +49,7 @@ import indexInfoUtilXiong from '@/util/indexInfoUtilXiong.js'
 import indexInfoUtilJian from '@/util/indexInfoUtilJian.js'
 import stockDataUtil from '@/util/stockDataUtil.js'
 import storageUtil from '@/util/storageUtil.js'
+import Toast from '@/common/toast.js'
 import fundAccountUtil from '@/util/fundAccountUtil.js'
 
 const codeMap = indexInfoUtilXiong.codeMap
@@ -52,6 +64,9 @@ export default {
   name: 'IndexDetail',
   data () {
     return {
+      popupVisible: false,
+      filterList: ['正常', '牛', '熊'],
+      niuXiong: '',
       grid: {
         top: '15%',
         left: '-8%',
@@ -195,9 +210,27 @@ export default {
   },
 
   methods: {
+    niuXiongChangeHandler () {
+      this.popupVisible = true
+    },
+    onNiuXiongChangeHandler (text) {
+      const query = this.$router.history.current.query
+      this.$http.post('market/updateIndexNiuXiong', {
+        key: query.key,
+        value: text
+      }).then((data) => {
+        if (data.success) {
+          Toast.success('操作成功')
+        } else {
+          Toast.error('操作失败')
+        }
+      })
+      this.popupVisible = false
+    },
     initPage () {
       const query = this.$router.history.current.query
       this.queryData = Object.assign({}, query)
+      this.niuXiong = storageUtil.getIndexNiuXiong(query.key)
       this.position = storageUtil.getIndexPosition(query.key)
       this.$http.get(`webData/${stockDataUtil.getAllUrl()}`, {
         code: query.code,

@@ -23,7 +23,7 @@ import storageUtil from '@/util/storageUtil.js'
 export default {
   name: 'DataConfig',
   data () {
-    const dataWay = storageUtil.getAppConfig('dataWay') || '东方'
+    const dataWay = storageUtil.getAppConfig('dataWay') || '腾讯'
     return {
       dataWay: dataWay
     }

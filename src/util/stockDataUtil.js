@@ -11,7 +11,7 @@ const todayDataList = {
 }
 
 function getWay () {
-  return storageUtil.getAppConfig('dataWay') || '东方'
+  return storageUtil.getAppConfig('dataWay') || '腾讯'
 }
 
 const stockDataUtil = {

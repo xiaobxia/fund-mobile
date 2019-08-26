@@ -140,24 +140,24 @@ export default {
             }
             // 连续跌
             if (ifAllDown(recentNetValue, i, 4).flag) {
-              infoList[i] = 4
+              infoList[i] = '4'
               if (ifAllDown(recentNetValue, i, 4).rate < -5) {
-                infoList[i] = 4
+                infoList[i] = '4'
               } else {
-                infoList[i] = 4 + '-少'
+                infoList[i] = '4' + '-少'
               }
             }
             if (ifAllDown(recentNetValue, i, 5).flag) {
-              infoList[i] = 5
+              infoList[i] = '5'
             }
             if (ifAllDown(recentNetValue, i, 6).flag) {
-              infoList[i] = 6
+              infoList[i] = '6'
             }
             if (ifAllDown(recentNetValue, i, 7).flag) {
-              infoList[i] = 7
+              infoList[i] = '7'
             }
             if (ifAllDown(recentNetValue, i, 8).flag) {
-              infoList[i] = 8
+              infoList[i] = '8'
             }
             // 连续涨
             if (ifAllUp(recentNetValue, i, 4).flag) {
@@ -166,9 +166,13 @@ export default {
             if (ifAllUp(recentNetValue, i, 5).flag) {
               infoList[i] = '牛-5'
             }
+            if (!infoList[i]) {
+              infoList[i] = ''
+            }
           }
           this.klineMap[item.key] = kline
           this.allInfo[item.key] = infoList
+          console.log(infoList)
           this.rateInfo[item.key] = this.keepTwoDecimals(recentNetValue[0].netChangeRatio)
         }
       })

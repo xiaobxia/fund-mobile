@@ -21,6 +21,7 @@
         <span class="buy-info">卖:{{indexSellNumber}}</span>
         <span v-if="indexNiuXiong === '牛'" class="buy has-tag">{{indexNiuXiong}}</span>
         <span v-if="indexNiuXiong === '熊'" class="sell has-tag">{{indexNiuXiong}}</span>
+        <span v-if="ifThreeDown" class="buy has-tag">卖出减半</span>
         <span style="float: right" :class="numberClass(rate)">{{rate}}%</span>
       </h3>
       <p class="explain">
@@ -262,6 +263,9 @@ export default {
     },
     ifTwoSell () {
       return this.buySellList[0] === 'sell' && this.buySellList[1] === 'sell'
+    },
+    ifThreeDown () {
+      return this.netChangeRatioList[0] < 0 && this.netChangeRatioList[1] < 0 && this.netChangeRatioList[2] < 0
     }
   },
   mounted () {

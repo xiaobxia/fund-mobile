@@ -125,7 +125,7 @@ export default {
     queryData (item) {
       this.$http.getWithCache(`webData/${stockDataUtil.getAllUrl()}`, {
         code: item.code,
-        days: 16
+        days: 22
       }, {interval: 30}).then((data) => {
         if (data.success) {
           const list = data.data.list
@@ -134,8 +134,8 @@ export default {
           let infoList = []
           let kline = []
           // 近的在前
-          for (let i = 0; i < 8; i++) {
-            if (i < 8) {
+          for (let i = 0; i < 12; i++) {
+            if (i < 12) {
               kline.push(recentNetValue[i])
             }
             // 连续跌

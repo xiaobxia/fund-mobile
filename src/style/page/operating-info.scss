@@ -116,12 +116,16 @@
   .small {
     .explain {
       span {
-        width: 8%;
+        width: 32px;
+        margin-right: 5px;
+        font-size: 16px;
       }
     }
     .netChange.wn {
       span {
-        width: 8%;
+        width: 32px;
+        margin-right: 5px;
+        font-size: 14px;
       }
     }
   }

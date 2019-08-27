@@ -262,9 +262,9 @@ function getIndexYearDiffFactor (indexKey) {
 function getBuyNumber (hasCount, rowBuy, indexRedistributionStandard) {
   function getY (x) {
     if (x <= indexRedistributionStandard) {
-      return 0.33 + 0.33 * (x / indexRedistributionStandard)
+      return 0.4 + 0.4 * (x / indexRedistributionStandard)
     } else {
-      return 0.66 - 0.33 * ((x - indexRedistributionStandard) / indexRedistributionStandard)
+      return 0.8 - 0.4 * ((x - indexRedistributionStandard) / indexRedistributionStandard)
     }
   }
   let a = hasCount + rowBuy
@@ -313,7 +313,7 @@ function getSellNumber (hasCount, rowSell, indexRedistributionStandard) {
   let c = hasCount - a
   // 中间位
   let b = hasCount - (c / 2)
-  let d = 0.34 + 0.66 * (b / (2 * indexRedistributionStandard))
+  let d = 0.4 + 0.6 * (b / (2 * indexRedistributionStandard))
   return d * c
 }
 // 卖出金额再分配

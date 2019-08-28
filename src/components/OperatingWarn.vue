@@ -23,12 +23,7 @@
       </div>
     </div>
     <div class="warn-wrap">
-      <p v-if="sellCount > 12" class="black-text">想要追也别在大涨的日子追，没有多少底仓的时候也不能追</p>
-      <p v-if="question8 === '吃力'" class="purple-text">挣钱变吃力，出现卖出信号一定得卖</p>
-      <p v-if="isChunJie" class="purple-text">春节前后配置创业板和传媒电子计算机</p>
-      <p v-if="question1 === '强'" class="red-text">市场特别强势的时候，阴线策略应该看3天，一般强势看2天</p>
-      <p v-if="question1 === '弱'" class="red-text">市场弱势的时候，阴线策略看1天</p>
-      <p class="red-text">出做空信号，感觉盘面也不强，那就要缩仓</p>
+      <p class="black-text">不要追，不管什么情况</p>
     </div>
   </div>
 </template>

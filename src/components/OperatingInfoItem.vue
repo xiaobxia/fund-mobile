@@ -22,7 +22,7 @@
         <span v-if="indexNiuXiong === '牛'" class="buy has-tag">{{indexNiuXiong}}</span>
         <span v-if="indexNiuXiong === '小牛'" class="buy has-tag">{{indexNiuXiong}}</span>
         <span v-if="indexNiuXiong === '熊'" class="sell has-tag">{{indexNiuXiong}}</span>
-        <span v-if="ifThreeDown" class="buy has-tag">卖出减半</span>
+        <span v-if="ifThreeDown" class="buy has-tag">买1/3</span>
         <span style="float: right" :class="numberClass(rate)">{{rate}}%</span>
       </h3>
       <p class="explain">

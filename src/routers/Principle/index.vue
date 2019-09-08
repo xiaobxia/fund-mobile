@@ -67,16 +67,6 @@
         </mt-radio>
       </div>
       <div class="question">
-        7.是否缩量？
-      </div>
-      <div class="answer">
-        <mt-radio
-          align="right"
-          v-model="question_7"
-          :options="['是', '否']">
-        </mt-radio>
-      </div>
-      <div class="question">
         8.挣钱是否变吃力(并且卖出信号也变准了，吃力就仓位8成以下)？
       </div>
       <div class="answer">
@@ -137,7 +127,6 @@ export default {
       question_4: storageUtil.getMarketStatus('question_4') || '否',
       question_5: storageUtil.getMarketStatus('question_5') || '否',
       question_6: storageUtil.getMarketStatus('question_6') || '无',
-      question_7: storageUtil.getMarketStatus('question_7') || '否',
       question_8: storageUtil.getMarketStatus('question_8') || '不吃力',
       question_9: storageUtil.getMarketStatus('question_9') || '否'
     }
@@ -182,13 +171,6 @@ export default {
       storageUtil.setMarketStatus('question_6', val)
       this.$http.post('market/updateMarketQuestion', {
         key: 'question_6',
-        value: val
-      })
-    },
-    question_7 (val) {
-      storageUtil.setMarketStatus('question_7', val)
-      this.$http.post('market/updateMarketQuestion', {
-        key: 'question_7',
         value: val
       })
     },

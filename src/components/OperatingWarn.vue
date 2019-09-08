@@ -41,7 +41,6 @@ export default {
     const question4 = storageUtil.getMarketStatus('question_4')
     const question5 = storageUtil.getMarketStatus('question_5')
     const question6 = storageUtil.getMarketStatus('question_6')
-    const question7 = storageUtil.getMarketStatus('question_7')
     const question8 = storageUtil.getMarketStatus('question_8')
     const question9 = storageUtil.getMarketStatus('question_9')
 
@@ -61,7 +60,6 @@ export default {
       question4,
       question5,
       question6,
-      question7,
       question8,
       question9
     }

@@ -40,14 +40,14 @@
           <div class="bottom">操作分析-熊</div>
         </div>
       </div>
-      <div class="img-card" @click="toPath('/page/changeMarket')">
+      <div class="img-card" @click="toPath('/page/averageIndex')">
         <!--<img src="../../assets/800_600_dribbble_icons.jpg" alt="">-->
         <div class="container">
           <div class="content">
-            <img src="../../assets/变脸.png" alt="">
-            <!--<i class="fab fa-sellsy"></i>-->
+            <img src="../../assets/均线买卖.png" alt="">
+            <!--<i class="fas fa-balance-scale"></i>-->
           </div>
-          <div class="bottom">变盘策略</div>
+          <div class="bottom">均线策略</div>
         </div>
       </div>
       <div class="img-card" @click="toPath('/page/todayIndex')">
@@ -57,16 +57,6 @@
             <!--<i class="fab fa-cloudversify"></i>-->
           </div>
           <div class="bottom">今日指数</div>
-        </div>
-      </div>
-      <div class="img-card" @click="toPath('/page/averageIndex')">
-        <!--<img src="../../assets/800_600_dribbble_icons.jpg" alt="">-->
-        <div class="container">
-          <div class="content">
-            <img src="../../assets/均线买卖.png" alt="">
-            <!--<i class="fas fa-balance-scale"></i>-->
-          </div>
-          <div class="bottom">均线策略</div>
         </div>
       </div>
       <div class="img-card" @click="toPath('/page/indexDifference')">

@@ -23,6 +23,8 @@
         <span v-if="indexNiuXiong === '小牛'" class="buy has-tag">{{indexNiuXiong}}</span>
         <span v-if="indexNiuXiong === '熊'" class="sell has-tag">{{indexNiuXiong}}</span>
         <span v-if="ifThreeDown" class="buy has-tag">买1/3</span>
+        <span v-if="ifFiveFour" class="buy has-tag">买进</span>
+        <span v-if="ifSixFive" class="buy has-tag">走牛</span>
         <span style="float: right" :class="numberClass(rate)">{{rate}}%</span>
       </h3>
       <p class="explain">
@@ -267,6 +269,57 @@ export default {
     },
     ifThreeDown () {
       return this.netChangeRatioList[0] < 0 && this.netChangeRatioList[1] < 0 && this.netChangeRatioList[2] < 0
+    },
+    ifFiveFour () {
+      if (this.netChangeRatioListLarge[0] < 0) {
+        let count = 0
+        if (this.netChangeRatioListLarge[1] > 0) {
+          count++
+        }
+        if (this.netChangeRatioListLarge[2] > 0) {
+          count++
+        }
+        if (this.netChangeRatioListLarge[3] > 0) {
+          count++
+        }
+        if (this.netChangeRatioListLarge[4] > 0) {
+          count++
+        }
+        if (this.netChangeRatioListLarge[5] > 0) {
+          count++
+        }
+        if (count < 2) {
+          return true
+        }
+      }
+      return false
+    },
+    ifSixFive () {
+      if (this.netChangeRatioListLarge[0] < 0) {
+        let count = 0
+        if (this.netChangeRatioListLarge[1] > 0) {
+          count++
+        }
+        if (this.netChangeRatioListLarge[2] > 0) {
+          count++
+        }
+        if (this.netChangeRatioListLarge[3] > 0) {
+          count++
+        }
+        if (this.netChangeRatioListLarge[4] > 0) {
+          count++
+        }
+        if (this.netChangeRatioListLarge[5] > 0) {
+          count++
+        }
+        if (this.netChangeRatioListLarge[6] > 0) {
+          count++
+        }
+        if (count < 2) {
+          return true
+        }
+      }
+      return false
     }
   },
   mounted () {

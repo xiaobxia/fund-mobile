@@ -40,14 +40,14 @@
           <div class="bottom">操作分析-熊</div>
         </div>
       </div>
-      <div class="img-card" @click="toPath('/page/averageIndex')">
+      <div class="img-card" @click="toPath('/page/indexDifference')">
         <!--<img src="../../assets/800_600_dribbble_icons.jpg" alt="">-->
         <div class="container">
           <div class="content">
-            <img src="../../assets/均线买卖.png" alt="">
-            <!--<i class="fas fa-balance-scale"></i>-->
+            <img src="../../assets/相对标准偏差.png" alt="">
+            <!--<i class="fab fa-sellsy"></i>-->
           </div>
-          <div class="bottom">均线策略</div>
+          <div class="bottom">差价策略</div>
         </div>
       </div>
       <div class="img-card" @click="toPath('/page/todayIndex')">
@@ -59,14 +59,24 @@
           <div class="bottom">今日指数</div>
         </div>
       </div>
-      <div class="img-card" @click="toPath('/page/indexDifference')">
+      <div class="img-card" @click="toPath('/page/averageIndex')">
         <!--<img src="../../assets/800_600_dribbble_icons.jpg" alt="">-->
         <div class="container">
           <div class="content">
-            <img src="../../assets/相对标准偏差.png" alt="">
-            <!--<i class="fab fa-sellsy"></i>-->
+            <img src="../../assets/均线买卖.png" alt="">
+            <!--<i class="fas fa-balance-scale"></i>-->
           </div>
-          <div class="bottom">差价策略</div>
+          <div class="bottom">均线策略</div>
+        </div>
+      </div>
+      <div class="img-card" @click="toPath('/page/averageMonthIndex')">
+        <!--<img src="../../assets/800_600_dribbble_icons.jpg" alt="">-->
+        <div class="container">
+          <div class="content">
+            <img src="../../assets/均值.png" alt="">
+            <!--<i class="fas fa-balance-scale"></i>-->
+          </div>
+          <div class="bottom">月线策略</div>
         </div>
       </div>
       <div class="img-card" @click="toPath('/page/monthIncome')">

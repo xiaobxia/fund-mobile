@@ -170,6 +170,11 @@ const routers = [
     component: lazyLoading('ManyDown')
   },
   {
+    name: 'AverageMonthIndex',
+    path: '/page/averageMonthIndex',
+    component: lazyLoading('AverageMonthIndex')
+  },
+  {
     name: '404',
     path: '*',
     component: lazyLoading('NotMatch')

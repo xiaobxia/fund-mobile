@@ -6,7 +6,7 @@
       </mt-button>
     </mt-header>
     <div class="main-body">
-      <mt-cell-swipe v-for="(item) in list" :key="item.code">
+      <mt-cell-swipe v-for="(item) in list" :key="item.code" :class="diffInfo[item.key] >= 1 ? 'has-back':''">
         <div slot="title">
           <h3>
             {{item.name}}

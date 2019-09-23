@@ -449,11 +449,12 @@ const operatingTooltip = {
     const asset = getUserAsset()
     // 如果是混合指数宽限1.25倍
     let mix = item.mix ? 1.25 : 1
-    const indexAssetStandard = mix * asset / indexNumber
+    // 取不是定投的那部分
+    const indexAssetStandard = mix * (asset * 0.66) / indexNumber
     const indexRedistributionStandard = indexAssetStandard / 2
     return {
       // 危险
-      positionDangerLine: indexRedistributionStandard * 3,
+      positionDangerLine: indexRedistributionStandard * 2,
       // 提示
       positionWarnLine: indexAssetStandard
     }
@@ -465,10 +466,10 @@ const operatingTooltip = {
     if (hasCount >= positionDangerLine) {
       return 'danger'
     }
-    let positionWarnLine = positionWarnNumber.positionWarnLine
-    if (hasCount >= positionWarnLine) {
-      return 'warn'
-    }
+    // let positionWarnLine = positionWarnNumber.positionWarnLine
+    // if (hasCount >= positionWarnLine) {
+    //   return 'warn'
+    // }
     return ''
   },
   // 损失提示，防止单一品种损失过多

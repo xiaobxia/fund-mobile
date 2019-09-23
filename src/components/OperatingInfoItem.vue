@@ -40,6 +40,7 @@
                   :class="subItem">{{subItem}}</span>
       </p>
       <div class="other-text">
+        <p class="purple-text" v-if="positionWarn === 'danger'">又是危仓又是卖出信号，那必须的卖</p>
         <p class="purple-text" v-if="ifJigou">机构的票，卖出不要看简</p>
         <p v-if="rate <= -3">是否有利空？是就先不接，标记利空，不是也不要接太多</p>
         <p v-if="ifWeak">进入弱势期,卖出信号不多那就应该减仓</p>

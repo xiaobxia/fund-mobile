@@ -4,17 +4,17 @@
     <div slot="title">
       <h3>
         <span class="index-name">{{indexInfo.name}}</span>
-        <i v-if="ifBuyFlagInvalid" class="good-bad-tag fas fa-ban"></i>
+        <!--<i v-if="ifBuyFlagInvalid" class="good-bad-tag fas fa-ban"></i>-->
         <i v-if="ifTwoSell" class="good-bad-tag fab fa-sellcast"></i>
-        <i v-if="ifWeak" class="good-bad-tag fa fa-battery-quarter"></i>
-        <i v-if="ifSpeedUpDown" class="good-bad-tag fas fa-rocket"></i>
-        <i v-if="ifOverheated" class="good-bad-tag fab fa-hotjar"></i>
-        <i v-if="ifDownSpeedDown" class="good-bad-tag fas fa-hands"></i>
-        <i v-if="ifSingleUp" class="good-bad-tag fas fa-street-view"></i>
-        <i v-if="ifSingleDown" class="good-bad-tag fas fa-street-view"></i>
-        <i v-if="ifUpSpeedDown" class="good-bad-tag fas fa-exclamation-triangle"></i>
+        <!--<i v-if="ifWeak" class="good-bad-tag fa fa-battery-quarter"></i>-->
+        <!--<i v-if="ifSpeedUpDown" class="good-bad-tag fas fa-rocket"></i>-->
+        <!--<i v-if="ifOverheated" class="good-bad-tag fab fa-hotjar"></i>-->
+        <!--<i v-if="ifDownSpeedDown" class="good-bad-tag fas fa-hands"></i>-->
+        <!--<i v-if="ifSingleUp" class="good-bad-tag fas fa-street-view"></i>-->
+        <!--<i v-if="ifSingleDown" class="good-bad-tag fas fa-street-view"></i>-->
+        <!--<i v-if="ifUpSpeedDown" class="good-bad-tag fas fa-exclamation-triangle"></i>-->
         <span v-if="hasCount" class="has-count">{{hasCount}}</span>
-        <span v-if="getLossWarn" class="danger-tag operate-tag">巨亏</span>
+        <!--<span v-if="getLossWarn" class="danger-tag operate-tag">巨亏</span>-->
         <span v-if="positionWarn === 'danger'" class="danger-tag operate-tag">危仓</span>
         <span v-if="positionWarn === 'warn'" class="warn-tag operate-tag">高仓</span>
         <span class="buy-info">买:{{indexBuyNumber}}</span>
@@ -22,8 +22,8 @@
         <span v-if="indexNiuXiong === '牛'" class="buy has-tag">{{indexNiuXiong}}</span>
         <span v-if="indexNiuXiong === '小牛'" class="buy has-tag">{{indexNiuXiong}}</span>
         <span v-if="indexNiuXiong === '熊'" class="sell has-tag">{{indexNiuXiong}}</span>
-        <span v-if="ifThreeDown" class="buy has-tag">买1/3</span>
-        <span v-if="ifFiveFour" class="buy has-tag">买进</span>
+        <span v-if="ifThreeDown" class="buy has-tag">1/3</span>
+        <span v-if="ifFiveFour" class="buy has-tag">买</span>
         <span v-if="ifSixFive" class="buy has-tag">走牛</span>
         <span style="float: right" :class="numberClass(rate)">{{rate}}%</span>
       </h3>

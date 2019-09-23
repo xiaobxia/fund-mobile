@@ -21,6 +21,7 @@
 <script>
 import indexInfoUtilXiong from '@/util/indexInfoUtilXiong.js'
 import stockDataUtil from '@/util/stockDataUtil.js'
+import storageUtil from '@/util/storageUtil.js'
 
 const codeMap = indexInfoUtilXiong.codeMap
 
@@ -70,7 +71,9 @@ export default {
           for (let i = 0; i < 20; i++) {
             now += parseFloat(list[i].kline.close)
           }
-          this.diffInfo[item.key] = this.countDifferenceRate(parseFloat(list[0].kline.close), now / 20)
+          const diff = this.countDifferenceRate(parseFloat(list[0].kline.close), now / 20)
+          this.diffInfo[item.key] = diff
+          storageUtil.setMonthAverage(item.key, diff)
         }
       })
     },

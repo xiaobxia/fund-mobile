@@ -454,7 +454,7 @@ const operatingTooltip = {
     const indexRedistributionStandard = indexAssetStandard / 2
     return {
       // 危险
-      positionDangerLine: indexRedistributionStandard * 2,
+      positionDangerLine: indexRedistributionStandard * 1.6,
       // 提示
       positionWarnLine: indexAssetStandard
     }

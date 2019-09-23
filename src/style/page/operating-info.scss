@@ -174,16 +174,15 @@
     color: $yellow-color;
   }
   .danger-tag {
-    border: 2px solid yellow;
-    color: yellow;
+    border: 2px solid $yellow-color;
+    color: $yellow-color;
   }
   // 持有标签
   .has-tag {
-    margin: 0 .25em;
-    font-size: 26px;
-    padding: 0 0.3em;
+    font-size: 22px;
+    padding: 0 2px;
     border-radius: 4px;
-    vertical-align: top;
+    vertical-align: middle;
     &.sell {
       border: 2px solid $green-color;
       color: $green-color;
@@ -191,6 +190,16 @@
     &.buy {
       border: 2px solid $red-color;
       color: $red-color;
+    }
+    &.buy-s {
+      border: 2px solid $red-color;
+      background-color: $red-color;
+      color: #fff;
+    }
+    &.sell-s {
+      border: 2px solid $green-color;
+      background-color: $green-color;
+      color: #fff;
     }
   }
 

@@ -203,6 +203,29 @@ const storageUtil = {
     localStorage.setItem('average', JSON.stringify(config))
     return config
   },
+  getMonthAverage: function (key) {
+    let config = {}
+    if (window._monthAverage) {
+      config = window._monthAverage
+    } else {
+      const monthAverageString = localStorage.getItem('monthAverage')
+      if (monthAverageString) {
+        config = JSON.parse(monthAverageString)
+      }
+      window._monthAverage = config
+    }
+    if (key) {
+      return config[key]
+    }
+    return config
+  },
+  setMonthAverage: function (key, value) {
+    let config = this.getMonthAverage()
+    config[key] = value
+    window._monthAverage = config
+    localStorage.setItem('monthAverage', JSON.stringify(config))
+    return config
+  },
   getIndexRate: function (key) {
     let config = {}
     if (window._indexRate) {

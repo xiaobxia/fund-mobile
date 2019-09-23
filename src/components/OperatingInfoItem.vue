@@ -5,7 +5,7 @@
       <h3>
         <span class="index-name">{{indexInfo.name}}</span>
         <!--<i v-if="ifBuyFlagInvalid" class="good-bad-tag fas fa-ban"></i>-->
-        <i v-if="ifTwoSell" class="good-bad-tag fab fa-sellcast"></i>
+        <!--<i v-if="ifThreeSell" class="good-bad-tag fab fa-sellcast"></i>-->
         <!--<i v-if="ifWeak" class="good-bad-tag fa fa-battery-quarter"></i>-->
         <!--<i v-if="ifSpeedUpDown" class="good-bad-tag fas fa-rocket"></i>-->
         <!--<i v-if="ifOverheated" class="good-bad-tag fab fa-hotjar"></i>-->
@@ -22,9 +22,12 @@
         <span v-if="indexNiuXiong === '牛'" class="buy has-tag">{{indexNiuXiong}}</span>
         <span v-if="indexNiuXiong === '小牛'" class="buy has-tag">{{indexNiuXiong}}</span>
         <span v-if="indexNiuXiong === '熊'" class="sell has-tag">{{indexNiuXiong}}</span>
-        <span v-if="ifThreeDown" class="buy has-tag">1/3</span>
-        <span v-if="ifFiveFour" class="buy has-tag">买</span>
-        <span v-if="ifSixFive" class="buy has-tag">走牛</span>
+        <span v-if="averageMonthIndex >= 1" class="buy has-tag">多</span>
+        <span v-if="averageMonthIndex <= -1" class="sell has-tag">空</span>
+        <span v-if="ifThreeDown" class="buy-s has-tag">1/3</span>
+        <span v-if="ifFiveFour" class="buy-s has-tag">买</span>
+        <span v-if="ifSixFive" class="buy-s has-tag">走牛</span>
+        <span v-if="ifThreeSell" class="sell-s has-tag">3卖</span>
         <span style="float: right" :class="numberClass(rate)">{{rate}}%</span>
       </h3>
       <p class="explain">
@@ -51,7 +54,7 @@
         <p v-if="ifDownSpeedDown">跌势减弱，可以等等</p>
         <p v-if="ifSingleUp">下跌中一支独秀，需要减仓，特别是还出了卖出信号</p>
         <p v-if="ifSingleDown">上涨中一支独秀，需要减仓</p>
-        <p v-if="ifTwoSell">连续卖出信号</p>
+        <p v-if="ifThreeSell">连续卖出信号</p>
       </div>
       <div class="left-tag">
         <span v-if="buySellFlagTrue === 'sell' && hasCount > 0" class="low-sell top"><i class="fas fa-long-arrow-alt-down"></i></span>
@@ -265,8 +268,8 @@ export default {
     ifSingleDown () {
       return this.countDownNumber < 6 && this.rate < 0
     },
-    ifTwoSell () {
-      return this.buySellList[0] === 'sell' && this.buySellList[1] === 'sell'
+    ifThreeSell () {
+      return this.buySellList[0] === 'sell' && this.buySellList[1] === 'sell' && this.buySellList[2] === 'sell'
     },
     ifThreeDown () {
       return this.netChangeRatioList[0] < 0 && this.netChangeRatioList[1] < 0 && this.netChangeRatioList[2] < 0
@@ -321,6 +324,9 @@ export default {
         }
       }
       return false
+    },
+    averageMonthIndex () {
+      return storageUtil.getMonthAverage(this.indexInfo.key) || 0
     }
   },
   mounted () {

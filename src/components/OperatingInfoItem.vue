@@ -21,6 +21,8 @@
         <span class="buy-info">卖:{{indexSellNumber}}</span>
         <span v-if="indexNiuXiong === '牛'" class="buy-s has-tag">{{indexNiuXiong}}</span>
         <span v-if="indexNiuXiong === '小牛'" class="buy has-tag">{{indexNiuXiong}}</span>
+        <span v-if="indexNiuXiong === '大反转'" class="buy-s has-tag">{{indexNiuXiong}}</span>
+        <span v-if="indexNiuXiong === '小反转'" class="buy has-tag">{{indexNiuXiong}}</span>
         <span v-if="indexNiuXiong === '熊'" class="sell-s has-tag">{{indexNiuXiong}}</span>
         <span v-if="averageMonthIndex > 0.5" class="buy-s has-tag">多</span>
         <span v-if="averageMonthIndex > 0 && averageMonthIndex <= 0.5" class="buy has-tag">乐观</span>

@@ -65,7 +65,7 @@ export default {
   data () {
     return {
       popupVisible: false,
-      filterList: ['正常', '小牛', '牛', '熊'],
+      filterList: ['正常', '小牛', '牛', '熊', '小反转', '大反转'],
       niuXiong: '',
       grid: {
         top: '15%',

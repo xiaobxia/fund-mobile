@@ -28,6 +28,7 @@
         <span v-if="averageMonthIndex < -0.5" class="sell-s has-tag">空</span>
         <span v-if="ifThreeDown" class="buy-s has-tag">1/3</span>
         <span v-if="ifFiveFour" class="buy-s has-tag">买</span>
+        <span v-if="ifSixFour" class="buy-s has-tag">买</span>
         <span v-if="ifSixFive" class="buy-s has-tag">走牛</span>
         <span v-if="ifThreeSell" class="sell-s has-tag">3卖</span>
         <span style="float: right" :class="numberClass(rate)">{{rate}}%</span>
@@ -48,14 +49,14 @@
         <p class="purple-text" v-if="positionWarn === 'danger'">又是危仓又是卖出信号，那必须的卖</p>
         <p class="purple-text" v-if="ifJigou">机构的票，卖出不要看简</p>
         <p v-if="rate <= -3">是否有利空？是就先不接，标记利空，不是也不要接太多</p>
-        <p v-if="ifWeak">进入弱势期,卖出信号不多那就应该减仓</p>
-        <p v-if="ifSpeedUpDown">下跌在加速</p>
+        <!--<p v-if="ifWeak">进入弱势期,卖出信号不多那就应该减仓</p>-->
+        <!--<p v-if="ifSpeedUpDown">下跌在加速</p>-->
         <p v-if="ifBuyFlagInvalid">买入信号开始坑人</p>
-        <p v-if="ifOverheated">过热危险，需要减仓</p>
-        <p v-if="ifUpSpeedDown">卖出信号后转弱，需要减仓</p>
-        <p v-if="ifDownSpeedDown">跌势减弱，可以等等</p>
-        <p v-if="ifSingleUp">下跌中一支独秀，需要减仓，特别是还出了卖出信号</p>
-        <p v-if="ifSingleDown">上涨中一支独秀，需要减仓</p>
+        <!--<p v-if="ifOverheated">过热危险，需要减仓</p>-->
+        <!--<p v-if="ifUpSpeedDown">卖出信号后转弱，需要减仓</p>-->
+        <!--<p v-if="ifDownSpeedDown">跌势减弱，可以等等</p>-->
+        <!--<p v-if="ifSingleUp">下跌中一支独秀，需要减仓，特别是还出了卖出信号</p>-->
+        <!--<p v-if="ifSingleDown">上涨中一支独秀，需要减仓</p>-->
         <p v-if="ifThreeSell">连续卖出信号</p>
       </div>
       <div class="left-tag">
@@ -322,6 +323,30 @@ export default {
           count++
         }
         if (count < 2) {
+          return true
+        }
+      }
+      return false
+    },
+    ifSixFour () {
+      if (this.netChangeRatioListLarge[0] < 0 && this.netChangeRatioListLarge[6] < 0) {
+        let count = 0
+        if (this.netChangeRatioListLarge[1] > 0) {
+          count++
+        }
+        if (this.netChangeRatioListLarge[2] > 0) {
+          count++
+        }
+        if (this.netChangeRatioListLarge[3] > 0) {
+          count++
+        }
+        if (this.netChangeRatioListLarge[4] > 0) {
+          count++
+        }
+        if (this.netChangeRatioListLarge[5] > 0) {
+          count++
+        }
+        if (count < 3) {
           return true
         }
       }

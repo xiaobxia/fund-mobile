@@ -448,13 +448,13 @@ const operatingTooltip = {
   getPositionWarnNumber (item) {
     const asset = getUserAsset()
     // 如果是混合指数宽限1.25倍
-    let mix = item.mix ? 1.25 : 1
+    let mix = item.mix ? 1.2 : 1
     // 取不是定投的那部分
-    const indexAssetStandard = mix * (asset * 0.66) / indexNumber
+    const indexAssetStandard = mix * (asset * 0.67) / indexNumber
     const indexRedistributionStandard = indexAssetStandard / 2
     return {
       // 危险
-      positionDangerLine: indexRedistributionStandard * 1.6,
+      positionDangerLine: indexRedistributionStandard * 1.67,
       // 提示
       positionWarnLine: indexAssetStandard
     }

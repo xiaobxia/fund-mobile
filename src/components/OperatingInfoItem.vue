@@ -22,7 +22,7 @@
         <span v-if="indexNiuXiong === '牛'" class="buy has-tag">{{indexNiuXiong}}</span>
         <span v-if="indexNiuXiong === '小牛'" class="buy has-tag">{{indexNiuXiong}}</span>
         <span v-if="indexNiuXiong === '熊'" class="sell has-tag">{{indexNiuXiong}}</span>
-        <span v-if="averageMonthIndex >= 1" class="buy has-tag">多</span>
+        <span v-if="averageMonthIndex >= 0" class="buy has-tag">多</span>
         <span v-if="averageMonthIndex <= -1" class="sell has-tag">空</span>
         <span v-if="ifThreeDown" class="buy-s has-tag">1/3</span>
         <span v-if="ifFiveFour" class="buy-s has-tag">买</span>

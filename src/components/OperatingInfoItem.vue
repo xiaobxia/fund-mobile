@@ -15,8 +15,8 @@
         <!--<i v-if="ifUpSpeedDown" class="good-bad-tag fas fa-exclamation-triangle"></i>-->
         <span v-if="hasCount" class="has-count">{{hasCount}}</span>
         <!--<span v-if="getLossWarn" class="danger-tag operate-tag">巨亏</span>-->
-        <span v-if="positionWarn === 'danger'" class="danger-tag operate-tag">危仓</span>
-        <span v-if="positionWarn === 'warn'" class="warn-tag operate-tag">高仓</span>
+        <span v-if="positionWarn === 'danger'" class="danger-tag-s operate-tag">危仓</span>
+        <span v-if="positionWarn === 'warn'" class="warn-tag-s operate-tag">高仓</span>
         <span class="buy-info">买:{{indexBuyNumber}}</span>
         <span class="buy-info">卖:{{indexSellNumber}}</span>
         <span v-if="indexNiuXiong === '牛'" class="buy-s has-tag">{{indexNiuXiong}}</span>

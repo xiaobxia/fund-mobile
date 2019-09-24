@@ -177,6 +177,16 @@
     border: 2px solid $yellow-color;
     color: $yellow-color;
   }
+  .warn-tag-s {
+    border: 2px solid $yellow-color;
+    background-color: $yellow-color;
+    color: #fff;
+  }
+  .danger-tag-s {
+    border: 2px solid $yellow-color;
+    background-color: $yellow-color;
+    color: #fff;
+  }
   // 持有标签
   .has-tag {
     font-size: 22px;

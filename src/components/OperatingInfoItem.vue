@@ -2,7 +2,7 @@
   <mt-cell-swipe :to="toUrl"
                  :class="['operating-info-item',buySellList[0], hasCount > 0 ? 'has':'no-has', 'should-' + shouldDo, lock ?'lock':'no-lock']">
     <div slot="title">
-      <h3>
+      <h3 class="op">
         <span class="index-name">{{indexInfo.name}}</span>
         <!--<i v-if="ifBuyFlagInvalid" class="good-bad-tag fas fa-ban"></i>-->
         <!--<i v-if="ifThreeSell" class="good-bad-tag fab fa-sellcast"></i>-->
@@ -17,12 +17,12 @@
         <!--<span v-if="getLossWarn" class="danger-tag operate-tag">巨亏</span>-->
         <span v-if="positionWarn === 'danger'" class="danger-tag-s operate-tag">危仓</span>
         <span v-if="positionWarn === 'warn'" class="warn-tag-s operate-tag">高仓</span>
-        <span class="buy-info">买:{{indexBuyNumber}}</span>
-        <span class="buy-info">卖:{{indexSellNumber}}</span>
+        <span class="buy-info">{{indexBuyNumber}}</span>
+        <span class="buy-info">{{indexSellNumber}}</span>
         <span v-if="indexNiuXiong === '牛'" class="buy-s has-tag">{{indexNiuXiong}}</span>
         <span v-if="indexNiuXiong === '小牛'" class="buy has-tag">{{indexNiuXiong}}</span>
-        <span v-if="indexNiuXiong === '大反转'" class="buy-s has-tag">{{indexNiuXiong}}</span>
-        <span v-if="indexNiuXiong === '小反转'" class="buy has-tag">{{indexNiuXiong}}</span>
+        <span v-if="indexNiuXiong === '大反'" class="buy-s has-tag">{{indexNiuXiong}}</span>
+        <span v-if="indexNiuXiong === '小反'" class="buy has-tag">{{indexNiuXiong}}</span>
         <span v-if="indexNiuXiong === '熊'" class="sell-s has-tag">{{indexNiuXiong}}</span>
         <span v-if="averageMonthIndex > 0.5" class="buy-s has-tag">多</span>
         <span v-if="averageMonthIndex > 0 && averageMonthIndex <= 0.5" class="buy has-tag">乐观</span>

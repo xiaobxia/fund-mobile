@@ -4,6 +4,12 @@
     border: none;
     margin-bottom: 10px;
   }
+  h3.op {
+    font-size: 28px;
+  }
+  .operating-info-item {
+    padding: 20px;
+  }
   .netChange {
     position: relative;
     margin: 0;
@@ -284,7 +290,7 @@
     }
   }
   .left-tag {
-    left: -25px;
+    left: -20px;
   }
   .right-tag {
     right: -5px;

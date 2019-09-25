@@ -10,6 +10,15 @@ const jigou = [
   'xiaofei'
 ]
 
+const highRate = [
+  'chuanmei',
+  'youse',
+  'dichan',
+  'gangtie',
+  'meitan',
+  'baoxian'
+]
+
 // 机构对指数的影响
 function getIndexJigouFactor (key, buySell) {
   if (jigou.indexOf(key) !== -1) {
@@ -17,6 +26,19 @@ function getIndexJigouFactor (key, buySell) {
       return 1
     } else {
       return 0.75
+    }
+  }
+  return 1
+}
+
+function getIndexHighRateFactor (key, buySell) {
+  if (highRate.indexOf(key) !== -1) {
+    if (buySell === 'buy') {
+      // 买
+      return 0.75
+    } else {
+      // 卖
+      return 1
     }
   }
   return 1
@@ -328,7 +350,8 @@ const operatingTooltip = {
     let indexYearDiffFactor = getIndexYearDiffFactor(indexItem.key)
     let indexMarketTimeFactor = getIndexMarketTimeFactor(indexItem.key)
     let indexJigouFactor = getIndexJigouFactor(indexItem.key, 'buy')
-    let buyNumber = buyBase * indexPositionFactor * indexAverageFactor * indexMonthDiffFactor * indexYearDiffFactor * indexMarketTimeFactor * indexJigouFactor
+    let indexHighRateFactor = getIndexHighRateFactor(indexItem.key, 'buy')
+    let buyNumber = buyBase * indexPositionFactor * indexAverageFactor * indexMonthDiffFactor * indexYearDiffFactor * indexMarketTimeFactor * indexJigouFactor * indexHighRateFactor
     let finalBuyNumber = buyNumberRedistribution(indexItem, hasCount, buyNumber)
     return Math.round(finalBuyNumber / 100) * 100
   },
@@ -341,7 +364,8 @@ const operatingTooltip = {
     let indexYearDiffFactor = getIndexYearDiffFactor(indexItem.key)
     let indexMarketTimeFactor = getIndexMarketTimeFactor(indexItem.key)
     let indexJigouFactor = getIndexJigouFactor(indexItem.key, 'sell')
-    let sellNumber = sellBase * (2 - indexPositionFactor) * (2 - indexAverageFactor) * (2 - indexMonthDiffFactor) * (2 - indexYearDiffFactor) * (2 - indexMarketTimeFactor) * indexJigouFactor
+    let indexHighRateFactor = getIndexHighRateFactor(indexItem.key, 'sell')
+    let sellNumber = sellBase * (2 - indexPositionFactor) * (2 - indexAverageFactor) * (2 - indexMonthDiffFactor) * (2 - indexYearDiffFactor) * (2 - indexMarketTimeFactor) * indexJigouFactor * indexHighRateFactor
     let finalSellNumber = sellNumberRedistribution(indexItem, hasCount, sellNumber)
     return Math.round(finalSellNumber / 100) * 100
   },
@@ -447,8 +471,10 @@ const operatingTooltip = {
   // 仓位提示的警戒线
   getPositionWarnNumber (item) {
     const asset = getUserAsset()
-    // 如果是混合指数宽限1.25倍
-    let mix = item.mix ? 1.2 : 1
+    let mix = 1
+    if (highRate.indexOf(item.key) !== -1) {
+      mix = 0.75
+    }
     // 取不是定投的那部分
     const indexAssetStandard = mix * (asset * 0.67) / indexNumber
     const indexRedistributionStandard = indexAssetStandard / 2

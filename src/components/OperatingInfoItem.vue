@@ -29,8 +29,9 @@
         <span v-if="averageMonthIndex <= 0 && averageMonthIndex >= -0.5" class="sell has-tag">谨慎</span>
         <span v-if="averageMonthIndex < -0.5" class="sell-s has-tag">空</span>
         <span v-if="ifThreeDown" class="buy-s has-tag">1/3</span>
-        <span v-if="ifFiveFour" class="buy-s has-tag">买</span>
-        <span v-if="ifSixFour" class="buy-s has-tag">买</span>
+        <span v-if="ifFiveFour && !ifSixFive" class="buy-s has-tag">小</span>
+        <span v-if="ifSevenFive && !ifEightSix" class="buy-s has-tag">小</span>
+        <span v-if="ifEightSix" class="buy-s has-tag">大</span>
         <span v-if="ifSixFive" class="buy-s has-tag">走牛</span>
         <span v-if="ifThreeSell" class="sell-s has-tag">3卖</span>
         <span style="float: right" :class="numberClass(rate)">{{rate}}%</span>
@@ -330,7 +331,7 @@ export default {
       }
       return false
     },
-    ifSixFour () {
+    ifSevenFive () {
       if (this.netChangeRatioListLarge[0] < 0 && this.netChangeRatioListLarge[6] < 0) {
         let count = 0
         if (this.netChangeRatioListLarge[1] > 0) {
@@ -346,6 +347,33 @@ export default {
           count++
         }
         if (this.netChangeRatioListLarge[5] > 0) {
+          count++
+        }
+        if (count < 3) {
+          return true
+        }
+      }
+      return false
+    },
+    ifEightSix () {
+      if (this.netChangeRatioListLarge[0] < 0 && this.netChangeRatioListLarge[7] < 0) {
+        let count = 0
+        if (this.netChangeRatioListLarge[1] > 0) {
+          count++
+        }
+        if (this.netChangeRatioListLarge[2] > 0) {
+          count++
+        }
+        if (this.netChangeRatioListLarge[3] > 0) {
+          count++
+        }
+        if (this.netChangeRatioListLarge[4] > 0) {
+          count++
+        }
+        if (this.netChangeRatioListLarge[5] > 0) {
+          count++
+        }
+        if (this.netChangeRatioListLarge[6] > 0) {
           count++
         }
         if (count < 3) {

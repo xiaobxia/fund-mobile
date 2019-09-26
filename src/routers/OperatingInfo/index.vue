@@ -110,7 +110,8 @@ export default {
       totalSum: 10000,
       nowMonthRate: 0,
       lastDayBuy: [0, 0],
-      lastDaySell: [0, 0]
+      lastDaySell: [0, 0],
+      monthAverage: [0, 0, 0, 0]
     }
   },
   components: {OperatingInfoItem, OperatingWarn},
@@ -207,9 +208,25 @@ export default {
           }
         })
       ]).then(() => {
+        let duo = 0
+        let leguan = 0
+        let jinshen = 0
+        let kong = 0
         for (let i = 0; i < indexList.length; i++) {
           this.queryData(indexList[i])
+          const rate = storageUtil.getMonthAverage(indexList[i].key)
+          if (rate > 1) {
+            duo++
+          } else if (rate <= 1 && rate > 0) {
+            leguan++
+          } else if (rate <= 0 && rate >= -0.5) {
+            jinshen++
+          } else if (rate < -0.5) {
+            kong++
+          }
         }
+        this.monthAverage = [duo, leguan, jinshen, kong]
+        console.log([duo, leguan, jinshen, kong])
       })
     },
     qsStringify (query) {

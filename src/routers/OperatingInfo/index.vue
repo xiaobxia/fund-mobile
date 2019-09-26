@@ -17,6 +17,7 @@
         :lastDaySell="lastDaySell"
         :nowMonthRate="nowMonthRate"
         :type="typeName"
+        :monthAverage="monthAverage"
       />
       <operating-info-item
         v-for="(item) in list"

@@ -23,6 +23,7 @@
       </div>
     </div>
     <div class="warn-wrap">
+      <p>多:{{monthAverage[0]}} 乐观:{{monthAverage[1]}} 谨慎:{{monthAverage[2]}} 空:{{monthAverage[3]}}</p>
       <p v-if="monthAverage[0]>=16" class="purple-text">可以不卖，高仓的还是要卖</p>
       <p v-if="((monthAverage[0]+monthAverage[1])>=16) && monthAverage[0]<16" class="purple-text">卖的卖一半</p>
       <p v-if="(monthAverage[0]+monthAverage[1])<16" class="purple-text">出卖信号就得卖</p>

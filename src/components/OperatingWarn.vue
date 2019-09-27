@@ -27,6 +27,7 @@
       <p v-if="monthAverage[0]>=16" class="purple-text">可以不卖，高仓的还是要卖</p>
       <p v-if="((monthAverage[0]+monthAverage[1])>=16) && monthAverage[0]<16" class="purple-text">卖的卖一半</p>
       <p v-if="(monthAverage[0]+monthAverage[1])<16" class="purple-text">出卖信号就得卖</p>
+      <p v-if="(monthAverage[2]+monthAverage[3])>=16" class="purple-text">可以杀跌</p>
       <p class="black-text">不要追，不管什么情况</p>
     </div>
   </div>

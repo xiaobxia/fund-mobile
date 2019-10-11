@@ -13,6 +13,7 @@
       <mt-button type="primary" @click="updateValuation" class="main-btn">更新估值</mt-button>
       <mt-button type="primary" @click="updateRate" class="main-btn">更新涨跌幅</mt-button>
       <mt-button type="primary" @click="updateFundBuySellRate" class="main-btn">更新买卖费率</mt-button>
+      <mt-button type="primary" @click="updateFixYearAverage" class="main-btn">更新定投年线</mt-button>
     </div>
   </div>
 </template>
@@ -88,6 +89,14 @@ export default {
         spinnerType: 'fading-circle'
       })
       this.$http.get('schedule/updateFundBuySellRate').then(() => {
+        Indicator.close()
+      })
+    },
+    updateFixYearAverage () {
+      Indicator.open({
+        spinnerType: 'fading-circle'
+      })
+      this.$http.get('stock/updateFixYearAverage').then(() => {
         Indicator.close()
       })
     }

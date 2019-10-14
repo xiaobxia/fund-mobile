@@ -1,6 +1,6 @@
 <template>
   <mt-cell-swipe :to="toUrl"
-                 :class="['operating-info-item',buySellList[0], hasCount > 0 ? 'has':'no-has', 'should-' + shouldDo, lock ?'lock':'no-lock']">
+                 :class="['operating-info-item',buySellList[0], hasCount > 0 ? 'has':'no-has', 'should-' + shouldDo, lock ?'lock':'no-lock', shouldBuyImportant ? 'should-buy-im' : '']">
     <div slot="title">
       <h3 class="op">
         <span class="index-name">{{indexInfo.name}}</span>
@@ -33,7 +33,7 @@
         <span v-if="ifSevenFive && !ifEightSix" class="buy-s has-tag">小</span>
         <span v-if="ifEightSix" class="buy-s has-tag">大</span>
         <span v-if="ifSixFive" class="buy-s has-tag">走牛</span>
-        <span v-if="ifThreeSell" class="sell-s has-tag">3卖</span>
+        <span v-if="ifFiveUp" class="warn-s has-tag">涨5</span>
         <span style="float: right" :class="numberClass(rate)">{{rate}}%</span>
       </h3>
       <p class="explain">
@@ -50,7 +50,8 @@
       </p>
       <div class="other-text">
         <p class="purple-text" v-if="positionWarn === 'danger'">又是危仓又是卖出信号，那必须的卖</p>
-        <p class="purple-text" v-if="ifJigou">机构的票，卖出不要看简</p>
+        <!--<p class="purple-text" v-if="ifJigou">机构的票，卖出不要看简</p>-->
+        <p class="purple-text" v-if="ifFiveUp">当天可以卖，第二天可以接回来</p>
         <p v-if="rate <= -3">是否有利空？是就先不接，标记利空，不是也不要接太多</p>
         <!--<p v-if="ifWeak">进入弱势期,卖出信号不多那就应该减仓</p>-->
         <!--<p v-if="ifSpeedUpDown">下跌在加速</p>-->
@@ -60,7 +61,7 @@
         <!--<p v-if="ifDownSpeedDown">跌势减弱，可以等等</p>-->
         <!--<p v-if="ifSingleUp">下跌中一支独秀，需要减仓，特别是还出了卖出信号</p>-->
         <!--<p v-if="ifSingleDown">上涨中一支独秀，需要减仓</p>-->
-        <p v-if="ifThreeSell">连续卖出信号</p>
+        <!--<p v-if="ifThreeSell">连续卖出信号</p>-->
       </div>
       <div class="left-tag">
         <span v-if="buySellFlagTrue === 'sell' && hasCount > 0" class="low-sell top"><i class="fas fa-long-arrow-alt-down"></i></span>
@@ -384,6 +385,22 @@ export default {
     },
     averageMonthIndex () {
       return storageUtil.getMonthAverage(this.indexInfo.key) || 0
+    },
+    ifFiveUp () {
+      return (
+        this.netChangeRatioListLarge[0] > 0 &&
+        this.netChangeRatioListLarge[1] > 0 &&
+        this.netChangeRatioListLarge[2] > 0 &&
+        this.netChangeRatioListLarge[3] > 0 &&
+        this.netChangeRatioListLarge[4] > 0
+      )
+    },
+    shouldBuyImportant () {
+      return (
+        this.netChangeRatioListLarge[0] < 0 &&
+        this.indexNiuXiong === '牛' &&
+        this.indexNiuXiong === '大反'
+      )
     }
   },
   mounted () {

@@ -149,6 +149,11 @@
       background-color: $red-color-back;
     }
   }
+  .mint-cell {
+    &.should-buy-im {
+      background-color: $red-color-back !important;
+    }
+  }
   .has-count {
     font-size: 24px;
   }
@@ -215,6 +220,11 @@
     &.sell-s {
       border: 2px solid $green-color;
       background-color: $green-color;
+      color: #fff;
+    }
+    &.warn-s {
+      border: 2px solid $yellow-color;
+      background-color: $yellow-color;
       color: #fff;
     }
   }

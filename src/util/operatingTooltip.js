@@ -44,6 +44,25 @@ function getIndexHighRateFactor (key, buySell) {
   return 1
 }
 
+// 指数涨跌幅度对买入金额的影响
+function getIndexNetChangeRatioRateFactor (averageRate, rate, buySell) {
+  // 暂时只对买入有影响
+  if (buySell === 'buy' && rate <= 0) {
+    // 买
+    rate = Math.abs(rate)
+    if (rate < (1.5 * averageRate)) {
+      return 0.5 + (rate * 0.5 / (1.5 * averageRate))
+    } else if (rate > (3 * averageRate)) {
+      return 1
+    } else {
+      return 1 + ((rate - (1.5 * averageRate)) * 0.5 / averageRate)
+    }
+  } else {
+    // 卖
+    return 1
+  }
+}
+
 // 指数数量
 const indexNumber = 24
 
@@ -351,7 +370,8 @@ const operatingTooltip = {
     let indexMarketTimeFactor = getIndexMarketTimeFactor(indexItem.key)
     let indexJigouFactor = getIndexJigouFactor(indexItem.key, 'buy')
     let indexHighRateFactor = getIndexHighRateFactor(indexItem.key, 'buy')
-    let buyNumber = buyBase * indexPositionFactor * indexAverageFactor * indexMonthDiffFactor * indexYearDiffFactor * indexMarketTimeFactor * indexJigouFactor * indexHighRateFactor
+    let indexNetChangeRatioRateFactor = getIndexNetChangeRatioRateFactor(indexItem.rate, marketInfo.netChangeRatio, 'buy')
+    let buyNumber = buyBase * indexPositionFactor * indexAverageFactor * indexMonthDiffFactor * indexYearDiffFactor * indexMarketTimeFactor * indexJigouFactor * indexHighRateFactor * indexNetChangeRatioRateFactor
     let finalBuyNumber = buyNumberRedistribution(indexItem, hasCount, buyNumber)
     return Math.round(finalBuyNumber / 100) * 100
   },
@@ -365,7 +385,8 @@ const operatingTooltip = {
     let indexMarketTimeFactor = getIndexMarketTimeFactor(indexItem.key)
     let indexJigouFactor = getIndexJigouFactor(indexItem.key, 'sell')
     let indexHighRateFactor = getIndexHighRateFactor(indexItem.key, 'sell')
-    let sellNumber = sellBase * (2 - indexPositionFactor) * (2 - indexAverageFactor) * (2 - indexMonthDiffFactor) * (2 - indexYearDiffFactor) * (2 - indexMarketTimeFactor) * indexJigouFactor * indexHighRateFactor
+    let indexNetChangeRatioRateFactor = getIndexNetChangeRatioRateFactor(indexItem.rate, marketInfo.netChangeRatio, 'sell')
+    let sellNumber = sellBase * (2 - indexPositionFactor) * (2 - indexAverageFactor) * (2 - indexMonthDiffFactor) * (2 - indexYearDiffFactor) * (2 - indexMarketTimeFactor) * indexJigouFactor * indexHighRateFactor * indexNetChangeRatioRateFactor
     let finalSellNumber = sellNumberRedistribution(indexItem, hasCount, sellNumber)
     return Math.round(finalSellNumber / 100) * 100
   },

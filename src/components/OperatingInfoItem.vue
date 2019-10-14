@@ -222,7 +222,8 @@ export default {
         this.indexInfo,
         {
           buyFlagCount: this.buyCount,
-          sellFlagCount: this.sellCount
+          sellFlagCount: this.sellCount,
+          netChangeRatio: this.rate
         },
         this.hasCount
       )

@@ -170,7 +170,8 @@ function assetMarketTimeFactor () {
 // 操作的标准
 function operateStandard () {
   const asset = getUserAsset()
-  return asset / (indexNumber * 5)
+  // 波段仓理论上占30%
+  return asset * 0.7 / (indexNumber * 5)
 }
 
 // 指数择时因子

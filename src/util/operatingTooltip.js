@@ -46,6 +46,7 @@ function getIndexHighRateFactor (key, buySell) {
 
 // 指数涨跌幅度对买入金额的影响
 function getIndexNetChangeRatioRateFactor (averageRate, rate, buySell) {
+  rate = Math.abs(rate)
   // 暂时只对买入有影响
   if (buySell === 'buy') {
     // 买

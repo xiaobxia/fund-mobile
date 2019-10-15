@@ -47,15 +47,14 @@ function getIndexHighRateFactor (key, buySell) {
 // 指数涨跌幅度对买入金额的影响
 function getIndexNetChangeRatioRateFactor (averageRate, rate, buySell) {
   // 暂时只对买入有影响
-  if (buySell === 'buy' && rate <= 0) {
+  if (buySell === 'buy') {
     // 买
-    rate = Math.abs(rate)
     if (rate < (1.5 * averageRate)) {
-      return 0.5 + (rate * 0.5 / (1.5 * averageRate))
+      return 0.1 + (rate * 0.9 / (1.5 * averageRate))
     } else if (rate > (3 * averageRate)) {
       return 1
     } else {
-      return 1 + ((rate - (1.5 * averageRate)) * 0.5 / averageRate)
+      return 1 + ((rate - (1.5 * averageRate)) * 0.5 / (1.5 * averageRate))
     }
   } else {
     // 卖

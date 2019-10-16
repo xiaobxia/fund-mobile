@@ -397,11 +397,7 @@ export default {
       )
     },
     shouldBuyImportant () {
-      return (
-        this.netChangeRatioListLarge[0] < 0 &&
-        this.indexNiuXiong === '牛' &&
-        this.indexNiuXiong === '大反'
-      )
+      return this.netChangeRatioListLarge[0] < 0 && (this.indexNiuXiong === '牛' || this.indexNiuXiong === '大反')
     }
   },
   mounted () {

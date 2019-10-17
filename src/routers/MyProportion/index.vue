@@ -6,7 +6,21 @@
       </mt-button>
     </mt-header>
     <div class="main-body">
+      <div class="content info">
+        <span class="item">当前资金：{{todayAsset}}</span>
+        <span class="item">当前持仓：{{parseInt(totalSum)}}</span>
+        <span class="item">定投资金：{{fixTotal}}</span>
+        <span class="item">波段资金：{{otherTotal}}</span>
+      </div>
       <div class="content">
+        <p>定投资金占比</p>
+        <div class="proportion-item">
+          <div class="title">定投<span>{{parseInt((fixTotal/totalSum) * 100)}}%</span></div>
+          <mt-progress :value="parseInt((fixTotal/totalSum) * 100)" :bar-height="barHeight"></mt-progress>
+        </div>
+      </div>
+      <div class="content">
+        <p>波段主题分布</p>
         <div v-for="(item, index) in list" :key="index" class="proportion-item">
           <div class="title">{{item.name}}<span>{{item.proportion}}%</span></div>
           <mt-progress :value="item.proportion" :bar-height="barHeight"></mt-progress>
@@ -17,6 +31,7 @@
 </template>
 <script>
 import indexInfoUtilXiong from '@/util/indexInfoUtilXiong.js'
+import storageUtil from '@/util/storageUtil.js'
 
 const codeMap = indexInfoUtilXiong.codeMap
 
@@ -24,6 +39,7 @@ const zoom = window.adaptive.zoom
 export default{
   name: 'MyProportion',
   data () {
+    const userFundAccountInfo = storageUtil.getUserFundAccountInfo()
     let distribution = {}
     for (let key in codeMap) {
       distribution[codeMap[key].name] = 0
@@ -32,7 +48,10 @@ export default{
       distribution,
       totalSum: 0,
       barHeight: 30 * zoom,
-      list: []
+      fixTotal: 0,
+      otherTotal: 0,
+      list: [],
+      todayAsset: userFundAccountInfo.today_asset
     }
   },
   computed: {
@@ -46,6 +65,7 @@ export default{
         if (data.success) {
           const list = data.data.list
           let totalSum = 0
+          let otherTotal = 0
           for (let i = 0; i < list.length; i++) {
             const item = list[i]
             totalSum += item.sum
@@ -56,6 +76,7 @@ export default{
                 } else {
                   this.distribution[item.theme] = parseInt(item.sum)
                 }
+                otherTotal += parseInt(item.sum)
               } else {
                 if (this.distribution['定投']) {
                   this.distribution['定投'] += parseInt(item.sum)
@@ -66,12 +87,13 @@ export default{
             }
           }
           this.totalSum = totalSum
+          this.otherTotal = otherTotal
           let proportionList = []
           for (let key in codeMap) {
             if (this.distribution[codeMap[key].name]) {
               proportionList.push({
                 name: codeMap[key].name,
-                proportion: this.keepTwoDecimals(100 * this.distribution[codeMap[key].name] / totalSum)
+                proportion: this.keepTwoDecimals(100 * this.distribution[codeMap[key].name] / otherTotal)
               })
             } else {
               proportionList.push({
@@ -80,10 +102,11 @@ export default{
               })
             }
           }
-          proportionList.push({
-            name: '定投',
-            proportion: this.keepTwoDecimals(100 * this.distribution['定投'] / totalSum)
-          })
+          // proportionList.push({
+          //   name: '定投',
+          //   proportion: this.keepTwoDecimals(100 * this.distribution['定投'] / totalSum)
+          // })
+          this.fixTotal = this.distribution['定投']
           proportionList.sort((a, b) => {
             return b.proportion - a.proportion
           })

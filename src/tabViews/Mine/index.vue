@@ -16,7 +16,7 @@
       </mt-cell-swipe>
       <mt-cell-swipe :to="'/page/myProportion'" is-link>
         <div slot="title">
-          <h3><i class="fas fa-chart-pie"></i>持仓占比</h3>
+          <h3><i class="fas fa-chart-pie"></i>持仓数据</h3>
         </div>
       </mt-cell-swipe>
       <mt-cell-swipe :to="'/page/myNetValueLine'" is-link>

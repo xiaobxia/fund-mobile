@@ -2,6 +2,13 @@
   .main-body {
     background-color: #fff;
   }
+  .info {
+    .item {
+      display: inline-block;
+      width: 49%;
+      font-size: 30px;
+    }
+  }
   .title {
     span {
       float: right;

@@ -56,10 +56,10 @@ export default {
         fundShares: userFundAccountInfo.fund_shares
       },
       buyForm: {
-        asset: ''
+        asset: 0
       },
       sellForm: {
-        shares: ''
+        shares: 0
       },
       editType: '修改',
       netValueInfo: {
@@ -106,12 +106,14 @@ export default {
         fundShares = this.form.fundShares
       }
       if (this.editType === '申购') {
-        fundAssetCost = this.form.fundAssetCost + this.buyForm.asset
-        fundShares = this.form.fundShares + (this.buyForm.asset / (this.netValueInfo.net_value || 1))
+        let buyAsset = parseInt(this.buyForm.asset)
+        fundAssetCost = this.form.fundAssetCost + buyAsset
+        fundShares = this.form.fundShares + (buyAsset / (this.netValueInfo.net_value || 1))
       }
       if (this.editType === '赎回') {
-        fundShares = this.form.fundShares - this.sellForm.shares
-        fundAssetCost = this.form.fundAssetCost * (fundShares / this.form.fundShares)
+        let sellShares = parseInt(this.sellForm.shares)
+        fundShares = this.form.fundShares - sellShares
+        fundAssetCost = fundShares * (this.form.fundAssetCost / this.form.fundShares)
       }
       Http.post('userFund/updateUserFundAssetInfo', {
         fundAssetCost: numberUtil.keepTwoDecimals(fundAssetCost),

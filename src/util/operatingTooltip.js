@@ -19,6 +19,15 @@ const highRate = [
   'baoxian'
 ]
 
+const laji = [
+  'gangtie',
+  'huanbao',
+  'meitan',
+  'jijian',
+  'qiche',
+  'youse'
+]
+
 // 机构对指数的影响
 function getIndexJigouFactor (key, buySell) {
   if (jigou.indexOf(key) !== -1) {
@@ -35,10 +44,23 @@ function getIndexHighRateFactor (key, buySell) {
   if (highRate.indexOf(key) !== -1) {
     if (buySell === 'buy') {
       // 买
-      return 0.75
+      return 0.8
     } else {
       // 卖
       return 1
+    }
+  }
+  return 1
+}
+
+function getIndexLajiFactor (key, buySell) {
+  if (laji.indexOf(key) !== -1) {
+    if (buySell === 'buy') {
+      // 买
+      return 0.8
+    } else {
+      // 卖
+      return 1.2
     }
   }
   return 1
@@ -374,9 +396,10 @@ const operatingTooltip = {
     let indexYearDiffFactor = getIndexYearDiffFactor(indexItem.key)
     let indexMarketTimeFactor = getIndexMarketTimeFactor(indexItem.key)
     let indexJigouFactor = getIndexJigouFactor(indexItem.key, 'buy')
+    let indexLajiFactor = getIndexLajiFactor(indexItem.key, 'buy')
     let indexHighRateFactor = getIndexHighRateFactor(indexItem.key, 'buy')
     let indexNetChangeRatioRateFactor = getIndexNetChangeRatioRateFactor(indexItem.rate, marketInfo.netChangeRatio, 'buy')
-    let buyNumber = buyBase * indexPositionFactor * indexAverageFactor * indexMonthDiffFactor * indexYearDiffFactor * indexMarketTimeFactor * indexJigouFactor * indexHighRateFactor * indexNetChangeRatioRateFactor
+    let buyNumber = buyBase * indexPositionFactor * indexAverageFactor * indexMonthDiffFactor * indexYearDiffFactor * indexMarketTimeFactor * indexJigouFactor * indexHighRateFactor * indexNetChangeRatioRateFactor * indexLajiFactor
     let finalBuyNumber = buyNumberRedistribution(indexItem, hasCount, buyNumber)
     return Math.round(finalBuyNumber / 100) * 100
   },
@@ -389,9 +412,10 @@ const operatingTooltip = {
     let indexYearDiffFactor = getIndexYearDiffFactor(indexItem.key)
     let indexMarketTimeFactor = getIndexMarketTimeFactor(indexItem.key)
     let indexJigouFactor = getIndexJigouFactor(indexItem.key, 'sell')
+    let indexLajiFactor = getIndexLajiFactor(indexItem.key, 'sell')
     let indexHighRateFactor = getIndexHighRateFactor(indexItem.key, 'sell')
     let indexNetChangeRatioRateFactor = getIndexNetChangeRatioRateFactor(indexItem.rate, marketInfo.netChangeRatio, 'sell')
-    let sellNumber = sellBase * (2 - indexPositionFactor) * (2 - indexAverageFactor) * (2 - indexMonthDiffFactor) * (2 - indexYearDiffFactor) * (2 - indexMarketTimeFactor) * indexJigouFactor * indexHighRateFactor * indexNetChangeRatioRateFactor
+    let sellNumber = sellBase * (2 - indexPositionFactor) * (2 - indexAverageFactor) * (2 - indexMonthDiffFactor) * (2 - indexYearDiffFactor) * (2 - indexMarketTimeFactor) * indexJigouFactor * indexHighRateFactor * indexNetChangeRatioRateFactor * indexLajiFactor
     let finalSellNumber = sellNumberRedistribution(indexItem, hasCount, sellNumber)
     return Math.round(finalSellNumber / 100) * 100
   },
@@ -692,6 +716,7 @@ const operatingTooltip = {
     }
     return false
   },
+  laji,
   jigou
 }
 export default operatingTooltip

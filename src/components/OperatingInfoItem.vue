@@ -15,8 +15,9 @@
         <!--<i v-if="ifUpSpeedDown" class="good-bad-tag fas fa-exclamation-triangle"></i>-->
         <span v-if="hasCount" class="has-count">{{hasCount}}</span>
         <!--<span v-if="getLossWarn" class="danger-tag operate-tag">巨亏</span>-->
-        <span v-if="positionWarn === 'danger'" class="danger-tag-s operate-tag">危仓</span>
-        <span v-if="positionWarn === 'warn'" class="warn-tag-s operate-tag">高仓</span>
+        <span v-if="positionWarn === 'danger'" class="danger-tag-s operate-tag">危</span>
+        <span v-if="positionWarn === 'warn'" class="warn-tag-s operate-tag">高</span>
+        <span v-if="ifLaji" class="warn-tag-s operate-tag">垃圾</span>
         <span class="buy-info">{{indexBuyNumber}}</span>
         <span class="buy-info">{{indexSellNumber}}</span>
         <span v-if="indexNiuXiong === '牛'" class="buy-s has-tag">{{indexNiuXiong}}</span>
@@ -64,16 +65,16 @@
         <!--<p v-if="ifThreeSell">连续卖出信号</p>-->
       </div>
       <div class="left-tag">
-        <span v-if="buySellFlagTrue === 'sell' && hasCount > 0" class="low-sell top"><i class="fas fa-long-arrow-alt-down"></i></span>
-        <span v-if="buySellFlagTrue === 'buy' && hasCount > 0" class="up-buy top"><i class="fas fa-long-arrow-alt-up"></i></span>
-        <span v-if="ifStepUp" class="up-tag red-text mid"><i class="fas fa-level-up-alt"></i></span>
-        <span v-if="ifStepDown" class="down-tag green-text mid"><i class="fas fa-level-down-alt"></i></span>
-        <span v-if="changeMarket" class="change-tag bottom"><i class="fas fa-exchange-alt"></i></span>
+        <!--<span v-if="buySellFlagTrue === 'sell' && hasCount > 0" class="low-sell top"><i class="fas fa-long-arrow-alt-down"></i></span>-->
+        <!--<span v-if="buySellFlagTrue === 'buy' && hasCount > 0" class="up-buy top"><i class="fas fa-long-arrow-alt-up"></i></span>-->
+        <!--<span v-if="ifStepUp" class="up-tag red-text mid"><i class="fas fa-level-up-alt"></i></span>-->
+        <!--<span v-if="ifStepDown" class="down-tag green-text mid"><i class="fas fa-level-down-alt"></i></span>-->
+        <!--<span v-if="changeMarket" class="change-tag bottom"><i class="fas fa-exchange-alt"></i></span>-->
       </div>
       <div class="right-tag">
         <span v-if="lock" class="lock-tag top"></span>
-        <span v-if="indexAverage > 0" class="up-tag red-text mid"><i class="fas fa-angle-double-up"></i></span>
-        <span v-if="indexAverage < 0" class="down-tag green-text mid"><i class="fas fa-angle-double-down"></i></span>
+        <!--<span v-if="indexAverage > 0" class="up-tag red-text mid"><i class="fas fa-angle-double-up"></i></span>-->
+        <!--<span v-if="indexAverage < 0" class="down-tag green-text mid"><i class="fas fa-angle-double-down"></i></span>-->
       </div>
     </div>
   </mt-cell-swipe>
@@ -84,12 +85,12 @@ import storageUtil from '@/util/storageUtil.js'
 import operatingTooltip from '@/util/operatingTooltip.js'
 
 const jigou = operatingTooltip.jigou
+const laji = operatingTooltip.laji
 
 export default {
   name: 'OperatingInfoItem',
   data () {
-    return {
-    }
+    return {}
   },
   props: {
     indexInfo: {
@@ -180,6 +181,9 @@ export default {
   computed: {
     ifJigou () {
       return jigou.indexOf(this.indexInfo.key) !== -1
+    },
+    ifLaji () {
+      return laji.indexOf(this.indexInfo.key) !== -1
     },
     shouldDo () {
       return operatingTooltip.getShouldDo(this.netChangeRatioList, this.buySellList, this.closeList)

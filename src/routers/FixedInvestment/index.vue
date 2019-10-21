@@ -253,23 +253,23 @@ export default {
                 infoList[i] = ''
               }
             }
-            if (infoList[i] === '') {
-              if (ifAllDown(recentNetValue, i, 4).flag) {
-                if (ifAllDown(recentNetValue, i, 4).rate < -5) {
-                  infoList[i] = '跌多'
-                } else {
+            if (ifAllDown(recentNetValue, i, 4).flag) {
+              if (ifAllDown(recentNetValue, i, 4).rate < -5) {
+                infoList[i] = '跌多'
+              } else {
+                if (infoList[i] === '') {
                   infoList[i] = '跌少'
                 }
               }
-              if (ifAllDown(recentNetValue, i, 5).flag) {
-                infoList[i] = '跌多'
-              }
             }
-            if (infoList[i] === '') {
-              if (ifAllDown(recentNetValue, i, 3).flag) {
-                if (ifAllDown(recentNetValue, i, 3).rate < -3.6) {
-                  infoList[i] = '快跌'
-                } else {
+            if (ifAllDown(recentNetValue, i, 5).flag) {
+              infoList[i] = '跌多'
+            }
+            if (ifAllDown(recentNetValue, i, 3).flag) {
+              if (ifAllDown(recentNetValue, i, 3).rate < -3.6) {
+                infoList[i] = '快跌'
+              } else {
+                if (infoList[i] === '') {
                   infoList[i] = '慢跌'
                 }
               }

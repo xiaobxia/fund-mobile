@@ -91,6 +91,22 @@ function ifAllDown (list, start, day) {
   }
 }
 
+function getNetChangeRatioRateFactor (averageRate, rate) {
+  let rateAbs = Math.abs(rate)
+  // 暂时只对买入有影响
+  if (rate <= 0) {
+    if (rateAbs < (1.5 * averageRate)) {
+      return 0.1 + (rateAbs * 0.9 / (1.5 * averageRate))
+    } else if (rateAbs > (3 * averageRate)) {
+      return 1
+    } else {
+      return 1 + ((rateAbs - (1.5 * averageRate)) * 0.5 / (1.5 * averageRate))
+    }
+  } else {
+    return 1
+  }
+}
+
 export default {
   name: 'FixedInvestment',
   data () {
@@ -276,8 +292,9 @@ export default {
             }
           }
           this.klineMap[item.key] = kline
+          const buyFactor = getNetChangeRatioRateFactor(item.rate, recentNetValue[0].netChangeRatio)
           this.averageDiff[item.key] = this.countDifferenceRate(nowClose, this.averageMap[item.code])
-          this.canBuy[item.key] = parseInt(getBuyRate(this.countDifferenceRate(nowClose, this.averageMap[item.code])) * (120000 / 162.5) * this.indexParams[item.code] / 10) * 10
+          this.canBuy[item.key] = parseInt(buyFactor * getBuyRate(this.countDifferenceRate(nowClose, this.averageMap[item.code])) * (120000 / 162.5) * this.indexParams[item.code] / 10) * 10
           this.canSell[item.key] = parseInt(getBuyRate(-this.countDifferenceRate(nowClose, this.averageMap[item.code])) * (120000 / 162.5) * this.indexParamSell[item.code] / 10) * 10
           this.allInfo[item.key] = infoList
           this.rateInfo[item.key] = this.keepTwoDecimals(recentNetValue[0].netChangeRatio)

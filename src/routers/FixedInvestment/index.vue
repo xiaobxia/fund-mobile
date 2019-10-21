@@ -91,6 +91,61 @@ function ifAllDown (list, start, day) {
   }
 }
 
+function getNetChangeRatioList (list, index) {
+  const newList = []
+  for (let i = 0; i < 10; i++) {
+    newList.push(list[index + i].netChangeRatio)
+  }
+  return newList
+}
+
+function ifSevenSix (netChangeRatioList) {
+  if (netChangeRatioList[0] < 0 && netChangeRatioList[1] < 0) {
+    let count = 0
+    if (netChangeRatioList[2] > 0) {
+      count++
+    }
+    if (netChangeRatioList[3] > 0) {
+      count++
+    }
+    if (netChangeRatioList[4] > 0) {
+      count++
+    }
+    if (netChangeRatioList[5] > 0) {
+      count++
+    }
+    if (netChangeRatioList[6] > 0) {
+      count++
+    }
+    if (count < 2) {
+      return true
+    }
+  }
+  return false
+}
+
+function ifSixFive (netChangeRatioList) {
+  if (netChangeRatioList[0] < 0 && netChangeRatioList[1] < 0) {
+    let count = 0
+    if (netChangeRatioList[2] > 0) {
+      count++
+    }
+    if (netChangeRatioList[3] > 0) {
+      count++
+    }
+    if (netChangeRatioList[4] > 0) {
+      count++
+    }
+    if (netChangeRatioList[5] > 0) {
+      count++
+    }
+    if (count < 2) {
+      return true
+    }
+  }
+  return false
+}
+
 function getNetChangeRatioRateFactor (averageRate, rate) {
   let rateAbs = Math.abs(rate)
   // 暂时只对买入有影响
@@ -249,45 +304,49 @@ export default {
           const nowClose = recentNetValue[0]['close']
           let kline = []
           // 近的在前
-          for (let i = 0; i < 8; i++) {
+          for (let i = 0; i < 5; i++) {
+            const netChangeRatioList = getNetChangeRatioList(recentNetValue, i)
+            console.log(netChangeRatioList)
             const nowRecord = recentNetValue[i]
             const oneDayRecord = recentNetValue[i + 1]
             const twoDayRecord = recentNetValue[i + 2]
             let buyFlag = infoUtil[fnMap[item.key + 'Buy']](nowRecord, oneDayRecord, twoDayRecord)
             let sellFlag = infoUtil[fnMap[item.key + 'Sell']](nowRecord, oneDayRecord, twoDayRecord)
-            if (i < 5) {
-              kline.push(recentNetValue[i])
-              if (buyFlag.flag === true && buyFlag.text !== 'niu') {
-                infoList[i] = '买'
-              } else if (buyFlag.flag === true && buyFlag.text === 'niu' && oneDayRecord['netChangeRatio'] < 0) {
-                infoList[i] = '买少'
-              } else if (sellFlag.flag === true && sellFlag.text !== 'xiong') {
-                infoList[i] = '卖'
-              } else if (sellFlag.flag === true && sellFlag.text === 'xiong') {
-                infoList[i] = '卖少'
-              } else {
-                infoList[i] = ''
-              }
+            // 根据信号判断
+            kline.push(recentNetValue[i])
+            if (buyFlag.flag === true) {
+              infoList[i] = '买'
+            } else if (sellFlag.flag === true && sellFlag.text !== 'xiong') {
+              infoList[i] = '卖'
+            } else if (sellFlag.flag === true && sellFlag.text === 'xiong') {
+              infoList[i] = '卖少'
+            } else {
+              infoList[i] = ''
             }
-            if (ifAllDown(recentNetValue, i, 4).flag) {
-              if (ifAllDown(recentNetValue, i, 4).rate < -5) {
+            // 不是卖，也没有让买的时候
+            if (infoList[i] === '') {
+              let threeDay = ifAllDown(recentNetValue, i, 3)
+              let fourDay = ifAllDown(recentNetValue, i, 4)
+              let fiveDay = ifAllDown(recentNetValue, i, 5)
+              // 先判断是不是买少的
+              if (fourDay.flag) {
+                infoList[i] = '跌少'
+              }
+              if (ifSixFive(netChangeRatioList)) {
+                infoList[i] = '跌少'
+              }
+              // 判断是不是买大的，如果是那就可以覆盖他
+              if (threeDay.flag && threeDay.rate < -3.6) {
                 infoList[i] = '跌多'
-              } else {
-                if (infoList[i] === '') {
-                  infoList[i] = '跌少'
-                }
               }
-            }
-            if (ifAllDown(recentNetValue, i, 5).flag) {
-              infoList[i] = '跌多'
-            }
-            if (ifAllDown(recentNetValue, i, 3).flag) {
-              if (ifAllDown(recentNetValue, i, 3).rate < -3.6) {
-                infoList[i] = '快跌'
-              } else {
-                if (infoList[i] === '') {
-                  infoList[i] = '慢跌'
-                }
+              if (fourDay.flag && fourDay.rate < -5) {
+                infoList[i] = '跌多'
+              }
+              if (fiveDay.flag) {
+                infoList[i] = '跌多'
+              }
+              if (ifSevenSix(netChangeRatioList)) {
+                infoList[i] = '跌多'
               }
             }
           }

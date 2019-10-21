@@ -158,15 +158,6 @@ Util.prototype = {
         text: 'buy-101-0'
       }
     }
-    // 缩量，只适合牛市时使用
-    if (ifMatch(today,
-      {'ifUpOpen': false, 'ifOpenHigh': false, 'ifUpClose': false, 'ifCloseHigh': false}
-    )) {
-      return {
-        flag: true,
-        text: 'niu'
-      }
-    }
     return false
   },
   ifSellChuangye: function (record, oneDayRecord) {
@@ -227,15 +218,6 @@ Util.prototype = {
       return {
         flag: true,
         text: 'buy-101-0'
-      }
-    }
-    // 缩量，只适合牛市时使用
-    if (ifMatch(today,
-      {'ifUpOpen': false, 'ifOpenHigh': false, 'ifUpClose': false, 'ifCloseHigh': false}
-    )) {
-      return {
-        flag: true,
-        text: 'niu'
       }
     }
     return false
@@ -300,15 +282,6 @@ Util.prototype = {
         text: 'buy-101-0'
       }
     }
-    // 缩量，只适合牛市时使用
-    if (ifMatch(today,
-      {'ifUpOpen': false, 'ifOpenHigh': false, 'ifUpClose': false, 'ifCloseHigh': false}
-    )) {
-      return {
-        flag: true,
-        text: 'niu'
-      }
-    }
     return false
   },
   ifSellSanbai: function (record, oneDayRecord) {
@@ -369,15 +342,6 @@ Util.prototype = {
       return {
         flag: true,
         text: 'buy-101-0'
-      }
-    }
-    // 缩量，只适合牛市时使用
-    if (ifMatch(today,
-      {'ifUpOpen': false, 'ifOpenHigh': false, 'ifUpClose': false, 'ifCloseHigh': false}
-    )) {
-      return {
-        flag: true,
-        text: 'niu'
       }
     }
     return false
@@ -442,15 +406,6 @@ Util.prototype = {
         text: 'buy-101-0'
       }
     }
-    // 缩量，只适合牛市时使用
-    if (ifMatch(today,
-      {'ifUpOpen': false, 'ifOpenHigh': false, 'ifUpClose': false, 'ifCloseHigh': false}
-    )) {
-      return {
-        flag: true,
-        text: 'niu'
-      }
-    }
     return false
   },
   ifSellYiqian: function (record, oneDayRecord) {
@@ -513,15 +468,6 @@ Util.prototype = {
         text: 'buy-101-0'
       }
     }
-    // 缩量，只适合牛市时使用
-    if (ifMatch(today,
-      {'ifUpOpen': false, 'ifOpenHigh': false, 'ifUpClose': false, 'ifCloseHigh': false}
-    )) {
-      return {
-        flag: true,
-        text: 'niu'
-      }
-    }
     return false
   },
   ifSellBaijiu: function (record, oneDayRecord) {
@@ -560,7 +506,7 @@ Util.prototype = {
 const codeMap = {
   'chuangye': {
     code: 'sz399006',
-    name: '创业',
+    name: '创业板',
     threshold: 1.01,
     wave: 1.0815568862275453,
     rate: 0.9367763157894737,
@@ -568,7 +514,7 @@ const codeMap = {
   },
   'wulin': {
     code: 'sh000016',
-    name: '50',
+    name: '上证50',
     threshold: 0.76,
     rate: 0.7031645569620255,
     wave: 0.8081952662721895,
@@ -576,7 +522,7 @@ const codeMap = {
   },
   'sanbai': {
     code: 'sh000300',
-    name: '300',
+    name: '沪深300',
     threshold: 0.77,
     rate: 0.7243790849673197,
     wave: 0.825182926829268,
@@ -584,7 +530,7 @@ const codeMap = {
   },
   'wubai': {
     code: 'sh000905',
-    name: '500',
+    name: '沪深500',
     threshold: 0.86,
     wave: 0.853157894736842,
     rate: 0.868132530120482,
@@ -592,7 +538,7 @@ const codeMap = {
   },
   'yiqian': {
     code: 'sh000852',
-    name: '1000',
+    name: '中证1000',
     threshold: 0.83,
     rate: 0.7927516778523488,
     wave: 0.8675304878048783

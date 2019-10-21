@@ -2,6 +2,95 @@ import storageUtil from '@/util/storageUtil.js'
 import numberUtil from './numberUtil'
 import moment from 'moment'
 
+const keyName = {
+  'chuangye': {
+    name: '创业'
+  },
+  'yiyao': {
+    name: '医药'
+  },
+  'jisuanji': {
+    name: '计算机'
+  },
+  'dianzi': {
+    name: '电子'
+  },
+  'wulin': {
+    name: '50'
+  },
+  'yinhang': {
+    name: '银行'
+  },
+  'xiaofei': {
+    name: '消费'
+  },
+  'jungong': {
+    name: '军工'
+  },
+  'xinxi': {
+    name: '信息'
+  },
+  'jijian': {
+    name: '基建'
+  },
+  'huanbao': {
+    name: '环保'
+  },
+  'qiche': {
+    name: '汽车'
+  },
+  'yiqian': {
+    name: '1000'
+  },
+  'chuanmei': {
+    name: '传媒'
+  },
+  'zhengquan': {
+    name: '证券'
+  },
+  'youse': {
+    name: '有色'
+  },
+  'dichan': {
+    name: '地产'
+  },
+  'yiliao': {
+    name: '医疗'
+  },
+  'shengwu': {
+    name: '生物'
+  },
+  'wubai': {
+    name: '500'
+  },
+  'gangtie': {
+    name: '钢铁'
+  },
+  'meitan': {
+    name: '煤炭'
+  },
+  'baoxian': {
+    name: '保险'
+  },
+  'sanbai': {
+    name: '300'
+  },
+  'baijiu': {
+    name: '白酒'
+  }
+}
+
+function keyToName (keyList) {
+  const list = []
+  for (let i = 0; i < keyList.length; i++) {
+    let item = keyName[keyList[i]]
+    if (item) {
+      list.push(item.name)
+    }
+  }
+  return list
+}
+
 const jigou = [
   'shengwu',
   'yiliao',
@@ -717,6 +806,8 @@ const operatingTooltip = {
     return false
   },
   laji,
-  jigou
+  jigou,
+  jigouName: keyToName(jigou),
+  lajiName: keyToName(laji)
 }
 export default operatingTooltip

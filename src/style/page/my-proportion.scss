@@ -9,8 +9,24 @@
       font-size: 30px;
     }
   }
+  .tag {
+    font-size: 22px;
+    padding: 0 2px;
+    border-radius: 4px;
+    margin-left: 20px;
+    &.jigou {
+      border: 2px solid $red-color;
+      background-color: $red-color;
+      color: #fff;
+    }
+    &.laji {
+      border: 2px solid $green-color;
+      background-color: $green-color;
+      color: #fff;
+    }
+  }
   .title {
-    span {
+    .rate {
       float: right;
     }
   }

@@ -22,7 +22,7 @@
       <div class="content">
         <p>波段主题分布</p>
         <div v-for="(item, index) in list" :key="index" class="proportion-item">
-          <div class="title">{{item.name}}<span>{{item.proportion}}%</span></div>
+          <div class="title">{{item.name}}<span v-if="ifLaji(item.name)" class="tag laji">垃圾</span><span v-if="ifJigou(item.name)" class="tag jigou">机构</span><span class="rate">{{item.proportion}}%</span></div>
           <mt-progress :value="item.proportion" :bar-height="barHeight"></mt-progress>
         </div>
       </div>
@@ -32,6 +32,10 @@
 <script>
 import indexInfoUtilXiong from '@/util/indexInfoUtilXiong.js'
 import storageUtil from '@/util/storageUtil.js'
+import operatingTooltip from '@/util/operatingTooltip.js'
+
+const jigouName = operatingTooltip.jigouName
+const lajiName = operatingTooltip.lajiName
 
 const codeMap = indexInfoUtilXiong.codeMap
 
@@ -60,6 +64,12 @@ export default{
     this.queryRecord()
   },
   methods: {
+    ifJigou (key) {
+      return jigouName.indexOf(key) !== -1
+    },
+    ifLaji (key) {
+      return lajiName.indexOf(key) !== -1
+    },
     queryRecord () {
       this.$http.get('userFund/getUserFunds').then((data) => {
         if (data.success) {

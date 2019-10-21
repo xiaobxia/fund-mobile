@@ -155,7 +155,7 @@
     }
   }
   .has-count {
-    font-size: 24px;
+    font-size: 22px;
   }
     // 当天卖出信号
   .mint-cell.sell {
@@ -198,6 +198,20 @@
     background-color: $yellow-color;
     color: #fff;
   }
+  .must-tag {
+    font-size: 16px;
+    padding: 5px;
+    border-radius: 20px;
+    vertical-align: middle;
+    &.sell-s {
+      background-color: $green-color;
+      color: #fff;
+    }
+    &.buy-s {
+      background-color: $red-color;
+      color: #fff;
+    }
+  }
   // 持有标签
   .has-tag {
     font-size: 22px;
@@ -225,6 +239,11 @@
     &.warn-s {
       border: 2px solid $yellow-color;
       background-color: $yellow-color;
+      color: #fff;
+    }
+    &.info-s {
+      border: 2px solid $blue-color;
+      background-color: $blue-color;
       color: #fff;
     }
   }
@@ -374,7 +393,6 @@
   .index-name {
     font-size: 26px;
     display: inline-block;
-    min-width: 80px;
   }
 }
 

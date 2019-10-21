@@ -29,12 +29,17 @@
         <span v-if="averageMonthIndex > 0 && averageMonthIndex <= 1" class="buy has-tag">乐观</span>
         <span v-if="averageMonthIndex <= 0 && averageMonthIndex >= -0.5" class="sell has-tag">谨慎</span>
         <span v-if="averageMonthIndex < -0.5" class="sell-s has-tag">空</span>
-        <span v-if="ifThreeDown" class="buy-s has-tag">1/3</span>
+        <span v-if="ifThreeDown && !ifLaji" class="buy-s has-tag">1/3</span>
         <span v-if="ifFiveFour && !ifSixFive" class="buy-s has-tag">小</span>
         <span v-if="ifSevenFive && !ifEightSix" class="buy-s has-tag">小</span>
         <span v-if="ifEightSix" class="buy-s has-tag">大</span>
         <span v-if="ifSixFive" class="buy-s has-tag">走牛</span>
         <span v-if="ifFiveUp" class="warn-s has-tag">涨5</span>
+        <span v-if="indexNiuXiong === '小反' && (ifThreeUp || ifFourUp || ifFiveUp)" class="info-s has-tag">解</span>
+        <span v-if="indexNiuXiong === '大反' && (ifFourUp || ifFiveUp)" class="info-s has-tag">解</span>
+        <span v-if="ifThreeUp && ifLaji" class="sell-s must-tag">卖</span>
+        <span v-if="ifFourUp && ifLaji" class="sell-s must-tag">卖1/3</span>
+        <span v-if="ifFiveUp && ifLaji" class="sell-s must-tag">卖1/2</span>
         <span style="float: right" :class="numberClass(rate)">{{rate}}%</span>
       </h3>
       <p class="explain">
@@ -286,6 +291,32 @@ export default {
     ifThreeDown () {
       return this.netChangeRatioList[0] < 0 && this.netChangeRatioList[1] < 0 && this.netChangeRatioList[2] < 0
     },
+    ifThreeUp () {
+      return (
+        this.netChangeRatioListLarge[0] > 0 &&
+        this.netChangeRatioListLarge[1] > 0 &&
+        this.netChangeRatioListLarge[2] > 0 &&
+        this.netChangeRatioListLarge[3] <= 0
+      )
+    },
+    ifFourUp () {
+      return (
+        this.netChangeRatioListLarge[0] > 0 &&
+        this.netChangeRatioListLarge[1] > 0 &&
+        this.netChangeRatioListLarge[2] > 0 &&
+        this.netChangeRatioListLarge[3] > 0 &&
+        this.netChangeRatioListLarge[4] <= 0
+      )
+    },
+    ifFiveUp () {
+      return (
+        this.netChangeRatioListLarge[0] > 0 &&
+        this.netChangeRatioListLarge[1] > 0 &&
+        this.netChangeRatioListLarge[2] > 0 &&
+        this.netChangeRatioListLarge[3] > 0 &&
+        this.netChangeRatioListLarge[4] > 0
+      )
+    },
     ifFiveFour () {
       if (this.netChangeRatioListLarge[0] < 0) {
         let count = 0
@@ -390,15 +421,6 @@ export default {
     },
     averageMonthIndex () {
       return storageUtil.getMonthAverage(this.indexInfo.key) || 0
-    },
-    ifFiveUp () {
-      return (
-        this.netChangeRatioListLarge[0] > 0 &&
-        this.netChangeRatioListLarge[1] > 0 &&
-        this.netChangeRatioListLarge[2] > 0 &&
-        this.netChangeRatioListLarge[3] > 0 &&
-        this.netChangeRatioListLarge[4] > 0
-      )
     },
     shouldBuyImportant () {
       return this.netChangeRatioListLarge[0] < 0 && (this.indexNiuXiong === '牛' || this.indexNiuXiong === '大反')

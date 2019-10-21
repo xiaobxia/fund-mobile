@@ -302,6 +302,16 @@ export default {
                 buySellList[i] = ''
               }
             }
+            if (buySellList[i] === 'sell') {
+              if (netChangeRatioList[i] <= 0) {
+                buySellList[i] = ''
+              }
+            }
+            if (buySellList[i] === 'buy') {
+              if (netChangeRatioList[i] >= 0) {
+                buySellList[i] = ''
+              }
+            }
           }
           /**
            * 生成市场风险提示

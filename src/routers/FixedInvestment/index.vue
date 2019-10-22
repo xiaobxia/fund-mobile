@@ -351,9 +351,9 @@ export default {
             }
           }
           this.klineMap[item.key] = kline
-          const buyFactor = getNetChangeRatioRateFactor(item.rate, recentNetValue[0].netChangeRatio)
+          // const buyFactor = getNetChangeRatioRateFactor(item.rate, recentNetValue[0].netChangeRatio)
           this.averageDiff[item.key] = this.countDifferenceRate(nowClose, this.averageMap[item.code])
-          this.canBuy[item.key] = parseInt(buyFactor * getBuyRate(this.countDifferenceRate(nowClose, this.averageMap[item.code])) * (120000 / 162.5) * this.indexParams[item.code] / 10) * 10
+          this.canBuy[item.key] = parseInt(getBuyRate(this.countDifferenceRate(nowClose, this.averageMap[item.code])) * (120000 / 162.5) * this.indexParams[item.code] / 10) * 10
           this.canSell[item.key] = parseInt(getBuyRate(-this.countDifferenceRate(nowClose, this.averageMap[item.code])) * (120000 / 162.5) * this.indexParamSell[item.code] / 10) * 10
           this.allInfo[item.key] = infoList
           this.rateInfo[item.key] = this.keepTwoDecimals(recentNetValue[0].netChangeRatio)

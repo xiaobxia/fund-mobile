@@ -15,7 +15,7 @@
       <div class="content">
         <p>定投资金占比</p>
         <div class="proportion-item">
-          <div class="title">定投<span>{{parseInt((fixTotal/todayAsset) * 100)}}%</span></div>
+          <div class="title">定投<span class="rate">{{parseInt((fixTotal/todayAsset) * 100)}}%</span></div>
           <mt-progress :value="parseInt((fixTotal/todayAsset) * 100)" :bar-height="barHeight"></mt-progress>
         </div>
       </div>

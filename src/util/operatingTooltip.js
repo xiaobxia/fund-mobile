@@ -91,6 +91,7 @@ function keyToName (keyList) {
   return list
 }
 
+// 机构指数
 const jigou = [
   'shengwu',
   'yiliao',
@@ -99,6 +100,7 @@ const jigou = [
   'xiaofei'
 ]
 
+// 高费率指数
 const highRate = [
   'chuanmei',
   'youse',
@@ -108,6 +110,7 @@ const highRate = [
   'baoxian'
 ]
 
+// 垃圾指数
 const laji = [
   'gangtie',
   'huanbao',
@@ -116,6 +119,12 @@ const laji = [
   'qiche',
   'youse'
 ]
+
+// 定投占比
+const fixedInvestmentRatio = 0.33
+
+// 指数数量
+const indexNumber = 24
 
 // 机构对指数的影响
 function getIndexJigouFactor (key, buySell) {
@@ -129,6 +138,7 @@ function getIndexJigouFactor (key, buySell) {
   return 1
 }
 
+// 高费率对指数的影响
 function getIndexHighRateFactor (key, buySell) {
   if (highRate.indexOf(key) !== -1) {
     if (buySell === 'buy') {
@@ -142,6 +152,7 @@ function getIndexHighRateFactor (key, buySell) {
   return 1
 }
 
+// 垃圾指数的影响
 function getIndexLajiFactor (key, buySell) {
   if (laji.indexOf(key) !== -1) {
     if (buySell === 'buy') {
@@ -177,9 +188,6 @@ function getIndexNetChangeRatioRateFactor (averageRate, rate, buySell) {
     return 1
   }
 }
-
-// 指数数量
-const indexNumber = 24
 
 // 获取当天账户资产
 function getUserAsset () {
@@ -285,8 +293,8 @@ function assetMarketTimeFactor () {
 // 操作的标准
 function operateStandard () {
   const asset = getUserAsset()
-  // 波段仓理论上占30%
-  return asset * 0.7 / (indexNumber * 5)
+  // 波段仓占比
+  return asset * (1 - fixedInvestmentRatio) / (indexNumber * 5)
 }
 
 // 指数择时因子

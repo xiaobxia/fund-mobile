@@ -1,20 +1,10 @@
 <template>
   <mt-cell-swipe :to="toUrl"
-                 :class="['operating-info-item',buySellList[0], hasCount > 0 ? 'has':'no-has', 'should-' + shouldDo, lock ?'lock':'no-lock', shouldBuyImportant ? 'should-buy-im' : '']">
+                 :class="['operating-info-item', ...getItemClass()]">
     <div slot="title">
       <h3 class="op">
         <span class="index-name">{{indexInfo.name}}</span>
-        <!--<i v-if="ifBuyFlagInvalid" class="good-bad-tag fas fa-ban"></i>-->
-        <!--<i v-if="ifThreeSell" class="good-bad-tag fab fa-sellcast"></i>-->
-        <!--<i v-if="ifWeak" class="good-bad-tag fa fa-battery-quarter"></i>-->
-        <!--<i v-if="ifSpeedUpDown" class="good-bad-tag fas fa-rocket"></i>-->
-        <!--<i v-if="ifOverheated" class="good-bad-tag fab fa-hotjar"></i>-->
-        <!--<i v-if="ifDownSpeedDown" class="good-bad-tag fas fa-hands"></i>-->
-        <!--<i v-if="ifSingleUp" class="good-bad-tag fas fa-street-view"></i>-->
-        <!--<i v-if="ifSingleDown" class="good-bad-tag fas fa-street-view"></i>-->
-        <!--<i v-if="ifUpSpeedDown" class="good-bad-tag fas fa-exclamation-triangle"></i>-->
-        <span v-if="hasCount" class="has-count">{{hasCount}}</span>
-        <!--<span v-if="getLossWarn" class="danger-tag operate-tag">巨亏</span>-->
+        <span v-if="ifHas" class="has-count">{{hasCount}}</span>
         <span v-if="positionWarn === 'danger'" class="danger-tag-s operate-tag">危</span>
         <span v-if="positionWarn === 'warn'" class="warn-tag-s operate-tag">高</span>
         <span v-if="ifLaji" class="warn-tag-s operate-tag">垃圾</span>
@@ -35,8 +25,7 @@
         <span v-if="ifEightSix" class="buy-s has-tag">大</span>
         <span v-if="ifSevenSix" class="buy-s has-tag">走牛</span>
         <span v-if="ifFiveUp" class="warn-s has-tag">涨5</span>
-        <span v-if="indexNiuXiong === '小反' && (ifThreeUp || ifFourUp || ifFiveUp)" class="info-s has-tag">解</span>
-        <span v-if="indexNiuXiong === '大反' && (ifFourUp || ifFiveUp)" class="info-s has-tag">解</span>
+        <span v-if="ifJieFantan()" class="info-s has-tag">解</span>
         <span v-if="ifThreeUp && ifLaji" class="sell-s must-tag">卖</span>
         <span v-if="ifFourUp && ifLaji" class="sell-s must-tag">卖1/3</span>
         <span v-if="ifFiveUp && ifLaji" class="sell-s must-tag">卖1/2</span>
@@ -55,31 +44,12 @@
                   :class="subItem">{{subItem}}</span>
       </p>
       <div class="other-text">
-        <p class="purple-text" v-if="positionWarn === 'danger'">又是危仓又是卖出信号，那必须的卖</p>
-        <!--<p class="purple-text" v-if="ifJigou">机构的票，卖出不要看简</p>-->
         <p class="purple-text" v-if="ifFiveUp">当天可以卖，第二天可以接回来</p>
         <p v-if="rate <= -3">是否有利空？是就先不接，标记利空，不是也不要接太多</p>
-        <!--<p v-if="ifWeak">进入弱势期,卖出信号不多那就应该减仓</p>-->
-        <!--<p v-if="ifSpeedUpDown">下跌在加速</p>-->
-        <p v-if="ifBuyFlagInvalid">买入信号开始坑人</p>
-        <!--<p v-if="ifOverheated">过热危险，需要减仓</p>-->
-        <!--<p v-if="ifUpSpeedDown">卖出信号后转弱，需要减仓</p>-->
-        <!--<p v-if="ifDownSpeedDown">跌势减弱，可以等等</p>-->
-        <!--<p v-if="ifSingleUp">下跌中一支独秀，需要减仓，特别是还出了卖出信号</p>-->
-        <!--<p v-if="ifSingleDown">上涨中一支独秀，需要减仓</p>-->
-        <!--<p v-if="ifThreeSell">连续卖出信号</p>-->
       </div>
-      <div class="left-tag">
-        <!--<span v-if="buySellFlagTrue === 'sell' && hasCount > 0" class="low-sell top"><i class="fas fa-long-arrow-alt-down"></i></span>-->
-        <!--<span v-if="buySellFlagTrue === 'buy' && hasCount > 0" class="up-buy top"><i class="fas fa-long-arrow-alt-up"></i></span>-->
-        <!--<span v-if="ifStepUp" class="up-tag red-text mid"><i class="fas fa-level-up-alt"></i></span>-->
-        <!--<span v-if="ifStepDown" class="down-tag green-text mid"><i class="fas fa-level-down-alt"></i></span>-->
-        <!--<span v-if="changeMarket" class="change-tag bottom"><i class="fas fa-exchange-alt"></i></span>-->
-      </div>
+      <div class="left-tag"></div>
       <div class="right-tag">
         <span v-if="lock" class="lock-tag top"></span>
-        <!--<span v-if="indexAverage > 0" class="up-tag red-text mid"><i class="fas fa-angle-double-up"></i></span>-->
-        <!--<span v-if="indexAverage < 0" class="down-tag green-text mid"><i class="fas fa-angle-double-down"></i></span>-->
       </div>
     </div>
   </mt-cell-swipe>
@@ -184,23 +154,24 @@ export default {
     }
   },
   computed: {
+    ifHas () {
+      return this.hasCount > 0
+    },
     ifJigou () {
       return jigou.indexOf(this.indexInfo.key) !== -1
     },
     ifLaji () {
       return laji.indexOf(this.indexInfo.key) !== -1
     },
-    shouldDo () {
-      return operatingTooltip.getShouldDo(this.netChangeRatioList, this.buySellList, this.closeList)
+    // 是否处于反弹
+    ifInFantan () {
+      return this.indexNiuXiong === '大反' || this.indexNiuXiong === '小反'
+    },
+    ifInLeguan () {
+      return this.indexNiuXiong === '牛' || this.indexNiuXiong === '小牛' || this.averageMonthIndex > 0
     },
     positionWarn () {
       return operatingTooltip.getPositionWarn(this.indexInfo, this.hasCount)
-    },
-    getLossWarn () {
-      return operatingTooltip.getLossWarn(this.hasCount, this.costCount)
-    },
-    changeMarket () {
-      return storageUtil.getChangeMarket(this.indexInfo.key) || false
     },
     otherBuySellList () {
       if (this.type === '简') {
@@ -209,21 +180,12 @@ export default {
         return storageUtil.getJianBuySellList(this.indexInfo.key)
       }
     },
-    ifStepUp () {
-      return operatingTooltip.ifStepUp(this.netChangeRatioList, this.closeList)
-    },
-    ifStepDown () {
-      return operatingTooltip.ifStepDown(this.netChangeRatioList, this.closeList)
-    },
     indexAverage () {
       return storageUtil.getAverage(this.indexInfo.key) || 0
     },
     indexNiuXiong () {
       const niuXiong = storageUtil.getIndexNiuXiong(this.indexInfo.key)
       return niuXiong === '正常' ? '' : niuXiong
-    },
-    buySellFlagTrue () {
-      return operatingTooltip.ifBuySellFlagTrue(this.buySellList, this.closeList)
     },
     indexBuyNumber () {
       return operatingTooltip.getIndexBuyNumber(
@@ -248,48 +210,32 @@ export default {
         this.hasCount
       )
     },
-    // 买入信号失效，连续两个买入信号以后还在跌
-    ifBuyFlagInvalid () {
-      return operatingTooltip.ifBuyFlagInvalid(this.netChangeRatioList, this.buySellList)
-    },
-    // 是否进入弱势期
-    ifWeak () {
-      // 联合两边的
-      let buySell = []
-      for (let i = 0; i < 5; i++) {
-        if (this.buySellList[i] !== '') {
-          buySell.push(this.buySellList[i])
-        } else {
-          buySell.push(this.otherBuySellList[i])
-        }
-      }
-      return operatingTooltip.ifWeak(this.netChangeRatioList, buySell, this.closeList)
-    },
-    // 是否加速下跌
-    ifSpeedUpDown () {
-      return operatingTooltip.ifSpeedUpDown(this.netChangeRatioList)
-    },
-    // 是否过热
-    ifOverheated () {
-      return operatingTooltip.ifOverheated(this.positionWarn, this.buySellList)
-    },
-    ifUpSpeedDown () {
-      return operatingTooltip.ifUpSpeedDown(this.netChangeRatioList, this.buySellList)
-    },
-    ifDownSpeedDown () {
-      return operatingTooltip.ifDownSpeedDown(this.netChangeRatioList, this.buySellList)
-    },
-    ifSingleUp () {
-      return this.countUpNumber < 6 && this.rate > 0
-    },
-    ifSingleDown () {
-      return this.countDownNumber < 6 && this.rate < 0
-    },
     ifThreeSell () {
       return this.buySellList[0] === 'sell' && this.buySellList[1] === 'sell' && this.buySellList[2] === 'sell'
     },
     ifThreeDown () {
-      return this.netChangeRatioList[0] < 0 && this.netChangeRatioList[1] < 0 && this.netChangeRatioList[2] < 0
+      return (
+        this.netChangeRatioList[0] < 0 &&
+        this.netChangeRatioList[1] < 0 &&
+        this.netChangeRatioList[2] < 0
+      )
+    },
+    ifFourDown () {
+      return (
+        this.netChangeRatioList[0] < 0 &&
+        this.netChangeRatioList[1] < 0 &&
+        this.netChangeRatioList[2] < 0 &&
+        this.netChangeRatioList[3] < 0
+      )
+    },
+    ifFiveDown () {
+      return (
+        this.netChangeRatioList[0] < 0 &&
+        this.netChangeRatioList[1] < 0 &&
+        this.netChangeRatioList[2] < 0 &&
+        this.netChangeRatioList[3] < 0 &&
+        this.netChangeRatioList[4] < 0
+      )
     },
     ifThreeUp () {
       return (
@@ -421,14 +367,66 @@ export default {
     },
     averageMonthIndex () {
       return storageUtil.getMonthAverage(this.indexInfo.key) || 0
-    },
-    shouldBuyImportant () {
-      return this.netChangeRatioListLarge[0] < 0 && (this.indexNiuXiong === '牛' || this.indexNiuXiong === '大反')
     }
   },
   mounted () {
   },
   methods: {
+    ifJieFantan () {
+      return (
+        (this.indexNiuXiong === '小反' && (this.ifThreeUp || this.ifFourUp || this.ifFiveUp)) ||
+        (this.indexNiuXiong === '大反' && (this.ifFourUp || this.ifFiveUp))
+      )
+    },
+    getItemClass () {
+      const classList = []
+      let shouldClass = ''
+      classList.push(this.ifHas ? 'has' : 'no-has')
+      classList.push(this.lock ? 'lock' : 'no-lock')
+      // 涨5天了必须开始卖
+      if (this.ifFiveUp) {
+        classList.push('sell')
+      }
+      // 垃圾指数
+      if (this.ifLaji) {
+        if (this.ifThreeUp || this.ifFourUp || this.ifFiveUp) {
+          classList.push('sell')
+        }
+      }
+      if (this.buySellList[0] === 'buy') {
+        // 如果是买入信号，那就直接红色，返回
+        classList.push(this.buySellList[0])
+      } else if (this.buySellList[0] === 'sell') {
+        // 如果是卖出信号，那就判断是不是出于大反或者小反
+        if (!this.ifInFantan) {
+          // 不处于反弹期才可以卖
+          classList.push(this.buySellList[0])
+        }
+      } else {
+        // ----------------------应该买的部分
+        // 没有其他信号
+        // 连续跌三天，并且不是垃圾指数，并且处于乐观状态
+        if (this.ifThreeDown && !this.ifLaji && this.ifInLeguan) {
+          shouldClass = 'should-buy'
+        }
+        // 跌很多天
+        if (this.ifSixFive || this.ifSevenSix || this.ifSevenFive || this.ifEightSix) {
+          shouldClass = 'should-buy'
+        }
+        // 连跌
+        if (this.ifFourDown || this.ifFiveDown) {
+          shouldClass = 'should-buy'
+        }
+        // ----------------------应该卖的部分
+        if (this.otherBuySellList[0] !== 'buy' && shouldClass === '' && this.rate < 0) {
+          if (this.averageMonthIndex < 0 && !this.ifInFantan && !this.ifInLeguan) {
+            shouldClass = 'should-sell'
+          }
+        }
+      }
+      classList.push(shouldClass)
+      return classList
+    }
   }
 }
 </script>

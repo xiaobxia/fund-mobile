@@ -378,29 +378,46 @@ export default {
         (this.indexNiuXiong === '大反' && (this.ifFourUp || this.ifFiveUp))
       )
     },
+    // 获取今天前面的第一个买卖信号
+    getBeforeFlagBoth () {
+      for (let i = 1; i < this.buySellList.length; i++) {
+        if (this.buySellList[i]) {
+          return this.buySellList[i]
+        } else if (this.otherBuySellList[i]) {
+          return this.otherBuySellList[i]
+        }
+      }
+      return ''
+    },
     getItemClass () {
+      const buyClass = 'buy'
+      const sellClass = 'sell'
       const classList = []
       let shouldClass = ''
+      const buySellList = this.buySellList
       classList.push(this.ifHas ? 'has' : 'no-has')
       classList.push(this.lock ? 'lock' : 'no-lock')
       // 涨5天了必须开始卖
       if (this.ifFiveUp) {
-        classList.push('sell')
+        classList.push(sellClass)
       }
       // 垃圾指数
       if (this.ifLaji) {
         if (this.ifThreeUp || this.ifFourUp || this.ifFiveUp) {
-          classList.push('sell')
+          classList.push(sellClass)
         }
       }
-      if (this.buySellList[0] === 'buy') {
+      if (buySellList[0] === buyClass) {
         // 如果是买入信号，那就直接红色，返回
-        classList.push(this.buySellList[0])
-      } else if (this.buySellList[0] === 'sell') {
+        classList.push(buyClass)
+      } else if (buySellList[0] === sellClass) {
         // 如果是卖出信号，那就判断是不是出于大反或者小反
         if (!this.ifInFantan) {
           // 不处于反弹期才可以卖
-          classList.push(this.buySellList[0])
+          classList.push(sellClass)
+        } else if (this.ifJieFantan()) {
+          // 或者解除反弹了
+          classList.push(sellClass)
         }
       } else {
         // ----------------------应该买的部分

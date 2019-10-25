@@ -306,7 +306,6 @@ export default {
           // 近的在前
           for (let i = 0; i < 5; i++) {
             const netChangeRatioList = getNetChangeRatioList(recentNetValue, i)
-            console.log(netChangeRatioList)
             const nowRecord = recentNetValue[i]
             const oneDayRecord = recentNetValue[i + 1]
             const twoDayRecord = recentNetValue[i + 2]

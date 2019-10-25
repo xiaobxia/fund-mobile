@@ -7,6 +7,16 @@
     </mt-header>
     <div class="main-body">
       <div class="question">
+        9.市场阶段？
+      </div>
+      <div class="answer">
+        <mt-radio
+          align="right"
+          v-model="question_9"
+          :options="['筑底', '正常','筑顶']">
+        </mt-radio>
+      </div>
+      <div class="question">
         1.是否需要护盘？
       </div>
       <div class="answer">
@@ -77,16 +87,6 @@
         </mt-radio>
       </div>
       <div class="question">
-        9.几乎都涨了，但是有几只没涨或涨的不多，出现弱势让减仓的信号？
-      </div>
-      <div class="answer">
-        <mt-radio
-          align="right"
-          v-model="question_9"
-          :options="['是', '否']">
-        </mt-radio>
-      </div>
-      <div class="question">
         10.出现该涨不涨？那就降低10仓位配置的值
       </div>
       <div class="question">
@@ -128,7 +128,7 @@ export default {
       question_5: storageUtil.getMarketStatus('question_5') || '否',
       question_6: storageUtil.getMarketStatus('question_6') || '无',
       question_8: storageUtil.getMarketStatus('question_8') || '不吃力',
-      question_9: storageUtil.getMarketStatus('question_9') || '否'
+      question_9: storageUtil.getMarketStatus('question_9') || '正常'
     }
   },
   watch: {

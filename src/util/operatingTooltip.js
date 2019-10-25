@@ -208,6 +208,8 @@ function assetMarketStateFactor () {
   const question5 = storageUtil.getMarketStatus('question_5')
   // 是否悲观
   const question6 = storageUtil.getMarketStatus('question_6')
+  // 底，顶阶段
+  const question9 = storageUtil.getMarketStatus('question_9')
   let factor = 1
   let question1Factor = 1
   if (question1 === '强') {
@@ -253,6 +255,15 @@ function assetMarketStateFactor () {
     question6Factor = 0.9
   }
   factor = factor * question6Factor
+
+  let question9Factor = 1
+  if (question9 === '筑底') {
+    question9Factor = 1.1
+  }
+  if (question9 === '筑顶') {
+    question9Factor = 0.9
+  }
+  factor = factor * question9Factor
   return factor
 }
 

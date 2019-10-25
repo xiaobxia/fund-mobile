@@ -390,6 +390,8 @@ export default {
       return ''
     },
     getItemClass () {
+      // 市场阶段
+      const question9 = storageUtil.getMarketStatus('question_9')
       const buyClass = 'buy'
       const sellClass = 'sell'
       const classList = []
@@ -411,28 +413,36 @@ export default {
         // 如果是买入信号，那就直接红色，返回
         classList.push(buyClass)
       } else if (buySellList[0] === sellClass) {
-        // 如果是卖出信号，那就判断是不是出于大反或者小反
-        if (!this.ifInFantan) {
-          // 不处于反弹期才可以卖
+        if (question9 === '筑顶') {
+          // 如果是在筑顶那就都卖
           classList.push(sellClass)
-        } else if (this.ifJieFantan()) {
-          // 或者解除反弹了
-          classList.push(sellClass)
+        } else {
+          // 如果是卖出信号，那就判断是不是出于大反或者小反
+          if (!this.ifInFantan) {
+            // 不处于反弹期才可以卖
+            classList.push(sellClass)
+          } else if (this.ifJieFantan()) {
+            // 或者解除反弹了
+            classList.push(sellClass)
+          }
         }
       } else {
         // ----------------------应该买的部分
         // 没有其他信号
-        // 连续跌三天，并且不是垃圾指数，并且处于乐观状态
-        if (this.ifThreeDown && !this.ifLaji && this.ifInLeguan) {
-          shouldClass = 'should-buy'
-        }
-        // 跌很多天
-        if (this.ifSixFive || this.ifSevenSix || this.ifSevenFive || this.ifEightSix) {
-          shouldClass = 'should-buy'
-        }
-        // 连跌
-        if (this.ifFourDown || this.ifFiveDown) {
-          shouldClass = 'should-buy'
+        if (question9 !== '筑顶') {
+          // 不是筑顶阶段才行
+          // 连续跌三天，并且不是垃圾指数，并且处于乐观状态
+          if (this.ifThreeDown && !this.ifLaji && this.ifInLeguan) {
+            shouldClass = 'should-buy'
+          }
+          // 跌很多天
+          if (this.ifSixFive || this.ifSevenSix || this.ifSevenFive || this.ifEightSix) {
+            shouldClass = 'should-buy'
+          }
+          // 连跌
+          if (this.ifFourDown || this.ifFiveDown) {
+            shouldClass = 'should-buy'
+          }
         }
         // ----------------------应该卖的部分
         if (this.otherBuySellList[0] !== 'buy' && shouldClass === '' && this.rate < 0) {

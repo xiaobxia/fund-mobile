@@ -347,6 +347,9 @@ function getBuyBase (type, marketInfo) {
   const nowPosition = storageUtil.getAppConfig('nowPosition') || 100
   let positionFactor = ((position - nowPosition) / 100) + 1
   finalFactor = finalFactor * positionFactor
+  // 比例修正
+  const buyConfig = storageUtil.getAppConfig('buy') || 1
+  finalFactor = finalFactor * parseFloat(buyConfig)
   // 结果
   return finalFactor * operateStandard()
 }
@@ -369,6 +372,9 @@ function getSellBase (type, marketInfo) {
   const nowPosition = storageUtil.getAppConfig('nowPosition') || 100
   let positionFactor = ((nowPosition - position) / 100) + 1
   finalFactor = finalFactor * positionFactor
+  // 比例修正
+  const sellConfig = storageUtil.getAppConfig('sell') || 1
+  finalFactor = finalFactor * parseFloat(sellConfig)
   // 结果
   // 卖的标准大一点
   return finalFactor * operateStandard() * 3 / 2

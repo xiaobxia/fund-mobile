@@ -56,6 +56,15 @@
           <div class="bottom">仓位配置</div>
         </div>
       </div>
+      <div class="img-card" @click="toPath('/page/buySellConfig')">
+        <div class="container">
+          <div class="content">
+            <img src="../../assets/买卖.png" alt="">
+            <!--<i class="fas fa-book"></i>-->
+          </div>
+          <div class="bottom">买卖配置</div>
+        </div>
+      </div>
     </div>
   </div>
 </template>

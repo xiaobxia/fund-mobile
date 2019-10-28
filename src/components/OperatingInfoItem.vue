@@ -373,8 +373,12 @@ export default {
   },
   methods: {
     ifJieFantan () {
+      // 垃圾指数
+      if (this.ifLaji && this.indexNiuXiong === '小反' && this.ifThreeUp) {
+        return true
+      }
       return (
-        (this.indexNiuXiong === '小反' && (this.ifThreeUp || this.ifFourUp || this.ifFiveUp)) ||
+        (this.indexNiuXiong === '小反' && (this.ifFourUp || this.ifFiveUp)) ||
         (this.indexNiuXiong === '大反' && (this.ifFourUp || this.ifFiveUp))
       )
     },

@@ -120,6 +120,15 @@ const laji = [
   'youse'
 ]
 
+// 宽指数
+const kuanji = [
+  'sanbai',
+  'wubai',
+  'wulin',
+  'yiqian',
+  'chuangye'
+]
+
 // 定投占比
 const fixedInvestmentRatio = 0.33
 

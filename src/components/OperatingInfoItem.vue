@@ -26,6 +26,7 @@
         <span v-if="ifSevenSix" class="buy-s has-tag">走牛</span>
         <span v-if="ifFiveUp" class="warn-s has-tag">涨5</span>
         <span v-if="ifJieFantan()" class="info-s has-tag">解</span>
+        <span v-if="ifUpQuick()" class="sell-s must-tag">涨快</span>
         <span v-if="ifThreeUp && ifLaji" class="sell-s must-tag">卖</span>
         <span v-if="ifFourUp && ifLaji" class="sell-s must-tag">卖1/3</span>
         <span v-if="ifFiveUp && ifLaji" class="sell-s must-tag">卖1/2</span>
@@ -372,14 +373,28 @@ export default {
   mounted () {
   },
   methods: {
+    // 是否涨得太快
+    ifUpQuick () {
+      // 两天涨得多
+      if (this.netChangeRatioListLarge[0] > 0 && this.netChangeRatioListLarge[1] > 0) {
+        if ((this.netChangeRatioListLarge[0] + this.netChangeRatioListLarge[1]) > this.indexInfo.rate * 3) {
+          return true
+        }
+      }
+      if (this.netChangeRatioListLarge[0] > 0 && this.netChangeRatioListLarge[1] > 0 && this.netChangeRatioListLarge[2] > 0) {
+        if ((this.netChangeRatioListLarge[0] + this.netChangeRatioListLarge[1] + this.netChangeRatioListLarge[2]) > this.indexInfo.rate * 4) {
+          return true
+        }
+      }
+      return false
+    },
     ifJieFantan () {
-      // 垃圾指数
-      if (this.ifLaji && this.indexNiuXiong === '小反' && this.ifThreeUp) {
+      if ((this.indexNiuXiong === '小反' || this.indexNiuXiong === '大反') && this.ifUpQuick()) {
         return true
       }
       return (
-        (this.indexNiuXiong === '小反' && (this.ifFourUp || this.ifFiveUp)) ||
-        (this.indexNiuXiong === '大反' && (this.ifFourUp || this.ifFiveUp))
+        (this.indexNiuXiong === '小反' || this.indexNiuXiong === '大反') &&
+        (this.ifThreeUp || this.ifFourUp || this.ifFiveUp)
       )
     },
     // 获取今天前面的第一个买卖信号
@@ -405,6 +420,10 @@ export default {
       classList.push(this.lock ? 'lock' : 'no-lock')
       // 涨5天了必须开始卖
       if (this.ifFiveUp) {
+        classList.push(sellClass)
+      }
+      // 涨快了
+      if (this.ifUpQuick()) {
         classList.push(sellClass)
       }
       // 垃圾指数

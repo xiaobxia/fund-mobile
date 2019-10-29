@@ -24,6 +24,7 @@
     </div>
     <div class="warn-wrap">
       <p class="purple-text bold-text">{{question9}}阶段</p>
+      <p>买比{{buy}} 卖比{{sell}}</p>
       <p>多:{{monthAverage[0]}} 乐观:{{monthAverage[1]}} 谨慎:{{monthAverage[2]}} 空:{{monthAverage[3]}}</p>
       <p>大反:{{niuxiong[2]}} 小反:{{niuxiong[3]}} 熊:{{niuxiong[4]}} 牛:{{niuxiong[0]}} 小牛:{{niuxiong[1]}} 正常:{{niuxiong[5]}}</p>
       <p v-if="monthAverage[0]>=16" class="purple-text">可以不卖，高仓的还是要卖</p>
@@ -42,6 +43,8 @@ import storageUtil from '@/util/storageUtil.js'
 export default {
   name: 'OperatingWarn',
   data () {
+    const buy = storageUtil.getAppConfig('buy')
+    const sell = storageUtil.getAppConfig('sell')
     const question1 = storageUtil.getMarketStatus('question_1')
     const question2 = storageUtil.getMarketStatus('question_2')
     const question3 = storageUtil.getMarketStatus('question_3')
@@ -68,7 +71,9 @@ export default {
       question5,
       question6,
       question8,
-      question9
+      question9,
+      buy: buy || 1,
+      sell: sell || 1
     }
   },
   props: {

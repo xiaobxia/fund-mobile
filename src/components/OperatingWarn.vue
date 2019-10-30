@@ -24,6 +24,7 @@
     </div>
     <div class="warn-wrap">
       <p>本月收益率：{{myMonthRate}}%</p>
+      <p v-if="myMonthRate>=2" class="black-text">建议开始锁定收益</p>
       <p class="purple-text bold-text">{{question9}}阶段</p>
       <p>买比{{buy}} 卖比{{sell}}</p>
       <p>多:{{monthAverage[0]}} 乐观:{{monthAverage[1]}} 谨慎:{{monthAverage[2]}} 空:{{monthAverage[3]}}</p>

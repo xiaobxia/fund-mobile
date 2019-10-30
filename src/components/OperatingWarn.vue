@@ -75,7 +75,7 @@ export default {
       question9,
       buy: buy || 1,
       sell: sell || 1,
-      myMonthRate: 0
+      myMonthRate: myMonthRate || 0
     }
   },
   props: {

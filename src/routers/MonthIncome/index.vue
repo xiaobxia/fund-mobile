@@ -195,6 +195,7 @@ export default {
       this.sortRate['my'] = netChangeRatio
       this.rateInfo['my'] = this.keepTwoDecimals(netChangeRatio)
       this.nowMonthRate = res.data.rate
+      storageUtil.setAppConfig('myMonthRate', netChangeRatio)
       this.initPage()
     })
   },

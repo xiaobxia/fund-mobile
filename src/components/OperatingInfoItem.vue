@@ -411,6 +411,7 @@ export default {
     getItemClass () {
       // 市场阶段
       const question9 = storageUtil.getMarketStatus('question_9')
+      const myMonthRate = storageUtil.getAppConfig('myMonthRate')
       const buyClass = 'buy'
       const sellClass = 'sell'
       const classList = []
@@ -438,6 +439,9 @@ export default {
       } else if (buySellList[0] === sellClass) {
         if (question9 === '筑顶') {
           // 如果是在筑顶那就都卖
+          classList.push(sellClass)
+        } else if (myMonthRate >= 2) {
+          // 如果本月收益超过2了那就开始锁定收益
           classList.push(sellClass)
         } else {
           // 如果是卖出信号，那就判断是不是出于大反或者小反

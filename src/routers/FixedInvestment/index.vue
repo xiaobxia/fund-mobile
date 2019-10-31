@@ -335,10 +335,11 @@ export default {
                 infoList[i] = '跌少'
               }
               // 判断是不是买大的，如果是那就可以覆盖他
-              if (threeDay.flag && threeDay.rate < -3.6) {
+              console.log((5 * item.rate))
+              if (threeDay.flag && threeDay.rate < -(4 * item.rate)) {
                 infoList[i] = '跌多'
               }
-              if (fourDay.flag && fourDay.rate < -5) {
+              if (fourDay.flag && fourDay.rate < -(5 * item.rate)) {
                 infoList[i] = '跌多'
               }
               if (fiveDay.flag) {

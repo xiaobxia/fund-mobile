@@ -117,7 +117,8 @@ const laji = [
   'meitan',
   'jijian',
   'qiche',
-  'youse'
+  'youse',
+  'chuanmei'
 ]
 
 // 宽指数

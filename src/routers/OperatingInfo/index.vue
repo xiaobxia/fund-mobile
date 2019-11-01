@@ -17,7 +17,6 @@
         :lastDaySell="lastDaySell"
         :nowMonthRate="nowMonthRate"
         :type="typeName"
-        :monthAverage="monthAverage"
         :niuxiong="niuxiong"
       />
       <operating-info-item
@@ -113,8 +112,7 @@ export default {
       nowMonthRate: 0,
       lastDayBuy: [0, 0],
       lastDaySell: [0, 0],
-      monthAverage: [0, 0, 0, 0],
-      niuxiong: [0, 0, 0, 0, 0, 0]
+      niuxiong: [0, 0, 0]
     }
   },
   components: {OperatingInfoItem, OperatingWarn},
@@ -211,45 +209,21 @@ export default {
           }
         })
       ]).then(() => {
-        let duo = 0
-        let leguan = 0
-        let jinshen = 0
-        let kong = 0
         let dafan = 0
         let xiaofan = 0
         let zhengchang = 0
-        let daniu = 0
-        let xiaoniu = 0
-        let xiong = 0
         for (let i = 0; i < indexList.length; i++) {
           this.queryData(indexList[i])
-          const rate = storageUtil.getMonthAverage(indexList[i].key)
           const niuxiong = storageUtil.getIndexNiuXiong(indexList[i].key)
-          if (rate > 1) {
-            duo++
-          } else if (rate <= 1 && rate > 0) {
-            leguan++
-          } else if (rate <= 0 && rate >= -0.5) {
-            jinshen++
-          } else if (rate < -0.5) {
-            kong++
-          }
-          if (niuxiong === '牛') {
-            daniu++
-          } else if (niuxiong === '小牛') {
-            xiaoniu++
-          } else if (niuxiong === '大反') {
+          if (niuxiong === '大反') {
             dafan++
           } else if (niuxiong === '小反') {
             xiaofan++
-          } else if (niuxiong === '熊') {
-            xiong++
           } else if (niuxiong === '正常') {
             zhengchang++
           }
         }
-        this.niuxiong = [daniu, xiaoniu, dafan, xiaofan, xiong, zhengchang]
-        this.monthAverage = [duo, leguan, jinshen, kong]
+        this.niuxiong = [dafan, xiaofan, zhengchang]
       })
     },
     qsStringify (query) {

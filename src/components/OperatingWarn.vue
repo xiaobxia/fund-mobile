@@ -27,8 +27,7 @@
       <p v-if="myMonthRate>=2" class="black-text">建议开始锁定收益</p>
       <p class="purple-text bold-text">{{question9}}阶段</p>
       <p>买比{{buy}} 卖比{{sell}}</p>
-      <p>多:{{monthAverage[0]}} 乐观:{{monthAverage[1]}} 谨慎:{{monthAverage[2]}} 空:{{monthAverage[3]}}</p>
-      <p>大反:{{niuxiong[2]}} 小反:{{niuxiong[3]}} 熊:{{niuxiong[4]}} 牛:{{niuxiong[0]}} 小牛:{{niuxiong[1]}} 正常:{{niuxiong[5]}}</p>
+      <p>大反:{{niuxiong[0]}} 小反:{{niuxiong[1]}} 正常:{{niuxiong[2]}}</p>
       <!--<p v-if="monthAverage[0]>=16" class="purple-text">可以不卖，高仓的还是要卖</p>-->
       <!--<p v-if="(monthAverage[0]+monthAverage[1])<16" class="purple-text">出卖信号就得卖</p>-->
       <!--<p v-if="(monthAverage[2]+monthAverage[3])>=16" class="purple-text">可以杀跌</p>-->
@@ -122,12 +121,6 @@ export default {
       type: Array,
       default: function () {
         return [0, 0]
-      }
-    },
-    monthAverage: {
-      type: Array,
-      default: function () {
-        return [0, 0, 0, 0]
       }
     },
     niuxiong: {

@@ -842,6 +842,7 @@ const operatingTooltip = {
   },
   laji,
   jigou,
+  kuanji,
   jigouName: keyToName(jigou),
   lajiName: keyToName(laji)
 }

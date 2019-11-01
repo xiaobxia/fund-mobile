@@ -10,19 +10,12 @@
         <span v-if="ifLaji" class="warn-tag-s operate-tag">垃圾</span>
         <span class="buy-info">{{indexBuyNumber}}</span>
         <span class="buy-info">{{indexSellNumber}}</span>
-        <span v-if="indexNiuXiong === '牛'" class="buy-s has-tag">{{indexNiuXiong}}</span>
-        <span v-if="indexNiuXiong === '小牛'" class="buy has-tag">{{indexNiuXiong}}</span>
         <span v-if="indexNiuXiong === '大反'" class="buy-s has-tag">{{indexNiuXiong}}</span>
         <span v-if="indexNiuXiong === '小反'" class="buy has-tag">{{indexNiuXiong}}</span>
-        <span v-if="indexNiuXiong === '熊'" class="sell-s has-tag">{{indexNiuXiong}}</span>
-        <span v-if="averageMonthIndex > 1" class="buy-s has-tag">多</span>
-        <span v-if="averageMonthIndex > 0 && averageMonthIndex <= 1" class="buy has-tag">乐观</span>
-        <span v-if="averageMonthIndex <= 0 && averageMonthIndex >= -0.5" class="sell has-tag">谨慎</span>
-        <span v-if="averageMonthIndex < -0.5" class="sell-s has-tag">空</span>
-        <span v-if="ifThreeDown && !ifLaji" class="buy-s has-tag">1/3</span>
+        <span v-if="averageMonthIndex >= indexInfo.average" class="buy-s has-tag">多</span>
+        <span v-if="averageMonthIndex > 0 && averageMonthIndex < indexInfo.average" class="buy has-tag">乐观</span>
+        <span v-if="averageMonthIndex <= 0" class="sell-s has-tag">空</span>
         <span v-if="ifSixFive && !ifSevenSix" class="buy-s has-tag">小</span>
-        <span v-if="ifSevenFive && !ifEightSix" class="buy-s has-tag">小</span>
-        <span v-if="ifEightSix" class="buy-s has-tag">大</span>
         <span v-if="ifSevenSix" class="buy-s has-tag">走牛</span>
         <span v-if="ifFiveUp" class="warn-s has-tag">涨5</span>
         <span v-if="ifJieFantan()" class="info-s has-tag">解</span>
@@ -62,6 +55,7 @@ import operatingTooltip from '@/util/operatingTooltip.js'
 
 const jigou = operatingTooltip.jigou
 const laji = operatingTooltip.laji
+const kuanji = operatingTooltip.kuanji
 
 export default {
   name: 'OperatingInfoItem',
@@ -164,12 +158,12 @@ export default {
     ifLaji () {
       return laji.indexOf(this.indexInfo.key) !== -1
     },
+    ifKuanji () {
+      return kuanji.indexOf(this.indexInfo.key) !== -1
+    },
     // 是否处于反弹
     ifInFantan () {
       return this.indexNiuXiong === '大反' || this.indexNiuXiong === '小反'
-    },
-    ifInLeguan () {
-      return this.indexNiuXiong === '牛' || this.indexNiuXiong === '小牛' || this.averageMonthIndex > 0
     },
     positionWarn () {
       return operatingTooltip.getPositionWarn(this.indexInfo, this.hasCount)
@@ -408,6 +402,15 @@ export default {
       }
       return ''
     },
+    noSell (list) {
+      let newList = []
+      for (let i = 0; i < list.length; i++) {
+        if (list[i] !== 'sell') {
+          newList.push(list[i])
+        }
+      }
+      return newList
+    },
     getItemClass () {
       // 市场阶段
       const question9 = storageUtil.getMarketStatus('question_9')
@@ -419,8 +422,8 @@ export default {
       const buySellList = this.buySellList
       classList.push(this.ifHas ? 'has' : 'no-has')
       classList.push(this.lock ? 'lock' : 'no-lock')
-      // 涨5天了必须开始卖
-      if (this.ifFiveUp) {
+      // 涨4,5天了必须开始卖
+      if (this.ifFiveUp || this.ifFourUp) {
         classList.push(sellClass)
       }
       // 涨快了
@@ -437,49 +440,64 @@ export default {
         // 如果是买入信号，那就直接红色，返回
         classList.push(buyClass)
       } else if (buySellList[0] === sellClass) {
-        if (question9 === '筑顶') {
-          // 如果是在筑顶那就都卖
-          classList.push(sellClass)
-        } else if (myMonthRate >= 2) {
-          // 如果本月收益超过2了那就开始锁定收益
+        if (this.averageMonthIndex <= 0) {
+          // 在月线以下，该卖就得卖
           classList.push(sellClass)
         } else {
           // 如果是卖出信号，那就判断是不是出于大反或者小反
-          if (!this.ifInFantan) {
+          if (this.ifInFantan) {
+            // 处于反弹期的指数，不属于筑顶的，要解反了才能卖
+            if (this.ifJieFantan()) {
+              // 或者解除反弹了
+              classList.push(sellClass)
+            }
+          } else {
             // 不处于反弹期才可以卖
-            classList.push(sellClass)
-          } else if (this.ifJieFantan()) {
-            // 或者解除反弹了
             classList.push(sellClass)
           }
         }
       } else {
         // ----------------------应该买的部分
         // 没有其他信号
-        if (question9 !== '筑顶') {
-          // 不是筑顶阶段才行
-          // 连续跌三天，并且不是垃圾指数，并且处于乐观状态
-          if (this.ifThreeDown && !this.ifLaji && this.ifInLeguan) {
+        // 不是筑顶阶段才行
+        // 连续跌三天
+        if (this.ifThreeDown) {
+          if (this.ifKuanji) {
+            // 宽基指数可以买
             shouldClass = 'should-buy'
+          } else {
+            // 其他指数得要线上才能买
+            if (this.averageMonthIndex > 0) {
+              shouldClass = 'should-buy'
+            }
           }
-          // 跌很多天
-          if (this.ifSixFive || this.ifSevenSix || this.ifSevenFive || this.ifEightSix) {
-            shouldClass = 'should-buy'
-          }
-          // 连跌
-          if (this.ifFourDown || this.ifFiveDown) {
-            shouldClass = 'should-buy'
-          }
+        }
+        // 连跌4天或者5天，都能买
+        if (this.ifFourDown || this.ifFiveDown) {
+          shouldClass = 'should-buy'
+        }
+        // 跌很多天
+        if (this.ifSixFive || this.ifSevenSix) {
+          shouldClass = 'should-buy'
         }
         // ----------------------应该卖的部分
         if (this.otherBuySellList[0] !== 'buy' && shouldClass === '' && this.rate < 0) {
-          if (this.averageMonthIndex < 0 && !this.ifInFantan && !this.ifInLeguan) {
+          if (this.averageMonthIndex < 0 && !this.ifInFantan) {
             shouldClass = 'should-sell'
           }
         }
       }
       classList.push(shouldClass)
-      return classList
+      let classListF = classList
+      if (this.averageMonthIndex >= this.indexInfo.average) {
+        // 形成趋势以后，跌了就可以买，可以追
+        if (this.rate < 0) {
+          classList.push('should-buy')
+        }
+        // 在趋势中，什么卖出信号都不用管
+        classListF = this.noSell(classList)
+      }
+      return classListF
     }
   }
 }

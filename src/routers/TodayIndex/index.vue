@@ -74,9 +74,9 @@ const codeMap = {
     code: 'sh000993',
     name: '信息'
   },
-  'xiaofei': {
-    code: 'sh000990',
-    name: '消费'
+  'shipin': {
+    code: 'sz399396',
+    name: '食品'
   },
   'baoxian': {
     code: 'sz399809',

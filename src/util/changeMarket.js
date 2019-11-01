@@ -421,7 +421,7 @@ Util.prototype = {
     }
     return false
   },
-  ifXiaofei: function (record, oneDayRecord) {
+  ifShipin: function (record, oneDayRecord) {
     const today = this.getFlag(record)
     if (ifMatch(today,
       {'ifUpOpen': false, 'ifOpenHigh': false, 'ifUpClose': false, 'ifCloseHigh': false, 'ifSessionDown': false, 'ifSessionUpClose': false, 'ifSessionUp': false, 'ifSessionDownClose': false}
@@ -991,12 +991,12 @@ const codeMap = {
     rate: 1.074,
     wave: 1.0134768211920533
   },
-  'xiaofei': {
-    code: 'sh000990',
-    name: '消费',
-    threshold: 0.97,
-    rate: 0.9892814371257483,
-    wave: 0.9413607594936705
+  'shipin': {
+    code: 'sz399396',
+    name: '食品',
+    threshold: 0.85,
+    rate: 0.7876623376623377,
+    wave: 0.9127884615384618
   },
   'baoxian': {
     code: 'sz399809',
@@ -1100,7 +1100,7 @@ const fnMap = {
   jisuanji: 'ifJisuanji',
   baijiu: 'ifBaijiu',
   xinxi: 'ifXinxi',
-  xiaofei: 'ifXiaofei',
+  shipin: 'ifShipin',
   baoxian: 'ifBaoxian',
   wulin: 'ifWulin',
   chuanmei: 'ifChuanmei',

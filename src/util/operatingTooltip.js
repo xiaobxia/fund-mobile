@@ -21,8 +21,8 @@ const keyName = {
   'yinhang': {
     name: '银行'
   },
-  'xiaofei': {
-    name: '消费'
+  'shipin': {
+    name: '食品'
   },
   'jungong': {
     name: '军工'
@@ -97,7 +97,7 @@ const jigou = [
   'yiliao',
   'baijiu',
   'yiyao',
-  'xiaofei'
+  'shipin'
 ]
 
 // 高费率指数

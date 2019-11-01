@@ -15,8 +15,8 @@
         <span v-if="averageMonthIndex >= indexInfo.average" class="buy-s has-tag">多</span>
         <span v-if="averageMonthIndex > 0 && averageMonthIndex < indexInfo.average" class="buy has-tag">乐观</span>
         <span v-if="averageMonthIndex <= 0" class="sell-s has-tag">空</span>
-        <span v-if="ifSixFive && !ifSevenSix" class="buy-s has-tag">小</span>
-        <span v-if="ifSevenSix" class="buy-s has-tag">走牛</span>
+        <span v-if="ifxiaofan()" class="buy-s has-tag">小</span>
+        <span v-if="ifDafan()" class="buy-s has-tag">大</span>
         <span v-if="ifFiveUp" class="warn-s has-tag">涨5</span>
         <span v-if="ifJieFantan()" class="info-s has-tag">解</span>
         <span v-if="ifUpQuick()" class="sell-s must-tag">涨快</span>
@@ -411,6 +411,12 @@ export default {
       }
       return newList
     },
+    ifxiaofan () {
+      return this.ifSixFive || (this.averageMonthIndex > 0 && this.ifThreeDown)
+    },
+    ifDafan () {
+      return this.ifFourDown || this.ifFiveDown || this.ifSevenSix
+    },
     getItemClass () {
       // 市场阶段
       const question9 = storageUtil.getMarketStatus('question_9')
@@ -441,8 +447,10 @@ export default {
         classList.push(buyClass)
       } else if (buySellList[0] === sellClass) {
         if (this.averageMonthIndex <= 0) {
-          // 在月线以下，该卖就得卖
-          classList.push(sellClass)
+          // 在月线以下，就得卖，除了大反
+          if (!this.ifDafan()) {
+            classList.push(sellClass)
+          }
         } else {
           // 如果是卖出信号，那就判断是不是出于大反或者小反
           if (this.ifInFantan) {

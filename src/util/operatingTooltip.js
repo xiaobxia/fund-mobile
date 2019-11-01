@@ -140,7 +140,7 @@ const indexNumber = 24
 function getIndexJigouFactor (key, buySell) {
   if (jigou.indexOf(key) !== -1) {
     if (buySell === 'buy') {
-      return 1
+      return 1.25
     } else {
       return 0.75
     }

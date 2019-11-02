@@ -10,6 +10,7 @@
         <div slot="title">
           <h3>
             {{item.name}}
+            <span class="average-number"><i v-if="diffInfo[item.key] >= (item.average * 0.66)" class="fas fa-book"></i>{{item.average}} (<span :class="numberClass(diffInfo[item.key] - item.average)">{{parseFloat(diffInfo[item.key] - item.average).toFixed(2)}}</span>)</span>
             <span style="float: right" :class="numberClass(diffInfo[item.key])">{{diffInfo[item.key]}}%</span>
           </h3>
         </div>

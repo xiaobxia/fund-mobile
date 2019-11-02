@@ -18,6 +18,14 @@
   h3.op {
     font-size: 28px;
   }
+  .average-number {
+    position: absolute;
+    left: 270px;
+    .fas {
+      color: $red-color;
+      font-size: 28px;
+    }
+  }
   .operating-info-item {
     padding: 20px;
   }

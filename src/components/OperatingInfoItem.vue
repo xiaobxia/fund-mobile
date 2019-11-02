@@ -166,6 +166,9 @@ export default {
     ifInFantan () {
       return this.indexNiuXiong === '大反' || this.indexNiuXiong === '小反'
     },
+    ifInDafan () {
+      return this.indexNiuXiong === '大反'
+    },
     positionWarn () {
       return operatingTooltip.getPositionWarn(this.indexInfo, this.hasCount)
     },
@@ -464,7 +467,7 @@ export default {
       } else if (buySellList[0] === sellClass) {
         if (this.averageMonthIndex <= 0) {
           // 在月线以下，就得卖，除了大反
-          if (!this.ifDafan()) {
+          if (!this.ifInDafan) {
             classList.push(sellClass)
           }
         } else {

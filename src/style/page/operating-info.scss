@@ -4,6 +4,17 @@
     border: none;
     margin-bottom: 10px;
   }
+  .mint-cell {
+    &.duo {
+      background-color: rgba(208, 153, 183, 0.2);
+    }
+    &.leguan {
+      background-color: rgba(112, 220, 240, 0.2);
+    }
+    &.kong {
+      background-color: rgba(254, 255, 153, 0.2);
+    }
+  }
   h3.op {
     font-size: 28px;
   }

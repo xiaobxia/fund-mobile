@@ -6,7 +6,7 @@
       </mt-button>
     </mt-header>
     <div class="main-body">
-      <mt-cell-swipe v-for="(item) in list" :key="item.code" :class="diffInfo[item.key] >= 1 ? 'has-back':''">
+      <mt-cell-swipe v-for="(item) in list" :key="item.code" :class="diffInfo[item.key] >= item.average ? 'duo': (diffInfo[item.key]>0?'leguan':'kong')">
         <div slot="title">
           <h3>
             {{item.name}}
@@ -38,6 +38,7 @@ export default {
         threshold: codeMap[key].threshold,
         wave: codeMap[key].wave,
         rate: codeMap[key].rate,
+        average: codeMap[key].average,
         sortRate: 0
       })
       diffInfo[key] = 0

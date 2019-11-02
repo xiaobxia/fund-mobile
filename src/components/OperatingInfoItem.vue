@@ -38,6 +38,7 @@
                   :class="subItem">{{subItem}}</span>
       </p>
       <div class="other-text">
+        <p>原买：{{indexRawBuyNumber}}</p>
         <p class="purple-text" v-if="ifFiveUp">当天可以卖，第二天可以接回来</p>
         <p v-if="rate <= -3">是否有利空？是就先不接，标记利空，不是也不要接太多</p>
       </div>
@@ -183,6 +184,19 @@ export default {
       return niuXiong === '正常' ? '' : niuXiong
     },
     indexBuyNumber () {
+      return operatingTooltip.getIndexBuyNumber(
+        this.type,
+        this.indexInfo,
+        {
+          buyFlagCount: this.buyCount,
+          sellFlagCount: this.sellCount,
+          netChangeRatio: this.rate
+        },
+        this.hasCount,
+        true
+      )
+    },
+    indexRawBuyNumber () {
       return operatingTooltip.getIndexBuyNumber(
         this.type,
         this.indexInfo,

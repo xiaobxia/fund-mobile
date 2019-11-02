@@ -511,7 +511,7 @@ function sellNumberRedistribution (indexItem, hasCount, sellNumber) {
 }
 
 const operatingTooltip = {
-  getIndexBuyNumber (type, indexItem, marketInfo, hasCount) {
+  getIndexBuyNumber (type, indexItem, marketInfo, hasCount, ifChange) {
     // 标准到百
     let buyBase = getBuyBase(type, marketInfo)
     let indexPositionFactor = getIndexPositionFactor(indexItem.key, indexItem.attach)
@@ -522,7 +522,10 @@ const operatingTooltip = {
     let indexJigouFactor = getIndexJigouFactor(indexItem.key, 'buy')
     let indexLajiFactor = getIndexLajiFactor(indexItem.key, 'buy')
     let indexHighRateFactor = getIndexHighRateFactor(indexItem.key, 'buy')
-    let indexNetChangeRatioRateFactor = getIndexNetChangeRatioRateFactor(indexItem.rate, marketInfo.netChangeRatio, 'buy')
+    let indexNetChangeRatioRateFactor = 1
+    if (ifChange) {
+      indexNetChangeRatioRateFactor = getIndexNetChangeRatioRateFactor(indexItem.rate, marketInfo.netChangeRatio, 'buy')
+    }
     let buyNumber = buyBase * indexPositionFactor * indexAverageFactor * indexMonthDiffFactor * indexYearDiffFactor * indexMarketTimeFactor * indexJigouFactor * indexHighRateFactor * indexNetChangeRatioRateFactor * indexLajiFactor
     let finalBuyNumber = buyNumberRedistribution(indexItem, hasCount, buyNumber)
     return Math.round(finalBuyNumber / 100) * 100

@@ -15,7 +15,7 @@
         <span v-if="averageMonthIndex >= indexInfo.average" class="buy-s has-tag">多</span>
         <span v-if="averageMonthIndex > 0 && averageMonthIndex < indexInfo.average" class="buy has-tag">乐观</span>
         <span v-if="averageMonthIndex <= 0" class="sell-s has-tag">空</span>
-        <span v-if="ifxiaofan()" class="buy-s has-tag">小</span>
+        <span v-if="!ifDafan() && ifxiaofan()" class="buy-s has-tag">小</span>
         <span v-if="ifDafan()" class="buy-s has-tag">大</span>
         <span v-if="ifFiveUp" class="warn-s has-tag">涨5</span>
         <span v-if="ifJieFantan()" class="info-s has-tag">解</span>
@@ -397,11 +397,8 @@ export default {
       return false
     },
     ifJieFantan () {
-      if ((this.indexNiuXiong === '小反' || this.indexNiuXiong === '大反') && this.ifUpQuick()) {
-        return true
-      }
       return (
-        (this.indexNiuXiong === '小反' || this.indexNiuXiong === '大反') &&
+        (this.indexNiuXiong === '大反' || this.indexNiuXiong === '小反') &&
         (this.ifThreeUp || this.ifFourUp || this.ifFiveUp)
       )
     },
@@ -429,7 +426,12 @@ export default {
       return this.ifSixFive || (this.averageMonthIndex > 0 && this.ifThreeDown)
     },
     ifDafan () {
-      return this.ifFourDown || this.ifFiveDown || this.ifSevenSix
+      if (this.ifFourDown || this.ifFiveDown || this.ifSevenSix) {
+        return true
+      } else if (this.indexInfo.key === 'baoxian' && this.ifSixFive) {
+        return true
+      }
+      return false
     },
     getItemClass () {
       // 市场阶段

@@ -6,11 +6,10 @@
       </mt-button>
     </mt-header>
     <div class="main-body">
-      <mt-cell-swipe v-for="(item) in list" :key="item.code" :class="diffInfo[item.key] >= item.average ? 'duo': (diffInfo[item.key]>0?'leguan':'kong')">
+      <mt-cell-swipe v-for="(item) in list" :key="item.code" :class="lockInfo[item.key] ? 'duo': (diffInfo[item.key]>0?'leguan':'kong')">
         <div slot="title">
           <h3>
             {{item.name}}
-            <span class="average-number"><i v-if="diffInfo[item.key] >= (item.average * 0.66)" class="fas fa-book"></i>{{item.average}} (<span :class="numberClass(diffInfo[item.key] - item.average)">{{parseFloat(diffInfo[item.key] - item.average).toFixed(2)}}</span>)</span>
             <span style="float: right" :class="numberClass(diffInfo[item.key])">{{diffInfo[item.key]}}%</span>
           </h3>
         </div>
@@ -23,6 +22,7 @@
 import indexInfoUtilXiong from '@/util/indexInfoUtilXiong.js'
 import stockDataUtil from '@/util/stockDataUtil.js'
 import storageUtil from '@/util/storageUtil.js'
+import operatingTooltip from '@/util/operatingTooltip.js'
 
 const codeMap = indexInfoUtilXiong.codeMap
 
@@ -30,6 +30,7 @@ export default {
   name: 'AverageMonthIndex',
   data () {
     let diffInfo = {}
+    let lockInfo = {}
     let list = []
     for (let key in codeMap) {
       list.push({
@@ -43,10 +44,12 @@ export default {
         sortRate: 0
       })
       diffInfo[key] = 0
+      lockInfo[key] = false
     }
     return {
       list: list,
-      diffInfo: diffInfo
+      diffInfo: diffInfo,
+      lockInfo: lockInfo
     }
   },
   computed: {
@@ -64,20 +67,31 @@ export default {
     queryData (item) {
       this.$http.getWithCache(`webData/${stockDataUtil.getAllUrl()}`, {
         code: item.code,
-        days: 21
+        days: 30
       }, {interval: 30}).then((data) => {
         if (data.success) {
           const list = data.data.list
-          let now = 0
+          let averageList = []
           // 近的在前
-          for (let i = 0; i < 20; i++) {
-            now += parseFloat(list[i].kline.close)
+          for (let i = 0; i < 5; i++) {
+            averageList.push(this.countDiff(list, i))
           }
-          const diff = this.countDifferenceRate(parseFloat(list[0].kline.close), now / 20)
-          this.diffInfo[item.key] = diff
-          storageUtil.setMonthAverage(item.key, diff)
+          averageList.reverse()
+          this.diffInfo[item.key] = averageList[averageList.length - 1]
+          let lock = operatingTooltip.ifNoSell(averageList)
+          this.lockInfo[item.key] = lock
+          storageUtil.setNoSell(item.key, lock)
+          storageUtil.setMonthAverage(item.key, averageList[averageList.length - 1])
         }
       })
+    },
+    countDiff (list, index) {
+      let now = 0
+      // 近的在前
+      for (let i = index; i < (20 + index); i++) {
+        now += parseFloat(list[i].kline.close)
+      }
+      return this.countDifferenceRate(parseFloat(list[index].kline.close), now / 20)
     },
     backHandler () {
       this.$router.history.go(-1)

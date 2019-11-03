@@ -226,6 +226,29 @@ const storageUtil = {
     localStorage.setItem('monthAverage', JSON.stringify(config))
     return config
   },
+  getNoSell: function (key) {
+    let config = {}
+    if (window._noSell) {
+      config = window._noSell
+    } else {
+      const noSellString = localStorage.getItem('noSell')
+      if (noSellString) {
+        config = JSON.parse(noSellString)
+      }
+      window._noSell = config
+    }
+    if (key) {
+      return config[key]
+    }
+    return config
+  },
+  setNoSell: function (key, value) {
+    let config = this.getNoSell()
+    config[key] = value
+    window._noSell = config
+    localStorage.setItem('noSell', JSON.stringify(config))
+    return config
+  },
   getIndexRate: function (key) {
     let config = {}
     if (window._indexRate) {

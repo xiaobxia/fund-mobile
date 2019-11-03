@@ -12,8 +12,8 @@
         <span class="buy-info">{{indexSellNumber}}</span>
         <span v-if="indexNiuXiong === '大反'" class="buy-s has-tag">{{indexNiuXiong}}</span>
         <span v-if="indexNiuXiong === '小反'" class="buy has-tag">{{indexNiuXiong}}</span>
-        <span v-if="averageMonthIndex >= indexInfo.average" class="buy-s has-tag">多</span>
-        <span v-if="averageMonthIndex > 0 && averageMonthIndex < indexInfo.average" class="buy has-tag">乐观</span>
+        <span v-if="noSellIndex" class="buy-s has-tag">锁</span>
+        <span v-if="averageMonthIndex > 0" class="buy has-tag">乐观</span>
         <span v-if="averageMonthIndex <= 0" class="sell-s has-tag">空</span>
         <span v-if="!ifDafan() && ifxiaofan()" class="buy-s has-tag">小</span>
         <span v-if="ifDafan()" class="buy-s has-tag">大</span>
@@ -379,6 +379,9 @@ export default {
     },
     averageMonthIndex () {
       return storageUtil.getMonthAverage(this.indexInfo.key) || 0
+    },
+    noSellIndex () {
+      return storageUtil.getNoSell(this.indexInfo.key) || false
     }
   },
   mounted () {
@@ -509,6 +512,7 @@ export default {
         }
         // ----------------------应该卖的部分
         if (this.otherBuySellList[0] !== 'buy' && shouldClass === '' && this.rate < 0) {
+          // 研究过了，线上确实可以不杀跌
           if (this.averageMonthIndex < 0 && !this.ifInFantan) {
             shouldClass = 'should-sell'
           }
@@ -516,11 +520,7 @@ export default {
       }
       classList.push(shouldClass)
       let classListF = classList
-      if (this.averageMonthIndex >= this.indexInfo.average) {
-        // 形成趋势以后，跌了就可以买，可以追
-        if (this.rate < 0) {
-          classList.push('should-buy')
-        }
+      if (this.noSellIndex) {
         // 在趋势中，什么卖出信号都不用管
         classListF = this.noSell(classList)
       }

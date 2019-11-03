@@ -500,13 +500,137 @@ Util.prototype = {
       }
     }
     return false
+  },
+  ifBuyYiliao: function (record, oneDayRecord) {
+    const today = this.getFlag(record, 1.9)
+    // 无抵抗下跌的都要
+    if (ifMatch(today,
+      {'ifHighPreCloseDown': true}
+    )) {
+      return {
+        flag: true,
+        text: 'buy-100-0'
+      }
+    }
+    // 跌幅两倍波动的就要
+    if (ifMatch(today,
+      {'ifUpClose': false, 'ifCloseHigh2': true}
+    )) {
+      return {
+        flag: true,
+        text: 'buy-101-0'
+      }
+    }
+    // 下跌
+    if (ifMatch(today,
+      {'ifCloseHigh': true, 'ifSessionDownHigh': true, 'ifSessionUpClose': false, 'ifSessionUp': false, 'ifSessionDownCloseHigh': true}
+    )) {
+      return {
+        flag: true,
+        text: 'buy-101-0'
+      }
+    }
+    return false
+  },
+  ifSellYiliao: function (record, oneDayRecord) {
+    const today = this.getFlag(record, 1.9)
+    // 大涨
+    if (ifMatch(today,
+      {'ifHighPreCloseUpHigh': true}
+    )) {
+      return {
+        flag: true,
+        text: 'sell-100-0'
+      }
+    }
+    // 涨幅两倍波动的就要
+    if (ifMatch(today,
+      {'ifUpClose': true, 'ifCloseHigh2': true}
+    )) {
+      return {
+        flag: true,
+        text: 'sell-101-0'
+      }
+    }
+    // 下跌
+    if (ifMatch(today,
+      {'ifCloseHigh': true, 'ifSessionDownHigh': false, 'ifSessionUpClose': true, 'ifSessionUp': true, 'ifSessionDownCloseHigh': false}
+    )) {
+      return {
+        flag: true,
+        text: 'xiong'
+      }
+    }
+    return false
+  },
+  ifBuyShengwu: function (record, oneDayRecord) {
+    const today = this.getFlag(record, 1.9)
+    // 无抵抗下跌的都要
+    if (ifMatch(today,
+      {'ifHighPreCloseDown': true}
+    )) {
+      return {
+        flag: true,
+        text: 'buy-100-0'
+      }
+    }
+    // 跌幅两倍波动的就要
+    if (ifMatch(today,
+      {'ifUpClose': false, 'ifCloseHigh2': true}
+    )) {
+      return {
+        flag: true,
+        text: 'buy-101-0'
+      }
+    }
+    // 下跌
+    if (ifMatch(today,
+      {'ifCloseHigh': true, 'ifSessionDownHigh': true, 'ifSessionUpClose': false, 'ifSessionUp': false, 'ifSessionDownCloseHigh': true}
+    )) {
+      return {
+        flag: true,
+        text: 'buy-101-0'
+      }
+    }
+    return false
+  },
+  ifSellShengwu: function (record, oneDayRecord) {
+    const today = this.getFlag(record, 1.9)
+    // 大涨
+    if (ifMatch(today,
+      {'ifHighPreCloseUpHigh': true}
+    )) {
+      return {
+        flag: true,
+        text: 'sell-100-0'
+      }
+    }
+    // 涨幅两倍波动的就要
+    if (ifMatch(today,
+      {'ifUpClose': true, 'ifCloseHigh2': true}
+    )) {
+      return {
+        flag: true,
+        text: 'sell-101-0'
+      }
+    }
+    // 下跌
+    if (ifMatch(today,
+      {'ifCloseHigh': true, 'ifSessionDownHigh': false, 'ifSessionUpClose': true, 'ifSessionUp': true, 'ifSessionDownCloseHigh': false}
+    )) {
+      return {
+        flag: true,
+        text: 'xiong'
+      }
+    }
+    return false
   }
 }
 
 const codeMap = {
   'chuangye': {
     code: 'sz399006',
-    name: '创业',
+    name: '创业板',
     threshold: 1.01,
     wave: 1.0815568862275453,
     rate: 0.9367763157894737,
@@ -514,7 +638,7 @@ const codeMap = {
   },
   'wulin': {
     code: 'sh000016',
-    name: '50',
+    name: '上证50',
     threshold: 0.76,
     rate: 0.7031645569620255,
     wave: 0.8081952662721895,
@@ -522,7 +646,7 @@ const codeMap = {
   },
   'sanbai': {
     code: 'sh000300',
-    name: '300',
+    name: '沪深300',
     threshold: 0.77,
     rate: 0.7243790849673197,
     wave: 0.825182926829268,
@@ -530,7 +654,7 @@ const codeMap = {
   },
   'wubai': {
     code: 'sh000905',
-    name: '500',
+    name: '沪深500',
     threshold: 0.86,
     wave: 0.853157894736842,
     rate: 0.868132530120482,
@@ -538,7 +662,7 @@ const codeMap = {
   },
   'yiqian': {
     code: 'sh000852',
-    name: '1000',
+    name: '中证1000',
     threshold: 0.83,
     rate: 0.7927516778523488,
     wave: 0.8675304878048783
@@ -549,6 +673,20 @@ const codeMap = {
     threshold: 1.25,
     rate: 1.1202272727272722,
     wave: 1.374864864864865
+  },
+  'yiliao': {
+    code: 'sz399989',
+    name: '医疗',
+    threshold: 0.97,
+    wave: 1.0519615384615388,
+    rate: 0.8889999999999998
+  },
+  'shengwu': {
+    code: 'sz399441',
+    name: '生物',
+    threshold: 0.89,
+    rate: 0.8235460992907802,
+    wave: 0.9630645161290321
   }
 }
 const fnMap = {
@@ -563,7 +701,11 @@ const fnMap = {
   yiqianBuy: 'ifBuyYiqian',
   yiqianSell: 'ifSellYiqian',
   baijiuBuy: 'ifBuyBaijiu',
-  baijiuSell: 'ifSellBaijiu'
+  baijiuSell: 'ifSellBaijiu',
+  yiliaoBuy: 'ifBuyYiliao',
+  yiliaoSell: 'ifSellYiliao',
+  shengwuBuy: 'ifBuyShengwu',
+  shengwuSell: 'ifSellShengwu'
 }
 
 const FixedInvestment = {

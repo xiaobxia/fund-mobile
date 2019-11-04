@@ -872,7 +872,7 @@ const operatingTooltip = {
         for (let j = maxIndex; j < averageList.length; j++) {
           let now = averageList[j]
           if (now < (max * 0.5)) {
-            if (now > 0) {
+            if (now >= 0.1) {
               return false
             }
           }

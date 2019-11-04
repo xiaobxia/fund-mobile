@@ -273,6 +273,9 @@ function assetMarketStateFactor () {
   if (question9 === '筑顶') {
     question9Factor = 0.9
   }
+  if (question9 === '筑顶后大跌') {
+    question9Factor = 0.5
+  }
   factor = factor * question9Factor
   return factor
 }

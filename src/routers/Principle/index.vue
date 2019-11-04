@@ -13,7 +13,7 @@
         <mt-radio
           align="right"
           v-model="question_9"
-          :options="['筑底', '正常','筑顶']">
+          :options="['筑底', '正常','筑顶', '筑顶后大跌']">
         </mt-radio>
       </div>
       <div class="question">

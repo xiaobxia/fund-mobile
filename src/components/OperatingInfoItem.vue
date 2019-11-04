@@ -12,13 +12,13 @@
         <span class="buy-info">{{indexSellNumber}}</span>
         <span v-if="indexNiuXiong === '大反'" class="buy-s has-tag">{{indexNiuXiong}}</span>
         <span v-if="indexNiuXiong === '小反'" class="buy has-tag">{{indexNiuXiong}}</span>
-        <span v-if="noSellIndex" class="buy-s has-tag">锁</span>
+        <span v-if="noSellIndex" class="buy-s has-tag">锁仓</span>
         <span v-if="averageMonthIndex > 0" class="buy has-tag">乐观</span>
         <span v-if="averageMonthIndex <= 0" class="sell-s has-tag">空</span>
         <span v-if="!ifDafan() && ifxiaofan()" class="buy-s has-tag">小</span>
         <span v-if="ifDafan()" class="buy-s has-tag">大</span>
         <span v-if="ifFiveUp" class="warn-s has-tag">涨5</span>
-        <span v-if="ifJieFantan()" class="info-s has-tag">解</span>
+        <span v-if="ifJieFantan()" class="info-s has-tag">解反</span>
         <span v-if="ifUpQuick()" class="sell-s must-tag">涨快</span>
         <span v-if="ifThreeUp && ifLaji" class="sell-s must-tag">卖</span>
         <span v-if="ifFourUp && ifLaji" class="sell-s must-tag">卖1/3</span>
@@ -391,12 +391,12 @@ export default {
     ifUpQuick () {
       // 两天涨得多
       if (this.netChangeRatioListLarge[0] > 0 && this.netChangeRatioListLarge[1] > 0) {
-        if ((this.netChangeRatioListLarge[0] + this.netChangeRatioListLarge[1]) > this.indexInfo.rate * 3) {
+        if ((this.netChangeRatioListLarge[0] + this.netChangeRatioListLarge[1]) > this.indexInfo.rate * 4) {
           return true
         }
       }
       if (this.netChangeRatioListLarge[0] > 0 && this.netChangeRatioListLarge[1] > 0 && this.netChangeRatioListLarge[2] > 0) {
-        if ((this.netChangeRatioListLarge[0] + this.netChangeRatioListLarge[1] + this.netChangeRatioListLarge[2]) > this.indexInfo.rate * 4) {
+        if ((this.netChangeRatioListLarge[0] + this.netChangeRatioListLarge[1] + this.netChangeRatioListLarge[2]) > this.indexInfo.rate * 6) {
           return true
         }
       }
@@ -455,9 +455,9 @@ export default {
         classList.push(sellClass)
       }
       // 涨快了
-      if (this.ifUpQuick()) {
-        classList.push(sellClass)
-      }
+      // if (this.ifUpQuick()) {
+      //   classList.push(sellClass)
+      // }
       // 垃圾指数
       if (this.ifLaji) {
         if (this.ifThreeUp || this.ifFourUp || this.ifFiveUp) {
@@ -468,22 +468,24 @@ export default {
         // 如果是买入信号，那就直接红色，返回
         classList.push(buyClass)
       } else if (buySellList[0] === sellClass) {
-        if (this.averageMonthIndex <= 0) {
-          // 在月线以下，就得卖，除了大反
-          if (!this.ifInDafan) {
-            classList.push(sellClass)
-          }
-        } else {
-          // 如果是卖出信号，那就判断是不是出于大反或者小反
-          if (this.ifInFantan) {
-            // 处于反弹期的指数，不属于筑顶的，要解反了才能卖
-            if (this.ifJieFantan()) {
-              // 或者解除反弹了
+        if (question9 !== '筑顶后大跌') {
+          if (this.averageMonthIndex <= 0) {
+            // 在月线以下，就得卖，除了大反
+            if (!this.ifInDafan) {
               classList.push(sellClass)
             }
           } else {
-            // 不处于反弹期才可以卖
-            classList.push(sellClass)
+            // 如果是卖出信号，那就判断是不是出于大反或者小反
+            if (this.ifInFantan) {
+              // 处于反弹期的指数，不属于筑顶的，要解反了才能卖
+              if (this.ifJieFantan()) {
+                // 或者解除反弹了
+                classList.push(sellClass)
+              }
+            } else {
+              // 不处于反弹期才可以卖
+              classList.push(sellClass)
+            }
           }
         }
       } else {

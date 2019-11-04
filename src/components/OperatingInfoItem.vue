@@ -523,6 +523,10 @@ export default {
       classList.push(shouldClass)
       let classListF = classList
       if (this.noSellIndex) {
+        if (this.rate < 0) {
+          // 锁仓阶段可以跌了就买
+          classList.push('should-buy')
+        }
         // 在趋势中，什么卖出信号都不用管
         classListF = this.noSell(classList)
       }

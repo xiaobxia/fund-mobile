@@ -469,7 +469,7 @@ export default {
         classList.push(buyClass)
       } else if (buySellList[0] === sellClass) {
         if (question9 !== '筑顶后大跌') {
-          if (this.averageMonthIndex <= 0) {
+          if (this.averageMonthIndex < 0) {
             // 在月线以下，就得卖，除了大反
             if (!this.ifInDafan) {
               classList.push(sellClass)

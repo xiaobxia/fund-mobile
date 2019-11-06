@@ -153,7 +153,7 @@ export default {
   computed: {
     jukui () {
       const incomeRate = this.countDifferenceRate((this.hasCount * (100 + this.rate) / 100), this.costCount)
-      return incomeRate < -2 && positionWarn === 'danger'
+      return incomeRate < -2 && this.positionWarn === 'danger'
     },
     ifHas () {
       return this.hasCount > 0

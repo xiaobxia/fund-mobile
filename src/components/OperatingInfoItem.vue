@@ -23,6 +23,7 @@
         <span v-if="ifThreeUp && ifLaji" class="sell-s must-tag">卖</span>
         <span v-if="ifFourUp && ifLaji" class="sell-s must-tag">卖1/3</span>
         <span v-if="ifFiveUp && ifLaji" class="sell-s must-tag">卖1/2</span>
+        <span v-if="positionWarn === 'danger' && jukui" class="danger-tag-s operate-tag">巨亏</span>
         <span style="float: right" :class="numberClass(rate)">{{rate}}%</span>
       </h3>
       <p class="explain">
@@ -150,6 +151,10 @@ export default {
     }
   },
   computed: {
+    jukui () {
+      const incomeRate = this.countDifferenceRate((this.hasCount * (100 + this.rate) / 100), this.costCount)
+      return incomeRate < -2
+    },
     ifHas () {
       return this.hasCount > 0
     },

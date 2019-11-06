@@ -23,7 +23,7 @@
         <span v-if="ifThreeUp && ifLaji" class="sell-s must-tag">卖</span>
         <span v-if="ifFourUp && ifLaji" class="sell-s must-tag">卖1/3</span>
         <span v-if="ifFiveUp && ifLaji" class="sell-s must-tag">卖1/2</span>
-        <span v-if="positionWarn === 'danger' && jukui" class="danger-tag-s operate-tag">巨亏</span>
+        <span v-if="jukui" class="danger-tag-s operate-tag">巨亏</span>
         <span style="float: right" :class="numberClass(rate)">{{rate}}%</span>
       </h3>
       <p class="explain">
@@ -153,7 +153,7 @@ export default {
   computed: {
     jukui () {
       const incomeRate = this.countDifferenceRate((this.hasCount * (100 + this.rate) / 100), this.costCount)
-      return incomeRate < -2
+      return incomeRate < -2 && positionWarn === 'danger'
     },
     ifHas () {
       return this.hasCount > 0
@@ -474,7 +474,10 @@ export default {
         classList.push(buyClass)
       } else if (buySellList[0] === sellClass) {
         if (question9 !== '筑顶后大跌') {
-          if (this.averageMonthIndex < 0) {
+          if (this.jukui) {
+            // 巨亏的那就得卖
+            classList.push(sellClass)
+          } else if (this.averageMonthIndex < 0) {
             // 在月线以下，就得卖，除了大反
             if (!this.ifInDafan) {
               classList.push(sellClass)
@@ -492,6 +495,8 @@ export default {
               classList.push(sellClass)
             }
           }
+        } else {
+          classList.push(sellClass)
         }
       } else {
         // ----------------------应该买的部分

@@ -16,7 +16,7 @@
         <span class="item">估算收益：<span :class="numberClass(valuationInfo)">{{parseInt(valuationInfo)}}</span></span>
         <span class="item">估算比率：<span :class="numberClass(todayIncomeRatio)">{{todayIncomeRatio}}%</span></span>
         <span class="item">最新购买：{{parseInt(lastBuy)}}</span>
-        <span class="item">新买波动：<span :class="numberClass(lastBuyChangeRatio)">{{lastBuyChangeRatio}}%</span></span>
+        <span class="item">新买收益：<span :class="numberClass(lastBuyChange)">{{parseInt(lastBuyChange)}}</span></span>
         <span class="item">净值波动：<span :class="numberClass(relativeRate)">{{relativeRate}}%</span></span>
         <span class="item">沪深300：<span :class="numberClass(hushenChangeRatio)">{{hushenChangeRatio}}%</span></span>
         <span class="item">创业板：<span :class="numberClass(chuangyeChangeRatio)">{{chuangyeChangeRatio}}%</span></span>
@@ -76,6 +76,7 @@ export default {
       lockCostSum: 0,
       lastTradingDay: userFundAccountInfo.pre_net_value_date,
       lastBuy: 0,
+      lastBuyChange: 0,
       lastBuyChangeRatio: 0,
       myPosition: 0,
       canSellSum: 0
@@ -164,6 +165,7 @@ export default {
         storageUtil.setAppConfig('nowPosition', parseFloat(this.myPosition))
         this.lastUpdateValuationTime = moment(list[0].valuation_date).format('YYYY-MM-DD HH:mm:ss')
         this.lastBuy = lastBuy
+        this.lastBuyChange = lastBuyValuation - lastBuy
         this.lastBuyChangeRatio = this.countDifferenceRate(lastBuyValuation, lastBuy)
         this.fundNumber = list.length
         this.lockCostSum = lockCostSum

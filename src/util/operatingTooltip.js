@@ -417,17 +417,7 @@ function getIndexAverageFactor (indexKey) {
 // 月收益跟随因子
 function getIndexMonthDiffFactor (indexKey) {
   const indexDiff = storageUtil.getIndexDiff(indexKey) || 0
-  let factor = 1
-  // 理论上当月最高和最低的票差不会超多30
-  if (indexDiff > 0) {
-    // 越靠近7.5越大
-    factor = 1.2 - (0.2 * (Math.abs(7.5 - indexDiff) / 7.5))
-  }
-  if (indexDiff < 0) {
-    // 越靠近-7.5越小
-    factor = 0.8 + (0.2 * (Math.abs(7.5 + indexDiff) / 7.5))
-  }
-  return factor
+  return 1 + (indexDiff / 20)
 }
 
 // 年收益跟随因子

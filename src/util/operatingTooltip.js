@@ -433,17 +433,7 @@ function getIndexMonthDiffFactor (indexKey) {
 // 年收益跟随因子
 function getIndexYearDiffFactor (indexKey) {
   const indexDiff = storageUtil.getIndexYearDiff(indexKey) || 0
-  let factor = 1
-  // 理论上当年最高和最低的票差不会超多50
-  if (indexDiff > 0) {
-    // 越靠近12.5越大
-    factor = 1.2 - (0.2 * (Math.abs(12.5 - indexDiff) / 12.5))
-  }
-  if (indexDiff < 0) {
-    // 越靠近-12.5越小
-    factor = 0.8 + (0.2 * (Math.abs(12.5 + indexDiff) / 12.5))
-  }
-  return factor
+  return 1 + (indexDiff / 100)
 }
 
 function getBuyNumber (hasCount, rowBuy, indexRedistributionStandard) {

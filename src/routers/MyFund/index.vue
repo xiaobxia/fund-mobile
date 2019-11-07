@@ -12,7 +12,7 @@
         <span class="item">仓位信息：{{myPosition}}%</span>
         <span class="item">可卖金额：{{parseInt(canSellSum)}}</span>
         <span class="item">锁仓金额：{{parseInt(lockCostSum)}}</span>
-        <span class="item">锁仓收益：<span :class="numberClass(lockIncomeRatio)">{{lockIncomeRatio}}%</span></span>
+        <span class="item">锁仓收益：<span :class="numberClass(lockIncome)">{{parseInt(lockIncome)}}</span></span>
         <span class="item">估算收益：<span :class="numberClass(valuationInfo)">{{parseInt(valuationInfo)}}</span></span>
         <span class="item">估算比率：<span :class="numberClass(todayIncomeRatio)">{{todayIncomeRatio}}%</span></span>
         <span class="item">最新购买：{{parseInt(lastBuy)}}</span>
@@ -65,6 +65,7 @@ export default {
       list: [],
       timer: null,
       todayIncomeRatio: 0,
+      lockIncome: 0,
       lockIncomeRatio: 0,
       todayAsset: userFundAccountInfo.today_asset,
       cardInfo,
@@ -169,6 +170,7 @@ export default {
         this.lastBuyChangeRatio = this.countDifferenceRate(lastBuyValuation, lastBuy)
         this.fundNumber = list.length
         this.lockCostSum = lockCostSum
+        this.lockIncome = lockValuationSum - lockCostSum
         this.lockIncomeRatio = this.countDifferenceRate(lockValuationSum, lockCostSum)
         this.todayIncomeRatio = this.countDifferenceRate(valuationTotalSum, totalSum)
       }).then(() => {

@@ -24,7 +24,8 @@
     </div>
     <div class="warn-wrap">
       <p>本月收益率：{{myMonthRate}}%</p>
-      <p v-if="myMonthRate>=2" class="black-text">建议开始锁定收益</p>
+      <p  v-if="ifNiandi">年底机构结账，保护收益</p>
+      <p v-if="myMonthRate>=1.8" class="black-text">建议开始锁定收益，有一个降到60仓的过程，然后再重新按照信号做</p>
       <p class="purple-text bold-text">{{question9}}阶段</p>
       <p>买比{{buy}} 卖比{{sell}}</p>
       <p>大反:{{niuxiong[0]}} 小反:{{niuxiong[1]}} 正常:{{niuxiong[2]}}</p>
@@ -39,6 +40,7 @@
 <script>
 import moment from 'moment'
 import storageUtil from '@/util/storageUtil.js'
+import dateUtil from '@/util/dateUtil.js'
 
 export default {
   name: 'OperatingWarn',
@@ -56,9 +58,9 @@ export default {
     const question9 = storageUtil.getMarketStatus('question_9')
 
     let ifOperatingTime = false
-    const hour = new Date().getHours()
+    const hour = dateUtil.getDate().getHours()
     if (hour === 14) {
-      const Minute = new Date().getMinutes()
+      const Minute = dateUtil.getDate().getMinutes()
       if (Minute >= 40) {
         ifOperatingTime = true
       }
@@ -137,13 +139,18 @@ export default {
       return moment().isAfter('2020-01-19') && moment().isBefore('2020-02-07')
     },
     isGuoqing () {
-      return moment().isAfter('2019-09-23') && moment().isBefore('2019-10-11')
+      return moment().isAfter('2020-09-23') && moment().isBefore('2020-10-11')
     },
     ifLiuyi () {
-      const d = new Date()
+      const d = this.getDate()
       const day = d.getDate()
       const month = d.getMonth() + 1
       return month === 5 && day > 22
+    },
+    ifNiandi () {
+      const d = this.getDate()
+      const month = d.getMonth()
+      return month === 10 || month === 11
     }
   },
   mounted () {

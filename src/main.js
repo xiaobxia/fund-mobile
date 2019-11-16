@@ -11,6 +11,7 @@ import environmentUtil from './util/environmentUtil'
 import Http from '@/util/httpUtil.js'
 import store from './store'
 import numberUtil from '@/util/numberUtil.js'
+import dateUtil from '@/util/dateUtil.js'
 
 environmentUtil.setAdaptive()
 
@@ -54,6 +55,10 @@ Vue.prototype.keep100 = function (number) {
 
 for (let key in numberUtil) {
   Vue.prototype[key] = numberUtil[key]
+}
+
+for (let key in dateUtil) {
+  Vue.prototype[key] = dateUtil[key]
 }
 
 /* eslint-disable no-new */

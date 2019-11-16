@@ -278,7 +278,7 @@ export default {
       })
     },
     updateMyNetValue () {
-      const d = new Date()
+      const d = this.getDate()
       const hour = d.getHours()
       const minute = d.getMinutes()
       // 10点开始，15点结束

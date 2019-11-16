@@ -210,7 +210,7 @@ export default {
       const userFundAccountInfo = storageUtil.getUserFundAccountInfo()
       // 是交易日
       if (userFundAccountInfo.market_open === true) {
-        const d = new Date()
+        const d = this.getDate()
         const hour = d.getHours()
         const minute = d.getMinutes()
         if (hour >= 10 && minute >= 10) {

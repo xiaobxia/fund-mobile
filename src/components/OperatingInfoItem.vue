@@ -24,6 +24,7 @@
         <span v-if="ifFourUp && ifLaji" class="sell-s must-tag">卖1/3</span>
         <span v-if="ifFiveUp && ifLaji" class="sell-s must-tag">卖1/2</span>
         <span v-if="jukui" class="danger-tag-s operate-tag">巨亏</span>
+        <span v-if="ifFakeAsset" class="info-s has-tag">假</span>
         <span style="float: right" :class="numberClass(rate)">{{rate}}%</span>
       </h3>
       <p class="explain">
@@ -387,6 +388,10 @@ export default {
     },
     noSellIndex () {
       return storageUtil.getNoSell(this.indexInfo.key) || false
+    },
+    ifFakeAsset () {
+      const fake = storageUtil.getAppConfig('fake') || '真'
+      return fake === '假'
     }
   },
   mounted () {
@@ -525,7 +530,7 @@ export default {
         // ----------------------应该卖的部分
         if (this.otherBuySellList[0] !== 'buy' && shouldClass === '' && this.rate < 0) {
           // 研究过了，线上确实可以不杀跌
-          if (this.averageMonthIndex < 0 && !this.ifInFantan) {
+          if (this.averageMonthIndex < 0 && !this.ifInFantan && !this.ifThreeDown) {
             shouldClass = 'should-sell'
           }
         }

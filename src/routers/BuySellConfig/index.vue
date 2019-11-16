@@ -6,11 +6,15 @@
       </mt-button>
     </mt-header>
     <div class="main-body">
-      <mt-field label="买比例" placeholder="请输入" v-model="buy"></mt-field>
-      <mt-field label="卖比例" placeholder="请输入" v-model="sell"></mt-field>
-    </div>
-    <div class="bottom-bar">
-      <mt-button type="primary" @click="okHandler" class="main-btn">完成</mt-button>
+      <mt-radio
+        align="right"
+        v-model="fake"
+        :options="['真', '假']">
+      </mt-radio>
+      <mt-field label="假资产" placeholder="请输入" v-model="fakeAsset"></mt-field>
+      <div class="bottom-bar">
+        <mt-button type="primary" @click="okHandler" class="main-btn">完成</mt-button>
+      </div>
     </div>
   </div>
 </template>
@@ -22,15 +26,18 @@ import Toast from '@/common/toast.js'
 export default {
   name: 'BuySellConfig',
   data () {
-    const buy = storageUtil.getAppConfig('buy')
-    const sell = storageUtil.getAppConfig('sell')
+    const fake = storageUtil.getAppConfig('fake')
+    const fakeAsset = storageUtil.getAppConfig('fakeAsset')
     return {
-      buy: buy || 1,
-      sell: sell || 1
+      fake: fake || '真',
+      fakeAsset: fakeAsset || 0
     }
   },
   computed: {},
   watch: {
+    fake (val) {
+      storageUtil.setAppConfig('fake', val)
+    }
   },
   mounted () {
     this.initPage()
@@ -41,17 +48,8 @@ export default {
     backHandler () {
       this.$router.history.go(-1)
     },
-    toast (data) {
-      if (data.success) {
-        Toast.success('操作成功')
-        this.$router.history.go(-1)
-      } else {
-        Toast.error('操作失败')
-      }
-    },
     okHandler () {
-      storageUtil.setAppConfig('sell', this.sell)
-      storageUtil.setAppConfig('buy', this.buy)
+      storageUtil.setAppConfig('fakeAsset', this.fakeAsset)
     }
   }
 }

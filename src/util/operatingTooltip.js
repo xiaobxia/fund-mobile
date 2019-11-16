@@ -1,5 +1,6 @@
 import storageUtil from '@/util/storageUtil.js'
 import numberUtil from './numberUtil'
+import dateUtil from './dateUtil'
 import moment from 'moment'
 
 const keyName = {
@@ -199,10 +200,20 @@ function getIndexNetChangeRatioRateFactor (averageRate, rate, buySell) {
   }
 }
 
+function ifFakeAsset () {
+  const fake = storageUtil.getAppConfig('fake') || '真'
+  return fake === '假'
+}
+
 // 获取当天账户资产
 function getUserAsset () {
-  const userFundAccountInfo = storageUtil.getUserFundAccountInfo()
-  return userFundAccountInfo.today_asset
+  if (ifFakeAsset()) {
+    console.log('inin')
+    return storageUtil.getAppConfig('fakeAsset')
+  } else {
+    const userFundAccountInfo = storageUtil.getUserFundAccountInfo()
+    return userFundAccountInfo.today_asset
+  }
 }
 
 function assetMarketStateFactor () {
@@ -282,13 +293,29 @@ function assetMarketStateFactor () {
 
 // 资产择时因子
 function assetMarketTimeFactor () {
-  const d = new Date()
+  const d = dateUtil.getDate()
   const year = d.getFullYear()
   const day = d.getDate()
   const month = d.getMonth()
   let factor = 1
   // 按月分配
-  const monthFactorList = [1.1, 1.2, 1, 1, 0.9, 0.8, 1, 1.1, 1, 1.1, 0.9, 0.8]
+  const monthFactorList = [
+    // 1月，2月，是反弹的窗口期间
+    1.1,
+    1.2,
+    1,
+    1,
+    // 5月，6月，年中资金面紧张
+    0.9,
+    0.8,
+    1,
+    1.1,
+    1,
+    1.1,
+    // 11月，12月，年底资金面紧张，机构结账
+    0.8,
+    0.8
+  ]
   factor = factor * monthFactorList[month]
   // 季度末资金面紧张
   if (moment().isAfter(`${year}-03-16`) && moment().isBefore(`${year}-03-30`)) {
@@ -323,7 +350,7 @@ function operateStandard () {
 
 // 指数择时因子
 function getIndexMarketTimeFactor (key) {
-  const d = new Date()
+  const d = dateUtil.getDate()
   const month = d.getMonth() + 1
   const day = d.getDate()
   let factor = 1
@@ -360,9 +387,6 @@ function getBuyBase (type, marketInfo) {
   const nowPosition = storageUtil.getAppConfig('nowPosition') || 100
   let positionFactor = ((position - nowPosition) / 100) + 1
   finalFactor = finalFactor * positionFactor
-  // 比例修正
-  const buyConfig = storageUtil.getAppConfig('buy') || 1
-  finalFactor = finalFactor * parseFloat(buyConfig)
   // 结果
   return finalFactor * operateStandard()
 }
@@ -385,9 +409,6 @@ function getSellBase (type, marketInfo) {
   const nowPosition = storageUtil.getAppConfig('nowPosition') || 100
   let positionFactor = ((nowPosition - position) / 100) + 1
   finalFactor = finalFactor * positionFactor
-  // 比例修正
-  const sellConfig = storageUtil.getAppConfig('sell') || 1
-  finalFactor = finalFactor * parseFloat(sellConfig)
   // 结果
   // 卖的标准大一点
   return finalFactor * operateStandard() * 3 / 2
@@ -632,7 +653,8 @@ const operatingTooltip = {
   getPositionWarnNumber (item) {
     const asset = getUserAsset()
     let mix = 1
-    if (highRate.indexOf(item.key) !== -1) {
+    // 高费率和垃圾指数，限仓第一点，宽基的高一点
+    if (highRate.indexOf(item.key) !== -1 || laji.indexOf(item.key) !== -1) {
       mix = 0.75
     }
     // 取不是定投的那部分

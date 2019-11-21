@@ -544,7 +544,7 @@ export default {
         if (this.otherBuySellList[0] !== 'buy' && shouldClass === '' && this.rate < 0) {
           // 研究过了，线上确实可以不杀跌
           if (this.averageMonthIndex < 0 && !this.ifInFantan && !this.ifThreeDown) {
-            if (question9 === '筑底') {
+            if (question9 === '筑底' && !this.ifLaji) {
               if (this.positionWarn === 'danger') {
                 shouldClass = 'should-sell'
               }

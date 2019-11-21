@@ -25,6 +25,7 @@
         <span v-if="ifFiveUp && ifLaji" class="sell-s must-tag">卖1/2</span>
         <span v-if="jukui" class="danger-tag-s operate-tag">巨亏</span>
         <span v-if="ifFakeAsset" class="info-s has-tag">假</span>
+        <span v-if="ifDownQuick()" class="buy-s has-tag">跌快</span>
         <span style="float: right" :class="numberClass(rate)">{{rate}}%</span>
       </h3>
       <p class="explain">
@@ -412,6 +413,15 @@ export default {
       }
       return false
     },
+    // 是否跌得太快
+    ifDownQuick () {
+      if (this.netChangeRatioListLarge[0] < 0 && this.netChangeRatioListLarge[1] < 0 && this.netChangeRatioListLarge[2] < 0) {
+        if ((this.netChangeRatioListLarge[0] + this.netChangeRatioListLarge[1] + this.netChangeRatioListLarge[2]) < -(this.indexInfo.rate * 4)) {
+          return true
+        }
+      }
+      return false
+    },
     ifJieFantan () {
       return (
         (this.indexNiuXiong === '大反' || this.indexNiuXiong === '小反') &&
@@ -517,6 +527,9 @@ export default {
             if (this.averageMonthIndex > 0) {
               shouldClass = 'should-buy'
             }
+            if (this.ifDownQuick()) {
+              shouldClass = 'should-buy'
+            }
           }
         }
         // 连跌4天或者5天，都能买
@@ -531,7 +544,13 @@ export default {
         if (this.otherBuySellList[0] !== 'buy' && shouldClass === '' && this.rate < 0) {
           // 研究过了，线上确实可以不杀跌
           if (this.averageMonthIndex < 0 && !this.ifInFantan && !this.ifThreeDown) {
-            shouldClass = 'should-sell'
+            if (question9 === '筑底') {
+              if (this.positionWarn === 'danger') {
+                shouldClass = 'should-sell'
+              }
+            } else {
+              shouldClass = 'should-sell'
+            }
           }
         }
       }

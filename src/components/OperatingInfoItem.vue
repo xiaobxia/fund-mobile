@@ -442,7 +442,7 @@ export default {
     noSell (list) {
       let newList = []
       for (let i = 0; i < list.length; i++) {
-        if (list[i] !== 'sell') {
+        if (list[i] !== 'sell' || list[i] !== 'should-sell') {
           newList.push(list[i])
         }
       }
@@ -544,13 +544,7 @@ export default {
         if (this.otherBuySellList[0] !== 'buy' && shouldClass === '' && this.rate < 0) {
           // 研究过了，线上确实可以不杀跌
           if (this.averageMonthIndex < 0 && !this.ifInFantan && !this.ifThreeDown) {
-            if (question9 === '筑底' && !this.ifLaji) {
-              if (this.positionWarn === 'danger') {
-                shouldClass = 'should-sell'
-              }
-            } else {
-              shouldClass = 'should-sell'
-            }
+            shouldClass = 'should-sell'
           }
         }
       }

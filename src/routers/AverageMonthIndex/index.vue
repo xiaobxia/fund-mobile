@@ -79,6 +79,20 @@ export default {
           averageList.reverse()
           this.diffInfo[item.key] = averageList[averageList.length - 1]
           let lock = operatingTooltip.ifNoSell(averageList)
+          // 移动均线策略
+          let now = 0
+          let last = 0
+          // 近的在前
+          for (let i = 0; i < 7; i++) {
+            now += parseFloat(list[i].kline.close)
+          }
+          for (let j = 1; j < 8; j++) {
+            last += parseFloat(list[j].kline.close)
+          }
+          const diff = numberUtil.countDifferenceRate(now / 7, last / 7)
+          if (diff < 0.2) {
+            lock = false
+          }
           this.lockInfo[item.key] = lock
           storageUtil.setNoSell(item.key, lock)
           storageUtil.setMonthAverage(item.key, averageList[averageList.length - 1])

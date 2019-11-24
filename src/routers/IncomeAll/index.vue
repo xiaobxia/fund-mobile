@@ -36,6 +36,10 @@
             <td>沪深500</td>
             <td>{{allRate.wubai}}% <span :class="numberClass(allRate.my - allRate.wubai)">( {{keepTwoDecimals(allRate.my - allRate.wubai)}}% )</span></td>
           </tr>
+          <tr>
+            <td>沪深1000</td>
+            <td>{{allRate.yiqian}}% <span :class="numberClass(allRate.my - allRate.yiqian)">( {{keepTwoDecimals(allRate.my - allRate.yiqian)}}% )</span></td>
+          </tr>
         </table>
       </div>
     </div>
@@ -65,6 +69,10 @@ let webDataMap = {
   'wubai': {
     code: 'sh000905',
     name: '500'
+  },
+  'yiqian': {
+    code: 'sh000852',
+    name: '1000'
   }
 }
 

@@ -10,8 +10,6 @@
         <span class="name">{{niuXiong}}</span>
         <mt-button type="primary" @click="niuXiongChangeHandler">改变</mt-button>
       </div>
-      <mt-field label="指数仓位" placeholder="请输入" v-model="position"></mt-field>
-      <mt-button type="primary" @click="positionOkHandler" class="main-btn">完成</mt-button>
       <div class="content-body">
         <ve-line :mark-point="chartPoint" :yAxis="chartYAxis" :textStyle="chartTextStyle"
                  :height="chartHeight" :data="chartDataNetValue" :theme="lineTheme"
@@ -125,8 +123,7 @@ export default {
       list: [],
       indexChangeRatio: 0,
       pointType: '',
-      type: 'xiong',
-      position: 100
+      type: 'xiong'
     }
   },
 
@@ -231,7 +228,6 @@ export default {
       const query = this.$router.history.current.query
       this.queryData = Object.assign({}, query)
       this.niuXiong = storageUtil.getIndexNiuXiong(query.key)
-      this.position = storageUtil.getIndexPosition(query.key)
       this.$http.get(`webData/${stockDataUtil.getAllUrl()}`, {
         code: query.code,
         days: 200
@@ -321,19 +317,6 @@ export default {
     },
     backHandler () {
       this.$router.history.go(-1)
-    },
-    positionOkHandler () {
-      const query = this.$router.history.current.query
-      this.$http.post('market/updateIndexPosition', {
-        key: query.key,
-        value: this.position
-      }).then((data) => {
-        if (data.success) {
-          Toast.success('操作成功')
-        } else {
-          Toast.error('操作失败')
-        }
-      })
     }
   }
 }

@@ -226,6 +226,29 @@ const storageUtil = {
     localStorage.setItem('monthAverage', JSON.stringify(config))
     return config
   },
+  getQuarterAverage: function (key) {
+    let config = {}
+    if (window._quarterAverage) {
+      config = window._quarterAverage
+    } else {
+      const quarterAverageString = localStorage.getItem('quarterAverage')
+      if (quarterAverageString) {
+        config = JSON.parse(quarterAverageString)
+      }
+      window._quarterAverage = config
+    }
+    if (key) {
+      return config[key]
+    }
+    return config
+  },
+  setQuarterAverage: function (key, value) {
+    let config = this.getQuarterAverage()
+    config[key] = value
+    window._quarterAverage = config
+    localStorage.setItem('quarterAverage', JSON.stringify(config))
+    return config
+  },
   getNoSell: function (key) {
     let config = {}
     if (window._noSell) {
@@ -362,29 +385,6 @@ const storageUtil = {
     config[key] = JSON.stringify(value)
     window._xiongBuySellListLarge = config
     localStorage.setItem('xiongBuySellListLarge', JSON.stringify(config))
-    return config
-  },
-  getIndexPosition: function (key) {
-    let config = {}
-    if (window._indexPosition) {
-      config = window._indexPosition
-    } else {
-      const indexPositionString = localStorage.getItem('indexPosition')
-      if (indexPositionString) {
-        config = JSON.parse(indexPositionString)
-      }
-      window._indexPosition = config
-    }
-    if (key) {
-      return config[key]
-    }
-    return config
-  },
-  setIndexPosition: function (key, value) {
-    let config = this.getIndexPosition()
-    config[key] = value
-    window._indexPosition = config
-    localStorage.setItem('indexPosition', JSON.stringify(config))
     return config
   },
   getIndexNiuXiong: function (key) {

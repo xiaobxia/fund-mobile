@@ -47,7 +47,7 @@
             <img src="../../assets/相对标准偏差.png" alt="">
             <!--<i class="fab fa-sellsy"></i>-->
           </div>
-          <div class="bottom">差价策略</div>
+          <div class="bottom">季线策略</div>
         </div>
       </div>
       <div class="img-card" @click="toPath('/page/todayIndex')">

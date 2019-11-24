@@ -186,12 +186,6 @@ export default {
       }
     },
     otherDataInit () {
-      this.$http.get('market/getIndexPosition').then((res) => {
-        let list = res.data
-        list.map((item) => {
-          storageUtil.setIndexPosition(item.key, parseInt(item.value))
-        })
-      })
       this.$http.get('market/getIndexNiuXiong').then((res) => {
         let list = res.data
         list.map((item) => {

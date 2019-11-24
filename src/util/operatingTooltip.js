@@ -113,13 +113,13 @@ const highRate = [
 
 // 垃圾指数
 const laji = [
-  'gangtie',
-  'huanbao',
-  'meitan',
-  'jijian',
-  'qiche',
-  'youse',
-  'chuanmei'
+  // 'gangtie',
+  // 'huanbao',
+  // 'meitan',
+  // 'jijian',
+  // 'qiche',
+  // 'youse',
+  // 'chuanmei'
 ]
 
 // 宽指数
@@ -414,12 +414,6 @@ function getSellBase (type, marketInfo) {
   return finalFactor * operateStandard() * 3 / 2
 }
 
-// 指数态度因子
-function getIndexPositionFactor (indexKey) {
-  let indexPosition = storageUtil.getIndexPosition(indexKey) || 100
-  return indexPosition / 100
-}
-
 // 指数平均因子
 function getIndexAverageFactor (indexKey) {
   let indexAverage = storageUtil.getAverage(indexKey) || 0
@@ -431,6 +425,20 @@ function getIndexAverageFactor (indexKey) {
   if (indexAverage < 0) {
     // 越靠近-1越小
     factor = 0.8 + (0.2 * Math.abs(1 + indexAverage))
+  }
+  return factor
+}
+
+// 指数季度因子
+function getQuarterAverageFactor (indexKey) {
+  let indexAverage = storageUtil.getQuarterAverage(indexKey) || 0
+  let factor = 1
+  if (indexAverage < 0 && indexAverage >= -10) {
+    // 越靠近-10越小
+    factor = 1 + (0.5 * (indexAverage / 10))
+  }
+  if (indexAverage < -10 && indexAverage >= -20) {
+    factor = 1 - (0.5 * ((indexAverage + 20) / 10))
   }
   return factor
 }
@@ -450,9 +458,9 @@ function getIndexYearDiffFactor (indexKey) {
 function getBuyNumber (hasCount, rowBuy, indexRedistributionStandard) {
   function getY (x) {
     if (x <= indexRedistributionStandard) {
-      return 0.4 + 0.4 * (x / indexRedistributionStandard)
+      return 0.5 + 0.5 * (x / indexRedistributionStandard)
     } else {
-      return 0.8 - 0.4 * ((x - indexRedistributionStandard) / indexRedistributionStandard)
+      return 1 - 0.5 * ((x - indexRedistributionStandard) / indexRedistributionStandard)
     }
   }
   let a = hasCount + rowBuy
@@ -501,7 +509,7 @@ function getSellNumber (hasCount, rowSell, indexRedistributionStandard) {
   let c = hasCount - a
   // 中间位
   let b = hasCount - (c / 2)
-  let d = 0.4 + 0.6 * (b / (2 * indexRedistributionStandard))
+  let d = 0.5 + 0.5 * (b / (2 * indexRedistributionStandard))
   return d * c
 }
 // 卖出金额再分配
@@ -518,7 +526,7 @@ const operatingTooltip = {
   getIndexBuyNumber (type, indexItem, marketInfo, hasCount, ifChange) {
     // 标准到百
     let buyBase = getBuyBase(type, marketInfo)
-    let indexPositionFactor = getIndexPositionFactor(indexItem.key, indexItem.attach)
+    let indexQuarterAverageFactor = getQuarterAverageFactor(indexItem.key)
     let indexAverageFactor = getIndexAverageFactor(indexItem.key)
     let indexMonthDiffFactor = getIndexMonthDiffFactor(indexItem.key)
     let indexYearDiffFactor = getIndexYearDiffFactor(indexItem.key)
@@ -530,14 +538,14 @@ const operatingTooltip = {
     if (ifChange) {
       indexNetChangeRatioRateFactor = getIndexNetChangeRatioRateFactor(indexItem.rate, marketInfo.netChangeRatio, 'buy')
     }
-    let buyNumber = buyBase * indexPositionFactor * indexAverageFactor * indexMonthDiffFactor * indexYearDiffFactor * indexMarketTimeFactor * indexJigouFactor * indexHighRateFactor * indexNetChangeRatioRateFactor * indexLajiFactor
+    let buyNumber = buyBase * indexQuarterAverageFactor * indexAverageFactor * indexMonthDiffFactor * indexYearDiffFactor * indexMarketTimeFactor * indexJigouFactor * indexHighRateFactor * indexNetChangeRatioRateFactor * indexLajiFactor
     let finalBuyNumber = buyNumberRedistribution(indexItem, hasCount, buyNumber)
     return Math.round(finalBuyNumber / 100) * 100
   },
   getIndexSellNumber (type, indexItem, marketInfo, hasCount) {
     // 标准到百
     let sellBase = getSellBase(type, marketInfo)
-    let indexPositionFactor = getIndexPositionFactor(indexItem.key, indexItem.attach)
+    let indexQuarterAverageFactor = getQuarterAverageFactor(indexItem.key)
     let indexAverageFactor = getIndexAverageFactor(indexItem.key)
     let indexMonthDiffFactor = getIndexMonthDiffFactor(indexItem.key)
     let indexYearDiffFactor = getIndexYearDiffFactor(indexItem.key)
@@ -546,7 +554,7 @@ const operatingTooltip = {
     let indexLajiFactor = getIndexLajiFactor(indexItem.key, 'sell')
     let indexHighRateFactor = getIndexHighRateFactor(indexItem.key, 'sell')
     let indexNetChangeRatioRateFactor = getIndexNetChangeRatioRateFactor(indexItem.rate, marketInfo.netChangeRatio, 'sell')
-    let sellNumber = sellBase * (2 - indexPositionFactor) * (2 - indexAverageFactor) * (2 - indexMonthDiffFactor) * (2 - indexYearDiffFactor) * (2 - indexMarketTimeFactor) * indexJigouFactor * indexHighRateFactor * indexNetChangeRatioRateFactor * indexLajiFactor
+    let sellNumber = sellBase * (2 - indexQuarterAverageFactor) * (2 - indexAverageFactor) * (2 - indexMonthDiffFactor) * (2 - indexYearDiffFactor) * (2 - indexMarketTimeFactor) * indexJigouFactor * indexHighRateFactor * indexNetChangeRatioRateFactor * indexLajiFactor
     let finalSellNumber = sellNumberRedistribution(indexItem, hasCount, sellNumber)
     return Math.round(finalSellNumber / 100) * 100
   },

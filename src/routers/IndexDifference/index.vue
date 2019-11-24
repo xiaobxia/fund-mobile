@@ -1,33 +1,17 @@
 <template>
   <div class="operating-info">
-    <mt-header title="差价策略" :fixed="true">
+    <mt-header title="均线策略" :fixed="true">
       <mt-button slot="left" @click="backHandler">
         <i class="fas fa-chevron-left"></i>
       </mt-button>
     </mt-header>
     <div class="main-body">
-      <mt-cell-swipe>
+      <mt-cell-swipe v-for="(item) in list" :key="item.code">
         <div slot="title">
           <h3>
-            创业
-            <span style="float: right" :class="numberClass(chuangyeRate)">{{chuangyeRate}}%</span>
+            {{item.name}}
+            <span style="float: right" :class="numberClass(diffInfo[item.key])">{{diffInfo[item.key]}}%</span>
           </h3>
-          <p class="explain">
-            <span v-for="(subItem, index) in chuangyeBuySell" :key="subItem + index"
-                  :class="subItem === '买'?'buy':subItem === '卖'?'sell':''">{{subItem}}</span>
-          </p>
-        </div>
-      </mt-cell-swipe>
-      <mt-cell-swipe>
-        <div slot="title">
-          <h3>
-            50
-            <span style="float: right" :class="numberClass(wulinRate)">{{wulinRate}}%</span>
-          </h3>
-          <p class="explain">
-            <span v-for="(subItem, index) in wulinBuySell" :key="subItem + index"
-                  :class="subItem === '买'?'buy':subItem === '卖'?'sell':''">{{subItem}}</span>
-          </p>
         </div>
       </mt-cell-swipe>
     </div>
@@ -35,18 +19,32 @@
 </template>
 
 <script>
+import indexInfoUtilXiong from '@/util/indexInfoUtilXiong.js'
 import stockDataUtil from '@/util/stockDataUtil.js'
+import storageUtil from '@/util/storageUtil.js'
+
+const codeMap = indexInfoUtilXiong.codeMap
 
 export default {
-  name: 'IndexDifference',
+  name: 'AverageIndex',
   data () {
+    let diffInfo = {}
+    let list = []
+    for (let key in codeMap) {
+      list.push({
+        key: key,
+        code: codeMap[key].code,
+        name: codeMap[key].name,
+        threshold: codeMap[key].threshold,
+        wave: codeMap[key].wave,
+        rate: codeMap[key].rate,
+        sortRate: 0
+      })
+      diffInfo[key] = 0
+    }
     return {
-      wulin: [],
-      wulinRate: 0,
-      wulinBuySell: [],
-      chuangye: [],
-      chuangyeRate: 0,
-      chuangyeBuySell: []
+      list: list,
+      diffInfo: diffInfo
     }
   },
   computed: {
@@ -56,63 +54,22 @@ export default {
   },
   methods: {
     initPage () {
-      Promise.all([
-        this.$http.get(`webData/${stockDataUtil.getAllUrl()}`, {
-          code: 'sz399006',
-          days: 12
-        }).then((data) => {
-          if (data.success) {
-            const list = data.data.list
-            this.chuangye = list
-          }
-        }),
-        this.$http.get(`webData/${stockDataUtil.getAllUrl()}`, {
-          code: 'sh000016',
-          days: 12
-        }).then((data) => {
-          if (data.success) {
-            const list = data.data.list
-            this.wulin = list
-          }
-        })
-      ]).then(() => {
-        this.renderBuySell()
-      })
-    },
-    renderBuySell () {
-      const wulin = this.wulin
-      const chuangye = this.chuangye
-      const rateChuangye = 0.94
-      const rateWulin = 0.73
-      let chuangyeBuySell = []
-      let wulinBuySell = []
-      // 近的在前
-      for (let i = 0; i < 10; i++) {
-        const chuangyeRate = chuangye[i].kline['netChangeRatio']
-        const wulinRate = wulin[i].kline['netChangeRatio']
-        let bigRateChuangye = Math.abs(chuangyeRate - wulinRate) > rateChuangye * 2
-        let bigRateWulin = Math.abs(chuangyeRate - wulinRate) > rateWulin * 2
-        let tempFlag = Math.abs(chuangyeRate - wulinRate) > rateChuangye
-        let chuangyeFlag = ''
-        let wulinFlag = ''
-        if (i < 5) {
-          if (tempFlag && chuangyeRate > 0 && chuangyeRate > wulinRate && chuangyeRate > rateChuangye) {
-            chuangyeFlag = '卖'
-          } else if (bigRateChuangye && chuangyeRate < 0 && chuangyeRate < wulinRate && chuangyeRate < -rateChuangye) {
-            chuangyeFlag = '买'
-          } else if (bigRateWulin && wulinRate > 0 && wulinRate > chuangyeRate && wulinRate > rateWulin) {
-            wulinFlag = '卖'
-          } else if (bigRateWulin && wulinRate < 0 && wulinRate < chuangyeRate && wulinRate < -rateWulin) {
-            wulinFlag = '买'
-          }
-          chuangyeBuySell[i] = chuangyeFlag
-          wulinBuySell[i] = wulinFlag
-        }
+      let list = this.list
+      for (let i = 0; i < list.length; i++) {
+        this.queryData(list[i])
       }
-      this.chuangyeBuySell = chuangyeBuySell
-      this.wulinBuySell = wulinBuySell
-      this.wulinRate = wulin[0].kline['netChangeRatio']
-      this.chuangyeRate = chuangye[0].kline['netChangeRatio']
+    },
+    queryData (item) {
+      this.$http.getWithCache(`stock/getStockPriceAverage`, {
+        code: item.code,
+        days: 120
+      }, {interval: 30}).then((data) => {
+        if (data.success) {
+          const diff = data.data
+          this.diffInfo[item.key] = diff
+          storageUtil.setQuarterAverage(item.key, diff)
+        }
+      })
     },
     backHandler () {
       this.$router.history.go(-1)

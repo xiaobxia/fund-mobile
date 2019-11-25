@@ -208,7 +208,6 @@ function ifFakeAsset () {
 // 获取当天账户资产
 function getUserAsset () {
   if (ifFakeAsset()) {
-    console.log('inin')
     return storageUtil.getAppConfig('fakeAsset')
   } else {
     const userFundAccountInfo = storageUtil.getUserFundAccountInfo()
@@ -268,14 +267,14 @@ function assetMarketStateFactor () {
   }
   factor = factor * question4Factor
 
-  let question6Factor = 1
-  if (question6 === '乐观') {
-    question6Factor = 1.1
-  }
-  if (question6 === '悲观') {
-    question6Factor = 0.9
-  }
-  factor = factor * question6Factor
+  // let question6Factor = 1
+  // if (question6 === '乐观') {
+  //   question6Factor = 1.1
+  // }
+  // if (question6 === '悲观') {
+  //   question6Factor = 0.9
+  // }
+  // factor = factor * question6Factor
 
   let question9Factor = 1
   if (question9 === '筑底') {
@@ -330,8 +329,12 @@ function assetMarketTimeFactor () {
   if (moment().isAfter(`${year}-12-16`) && moment().isBefore(`${year}-12-30`)) {
     factor = factor * 0.9
   }
+  // 机构结账月
+  if (moment().isAfter(`${year}-11-16`) && moment().isBefore(`${year}-11-30`)) {
+    factor = factor * 0.9
+  }
   // 每个月的22日以后都是要谨慎的
-  const quarterList = [3, 6, 9, 12]
+  const quarterList = [3, 6, 9, 11, 12]
   // 不能和季末叠加
   if (quarterList.indexOf(month + 1) === -1) {
     if (day >= 22 && day < 30) {

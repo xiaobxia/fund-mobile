@@ -14,6 +14,37 @@ function localStorageRemoveItem (key) {
   return localStorage.removeItem(formatKey(key))
 }
 const storageUtil = {
+  getData: function (name, key) {
+    let value = {}
+    if (window[`_${name}`]) {
+      value = window[`_${name}`]
+    } else {
+      const valueString = localStorageGetItem(name)
+      if (valueString) {
+        value = JSON.parse(valueString)
+      }
+      window[`_${name}`] = value
+    }
+    if (key) {
+      return value[key]
+    }
+    return value
+  },
+  setData: function (name, key, value) {
+    let data = this.getData(name)
+    if (typeof key === 'object') {
+      value = key
+      data = value
+    } else {
+      data[key] = value
+    }
+    window[`_${name}`] = data
+    localStorageSetItem(name, JSON.stringify(data))
+    return data
+  },
+  clearAll: function () {
+    window.localStorage.clear()
+  },
   getAppConfig: function (key) {
     let config = {}
     if (window._appConfig) {

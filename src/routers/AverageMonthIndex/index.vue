@@ -89,7 +89,7 @@ export default {
           for (let j = 1; j < 8; j++) {
             last += parseFloat(list[j].kline.close)
           }
-          const diff = numberUtil.countDifferenceRate(now / 7, last / 7)
+          const diff = this.countDifferenceRate(now / 7, last / 7)
           if (diff < 0.2) {
             lock = false
           }

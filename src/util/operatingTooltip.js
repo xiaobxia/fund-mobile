@@ -196,7 +196,7 @@ function getIndexManyDownFactor (averageRate, netChangeRatioList) {
     netChangeRatioList[3] < 0
   ) {
     const rate = netChangeRatioList[0] + netChangeRatioList[1] + netChangeRatioList[2] + netChangeRatioList[3]
-    return 1 + (Math.abs(rate) / (5 * averageRate))
+    return 1 + ((Math.abs(rate) / (5 * averageRate)) * 0.75)
   }
   if (
     netChangeRatioList[0] < 0 &&
@@ -204,7 +204,7 @@ function getIndexManyDownFactor (averageRate, netChangeRatioList) {
     netChangeRatioList[2] < 0
   ) {
     const rate = netChangeRatioList[0] + netChangeRatioList[1] + netChangeRatioList[2]
-    return 1 + (Math.abs(rate) / (4 * averageRate))
+    return 1 + ((Math.abs(rate) / (4 * averageRate)) * 0.5)
   }
   return factor
 }

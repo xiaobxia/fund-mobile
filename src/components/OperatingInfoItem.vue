@@ -200,7 +200,8 @@ export default {
         {
           buyFlagCount: this.buyCount,
           sellFlagCount: this.sellCount,
-          netChangeRatio: this.rate
+          netChangeRatio: this.rate,
+          netChangeRatioList: this.netChangeRatioList
         },
         this.hasCount,
         true
@@ -213,7 +214,8 @@ export default {
         {
           buyFlagCount: this.buyCount,
           sellFlagCount: this.sellCount,
-          netChangeRatio: this.rate
+          netChangeRatio: this.rate,
+          netChangeRatioList: this.netChangeRatioList
         },
         this.hasCount
       )

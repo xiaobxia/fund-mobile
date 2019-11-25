@@ -177,6 +177,38 @@ function getIndexLajiFactor (key, buySell) {
   return 1
 }
 
+function getIndexManyDownFactor(averageRate, netChangeRatioList) {
+  let factor = 1
+  if (
+    netChangeRatioList[0] < 0 &&
+    netChangeRatioList[1] < 0 &&
+    netChangeRatioList[2] < 0 &&
+    netChangeRatioList[3] < 0 &&
+    netChangeRatioList[4] < 0
+  ) {
+    const rate = netChangeRatioList[0]+ netChangeRatioList[1]+ netChangeRatioList[2]+ netChangeRatioList[3]+netChangeRatioList[4]
+    return 1 + (Math.abs(rate)/(6*averageRate))
+  }
+  if (
+    netChangeRatioList[0] < 0 &&
+    netChangeRatioList[1] < 0 &&
+    netChangeRatioList[2] < 0 &&
+    netChangeRatioList[3] < 0
+  ) {
+    const rate = netChangeRatioList[0]+ netChangeRatioList[1]+ netChangeRatioList[2]+ netChangeRatioList[3]
+    return 1 + (Math.abs(rate)/(5*averageRate))
+  }
+  if (
+    netChangeRatioList[0] < 0 &&
+    netChangeRatioList[1] < 0 &&
+    netChangeRatioList[2] < 0
+  ) {
+    const rate = netChangeRatioList[0]+ netChangeRatioList[1]+ netChangeRatioList[2]
+    return 1 + (Math.abs(rate)/(4*averageRate))
+  }
+  return factor
+}
+
 // 指数涨跌幅度对买入金额的影响
 function getIndexNetChangeRatioRateFactor (averageRate, rate, buySell) {
   let rateAbs = Math.abs(rate)
@@ -541,7 +573,8 @@ const operatingTooltip = {
     if (ifChange) {
       indexNetChangeRatioRateFactor = getIndexNetChangeRatioRateFactor(indexItem.rate, marketInfo.netChangeRatio, 'buy')
     }
-    let buyNumber = buyBase * indexQuarterAverageFactor * indexAverageFactor * indexMonthDiffFactor * indexYearDiffFactor * indexMarketTimeFactor * indexJigouFactor * indexHighRateFactor * indexNetChangeRatioRateFactor * indexLajiFactor
+    let indexManyDownFactor = getIndexManyDownFactor(indexItem.rate, marketInfo.netChangeRatioList)
+    let buyNumber = buyBase * indexQuarterAverageFactor * indexAverageFactor * indexMonthDiffFactor * indexYearDiffFactor * indexMarketTimeFactor * indexJigouFactor * indexHighRateFactor * indexNetChangeRatioRateFactor * indexLajiFactor * indexManyDownFactor
     let finalBuyNumber = buyNumberRedistribution(indexItem, hasCount, buyNumber)
     return Math.round(finalBuyNumber / 100) * 100
   },

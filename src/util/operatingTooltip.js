@@ -177,7 +177,7 @@ function getIndexLajiFactor (key, buySell) {
   return 1
 }
 
-function getIndexManyDownFactor(averageRate, netChangeRatioList) {
+function getIndexManyDownFactor (averageRate, netChangeRatioList) {
   let factor = 1
   if (
     netChangeRatioList[0] < 0 &&
@@ -186,8 +186,8 @@ function getIndexManyDownFactor(averageRate, netChangeRatioList) {
     netChangeRatioList[3] < 0 &&
     netChangeRatioList[4] < 0
   ) {
-    const rate = netChangeRatioList[0]+ netChangeRatioList[1]+ netChangeRatioList[2]+ netChangeRatioList[3]+netChangeRatioList[4]
-    return 1 + (Math.abs(rate)/(6*averageRate))
+    const rate = netChangeRatioList[0] + netChangeRatioList[1] + netChangeRatioList[2] + netChangeRatioList[3] + netChangeRatioList[4]
+    return 1 + (Math.abs(rate) / (6 * averageRate))
   }
   if (
     netChangeRatioList[0] < 0 &&
@@ -195,16 +195,16 @@ function getIndexManyDownFactor(averageRate, netChangeRatioList) {
     netChangeRatioList[2] < 0 &&
     netChangeRatioList[3] < 0
   ) {
-    const rate = netChangeRatioList[0]+ netChangeRatioList[1]+ netChangeRatioList[2]+ netChangeRatioList[3]
-    return 1 + (Math.abs(rate)/(5*averageRate))
+    const rate = netChangeRatioList[0] + netChangeRatioList[1] + netChangeRatioList[2] + netChangeRatioList[3]
+    return 1 + (Math.abs(rate) / (5 * averageRate))
   }
   if (
     netChangeRatioList[0] < 0 &&
     netChangeRatioList[1] < 0 &&
     netChangeRatioList[2] < 0
   ) {
-    const rate = netChangeRatioList[0]+ netChangeRatioList[1]+ netChangeRatioList[2]
-    return 1 + (Math.abs(rate)/(4*averageRate))
+    const rate = netChangeRatioList[0] + netChangeRatioList[1] + netChangeRatioList[2]
+    return 1 + (Math.abs(rate) / (4 * averageRate))
   }
   return factor
 }

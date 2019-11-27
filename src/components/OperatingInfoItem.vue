@@ -444,7 +444,7 @@ export default {
     noSell (list) {
       let newList = []
       for (let i = 0; i < list.length; i++) {
-        if (list[i] !== 'sell' || list[i] !== 'should-sell') {
+        if (list[i] !== 'sell' && list[i] !== 'should-sell') {
           newList.push(list[i])
         }
       }

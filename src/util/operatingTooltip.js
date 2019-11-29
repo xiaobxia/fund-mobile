@@ -180,7 +180,7 @@ function getIndexLajiFactor (key, buySell) {
 function getJiesuan () {
   const d = dateUtil.getDate()
   const day = d.getDate()
-  const month = d.getMonth()
+  const month = d.getMonth() + 1
   if (month === 11) {
     return (1 - (2 * day / 31))
   }

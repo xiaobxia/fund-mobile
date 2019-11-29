@@ -141,9 +141,9 @@ const indexNumber = 24
 function getIndexJigouFactor (key, buySell) {
   if (jigou.indexOf(key) !== -1) {
     if (buySell === 'buy') {
-      return 1.25
+      return 1 + (0.25 * getJiesuan())
     } else {
-      return 0.75
+      return 1 - (0.25 * getJiesuan())
     }
   }
   return 1
@@ -173,6 +173,19 @@ function getIndexLajiFactor (key, buySell) {
       // 卖
       return 1.2
     }
+  }
+  return 1
+}
+
+function getJiesuan () {
+  const d = dateUtil.getDate()
+  const day = d.getDate()
+  const month = d.getMonth()
+  if (month === 11) {
+    return (1 - (2 * day / 31))
+  }
+  if (month === 12) {
+    return (-1 + (2 * day / 31))
   }
   return 1
 }
@@ -487,7 +500,7 @@ function getIndexMonthDiffFactor (indexKey) {
 // 年收益跟随因子
 function getIndexYearDiffFactor (indexKey) {
   const indexDiff = storageUtil.getIndexYearDiff(indexKey) || 0
-  return 1 + (indexDiff / 100)
+  return 1 + ((indexDiff * getJiesuan()) / 100)
 }
 
 function getBuyNumber (hasCount, rowBuy, indexRedistributionStandard) {
@@ -498,8 +511,10 @@ function getBuyNumber (hasCount, rowBuy, indexRedistributionStandard) {
       return 1 - 0.5 * ((x - indexRedistributionStandard) / indexRedistributionStandard)
     }
   }
+  let rest = 0
   let a = hasCount + rowBuy
   if (a > 2 * indexRedistributionStandard) {
+    rest = a - 2 * indexRedistributionStandard
     a = 2 * indexRedistributionStandard
   }
   let fBuy = 0
@@ -519,16 +534,19 @@ function getBuyNumber (hasCount, rowBuy, indexRedistributionStandard) {
     d = (getY(hasCount) + getY(a)) / 2
     fBuy = d * c
   }
-  if (fBuy + hasCount > 2 * indexRedistributionStandard) {
-    fBuy = 2 * indexRedistributionStandard - hasCount
-  }
-  return fBuy
+  // if (fBuy + hasCount > 2 * indexRedistributionStandard) {
+  //   fBuy = 2 * indexRedistributionStandard - hasCount
+  // }
+  return fBuy + (0.33 * rest)
 }
 
 // 买入金额再分配
 function buyNumberRedistribution (indexItem, hasCount, buyNumber) {
   const asset = getUserAsset()
-  const mix = indexItem.mix ? 1.25 : 1
+  let mix = indexItem.mix ? 1.25 : 1
+  if (jigou.indexOf(indexItem.key) !== -1) {
+    mix = 1 + (0.25 * getJiesuan())
+  }
   const indexAssetStandard = mix * asset / indexNumber
   const indexRedistributionStandard = indexAssetStandard / 2
   // return buyNumber
@@ -550,7 +568,10 @@ function getSellNumber (hasCount, rowSell, indexRedistributionStandard) {
 // 卖出金额再分配
 function sellNumberRedistribution (indexItem, hasCount, sellNumber) {
   const asset = getUserAsset()
-  const mix = indexItem.mix ? 1.25 : 1
+  let mix = indexItem.mix ? 1.25 : 1
+  if (jigou.indexOf(indexItem.key) !== -1) {
+    mix = 1 + (0.25 * getJiesuan())
+  }
   const indexAssetStandard = mix * asset / indexNumber
   const indexRedistributionStandard = indexAssetStandard / 2
   // return sellNumber

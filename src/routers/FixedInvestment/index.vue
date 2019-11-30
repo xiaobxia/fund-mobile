@@ -40,35 +40,17 @@ const fnMap = fixedInvestment.fnMap
 const formatData = fixedInvestment.formatData
 
 function getBuyRate (rate) {
-  if (rate >= 4 && rate < 8) {
-    return 0.9
+  if (rate >= 0 && rate < 40) {
+    return 1 - (rate / 40)
   }
-  if (rate >= 8 && rate < 12) {
-    return 0.8
+  if (rate >= 40) {
+    return 0
   }
-  if (rate >= 12 && rate < 16) {
-    return 0.7
+  if (rate < 0 && rate >= -40) {
+    return 1 - (rate / 40)
   }
-  if (rate >= 16 && rate < 20) {
-    return 0.6
-  }
-  if (rate >= 20) {
-    return 0.5
-  }
-  if (rate <= -4 && rate > -8) {
-    return 1.1
-  }
-  if (rate <= -8 && rate > -12) {
-    return 1.2
-  }
-  if (rate <= -12 && rate > -16) {
-    return 1.3
-  }
-  if (rate <= -16 && rate > -20) {
-    return 1.4
-  }
-  if (rate <= -20) {
-    return 1.5
+  if (rate < -40) {
+    return 2
   }
   return 1
 }

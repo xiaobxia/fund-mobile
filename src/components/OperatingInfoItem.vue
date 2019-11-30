@@ -389,6 +389,9 @@ export default {
     averageMonthIndex () {
       return storageUtil.getMonthAverage(this.indexInfo.key) || 0
     },
+    quarterAverage () {
+      return storageUtil.getQuarterAverage(this.indexInfo.key) || 0
+    },
     noSellIndex () {
       return storageUtil.getNoSell(this.indexInfo.key) || false
     },
@@ -491,7 +494,7 @@ export default {
         classList.push(buyClass)
       } else if (buySellList[0] === sellClass) {
         if (question9 !== '筑顶后大跌') {
-          if (this.jukui) {
+          if (this.jukui && this.quarterAverage < 0) {
             // 巨亏的那就得卖
             classList.push(sellClass)
           } else if (this.averageMonthIndex < 0) {

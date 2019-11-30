@@ -6,6 +6,7 @@
       </mt-button>
     </mt-header>
     <div class="main-body">
+      <div class="yellow-warn">申购在每月的月底进行</div>
       <div class="strategy-wrap">
         <span class="name">{{editType}}</span>
         <mt-button type="primary" @click="editTypeChangeHandler">改变</mt-button>

@@ -9,8 +9,12 @@
       <div class="content info">
         <span class="item">当前资金：{{todayAsset}}</span>
         <span class="item">当前持仓：{{parseInt(totalSum)}}</span>
-        <span class="item">定投资金：{{fixTotal}}</span>
         <span class="item">波段资金：{{otherTotal}}</span>
+        <span class="item"></span>
+        <span class="item">定投资金：{{fixTotal}}</span>
+        <span class="item">定投成本：{{parseInt(fixTotalCost)}}</span>
+        <span class="item">本月定投：{{parseInt(monthFix)}}</span>
+        <span class="item">本月成本：{{parseInt(monthFixCost)}}</span>
       </div>
       <div class="content">
         <p>定投资金占比</p>
@@ -30,6 +34,7 @@
   </div>
 </template>
 <script>
+import moment from 'moment'
 import indexInfoUtilXiong from '@/util/indexInfoUtilXiong.js'
 import storageUtil from '@/util/storageUtil.js'
 import operatingTooltip from '@/util/operatingTooltip.js'
@@ -52,8 +57,11 @@ export default{
       distribution,
       totalSum: 0,
       barHeight: 30 * zoom,
+      fixTotalCost: 0,
       fixTotal: 0,
+      monthFixCost: 0,
       otherTotal: 0,
+      monthFix: 0,
       list: [],
       todayAsset: userFundAccountInfo.today_asset
     }
@@ -76,6 +84,9 @@ export default{
           const list = data.data.list
           let totalSum = 0
           let otherTotal = 0
+          let monthFix = 0
+          let fixTotalCost = 0
+          let monthFixCost = 0
           for (let i = 0; i < list.length; i++) {
             const item = list[i]
             totalSum += item.sum
@@ -93,6 +104,13 @@ export default{
                 } else {
                   this.distribution['定投'] = parseInt(item.sum)
                 }
+                fixTotalCost += item.costSum
+                item.position_record.forEach((record) => {
+                  if (moment().isSame(record.confirm_date, 'month')) {
+                    monthFixCost += record.costSum
+                    monthFix += record.sum
+                  }
+                })
               }
             }
           }
@@ -120,6 +138,9 @@ export default{
           proportionList.sort((a, b) => {
             return b.proportion - a.proportion
           })
+          this.monthFix = monthFix
+          this.fixTotalCost = fixTotalCost
+          this.monthFixCost = monthFixCost
           this.list = proportionList
         }
       })

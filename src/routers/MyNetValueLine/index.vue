@@ -332,13 +332,13 @@ export default {
       // 我的
       // 年涨幅
       queryList.push(this.$http.get('userFund/getUserNetValueNowYearRate').then((res) => {
-        this.nowYearRate.my = res.data.rate
-        this.myIncomeRateInfo.nowYear = res.data.rate
+        this.nowYearRate.my = (res.data && res.data.rate) || 0
+        this.myIncomeRateInfo.nowYear = (res.data && res.data.rate) || 0
       }))
       // 月涨幅
       queryList.push(this.$http.get('userFund/getUserNetValueNowMonthRate').then((res) => {
-        this.nowMonthRate.my = res.data.rate
-        this.myIncomeRateInfo.nowMonth = res.data.rate
+        this.nowMonthRate.my = (res.data && res.data.rate) || 0
+        this.myIncomeRateInfo.nowMonth = (res.data && res.data.rate) || 0
       }))
       for (let key in webDataMap) {
         queryList.push(this.$http.get(`webData/${stockDataUtil.getAllUrl()}`, {
@@ -353,13 +353,13 @@ export default {
         queryList.push(this.$http.get('stock/getStockPriceNowYearRate', {
           code: webDataMap[key].code
         }).then((res) => {
-          this.nowYearRate[key] = res.data.rate
+          this.nowYearRate[key] = (res.data && res.data.rate) || 0
         }))
         // 月涨幅
         queryList.push(this.$http.get('stock/getStockPriceNowMonthRate', {
           code: webDataMap[key].code
         }).then((res) => {
-          this.nowMonthRate[key] = res.data.rate
+          this.nowMonthRate[key] = (res.data && res.data.rate) || 0
         }))
       }
       Promise.all(queryList).then(() => {

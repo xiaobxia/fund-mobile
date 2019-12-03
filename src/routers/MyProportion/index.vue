@@ -89,26 +89,26 @@ export default{
           let monthFixCost = 0
           for (let i = 0; i < list.length; i++) {
             const item = list[i]
-            totalSum += item.sum
+            totalSum += item.valuationSum
             if (item.theme) {
               if (item.strategy === '1') {
                 if (this.distribution[item.theme]) {
-                  this.distribution[item.theme] += parseInt(item.sum)
+                  this.distribution[item.theme] += parseInt(item.valuationSum)
                 } else {
-                  this.distribution[item.theme] = parseInt(item.sum)
+                  this.distribution[item.theme] = parseInt(item.valuationSum)
                 }
-                otherTotal += parseInt(item.sum)
+                otherTotal += parseInt(item.valuationSum)
               } else {
                 if (this.distribution['定投']) {
-                  this.distribution['定投'] += parseInt(item.sum)
+                  this.distribution['定投'] += parseInt(item.valuationSum)
                 } else {
-                  this.distribution['定投'] = parseInt(item.sum)
+                  this.distribution['定投'] = parseInt(item.valuationSum)
                 }
                 fixTotalCost += item.costSum
                 item.position_record.forEach((record) => {
                   if (moment().isSame(record.confirm_date, 'month')) {
                     monthFixCost += record.costSum
-                    monthFix += record.sum
+                    monthFix += record.valuationSum
                   }
                 })
               }

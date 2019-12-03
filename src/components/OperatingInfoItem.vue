@@ -501,6 +501,11 @@ export default {
             // 在月线以下，就得卖，除了大反
             if (!this.ifInDafan) {
               classList.push(sellClass)
+            } else {
+              if (this.ifJieFantan()) {
+                // 或者解除反弹了
+                classList.push(sellClass)
+              }
             }
           } else {
             // 如果是卖出信号，那就判断是不是出于大反或者小反

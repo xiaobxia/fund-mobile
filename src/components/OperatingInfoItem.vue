@@ -568,6 +568,9 @@ export default {
         // 在趋势中，什么卖出信号都不用管
         classListF = this.noSell(classList)
       }
+      if (this.lock) {
+        classListF = this.noSell(classList)
+      }
       return classListF
     }
   }

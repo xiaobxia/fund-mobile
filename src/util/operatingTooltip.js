@@ -405,13 +405,13 @@ function getIndexMarketTimeFactor (key) {
   // 4月炒周期
   if (month === 4 || (month === 3 && day > 26)) {
     if (['meitan', 'gangtie', 'youse'].indexOf(key) !== -1) {
-      factor = factor * 1.1
+      factor = factor * 1.2
     }
   }
   // 10月炒小票
   if (month === 9 && day > 26) {
     if (['chuangye', 'chuanmei', 'dianzi', 'jisuanji', 'xinxi'].indexOf(key) !== -1) {
-      factor = factor * 1.1
+      factor = factor * 1.2
     }
   }
   return factor

@@ -8,6 +8,7 @@
         <i class="fas fa-plus" @click="addHandler"></i>
       </mt-button>
     </mt-header>
+    <div class="yellow-warn">如果出金了盈亏就不等于APP内的累计收益</div>
     <div class="main-body">
       <ul
         v-infinite-scroll="loadMore"

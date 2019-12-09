@@ -11,11 +11,11 @@
         <span class="item">当前持仓：{{parseInt(totalSum)}}</span>
         <span class="item">波段资金：{{otherTotal}}</span>
         <span class="item"></span>
-        <span class="item">总定投：{{fixTotal}}<span :class="numberClass(fixTotal-fixTotalCost)">{{parseInt(fixTotal-fixTotalCost)}}</span></span>
+        <span class="item">总定投：{{fixTotal}}<span :class="numberClass(fixTotal-fixTotalCost)">({{parseInt(fixTotal-fixTotalCost)}})</span></span>
         <span class="item">总成本：{{parseInt(fixTotalCost)}}</span>
-        <span class="item">年定投：{{parseInt(yearFix)}}<span :class="numberClass(yearFix-yearFixCost)">{{parseInt(yearFix-yearFixCost)}}</span></span>
+        <span class="item">年定投：{{parseInt(yearFix)}}<span :class="numberClass(yearFix-yearFixCost)">({{parseInt(yearFix-yearFixCost)}})</span></span>
         <span class="item">年成本：{{parseInt(yearFixCost)}}</span>
-        <span class="item">月定投：{{parseInt(monthFix)}}<span :class="numberClass(monthFix-monthFixCost)">{{parseInt(monthFix-monthFixCost)}}</span></span>
+        <span class="item">月定投：{{parseInt(monthFix)}}<span :class="numberClass(monthFix-monthFixCost)">({{parseInt(monthFix-monthFixCost)}})</span></span>
         <span class="item">月成本：{{parseInt(monthFixCost)}}</span>
       </div>
       <div class="content">
@@ -148,11 +148,11 @@ export default{
           proportionList.sort((a, b) => {
             return b.proportion - a.proportion
           })
-          this.monthFix = monthFix
           this.fixTotalCost = fixTotalCost
-          this.monthFixCost = monthFixCost
           this.monthFix = monthFix
           this.monthFixCost = monthFixCost
+          this.yearFix = yearFix
+          this.yearFixCost = yearFixCost
           this.list = proportionList
         }
       })

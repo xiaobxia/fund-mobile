@@ -11,10 +11,12 @@
         <span class="item">当前持仓：{{parseInt(totalSum)}}</span>
         <span class="item">波段资金：{{otherTotal}}</span>
         <span class="item"></span>
-        <span class="item">定投资金：{{fixTotal}}</span>
-        <span class="item">定投成本：{{parseInt(fixTotalCost)}}</span>
-        <span class="item">本月定投：{{parseInt(monthFix)}}</span>
-        <span class="item">本月成本：{{parseInt(monthFixCost)}}</span>
+        <span class="item">总定投：{{fixTotal}}<span :class="numberClass(fixTotal-fixTotalCost)">{{parseInt(fixTotal-fixTotalCost)}}</span></span>
+        <span class="item">总成本：{{parseInt(fixTotalCost)}}</span>
+        <span class="item">年定投：{{parseInt(yearFix)}}<span :class="numberClass(yearFix-yearFixCost)">{{parseInt(yearFix-yearFixCost)}}</span></span>
+        <span class="item">年成本：{{parseInt(yearFixCost)}}</span>
+        <span class="item">月定投：{{parseInt(monthFix)}}<span :class="numberClass(monthFix-monthFixCost)">{{parseInt(monthFix-monthFixCost)}}</span></span>
+        <span class="item">月成本：{{parseInt(monthFixCost)}}</span>
       </div>
       <div class="content">
         <p>定投资金占比</p>
@@ -62,6 +64,8 @@ export default{
       monthFixCost: 0,
       otherTotal: 0,
       monthFix: 0,
+      yearFix: 0,
+      yearFixCost: 0,
       list: [],
       todayAsset: userFundAccountInfo.today_asset
     }
@@ -87,6 +91,8 @@ export default{
           let monthFix = 0
           let fixTotalCost = 0
           let monthFixCost = 0
+          let yearFix = 0
+          let yearFixCost = 0
           for (let i = 0; i < list.length; i++) {
             const item = list[i]
             totalSum += item.valuationSum
@@ -109,6 +115,10 @@ export default{
                   if (moment().isSame(record.confirm_date, 'month')) {
                     monthFixCost += record.costSum
                     monthFix += record.valuationSum
+                  }
+                  if (moment().isSame(record.confirm_date, 'year')) {
+                    yearFixCost += record.costSum
+                    yearFix += record.valuationSum
                   }
                 })
               }
@@ -140,6 +150,8 @@ export default{
           })
           this.monthFix = monthFix
           this.fixTotalCost = fixTotalCost
+          this.monthFixCost = monthFixCost
+          this.monthFix = monthFix
           this.monthFixCost = monthFixCost
           this.list = proportionList
         }

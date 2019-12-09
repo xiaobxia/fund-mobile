@@ -81,5 +81,9 @@ export default {
       timeZone -= 8; currentDate.setHours(tmpHours - timeZone)
     }
     return currentDate
+  },
+  isRound (date, days, today) {
+    today = today || (new Date())
+    return moment(today).isAfter(moment(date).subtract(days, 'days')) && moment(today).isBefore(moment(date).add(days, 'days'))
   }
 }

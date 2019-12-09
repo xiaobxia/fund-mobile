@@ -378,8 +378,8 @@ function assetMarketTimeFactor () {
   if (moment().isAfter(`${year}-11-16`) && moment().isBefore(`${year}-11-30`)) {
     factor = factor * 0.9
   }
-  // 每个月的22日以后都是要谨慎的
-  const quarterList = [3, 6, 9, 11, 12]
+  // 每个月的22日以后都是要谨慎的,要排除季末，也要排除春节行情
+  const quarterList = [1, 2, 3, 6, 9, 11, 12]
   // 不能和季末叠加
   if (quarterList.indexOf(month + 1) === -1) {
     if (day >= 22 && day < 30) {

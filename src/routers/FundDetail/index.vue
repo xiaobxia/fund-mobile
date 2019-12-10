@@ -34,6 +34,10 @@
               <span>份额 {{item.shares}}</span><span>金额 {{item.sum}}</span><span>剩余 {{item.surplus}}</span></div>
             </div>
         </div>
+        <div>
+          <mt-field label="输入金额" placeholder="请输入" v-model="sellMoney"></mt-field>
+          <div>{{sellShare}}</div>
+        </div>
       </div>
       <div class="theme-wrap">
         <span class="name">{{filterTheme}}</span>
@@ -86,7 +90,8 @@ export default {
       filterTheme: '',
       filterList,
       popupVisible: false,
-      canSellInfo: {}
+      canSellInfo: {},
+      sellMoney: 0
     }
   },
 
@@ -99,6 +104,9 @@ export default {
       } else {
         return ''
       }
+    },
+    sellShare () {
+      return parseInt(this.sellMoney / this.currentFund.valuation)
     }
   },
   mounted () {

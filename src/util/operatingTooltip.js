@@ -132,7 +132,7 @@ const kuanji = [
 ]
 
 // 定投占比
-const fixedInvestmentRatio = 0.5
+const fixedInvestmentRatio = 0.4
 
 // 指数数量
 const indexNumber = 24

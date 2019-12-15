@@ -570,9 +570,11 @@ export default {
         // 在趋势中，什么卖出信号都不用管
         classListF = this.noSell(classList)
       }
+      // 锁仓的没有卖出高亮
       if (this.lock) {
         classListF = this.noSell(classList)
       }
+      // 定投阶段没有卖出高亮
       if (this.indexNiuXiong === '定投') {
         classListF = this.noSell(classList)
       }

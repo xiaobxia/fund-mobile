@@ -63,7 +63,7 @@ export default {
   data () {
     return {
       popupVisible: false,
-      filterList: ['正常', '小反', '大反'],
+      filterList: ['正常', '小反', '大反', '定投'],
       niuXiong: '',
       grid: {
         top: '15%',

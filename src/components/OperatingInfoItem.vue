@@ -10,6 +10,7 @@
         <span v-if="ifLaji" class="warn-tag-s operate-tag">垃圾</span>
         <span class="buy-info">{{indexBuyNumber}}</span>
         <span class="buy-info">{{indexSellNumber}}</span>
+        <span v-if="indexNiuXiong === '定投'" class="buy-s has-tag">{{indexNiuXiong}}</span>
         <span v-if="indexNiuXiong === '大反'" class="buy-s has-tag">{{indexNiuXiong}}</span>
         <span v-if="indexNiuXiong === '小反'" class="buy has-tag">{{indexNiuXiong}}</span>
         <span v-if="noSellIndex" class="buy-s has-tag">锁仓</span>
@@ -18,6 +19,7 @@
         <span v-if="!ifDafan() && ifxiaofan()" class="buy-s has-tag">小</span>
         <span v-if="ifDafan()" class="buy-s has-tag">大</span>
         <span v-if="ifFiveUp" class="warn-s has-tag">涨5</span>
+        <span v-if="indexNiuXiong === '定投' && quarterAverage >= 0" class="info-s has-tag">解定</span>
         <span v-if="ifJieFantan()" class="info-s has-tag">解反</span>
         <span v-if="ifUpQuick()" class="sell-s must-tag">涨快</span>
         <span v-if="ifThreeUp && ifLaji" class="sell-s must-tag">卖</span>
@@ -569,6 +571,9 @@ export default {
         classListF = this.noSell(classList)
       }
       if (this.lock) {
+        classListF = this.noSell(classList)
+      }
+      if (this.indexNiuXiong === '定投') {
         classListF = this.noSell(classList)
       }
       return classListF

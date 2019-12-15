@@ -112,7 +112,7 @@ export default {
       nowMonthRate: 0,
       lastDayBuy: [0, 0],
       lastDaySell: [0, 0],
-      niuxiong: [0, 0, 0]
+      niuxiong: [0, 0, 0, 0]
     }
   },
   components: {OperatingInfoItem, OperatingWarn},
@@ -212,6 +212,7 @@ export default {
         let dafan = 0
         let xiaofan = 0
         let zhengchang = 0
+        let dingtou = 0
         for (let i = 0; i < indexList.length; i++) {
           this.queryData(indexList[i])
           const niuxiong = storageUtil.getIndexNiuXiong(indexList[i].key)
@@ -221,9 +222,11 @@ export default {
             xiaofan++
           } else if (niuxiong === '正常') {
             zhengchang++
+          } else if (niuxiong === '定投') {
+            dingtou++
           }
         }
-        this.niuxiong = [dafan, xiaofan, zhengchang]
+        this.niuxiong = [dafan, xiaofan, zhengchang, dingtou]
       })
     },
     qsStringify (query) {

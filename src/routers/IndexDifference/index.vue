@@ -38,6 +38,7 @@ export default {
         threshold: codeMap[key].threshold,
         wave: codeMap[key].wave,
         rate: codeMap[key].rate,
+        fixLine: codeMap[key].fixLine,
         sortRate: 0
       })
       diffInfo[key] = 0
@@ -68,11 +69,21 @@ export default {
           const diff = data.data
           this.diffInfo[item.key] = diff
           storageUtil.setQuarterAverage(item.key, diff)
+          if (diff <= item.fixLine) {
+            this.onNiuXiongChangeHandler(item.key, '定投')
+          }
         }
       })
     },
     backHandler () {
       this.$router.history.go(-1)
+    },
+    onNiuXiongChangeHandler (key, value) {
+      this.$http.post('market/updateIndexNiuXiong', {
+        key: key,
+        value: value
+      }).then((data) => {
+      })
     }
   }
 }

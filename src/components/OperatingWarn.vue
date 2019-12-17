@@ -28,6 +28,7 @@
       <p v-if="myMonthRate>=1.8" class="black-text">建议开始锁定收益，有一个降到60仓的过程，然后再重新按照信号做</p>
       <p class="purple-text bold-text">{{question9}}阶段</p>
       <p>买比{{buy}} 卖比{{sell}}</p>
+      <p>原锁仓数{{noSellCount}}</p>
       <p>大反:{{niuxiong[0]}} 定投:{{niuxiong[3]}} 小反:{{niuxiong[1]}} 正常:{{niuxiong[2]}}</p>
       <!--<p v-if="monthAverage[0]>=16" class="purple-text">可以不卖，高仓的还是要卖</p>-->
       <!--<p v-if="(monthAverage[0]+monthAverage[1])<16" class="purple-text">出卖信号就得卖</p>-->
@@ -86,6 +87,10 @@ export default {
       default: 0
     },
     sellCount: {
+      type: Number,
+      default: 0
+    },
+    noSellCount: {
       type: Number,
       default: 0
     },

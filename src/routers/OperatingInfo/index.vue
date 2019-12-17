@@ -8,6 +8,7 @@
     <div class="main-body">
       <operating-warn
         :buyCount="buyCount"
+        :noSellCount="noSellCount"
         :sellCount="sellCount"
         :countUpNumber="countUpNumber"
         :countDownNumber="countDownNumber"
@@ -40,6 +41,7 @@
         :countUpNumber="countUpNumber"
         :countDownNumber="countDownNumber"
         :type="typeName"
+        :noSellCount="noSellCount"
       />
     </div>
   </div>
@@ -112,7 +114,8 @@ export default {
       nowMonthRate: 0,
       lastDayBuy: [0, 0],
       lastDaySell: [0, 0],
-      niuxiong: [0, 0, 0, 0]
+      niuxiong: [0, 0, 0, 0],
+      noSellCount: 0
     }
   },
   components: {OperatingInfoItem, OperatingWarn},
@@ -319,6 +322,9 @@ export default {
             if (closeList[0] < closeList[1]) {
               this.lastDaySell[0]++
             }
+          }
+          if (storageUtil.getNoSell(item.key)) {
+            this.noSellCount = this.noSellCount + 1
           }
         }
       })

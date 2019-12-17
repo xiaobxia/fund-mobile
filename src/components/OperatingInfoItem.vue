@@ -13,12 +13,12 @@
         <span v-if="indexNiuXiong === '定投'" class="buy-s has-tag">{{indexNiuXiong}}</span>
         <span v-if="indexNiuXiong === '大反'" class="buy-s has-tag">{{indexNiuXiong}}</span>
         <span v-if="indexNiuXiong === '小反'" class="buy has-tag">{{indexNiuXiong}}</span>
-        <span v-if="noSellIndex" class="buy-s has-tag">锁仓</span>
+        <span v-if="noSellIndex || noSellCount >= 18" class="buy-s has-tag">锁仓</span>
         <span v-if="averageMonthIndex > 0" class="buy has-tag">乐观</span>
         <span v-if="averageMonthIndex <= 0" class="sell-s has-tag">空</span>
         <span v-if="!ifDafan() && ifxiaofan()" class="buy-s has-tag">小</span>
         <span v-if="ifDafan()" class="buy-s has-tag">大</span>
-        <span v-if="ifDafan() || ifxiaofan()" class="warn-s has-tag">买原</span>
+        <span v-if="ifDafan() || ifxiaofan() || noSellCount >= 12" class="warn-s has-tag">买原</span>
         <span v-if="ifFiveUp" class="warn-s has-tag">涨5</span>
         <span v-if="indexNiuXiong === '定投' && quarterAverage >= 0" class="info-s has-tag">解定</span>
         <span v-if="ifJieFantan()" class="info-s has-tag">解反</span>
@@ -79,6 +79,10 @@ export default {
     },
     toUrl: String,
     buyCount: {
+      type: Number,
+      default: 0
+    },
+    noSellCount: {
       type: Number,
       default: 0
     },
@@ -204,7 +208,8 @@ export default {
           buyFlagCount: this.buyCount,
           sellFlagCount: this.sellCount,
           netChangeRatio: this.rate,
-          netChangeRatioList: this.netChangeRatioList
+          netChangeRatioList: this.netChangeRatioList,
+          noSellCount: this.noSellCount
         },
         this.hasCount,
         true
@@ -218,7 +223,8 @@ export default {
           buyFlagCount: this.buyCount,
           sellFlagCount: this.sellCount,
           netChangeRatio: this.rate,
-          netChangeRatioList: this.netChangeRatioList
+          netChangeRatioList: this.netChangeRatioList,
+          noSellCount: this.noSellCount
         },
         this.hasCount
       )
@@ -229,7 +235,8 @@ export default {
         this.indexInfo,
         {
           buyFlagCount: this.buyCount,
-          sellFlagCount: this.sellCount
+          sellFlagCount: this.sellCount,
+          noSellCount: this.noSellCount
         },
         this.hasCount
       )
@@ -563,7 +570,7 @@ export default {
       }
       classList.push(shouldClass)
       let classListF = classList
-      if (this.noSellIndex) {
+      if (this.noSellIndex || this.noSellCount >= 18) {
         if (this.rate < 0) {
           // 锁仓阶段可以跌了就买
           classList.push('should-buy')

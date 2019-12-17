@@ -424,6 +424,9 @@ function getBuyBase (type, marketInfo) {
   // 买卖信号因子
   let buySellFactor = 0.34 * ((marketInfo.buyFlagCount - marketInfo.sellFlagCount) / indexNumber)
   finalFactor = finalFactor * (1 + buySellFactor)
+  // 锁仓因子
+  let noSellCountFactor = 0.34 * (marketInfo.noSellCount / indexNumber)
+  finalFactor = finalFactor * (1 + noSellCountFactor)
   // 市场状况
   let marketStateFactor = assetMarketStateFactor()
   finalFactor = finalFactor * marketStateFactor
@@ -446,6 +449,9 @@ function getSellBase (type, marketInfo) {
   // 买卖信号因子
   let buySellFactor = 0.34 * ((marketInfo.sellFlagCount - marketInfo.buyFlagCount) / indexNumber)
   finalFactor = finalFactor * (1 + buySellFactor)
+  // 锁仓因子
+  let noSellCountFactor = 0.34 * (marketInfo.noSellCount / indexNumber)
+  finalFactor = finalFactor * (1 - noSellCountFactor)
   // 市场状况
   let marketStateFactor = assetMarketStateFactor()
   finalFactor = finalFactor * (2 - marketStateFactor)

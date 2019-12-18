@@ -18,7 +18,7 @@
         <span v-if="averageMonthIndex <= 0" class="sell-s has-tag">空</span>
         <span v-if="!ifDafan() && ifxiaofan()" class="buy-s has-tag">小</span>
         <span v-if="ifDafan()" class="buy-s has-tag">大</span>
-        <span v-if="ifDafan() || ifxiaofan() || noSellCount >= 12" class="warn-s has-tag">买原</span>
+        <span v-if="ifDafan() || ifxiaofan()" class="warn-s has-tag">买原</span>
         <span v-if="ifFiveUp" class="warn-s has-tag">涨5</span>
         <span v-if="indexNiuXiong === '定投' && quarterAverage >= 0" class="info-s has-tag">解定</span>
         <span v-if="ifJieFantan()" class="info-s has-tag">解反</span>

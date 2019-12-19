@@ -90,7 +90,7 @@ export default {
       netChangeRatioLargeMap[key] = []
       firstClass[key] = ''
       rateMap[key] = 0
-      lockMap[codeMap[key].name] = false
+      lockMap[codeMap[key].name] = true
       hasCount[codeMap[key].name] = 0
       costCount[codeMap[key].name] = 0
     }
@@ -183,11 +183,11 @@ export default {
                   totalSum += item.sum
                   if (item.ifAllLock) {
                     if (this.lockMap[item.theme] !== '') {
-                      this.lockMap[item.theme] = true
+                      // this.lockMap[item.theme] = true
                     }
                   } else {
                     if (item.canSellSum < 100) {
-                      this.lockMap[item.theme] = true
+                      // this.lockMap[item.theme] = true
                     } else {
                       this.lockMap[item.theme] = false
                     }

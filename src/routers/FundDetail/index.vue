@@ -73,6 +73,11 @@ export default {
       })
     }
     filterList.push({
+      key: 'baijiu',
+      code: 'baijiu',
+      name: '白酒'
+    })
+    filterList.push({
       key: 'kong',
       code: 'kong',
       name: ''

@@ -41,6 +41,7 @@ export default {
         wave: codeMap[key].wave,
         rate: codeMap[key].rate,
         average: codeMap[key].average,
+        reduceLine: codeMap[key].reduceLine,
         sortRate: 0
       })
       diffInfo[key] = 0
@@ -77,7 +78,8 @@ export default {
             averageList.push(this.countDiff(list, i))
           }
           averageList.reverse()
-          this.diffInfo[item.key] = averageList[averageList.length - 1]
+          const drate = averageList[averageList.length - 1]
+          this.diffInfo[item.key] = drate
           let lock = operatingTooltip.ifNoSell(averageList)
           // 移动均线策略
           let now = 0
@@ -95,7 +97,16 @@ export default {
           }
           this.lockInfo[item.key] = lock
           storageUtil.setNoSell(item.key, lock)
-          storageUtil.setMonthAverage(item.key, averageList[averageList.length - 1])
+          storageUtil.setMonthAverage(item.key, drate)
+          let factor = 1
+          if (drate > 0) {
+            // 越靠近-10越小
+            factor = 1 - (0.5 * (drate / item.reduceLine))
+          }
+          if (factor < 0.5) {
+            factor = 0.5
+          }
+          storageUtil.setMonthFactor(item.key, factor)
         }
       })
     },

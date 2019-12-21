@@ -593,6 +593,7 @@ const operatingTooltip = {
     let buyBase = getBuyBase(type, marketInfo)
     let indexQuarterAverageFactor = getQuarterAverageFactor(indexItem.key)
     let indexAverageFactor = getIndexAverageFactor(indexItem.key)
+    let monthAverageFactor = storageUtil.getMonthFactor(indexItem.key) || 1
     let indexMonthDiffFactor = getIndexMonthDiffFactor(indexItem.key)
     let indexYearDiffFactor = getIndexYearDiffFactor(indexItem.key)
     let indexMarketTimeFactor = getIndexMarketTimeFactor(indexItem.key)
@@ -604,7 +605,19 @@ const operatingTooltip = {
       indexNetChangeRatioRateFactor = getIndexNetChangeRatioRateFactor(indexItem.rate, marketInfo.netChangeRatio, 'buy')
     }
     let indexManyDownFactor = getIndexManyDownFactor(indexItem.rate, marketInfo.netChangeRatioList)
-    let buyNumber = buyBase * indexQuarterAverageFactor * indexAverageFactor * indexMonthDiffFactor * indexYearDiffFactor * indexMarketTimeFactor * indexJigouFactor * indexHighRateFactor * indexNetChangeRatioRateFactor * indexLajiFactor * indexManyDownFactor
+    let buyNumber =
+      buyBase *
+      indexQuarterAverageFactor *
+      indexAverageFactor *
+      indexMonthDiffFactor *
+      indexYearDiffFactor *
+      indexMarketTimeFactor *
+      indexJigouFactor *
+      indexHighRateFactor *
+      indexNetChangeRatioRateFactor *
+      indexLajiFactor *
+      indexManyDownFactor *
+      monthAverageFactor
     let finalBuyNumber = buyNumberRedistribution(indexItem, hasCount, buyNumber)
     return Math.round(finalBuyNumber / 100) * 100
   },
@@ -613,6 +626,7 @@ const operatingTooltip = {
     let sellBase = getSellBase(type, marketInfo)
     let indexQuarterAverageFactor = getQuarterAverageFactor(indexItem.key)
     let indexAverageFactor = getIndexAverageFactor(indexItem.key)
+    let monthAverageFactor = storageUtil.getMonthFactor(indexItem.key) || 1
     let indexMonthDiffFactor = getIndexMonthDiffFactor(indexItem.key)
     let indexYearDiffFactor = getIndexYearDiffFactor(indexItem.key)
     let indexMarketTimeFactor = getIndexMarketTimeFactor(indexItem.key)
@@ -620,7 +634,18 @@ const operatingTooltip = {
     let indexLajiFactor = getIndexLajiFactor(indexItem.key, 'sell')
     let indexHighRateFactor = getIndexHighRateFactor(indexItem.key, 'sell')
     let indexNetChangeRatioRateFactor = getIndexNetChangeRatioRateFactor(indexItem.rate, marketInfo.netChangeRatio, 'sell')
-    let sellNumber = sellBase * (2 - indexQuarterAverageFactor) * (2 - indexAverageFactor) * (2 - indexMonthDiffFactor) * (2 - indexYearDiffFactor) * (2 - indexMarketTimeFactor) * indexJigouFactor * indexHighRateFactor * indexNetChangeRatioRateFactor * indexLajiFactor
+    let sellNumber =
+      sellBase *
+      (2 - indexQuarterAverageFactor) *
+      (2 - indexAverageFactor) *
+      (2 - indexMonthDiffFactor) *
+      (2 - indexYearDiffFactor) *
+      (2 - indexMarketTimeFactor) *
+      (2 - monthAverageFactor) *
+      indexJigouFactor *
+      indexHighRateFactor *
+      indexNetChangeRatioRateFactor *
+      indexLajiFactor
     let finalSellNumber = sellNumberRedistribution(indexItem, hasCount, sellNumber)
     return Math.round(finalSellNumber / 100) * 100
   },

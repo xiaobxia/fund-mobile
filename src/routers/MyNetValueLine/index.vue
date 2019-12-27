@@ -34,33 +34,33 @@
           </tr>
           <tr>
             <td>上证</td>
-            <td>{{nowMonthRate.shangzheng}}%<div :class="numberClass(nowMonthRate.my - nowMonthRate.shangzheng)">({{keepTwoDecimals(nowMonthRate.my - nowMonthRate.shangzheng)}}%)</div></td>
-            <td>{{nowYearRate.shangzheng}}%<div :class="numberClass(nowYearRate.my - nowYearRate.shangzheng)">({{keepTwoDecimals(nowYearRate.my - nowYearRate.shangzheng)}}%)</div></td>
+            <td>{{nowMonthRate.shangzheng}}%<div :class="stockNumberClass(nowMonthRate.my - nowMonthRate.shangzheng)">({{keepTwoDecimals(nowMonthRate.my - nowMonthRate.shangzheng)}}%)</div></td>
+            <td>{{nowYearRate.shangzheng}}%<div :class="stockNumberClass(nowYearRate.my - nowYearRate.shangzheng)">({{keepTwoDecimals(nowYearRate.my - nowYearRate.shangzheng)}}%)</div></td>
           </tr>
           <tr>
             <td>创业</td>
-            <td>{{nowMonthRate.chuangye}}%<div :class="numberClass(nowMonthRate.my - nowMonthRate.chuangye)">({{keepTwoDecimals(nowMonthRate.my - nowMonthRate.chuangye)}}%)</div></td>
-            <td>{{nowYearRate.chuangye}}%<div :class="numberClass(nowYearRate.my - nowYearRate.chuangye)">({{keepTwoDecimals(nowYearRate.my - nowYearRate.chuangye)}}%)</div></td>
+            <td>{{nowMonthRate.chuangye}}%<div :class="stockNumberClass(nowMonthRate.my - nowMonthRate.chuangye)">({{keepTwoDecimals(nowMonthRate.my - nowMonthRate.chuangye)}}%)</div></td>
+            <td>{{nowYearRate.chuangye}}%<div :class="stockNumberClass(nowYearRate.my - nowYearRate.chuangye)">({{keepTwoDecimals(nowYearRate.my - nowYearRate.chuangye)}}%)</div></td>
           </tr>
           <tr>
             <td>300</td>
-            <td>{{nowMonthRate.hushen}}%<div :class="numberClass(nowMonthRate.my - nowMonthRate.hushen)">({{keepTwoDecimals(nowMonthRate.my - nowMonthRate.hushen)}}%)</div></td>
-            <td>{{nowYearRate.hushen}}%<div :class="numberClass(nowYearRate.my - nowYearRate.hushen)">({{keepTwoDecimals(nowYearRate.my - nowYearRate.hushen)}}%)</div></td>
+            <td>{{nowMonthRate.hushen}}%<div :class="stockNumberClass(nowMonthRate.my - nowMonthRate.hushen)">({{keepTwoDecimals(nowMonthRate.my - nowMonthRate.hushen)}}%)</div></td>
+            <td>{{nowYearRate.hushen}}%<div :class="stockNumberClass(nowYearRate.my - nowYearRate.hushen)">({{keepTwoDecimals(nowYearRate.my - nowYearRate.hushen)}}%)</div></td>
           </tr>
           <tr>
             <td>50</td>
-            <td>{{nowMonthRate.wulin}}%<div :class="numberClass(nowMonthRate.my - nowMonthRate.wulin)">({{keepTwoDecimals(nowMonthRate.my - nowMonthRate.wulin)}}%)</div></td>
-            <td>{{nowYearRate.wulin}}%<div :class="numberClass(nowYearRate.my - nowYearRate.wulin)">({{keepTwoDecimals(nowYearRate.my - nowYearRate.wulin)}}%)</div></td>
+            <td>{{nowMonthRate.wulin}}%<div :class="stockNumberClass(nowMonthRate.my - nowMonthRate.wulin)">({{keepTwoDecimals(nowMonthRate.my - nowMonthRate.wulin)}}%)</div></td>
+            <td>{{nowYearRate.wulin}}%<div :class="stockNumberClass(nowYearRate.my - nowYearRate.wulin)">({{keepTwoDecimals(nowYearRate.my - nowYearRate.wulin)}}%)</div></td>
           </tr>
           <tr>
             <td>500</td>
-            <td>{{nowMonthRate.wubai}}%<div :class="numberClass(nowMonthRate.my - nowMonthRate.wubai)">({{keepTwoDecimals(nowMonthRate.my - nowMonthRate.wubai)}}%)</div></td>
-            <td>{{nowYearRate.wubai}}%<div :class="numberClass(nowYearRate.my - nowYearRate.wubai)">({{keepTwoDecimals(nowYearRate.my - nowYearRate.wubai)}}%)</div></td>
+            <td>{{nowMonthRate.wubai}}%<div :class="stockNumberClass(nowMonthRate.my - nowMonthRate.wubai)">({{keepTwoDecimals(nowMonthRate.my - nowMonthRate.wubai)}}%)</div></td>
+            <td>{{nowYearRate.wubai}}%<div :class="stockNumberClass(nowYearRate.my - nowYearRate.wubai)">({{keepTwoDecimals(nowYearRate.my - nowYearRate.wubai)}}%)</div></td>
           </tr>
           <tr>
             <td>1000</td>
-            <td>{{nowMonthRate.yiqian}}%<div :class="numberClass(nowMonthRate.my - nowMonthRate.yiqian)">({{keepTwoDecimals(nowMonthRate.my - nowMonthRate.yiqian)}}%)</div></td>
-            <td>{{nowYearRate.yiqian}}%<div :class="numberClass(nowYearRate.my - nowYearRate.yiqian)">({{keepTwoDecimals(nowYearRate.my - nowYearRate.yiqian)}}%)</div></td>
+            <td>{{nowMonthRate.yiqian}}%<div :class="stockNumberClass(nowMonthRate.my - nowMonthRate.yiqian)">({{keepTwoDecimals(nowMonthRate.my - nowMonthRate.yiqian)}}%)</div></td>
+            <td>{{nowYearRate.yiqian}}%<div :class="stockNumberClass(nowYearRate.my - nowYearRate.yiqian)">({{keepTwoDecimals(nowYearRate.my - nowYearRate.yiqian)}}%)</div></td>
           </tr>
         </table>
         <ve-histogram :grid="monthRateGrid"
@@ -80,7 +80,7 @@ import dateUtil from '@/util/dateUtil.js'
 import arrayUtil from '@/util/arrayUtil.js'
 import {Indicator} from 'mint-ui'
 import storageUtil from '@/util/storageUtil.js'
-import stockDataUtil from '@/util/stockDataUtil.js'
+import stockApiUtil from '@/util/stockApiUtil.js'
 
 const zoom = window.adaptive.zoom
 const baseFontSize = 22
@@ -341,7 +341,7 @@ export default {
         this.myIncomeRateInfo.nowMonth = (res.data && res.data.rate) || 0
       }))
       for (let key in webDataMap) {
-        queryList.push(this.$http.get(`webData/${stockDataUtil.getAllUrl()}`, {
+        queryList.push(this.$http.get(`webData/${stockApiUtil.getAllUrl()}`, {
           code: webDataMap[key].code,
           days
         }).then((data) => {

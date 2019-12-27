@@ -22,7 +22,7 @@ Vue.config.productionTip = false
 
 Vue.prototype.$http = Http
 
-Vue.prototype.numberClass = function (number) {
+Vue.prototype.stockNumberClass = function (number) {
   if (!number) {
     return ''
   }

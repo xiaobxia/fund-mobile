@@ -39,7 +39,7 @@
               {{item.code}} {{formatFundName(item.name, 11)}}
               <i class="sell-tag" v-if="!item.sell"></i>
               <i class="theme-tag" v-if="!item.theme"></i>
-              <span style="float: right" :class="numberClass(item.change_ratio)">{{item.change_ratio}}%</span>
+              <span style="float: right" :class="stockNumberClass(item.change_ratio)">{{item.change_ratio}}%</span>
             </h3>
           </div>
         </mt-cell-swipe>

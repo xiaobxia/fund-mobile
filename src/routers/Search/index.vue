@@ -14,7 +14,7 @@
           <mt-cell-swipe v-for="(item) in showList" :key="item.code" :to="'/page/fundDetail?code='+item.code">
             <div slot="title">
               <h3 :class="{lowRate: item.low_rate}">{{item.code}} {{formatFundName(item.name)}} <span style="float: right"
-                                                                                                     :class="numberClass(item.change_ratio)">{{item.change_ratio}}%</span></h3>
+                                                                                                     :class="stockNumberClass(item.change_ratio)">{{item.change_ratio}}%</span></h3>
             </div>
           </mt-cell-swipe>
         </div>

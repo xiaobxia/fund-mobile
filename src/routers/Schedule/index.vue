@@ -28,7 +28,7 @@ export default {
       scheduleList: []
     }
   },
-  mounted () {
+  created () {
     this.initPage()
   },
   methods: {

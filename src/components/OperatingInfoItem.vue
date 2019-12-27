@@ -29,7 +29,7 @@
         <span v-if="jukui" class="danger-tag-s operate-tag">巨亏</span>
         <span v-if="ifFakeAsset" class="info-s has-tag">假</span>
         <span v-if="ifDownQuick()" class="buy-s has-tag">跌快</span>
-        <span style="float: right" :class="numberClass(rate)">{{rate}}%</span>
+        <span style="float: right" :class="stockNumberClass(rate)">{{rate}}%</span>
       </h3>
       <p class="explain">
             <span v-for="(subItem, index) in buySellList" :key="subItem + index"

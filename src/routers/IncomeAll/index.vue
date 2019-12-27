@@ -18,27 +18,27 @@
           </tr>
           <tr>
             <td>上证</td>
-            <td>{{allRate.shangzheng}}% <span :class="numberClass(allRate.my - allRate.shangzheng)">( {{keepTwoDecimals(allRate.my - allRate.shangzheng)}}% )</span></td>
+            <td>{{allRate.shangzheng}}% <span :class="stockNumberClass(allRate.my - allRate.shangzheng)">( {{keepTwoDecimals(allRate.my - allRate.shangzheng)}}% )</span></td>
           </tr>
           <tr>
             <td>创业</td>
-            <td>{{allRate.chuangye}}% <span :class="numberClass(allRate.my - allRate.chuangye)">( {{keepTwoDecimals(allRate.my - allRate.chuangye)}}% )</span></td>
+            <td>{{allRate.chuangye}}% <span :class="stockNumberClass(allRate.my - allRate.chuangye)">( {{keepTwoDecimals(allRate.my - allRate.chuangye)}}% )</span></td>
           </tr>
           <tr>
             <td>上证50</td>
-            <td>{{allRate.wulin}}% <span :class="numberClass(allRate.my - allRate.wulin)">( {{keepTwoDecimals(allRate.my - allRate.wulin)}}% )</span></td>
+            <td>{{allRate.wulin}}% <span :class="stockNumberClass(allRate.my - allRate.wulin)">( {{keepTwoDecimals(allRate.my - allRate.wulin)}}% )</span></td>
           </tr>
           <tr>
             <td>沪深300</td>
-            <td>{{allRate.hushen}}% <span :class="numberClass(allRate.my - allRate.hushen)">( {{keepTwoDecimals(allRate.my - allRate.hushen)}}% )</span></td>
+            <td>{{allRate.hushen}}% <span :class="stockNumberClass(allRate.my - allRate.hushen)">( {{keepTwoDecimals(allRate.my - allRate.hushen)}}% )</span></td>
           </tr>
           <tr>
             <td>沪深500</td>
-            <td>{{allRate.wubai}}% <span :class="numberClass(allRate.my - allRate.wubai)">( {{keepTwoDecimals(allRate.my - allRate.wubai)}}% )</span></td>
+            <td>{{allRate.wubai}}% <span :class="stockNumberClass(allRate.my - allRate.wubai)">( {{keepTwoDecimals(allRate.my - allRate.wubai)}}% )</span></td>
           </tr>
           <tr>
             <td>沪深1000</td>
-            <td>{{allRate.yiqian}}% <span :class="numberClass(allRate.my - allRate.yiqian)">( {{keepTwoDecimals(allRate.my - allRate.yiqian)}}% )</span></td>
+            <td>{{allRate.yiqian}}% <span :class="stockNumberClass(allRate.my - allRate.yiqian)">( {{keepTwoDecimals(allRate.my - allRate.yiqian)}}% )</span></td>
           </tr>
         </table>
       </div>

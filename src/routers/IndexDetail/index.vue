@@ -16,7 +16,7 @@
                  :settings="chartSettings" :tooltip="chartTooltip" :grid="grid" :dataZoom="dataZoom"></ve-line>
       </div>
       <div class="index-rate">
-        <span :class="numberClass(indexChangeRatio)">{{indexChangeRatio}}%</span>
+        <span :class="stockNumberClass(indexChangeRatio)">{{indexChangeRatio}}%</span>
       </div>
       <div class="fund-list simple">
         <mt-cell-swipe v-for="(item) in list" :key="item.code" :to="'/page/fundDetail?code='+item.code" :class="item.has?'has-back':''">
@@ -25,7 +25,7 @@
               {{item.code}} {{formatFundName(item.name)}}
               <i class="lock-tag" v-if="item.ifAllLock"></i>
               <i class="dingtou-tag" v-if="ifFixedInvestment(item)"></i>
-              <span style="float: right" :class="numberClass(item.change_ratio)">{{item.change_ratio}}%</span>
+              <span style="float: right" :class="stockNumberClass(item.change_ratio)">{{item.change_ratio}}%</span>
             </h3>
             <p class="buysell"><span>买入: {{item.buy_rate_one}}</span><span>卖出: {{item.sell_rate_two}}</span><span>成本: {{keepTwoDecimals(item.buy_rate_one + item.sell_rate_two)}}</span></p>
           </div>
@@ -45,7 +45,7 @@
 <script>
 import indexInfoUtilXiong from '@/util/indexInfoUtilXiong.js'
 import indexInfoUtilJian from '@/util/indexInfoUtilJian.js'
-import stockDataUtil from '@/util/stockDataUtil.js'
+import stockApiUtil from '@/util/stockApiUtil.js'
 import storageUtil from '@/util/storageUtil.js'
 import Toast from '@/common/toast.js'
 import fundAccountUtil from '@/util/fundAccountUtil.js'
@@ -228,7 +228,7 @@ export default {
       const query = this.$router.history.current.query
       this.queryData = Object.assign({}, query)
       this.niuXiong = storageUtil.getIndexNiuXiong(query.key)
-      this.$http.get(`webData/${stockDataUtil.getAllUrl()}`, {
+      this.$http.get(`webData/${stockApiUtil.getAllUrl()}`, {
         code: query.code,
         days: 200
       }).then((data) => {

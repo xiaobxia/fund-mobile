@@ -16,7 +16,7 @@
         <div slot="title">
           <h3>
             {{item.name}}
-            <span style="float: right" :class="numberClass(rateInfo[item.key])">{{rateInfo[item.key]}}%</span>
+            <span style="float: right" :class="stockNumberClass(rateInfo[item.key])">{{rateInfo[item.key]}}%</span>
           </h3>
           <p class="netChange wn">
             <span v-for="(subItem, index) in klineMap[item.key]" :key="index"
@@ -34,7 +34,7 @@
 
 <script>
 import changeMarket from '@/util/changeMarket.js'
-import stockDataUtil from '@/util/stockDataUtil.js'
+import stockApiUtil from '@/util/stockApiUtil.js'
 import storageUtil from '@/util/storageUtil.js'
 
 const codeMap = changeMarket.codeMap
@@ -83,7 +83,7 @@ export default {
       }
     },
     queryData (item) {
-      this.$http.getWithCache(`webData/${stockDataUtil.getAllUrl()}`, {
+      this.$http.getWithCache(`webData/${stockApiUtil.getAllUrl()}`, {
         code: item.code,
         days: 12
       }, {interval: 30}).then((data) => {

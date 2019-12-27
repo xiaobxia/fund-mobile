@@ -12,7 +12,7 @@
             <span class="name">{{item.name}}</span>
             <span v-if="hasCount[item.name]" class="has-count">{{hasCount[item.name]}}</span>
             <span class="paiming">{{index + 1}}</span>
-            <span style="float: right" :class="numberClass(rateInfo[item.key])">{{rateInfo[item.key]}}%</span>
+            <span style="float: right" :class="stockNumberClass(rateInfo[item.key])">{{rateInfo[item.key]}}%</span>
           </h3>
         </div>
       </mt-cell-swipe>

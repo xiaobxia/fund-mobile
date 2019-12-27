@@ -10,7 +10,7 @@
         <div slot="title">
           <h3>
             {{item.name}}
-            <span style="float: right" :class="numberClass(diffInfo[item.key])">{{diffInfo[item.key]}}%</span>
+            <span style="float: right" :class="stockNumberClass(diffInfo[item.key])">{{diffInfo[item.key]}}%</span>
           </h3>
         </div>
       </mt-cell-swipe>
@@ -20,7 +20,7 @@
 
 <script>
 import indexInfoUtilXiong from '@/util/indexInfoUtilXiong.js'
-import stockDataUtil from '@/util/stockDataUtil.js'
+import stockApiUtil from '@/util/stockApiUtil.js'
 import storageUtil from '@/util/storageUtil.js'
 import operatingTooltip from '@/util/operatingTooltip.js'
 
@@ -66,7 +66,7 @@ export default {
       }
     },
     queryData (item) {
-      this.$http.getWithCache(`webData/${stockDataUtil.getAllUrl()}`, {
+      this.$http.getWithCache(`webData/${stockApiUtil.getAllUrl()}`, {
         code: item.code,
         days: 30
       }, {interval: 30}).then((data) => {

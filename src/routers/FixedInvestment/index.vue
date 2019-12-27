@@ -10,11 +10,11 @@
         <div slot="title">
           <h3>
             <span class="index-name">{{item.name}}</span>
-            <span :class="numberClass(averageDiff[item.key])">{{averageDiff[item.key]}}</span>
+            <span :class="stockNumberClass(averageDiff[item.key])">{{averageDiff[item.key]}}</span>
             <span>{{canBuy[item.key]}}</span>
             <span class="green-text">{{canSell[item.key]}}</span>
             <span v-if="hasCount[item.name]" class="has-count">{{hasCount[item.name]}}</span>
-            <span style="float: right" :class="numberClass(rateInfo[item.key])">{{rateInfo[item.key]}}%</span>
+            <span style="float: right" :class="stockNumberClass(rateInfo[item.key])">{{rateInfo[item.key]}}%</span>
           </h3>
           <p class="netChange wn">
             <span v-for="(subItem, index) in klineMap[item.key]" :key="index"
@@ -32,7 +32,7 @@
 
 <script>
 import fixedInvestment from '@/util/platformFixedInvestment.js'
-import stockDataUtil from '@/util/stockDataUtil.js'
+import stockApiUtil from '@/util/stockApiUtil.js'
 
 const codeMap = fixedInvestment.codeMap
 const InfoUtil = fixedInvestment.Util
@@ -295,7 +295,7 @@ export default {
       })
     },
     queryData (item) {
-      this.$http.getWithCache(`webData/${stockDataUtil.getAllUrl()}`, {
+      this.$http.getWithCache(`webData/${stockApiUtil.getAllUrl()}`, {
         code: item.code,
         days: 16
       }, {interval: 30}).then((data) => {

@@ -11,12 +11,12 @@
         <span class="item">当前持仓：{{parseInt(totalSum)}}</span>
         <span class="item">波段资金：{{otherTotal}}</span>
         <span class="item"></span>
-        <span class="item">总定投:{{fixTotal}}<span :class="numberClass(fixTotal-fixTotalCost)">({{parseInt(fixTotal-fixTotalCost)}})</span></span>
-        <span class="item">总成本:{{parseInt(fixTotalCost)}}<span :class="numberClass(fixTotal-fixTotalCost)">({{countDifferenceRate(fixTotal, fixTotalCost)}}%)</span></span>
-        <span class="item">年定投:{{parseInt(yearFix)}}<span :class="numberClass(yearFix-yearFixCost)">({{parseInt(yearFix-yearFixCost)}})</span></span>
-        <span class="item">年成本:{{parseInt(yearFixCost)}}<span :class="numberClass(yearFix-yearFixCost)">({{countDifferenceRate(yearFix, yearFixCost)}}%)</span></span>
-        <span class="item">月定投:{{parseInt(monthFix)}}<span :class="numberClass(monthFix-monthFixCost)">({{parseInt(monthFix-monthFixCost)}})</span></span>
-        <span class="item">月成本:{{parseInt(monthFixCost)}}<span :class="numberClass(monthFix-monthFixCost)">({{countDifferenceRate(monthFix, monthFixCost)}}%)</span></span>
+        <span class="item">总定投:{{fixTotal}}<span :class="stockNumberClass(fixTotal-fixTotalCost)">({{parseInt(fixTotal-fixTotalCost)}})</span></span>
+        <span class="item">总成本:{{parseInt(fixTotalCost)}}<span :class="stockNumberClass(fixTotal-fixTotalCost)">({{countDifferenceRate(fixTotal, fixTotalCost)}}%)</span></span>
+        <span class="item">年定投:{{parseInt(yearFix)}}<span :class="stockNumberClass(yearFix-yearFixCost)">({{parseInt(yearFix-yearFixCost)}})</span></span>
+        <span class="item">年成本:{{parseInt(yearFixCost)}}<span :class="stockNumberClass(yearFix-yearFixCost)">({{countDifferenceRate(yearFix, yearFixCost)}}%)</span></span>
+        <span class="item">月定投:{{parseInt(monthFix)}}<span :class="stockNumberClass(monthFix-monthFixCost)">({{parseInt(monthFix-monthFixCost)}})</span></span>
+        <span class="item">月成本:{{parseInt(monthFixCost)}}<span :class="stockNumberClass(monthFix-monthFixCost)">({{countDifferenceRate(monthFix, monthFixCost)}}%)</span></span>
       </div>
       <div class="content">
         <p>定投资金占比</p>

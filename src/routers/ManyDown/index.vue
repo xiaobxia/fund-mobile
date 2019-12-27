@@ -10,7 +10,7 @@
         <div slot="title">
           <h3>
             <span class="index-name">{{item.name}}</span>
-            <span style="float: right" :class="numberClass(rateInfo[item.key])">{{rateInfo[item.key]}}%</span>
+            <span style="float: right" :class="stockNumberClass(rateInfo[item.key])">{{rateInfo[item.key]}}%</span>
           </h3>
           <p class="netChange wn">
             <span v-for="(subItem, index) in klineMap[item.key]" :key="index"
@@ -28,7 +28,7 @@
 
 <script>
 import indexInfoUtilXiong from '@/util/indexInfoUtilXiong.js'
-import stockDataUtil from '@/util/stockDataUtil.js'
+import stockApiUtil from '@/util/stockApiUtil.js'
 
 const codeMap = indexInfoUtilXiong.codeMap
 const formatData = indexInfoUtilXiong.formatData
@@ -123,7 +123,7 @@ export default {
       }
     },
     queryData (item) {
-      this.$http.getWithCache(`webData/${stockDataUtil.getAllUrl()}`, {
+      this.$http.getWithCache(`webData/${stockApiUtil.getAllUrl()}`, {
         code: item.code,
         days: 22
       }, {interval: 30}).then((data) => {

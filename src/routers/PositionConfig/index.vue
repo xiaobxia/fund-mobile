@@ -17,19 +17,24 @@
 <script>
 import storageUtil from '@/util/storageUtil.js'
 import Toast from '@/common/toast.js'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'PositionConfig',
   data () {
-    const userFundAccountInfo = storageUtil.getUserFundAccountInfo()
     return {
-      position: userFundAccountInfo.position_config || 100
+      position: 100
     }
   },
-  computed: {},
+  computed: {
+    ...mapGetters([
+      'userFundAccountInfo'
+    ])
+  },
   watch: {
   },
-  mounted () {
+  created () {
+    this.position = parseFloat(this.userFundAccountInfo)
     this.initPage()
   },
   methods: {

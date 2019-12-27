@@ -68,31 +68,12 @@ export default {
     }
   },
   components: {Index, Mine, Fund, ConfigCenter, Square},
-  mounted () {
+  created () {
     this.initPage()
   },
   methods: {
     initPage () {
       this.checkLogin()
-      this.checkSubPath(this.$router.history.current.path)
-      // 刷新的时候before和after都不会执行
-      this.$router.beforeEach((transition, from, next) => {
-        if (this.checkAuthPath(transition)) {
-          const user = storageUtil.getUserInfo()
-          this.checkUser(user, transition)
-        }
-        this.checkSubPath(transition.path)
-        next()
-      })
-      // after只有真正进入了页面才会执行
-      this.$router.afterEach((transition) => {
-        // 验证路由过去是否需要登录状态
-        if (this.checkAuthPath(transition)) {
-          const user = storageUtil.getUserInfo()
-          this.checkUser(user, transition)
-        }
-        this.checkSubPath(transition.path)
-      })
     },
     checkLogin () {
       const token = localStorage.getItem('token') || ''
@@ -102,18 +83,15 @@ export default {
           storageUtil.setData('userInfo', {
             isLogin: false
           })
-          const user = storageUtil.getData('userInfo')
           this.ifChecked = true
-          if (user.isLogin !== true) {
-            this.$router.push('/page/login')
-          }
+          this.$router.push('/page/login')
         } else {
           this.$http.get('user/getUserAccountInfo').then((res) => {
             this.$store.commit('updateUserFundAccountInfo', res.data)
             this.ifChecked = true
             this.otherDataInit()
           })
-          storageUtil.getData('userInfo', {
+          storageUtil.setData('userInfo', {
             ...data.data,
             isLogin: true
           })

@@ -52,7 +52,7 @@ import indexInfoUtilXiong from '@/util/indexInfoUtilXiong.js'
 import indexInfoUtilJian from '@/util/indexInfoUtilJian.js'
 import qs from 'qs'
 import storageUtil from '@/util/storageUtil.js'
-import stockDataUtil from '@/util/stockDataUtil.js'
+import stockApiUtil from '@/util/stockApiUtil.js'
 import OperatingInfoItem from '@/components/OperatingInfoItem.vue'
 import OperatingWarn from '@/components/OperatingWarn.vue'
 
@@ -236,7 +236,7 @@ export default {
       return qs.stringify(query)
     },
     queryData (item) {
-      this.$http.getWithCache(`webData/${stockDataUtil.getAllUrl()}`, {
+      this.$http.getWithCache(`webData/${stockApiUtil.getAllUrl()}`, {
         code: item.code,
         days: 12
       }, {interval: 30}).then((data) => {

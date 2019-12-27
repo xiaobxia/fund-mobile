@@ -18,13 +18,13 @@
           <div slot="title">
             <h3>
               {{item.net_value_date}}
-              <span style="float: right" :class="numberClass(item.rate)">{{item.rate}}%</span>
+              <span style="float: right" :class="stockNumberClass(item.rate)">{{item.rate}}%</span>
             </h3>
             <p class="explain">
               <span class="item">成本：<span>{{item.asset_cost}}</span></span>
               <span class="item">份额：<span>{{item.shares}}</span></span>
               <span class="item">净值：<span>{{item.net_value}}</span></span>
-              <span class="item">盈亏：<span :class="numberClass(item.asset - item.asset_cost)">{{item.asset - item.asset_cost}}</span></span>
+              <span class="item">盈亏：<span :class="stockNumberClass(item.asset - item.asset_cost)">{{item.asset - item.asset_cost}}</span></span>
             </p>
           </div>
         </mt-cell-swipe>

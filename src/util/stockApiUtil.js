@@ -11,10 +11,10 @@ const todayDataList = {
 }
 
 function getWay () {
-  return storageUtil.getAppConfig('dataWay') || '腾讯'
+  return storageUtil.getData('appConfig', 'stockApiWay') || '腾讯'
 }
 
-const stockDataUtil = {
+const stockApiUtil = {
   getAllUrl: function () {
     const dataWay = getWay()
     return allDataList[dataWay]
@@ -24,4 +24,4 @@ const stockDataUtil = {
     return todayDataList[dataWay]
   }
 }
-export default stockDataUtil
+export default stockApiUtil

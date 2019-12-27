@@ -8,10 +8,10 @@
     <div class="main-body">
       <mt-radio
         align="right"
-        v-model="dataWay"
-        :options="['中金', '东方', '腾讯', '雪球']">
+        v-model="stockApiWay"
+        :options="['东方', '腾讯', '雪球']">
       </mt-radio>
-      <mt-button type="primary" @click="clearHandler" class="main-btn">清除本地存储数据</mt-button>
+      <mt-button type="primary" @click="clearHandler" class="bottom-bar">清除本地存储数据</mt-button>
     </div>
   </div>
 </template>
@@ -23,17 +23,17 @@ import storageUtil from '@/util/storageUtil.js'
 export default {
   name: 'DataConfig',
   data () {
-    const dataWay = storageUtil.getAppConfig('dataWay') || '腾讯'
+    const stockApiWay = storageUtil.getData('appConfig', 'stockApiWay') || '腾讯'
     return {
-      dataWay: dataWay
+      stockApiWay
     }
   },
   watch: {
-    dataWay (val) {
-      storageUtil.setAppConfig('dataWay', val)
+    stockApiWay (val) {
+      storageUtil.setData('appConfig', 'stockApiWay', val)
     }
   },
-  mounted () {
+  created () {
   },
   methods: {
     backHandler () {
@@ -42,6 +42,9 @@ export default {
     clearHandler () {
       localStorage.clear()
       Toast.success('操作成功')
+      setTimeout(() => {
+        location.reload()
+      }, 1000)
     }
   }
 }

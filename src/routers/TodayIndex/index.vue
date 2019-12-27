@@ -7,16 +7,16 @@
     </mt-header>
     <div class="main-body">
       <div class="income-info">
-        <span :class="numberClass(income)">{{income}} --- {{incomeRate}}% --- {{incomeRelativeRate}}%</span>
-        <span :class="numberClass(incomeDiff)"> --- {{incomeDiff}}</span>
+        <span :class="stockNumberClass(income)">{{income}} --- {{incomeRate}}% --- {{incomeRelativeRate}}%</span>
+        <span :class="stockNumberClass(incomeDiff)"> --- {{incomeDiff}}</span>
       </div>
       <mt-cell-swipe v-for="(item) in list" :key="item.code"  :class="item.mix ? 'has-back':''">
         <div slot="title">
           <h3>
             <span class="name">{{item.name}}</span>
             <span v-if="hasCount[item.name]" class="has-count">{{hasCount[item.name]}}</span>
-            <span v-if="hasCount[item.name]" :class="['income', numberClass(rateInfo[item.key])]">{{parseInt(rateInfo[item.key]*hasCount[item.name] / 100)}}</span>
-            <span style="float: right" :class="numberClass(rateInfo[item.key])">{{rateInfo[item.key]}}%</span>
+            <span v-if="hasCount[item.name]" :class="['income', stockNumberClass(rateInfo[item.key])]">{{parseInt(rateInfo[item.key]*hasCount[item.name] / 100)}}</span>
+            <span style="float: right" :class="stockNumberClass(rateInfo[item.key])">{{rateInfo[item.key]}}%</span>
           </h3>
           <div class="rate-info-icon">
             <i v-if="indexRateInfo[item.key] === 'up'" class="fas fa-long-arrow-alt-up up"></i>
@@ -34,7 +34,7 @@
 <script>
 import moment from 'moment'
 import storageUtil from '@/util/storageUtil.js'
-import stockDataUtil from '@/util/stockDataUtil.js'
+import stockApiUtil from '@/util/stockApiUtil.js'
 
 const codeMap = {
   'chuangye': {
@@ -305,7 +305,7 @@ export default {
       }
     },
     queryData (item) {
-      return this.$http.getWithCache(`webData/${stockDataUtil.getTodayUrl()}`, {
+      return this.$http.getWithCache(`webData/${stockApiUtil.getTodayUrl()}`, {
         code: item.code
       }, {interval: 30}).then((data) => {
         if (data.success) {

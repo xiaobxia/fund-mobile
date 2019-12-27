@@ -12,15 +12,15 @@
         <span class="item">仓位信息：{{myPosition}}%</span>
         <span class="item">可卖金额：{{parseInt(canSellSum)}}</span>
         <span class="item">锁仓金额：{{parseInt(lockCostSum)}}</span>
-        <span class="item">锁仓收益：<span :class="numberClass(lockIncome)">{{parseInt(lockIncome)}}</span></span>
-        <span class="item">估算收益：<span :class="numberClass(valuationInfo)">{{parseInt(valuationInfo)}}</span></span>
-        <span class="item">估算比率：<span :class="numberClass(todayIncomeRatio)">{{todayIncomeRatio}}%</span></span>
+        <span class="item">锁仓收益：<span :class="stockNumberClass(lockIncome)">{{parseInt(lockIncome)}}</span></span>
+        <span class="item">估算收益：<span :class="stockNumberClass(valuationInfo)">{{parseInt(valuationInfo)}}</span></span>
+        <span class="item">估算比率：<span :class="stockNumberClass(todayIncomeRatio)">{{todayIncomeRatio}}%</span></span>
         <span class="item">最新购买：{{parseInt(lastBuy)}}</span>
-        <span class="item">新买收益：<span :class="numberClass(lastBuyChange)">{{parseInt(lastBuyChange)}}</span></span>
-        <span class="item">净值波动：<span :class="numberClass(relativeRate)">{{relativeRate}}%</span></span>
-        <span class="item">沪深300：<span :class="numberClass(hushenChangeRatio)">{{hushenChangeRatio}}%</span></span>
-        <span class="item">创业板：<span :class="numberClass(chuangyeChangeRatio)">{{chuangyeChangeRatio}}%</span></span>
-        <span class="item">上证50：<span :class="numberClass(wulinChangeRatio)">{{wulinChangeRatio}}%</span></span>
+        <span class="item">新买收益：<span :class="stockNumberClass(lastBuyChange)">{{parseInt(lastBuyChange)}}</span></span>
+        <span class="item">净值波动：<span :class="stockNumberClass(relativeRate)">{{relativeRate}}%</span></span>
+        <span class="item">沪深300：<span :class="stockNumberClass(hushenChangeRatio)">{{hushenChangeRatio}}%</span></span>
+        <span class="item">创业板：<span :class="stockNumberClass(chuangyeChangeRatio)">{{chuangyeChangeRatio}}%</span></span>
+        <span class="item">上证50：<span :class="stockNumberClass(wulinChangeRatio)">{{wulinChangeRatio}}%</span></span>
       </div>
       <div class="lastUpdateValuationTime">更新于：{{lastUpdateValuationTime}}</div>
       <my-fund-card  v-for="(item) in cardInfo" :key="item.name"  :listData="item.list" :title="item.name"/>
@@ -33,7 +33,7 @@ import moment from 'moment'
 import MyFundCard from '@/components/MyFundCard.vue'
 import fundAccountUtil from '@/util/fundAccountUtil.js'
 import indexInfoUtil from '@/util/indexInfoUtilXiong.js'
-import stockDataUtil from '@/util/stockDataUtil.js'
+import stockApiUtil from '@/util/stockApiUtil.js'
 import storageUtil from '@/util/storageUtil.js'
 
 const codeMap = indexInfoUtil.codeMap
@@ -182,7 +182,7 @@ export default {
     },
     queryStockData () {
       // 沪深300
-      this.$http.getWithCache(`webData/${stockDataUtil.getTodayUrl()}`, {
+      this.$http.getWithCache(`webData/${stockApiUtil.getTodayUrl()}`, {
         code: 'sh000300'
       }, {interval: 30}).then((data) => {
         if (data.success) {
@@ -190,7 +190,7 @@ export default {
         }
       })
       // 创业板
-      this.$http.getWithCache(`webData/${stockDataUtil.getTodayUrl()}`, {
+      this.$http.getWithCache(`webData/${stockApiUtil.getTodayUrl()}`, {
         code: 'sz399006'
       }, {interval: 30}).then((data) => {
         if (data.success) {
@@ -198,7 +198,7 @@ export default {
         }
       })
       // 上证50
-      this.$http.getWithCache(`webData/${stockDataUtil.getTodayUrl()}`, {
+      this.$http.getWithCache(`webData/${stockApiUtil.getTodayUrl()}`, {
         code: 'sh000016'
       }, {interval: 30}).then((data) => {
         if (data.success) {

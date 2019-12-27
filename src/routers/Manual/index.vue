@@ -7,13 +7,13 @@
     </mt-header>
     <div class="main-body">
       <mt-button type="primary" @click="verifyMarketOpening" class="main-btn">验证股票开盘</mt-button>
-      <mt-button type="primary" @click="openWork" class="main-btn">开盘准备</mt-button>
+      <mt-button type="primary" @click="openWork" class="main-btn">开盘工作</mt-button>
       <mt-button type="primary" @click="updateFundBaseInfo" class="main-btn">更新净值</mt-button>
-      <mt-button type="primary" @click="betterValuation" class="main-btn">更新估值源</mt-button>
       <mt-button type="primary" @click="updateValuation" class="main-btn">更新估值</mt-button>
-      <mt-button type="primary" @click="updateRate" class="main-btn">更新涨跌幅</mt-button>
-      <mt-button type="primary" @click="updateFundBuySellRate" class="main-btn">更新买卖费率</mt-button>
       <mt-button type="primary" @click="updateFixYearAverage" class="main-btn">更新定投年线</mt-button>
+      <mt-button type="primary" @click="closeWork" class="main-btn">闭市工作</mt-button>
+      <mt-button type="primary" @click="reInitPreNetValue" class="main-btn">重新初始化pre_net_value</mt-button>
+      <mt-button type="primary" @click="addStockPrice" class="main-btn">添加最新股票数据</mt-button>
     </div>
   </div>
 </template>
@@ -40,7 +40,7 @@ export default {
       Indicator.open({
         spinnerType: 'fading-circle'
       })
-      this.$http.get('schedule/verifyMarketOpening').then(() => {
+      this.$http.get('stock/verifyStockMarketOpen').then(() => {
         Indicator.close()
       })
     },
@@ -48,7 +48,7 @@ export default {
       Indicator.open({
         spinnerType: 'fading-circle'
       })
-      this.$http.get('schedule/openWork').then(() => {
+      this.$http.get('sys/stockOpenWork').then(() => {
         Indicator.close()
       })
     },
@@ -56,15 +56,7 @@ export default {
       Indicator.open({
         spinnerType: 'fading-circle'
       })
-      this.$http.get('schedule/updateFundBaseInfo').then(() => {
-        Indicator.close()
-      })
-    },
-    betterValuation () {
-      Indicator.open({
-        spinnerType: 'fading-circle'
-      })
-      this.$http.get('schedule/betterValuation').then(() => {
+      this.$http.get('fund/updateAllFundBaseInfo').then(() => {
         Indicator.close()
       })
     },
@@ -72,23 +64,7 @@ export default {
       Indicator.open({
         spinnerType: 'fading-circle'
       })
-      this.$http.get('schedule/updateValuation').then(() => {
-        Indicator.close()
-      })
-    },
-    updateRate () {
-      Indicator.open({
-        spinnerType: 'fading-circle'
-      })
-      this.$http.get('schedule/updateRate').then(() => {
-        Indicator.close()
-      })
-    },
-    updateFundBuySellRate () {
-      Indicator.open({
-        spinnerType: 'fading-circle'
-      })
-      this.$http.get('schedule/updateFundBuySellRate').then(() => {
+      this.$http.get('fund/updateValuation').then(() => {
         Indicator.close()
       })
     },
@@ -96,7 +72,31 @@ export default {
       Indicator.open({
         spinnerType: 'fading-circle'
       })
-      this.$http.get('stock/updateFixYearAverage').then(() => {
+      this.$http.get('stock/updateStockIndexYearAverage').then(() => {
+        Indicator.close()
+      })
+    },
+    closeWork () {
+      Indicator.open({
+        spinnerType: 'fading-circle'
+      })
+      this.$http.get('sys/stockCloseWork').then(() => {
+        Indicator.close()
+      })
+    },
+    reInitPreNetValue () {
+      Indicator.open({
+        spinnerType: 'fading-circle'
+      })
+      this.$http.get('sys/reInitPreNetValue').then(() => {
+        Indicator.close()
+      })
+    },
+    addStockPrice () {
+      Indicator.open({
+        spinnerType: 'fading-circle'
+      })
+      this.$http.get('stock/addStockPrice').then(() => {
         Indicator.close()
       })
     }

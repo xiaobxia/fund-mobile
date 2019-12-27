@@ -6,6 +6,11 @@ Vue.use(Router)
 
 const routers = [
   {
+    name: 'Index',
+    path: '/',
+    component: null
+  },
+  {
     name: 'Login',
     path: '/page/login',
     component: lazyLoading('Login')
@@ -46,11 +51,6 @@ const routers = [
     component: lazyLoading('AverageIndex')
   },
   {
-    name: 'ChangeMarket',
-    path: '/page/changeMarket',
-    component: lazyLoading('ChangeMarket')
-  },
-  {
     name: 'TodayIndex',
     path: '/page/todayIndex',
     component: lazyLoading('TodayIndex')
@@ -61,9 +61,9 @@ const routers = [
     component: lazyLoading('FixedInvestment')
   },
   {
-    name: 'IndexDifference',
-    path: '/page/indexDifference',
-    component: lazyLoading('IndexDifference')
+    name: 'AverageHalfYearIndex',
+    path: '/page/averageHalfYearIndex',
+    component: lazyLoading('AverageHalfYearIndex')
   },
   {
     name: 'Market',

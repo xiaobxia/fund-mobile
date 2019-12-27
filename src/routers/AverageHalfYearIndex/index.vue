@@ -1,6 +1,6 @@
 <template>
   <div class="operating-info">
-    <mt-header title="均线策略" :fixed="true">
+    <mt-header title="半年线策略" :fixed="true">
       <mt-button slot="left" @click="backHandler">
         <i class="fas fa-chevron-left"></i>
       </mt-button>
@@ -10,7 +10,7 @@
         <div slot="title">
           <h3>
             {{item.name}}
-            <span style="float: right" :class="stockNumberClass(diffInfo[item.key])">{{diffInfo[item.key]}}%</span>
+            <span style="float: right" :class="stockNumberClass(item.netChangeRatio)">{{item.netChangeRatio}}%</span>
           </h3>
         </div>
       </mt-cell-swipe>
@@ -19,38 +19,26 @@
 </template>
 
 <script>
-import indexInfoUtilXiong from '@/util/indexInfoUtilXiong.js'
-import stockApiUtil from '@/util/stockApiUtil.js'
+import indexList from '@/common/indexList.js'
 import storageUtil from '@/util/storageUtil.js'
 
-const codeMap = indexInfoUtilXiong.codeMap
-
 export default {
-  name: 'AverageIndex',
+  name: 'AverageHalfYearIndex',
   data () {
-    let diffInfo = {}
     let list = []
-    for (let key in codeMap) {
+    indexList.forEach((item) => {
       list.push({
-        key: key,
-        code: codeMap[key].code,
-        name: codeMap[key].name,
-        threshold: codeMap[key].threshold,
-        wave: codeMap[key].wave,
-        rate: codeMap[key].rate,
-        fixLine: codeMap[key].fixLine,
-        sortRate: 0
+        ...item,
+        netChangeRatio: 0
       })
-      diffInfo[key] = 0
-    }
+    })
     return {
-      list: list,
-      diffInfo: diffInfo
+      list
     }
   },
   computed: {
   },
-  mounted () {
+  created () {
     this.initPage()
   },
   methods: {
@@ -61,16 +49,16 @@ export default {
       }
     },
     queryData (item) {
-      this.$http.getWithCache(`stock/getStockPriceAverage`, {
+      this.$http.getWithCache(`stock/getStockPriceAverageByDay`, {
         code: item.code,
         days: 120
-      }, {interval: 30}).then((data) => {
+      }, {interval: 20}).then((data) => {
         if (data.success) {
           const diff = data.data
-          this.diffInfo[item.key] = diff
-          storageUtil.setQuarterAverage(item.key, diff)
+          item.netChangeRatio = diff
+          storageUtil.setData('averageHalfYearIndex', item.key, diff)
           if (diff <= item.fixLine) {
-            this.onNiuXiongChangeHandler(item.key, '定投')
+            this.updateStockIndex(item.key, '定投')
           }
         }
       })
@@ -78,14 +66,14 @@ export default {
     backHandler () {
       this.$router.history.go(-1)
     },
-    onNiuXiongChangeHandler (key, value) {
+    updateStockIndex (key, value) {
       const d = this.getDate()
       const hour = d.getHours()
       const minute = d.getMinutes()
       if (hour >= 14 && minute >= 40) {
-        this.$http.post('market/updateIndexNiuXiong', {
+        this.$http.post('stock/updateStockIndex', {
           key: key,
-          value: value
+          flag: value
         }).then((data) => {
         })
       }

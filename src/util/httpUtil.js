@@ -54,7 +54,7 @@ const Http = {
     } else {
       queryString = qs.stringify({timestamp: new Date().getTime()})
     }
-    let cacheData = storageUtil.getQueryCache(cacheKey)
+    let cacheData = storageUtil.getData('queryCache', cacheKey)
     if (cacheData) {
       let cacheDataRaw = JSON.parse(cacheData)
       // 可以使用缓存
@@ -69,7 +69,7 @@ const Http = {
         time: Date.now(),
         data: data.data
       }
-      storageUtil.setQueryCache(cacheKey, JSON.stringify(cacheData))
+      storageUtil.setData('queryCache', cacheKey, JSON.stringify(cacheData))
       return data.data
     })
   },

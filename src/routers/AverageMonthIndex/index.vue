@@ -6,11 +6,11 @@
       </mt-button>
     </mt-header>
     <div class="main-body">
-      <mt-cell-swipe v-for="(item) in list" :key="item.code" :class="lockInfo[item.key] ? 'duo': (diffInfo[item.key]>0?'leguan':'kong')">
+      <mt-cell-swipe v-for="(item) in list" :key="item.code" :class="item.lock ? 'duo': (item.averageDiff>0?'leguan':'kong')">
         <div slot="title">
           <h3>
             {{item.name}}
-            <span style="float: right" :class="stockNumberClass(diffInfo[item.key])">{{diffInfo[item.key]}}%</span>
+            <span style="float: right" :class="stockNumberClass(item.averageDiff)">{{item.averageDiff}}%</span>
           </h3>
         </div>
       </mt-cell-swipe>
@@ -19,43 +19,29 @@
 </template>
 
 <script>
-import indexInfoUtilXiong from '@/util/indexInfoUtilXiong.js'
-import stockApiUtil from '@/util/stockApiUtil.js'
+import indexList from '@/common/indexList.js'
 import storageUtil from '@/util/storageUtil.js'
-import operatingTooltip from '@/util/operatingTooltip.js'
-
-const codeMap = indexInfoUtilXiong.codeMap
+import stockApiUtil from '@/util/stockApiUtil.js'
+import stockAnalysisUtil from '@/util/stockAnalysisUtil.js'
 
 export default {
   name: 'AverageMonthIndex',
   data () {
-    let diffInfo = {}
-    let lockInfo = {}
     let list = []
-    for (let key in codeMap) {
+    indexList.forEach((item) => {
       list.push({
-        key: key,
-        code: codeMap[key].code,
-        name: codeMap[key].name,
-        threshold: codeMap[key].threshold,
-        wave: codeMap[key].wave,
-        rate: codeMap[key].rate,
-        average: codeMap[key].average,
-        reduceLine: codeMap[key].reduceLine,
-        sortRate: 0
+        ...item,
+        averageDiff: 0,
+        lock: false
       })
-      diffInfo[key] = 0
-      lockInfo[key] = false
-    }
+    })
     return {
-      list: list,
-      diffInfo: diffInfo,
-      lockInfo: lockInfo
+      list
     }
   },
   computed: {
   },
-  mounted () {
+  created () {
     this.initPage()
   },
   methods: {
@@ -66,10 +52,10 @@ export default {
       }
     },
     queryData (item) {
-      this.$http.getWithCache(`webData/${stockApiUtil.getAllUrl()}`, {
+      this.$http.getWithCache(`stock/${stockApiUtil.getAllUrl()}`, {
         code: item.code,
         days: 30
-      }, {interval: 30}).then((data) => {
+      }, {interval: 20}).then((data) => {
         if (data.success) {
           const list = data.data.list
           let averageList = []
@@ -78,9 +64,10 @@ export default {
             averageList.push(this.countDiff(list, i))
           }
           averageList.reverse()
-          const drate = averageList[averageList.length - 1]
-          this.diffInfo[item.key] = drate
-          let lock = operatingTooltip.ifNoSell(averageList)
+          // 20线偏离度
+          const averageDiff = averageList[averageList.length - 1]
+          item.averageDiff = averageDiff
+          let lock = stockAnalysisUtil.ifNoSell(averageList)
           // 移动均线策略
           let now = 0
           let last = 0
@@ -95,21 +82,23 @@ export default {
           if (diff < 0.2) {
             lock = false
           }
-          this.lockInfo[item.key] = lock
-          storageUtil.setNoSell(item.key, lock)
-          storageUtil.setMonthAverage(item.key, drate)
-          let factor = 1
-          if (drate > 0) {
-            // 越靠近-10越小
-            factor = 1 - (0.5 * (drate / item.reduceLine))
-          }
-          if (factor < 0.5) {
-            factor = 0.5
-          }
-          storageUtil.setMonthFactor(item.key, factor)
+          item.lock = lock
+          // 保存锁仓信息
+          storageUtil.setData('noSell', item.key, lock)
+          storageUtil.setData('averageMonth', item.key, averageDiff)
+          // let factor = 1
+          // if (averageDiff > 0) {
+          //   // 越靠近-10越小
+          //   factor = 1 - (0.5 * (averageDiff / item.reduceLine))
+          // }
+          // if (factor < 0.5) {
+          //   factor = 0.5
+          // }
+          // storageUtil.setMonthFactor(item.key, factor)
         }
       })
     },
+    // 20线偏离度计算
     countDiff (list, index) {
       let now = 0
       // 近的在前

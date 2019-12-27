@@ -2,11 +2,9 @@
   <div>
     <div class="has-bar">
       <div class="img-card" @click="toPath('/page/fixedInvestment')">
-        <!--<img src="../../assets/timg.jpg" alt="">-->
         <div class="container">
           <div class="content">
             <img src="../../assets/投币.png" alt="">
-            <!--<i class="fas fa-allergies"></i>-->
           </div>
           <div class="bottom">定投策略</div>
         </div>
@@ -15,86 +13,70 @@
         <div class="container">
           <div class="content">
             <img src="../../assets/阴.png" alt="">
-            <!--<i class="fab fa-cloudversify"></i>-->
           </div>
           <div class="bottom">多阴策略</div>
         </div>
       </div>
       <div class="img-card" @click="toPath('/page/operatingInfo?type=jian')">
-        <!--<img src="../../assets/timg.jpg" alt="">-->
         <div class="container">
           <div class="content">
             <img src="../../assets/卖出记录.png" alt="">
-            <!--<i class="fas fa-allergies"></i>-->
           </div>
           <div class="bottom">操作分析-简</div>
         </div>
       </div>
       <div class="img-card" @click="toPath('/page/operatingInfo?type=xiong')">
-        <!--<img src="../../assets/timg.jpg" alt="">-->
         <div class="container">
           <div class="content">
             <img src="../../assets/熊市.png" alt="">
-            <!--<i class="fas fa-allergies"></i>-->
           </div>
           <div class="bottom">操作分析-熊</div>
         </div>
       </div>
-      <div class="img-card" @click="toPath('/page/indexDifference')">
-        <!--<img src="../../assets/800_600_dribbble_icons.jpg" alt="">-->
+      <div class="img-card" @click="toPath('/page/averageHalfYearIndex')">
         <div class="container">
           <div class="content">
             <img src="../../assets/相对标准偏差.png" alt="">
-            <!--<i class="fab fa-sellsy"></i>-->
           </div>
-          <div class="bottom">季线策略</div>
+          <div class="bottom">半年线策略</div>
         </div>
       </div>
       <div class="img-card" @click="toPath('/page/todayIndex')">
         <div class="container">
           <div class="content">
             <img src="../../assets/今日.png" alt="">
-            <!--<i class="fab fa-cloudversify"></i>-->
           </div>
           <div class="bottom">今日指数</div>
         </div>
       </div>
       <div class="img-card" @click="toPath('/page/averageIndex')">
-        <!--<img src="../../assets/800_600_dribbble_icons.jpg" alt="">-->
         <div class="container">
           <div class="content">
             <img src="../../assets/均线买卖.png" alt="">
-            <!--<i class="fas fa-balance-scale"></i>-->
           </div>
           <div class="bottom">均线策略</div>
         </div>
       </div>
       <div class="img-card" @click="toPath('/page/averageMonthIndex')">
-        <!--<img src="../../assets/800_600_dribbble_icons.jpg" alt="">-->
         <div class="container">
           <div class="content">
             <img src="../../assets/均值.png" alt="">
-            <!--<i class="fas fa-balance-scale"></i>-->
           </div>
           <div class="bottom">月线策略</div>
         </div>
       </div>
       <div class="img-card" @click="toPath('/page/monthIncome')">
-        <!--<img src="../../assets/800_600_dribbble_icons.jpg" alt="">-->
         <div class="container">
           <div class="content">
             <img src="../../assets/收益期.png" alt="">
-            <!--<i class="fab fa-sellsy"></i>-->
           </div>
           <div class="bottom">指数月收益</div>
         </div>
       </div>
       <div class="img-card" @click="toPath('/page/yearIncome')">
-        <!--<img src="../../assets/800_600_dribbble_icons.jpg" alt="">-->
         <div class="container">
           <div class="content">
             <img src="../../assets/全年无休.png" alt="">
-            <!--<i class="fab fa-sellsy"></i>-->
           </div>
           <div class="bottom">指数年收益</div>
         </div>

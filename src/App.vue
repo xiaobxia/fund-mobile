@@ -97,6 +97,14 @@ export default {
           })
         }
       })
+      this.$router.beforeEach((transition, from, next) => {
+        this.checkSubPath(transition.path)
+        next()
+      })
+      // after只有真正进入了页面才会执行
+      this.$router.afterEach((transition) => {
+        this.checkSubPath(transition.path)
+      })
     },
     checkSubPath (path) {
       this.subPath = path !== '/'

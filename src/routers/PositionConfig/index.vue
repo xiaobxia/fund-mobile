@@ -15,7 +15,6 @@
 </template>
 
 <script>
-import storageUtil from '@/util/storageUtil.js'
 import Toast from '@/common/toast.js'
 import { mapGetters } from 'vuex'
 
@@ -34,7 +33,7 @@ export default {
   watch: {
   },
   created () {
-    this.position = parseFloat(this.userFundAccountInfo)
+    this.position = this.userFundAccountInfo.positionConfig
     this.initPage()
   },
   methods: {
@@ -52,7 +51,7 @@ export default {
       }
     },
     okHandler () {
-      this.$http.post('market/updatePositionConfig', {
+      this.$http.post('stock/updatePositionConfig', {
         position: this.position
       }).then((data) => {
         if (data.success) {

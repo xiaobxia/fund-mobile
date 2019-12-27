@@ -10,7 +10,7 @@
         <div slot="title">
           <h3>
             {{item.name}}
-            <span style="float: right" :class="stockNumberClass(diffInfo[item.key])">{{diffInfo[item.key]}}%</span>
+            <span style="float: right" :class="stockNumberClass(item.diff)">{{item.diff}}%</span>
           </h3>
         </div>
       </mt-cell-swipe>
@@ -19,37 +19,27 @@
 </template>
 
 <script>
-import indexInfoUtilXiong from '@/util/indexInfoUtilXiong.js'
-import stockApiUtil from '@/util/stockApiUtil.js'
+import indexList from '@/common/indexList.js'
 import storageUtil from '@/util/storageUtil.js'
-
-const codeMap = indexInfoUtilXiong.codeMap
+import stockApiUtil from '@/util/stockApiUtil.js'
 
 export default {
   name: 'AverageIndex',
   data () {
-    let diffInfo = {}
     let list = []
-    for (let key in codeMap) {
+    indexList.forEach((item) => {
       list.push({
-        key: key,
-        code: codeMap[key].code,
-        name: codeMap[key].name,
-        threshold: codeMap[key].threshold,
-        wave: codeMap[key].wave,
-        rate: codeMap[key].rate,
-        sortRate: 0
+        ...item,
+        diff: 0
       })
-      diffInfo[key] = 0
-    }
+    })
     return {
-      list: list,
-      diffInfo: diffInfo
+      list
     }
   },
   computed: {
   },
-  mounted () {
+  created () {
     this.initPage()
   },
   methods: {
@@ -60,10 +50,10 @@ export default {
       }
     },
     queryData (item) {
-      this.$http.getWithCache(`webData/${stockApiUtil.getAllUrl()}`, {
+      this.$http.getWithCache(`stock/${stockApiUtil.getAllUrl()}`, {
         code: item.code,
         days: 12
-      }, {interval: 30}).then((data) => {
+      }, {interval: 20}).then((data) => {
         if (data.success) {
           const list = data.data.list
           let now = 0
@@ -76,8 +66,8 @@ export default {
             last += parseFloat(list[j].kline.close)
           }
           const diff = this.countDifferenceRate(now / 8, last / 8)
-          this.diffInfo[item.key] = diff
-          storageUtil.setAverage(item.key, diff)
+          item.diff = diff
+          storageUtil.setData('averageIndex', item.key, diff)
         }
       })
     },

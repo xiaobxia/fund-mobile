@@ -1,0 +1,24 @@
+.fm-tag {
+  padding: 0.2em 0.5em;
+  font-size: 24px;
+  &.yellow {
+    background-color: #fdf6ec;
+    color: #e6a23c;
+  }
+  .grey {
+    background-color: #f4f4f5;
+    color: #909399;
+  }
+  .green {
+    background-color: #f0f9eb;
+    color: #67c23a;
+  }
+  .blue {
+    background-color: rgb(198, 226, 255);
+    color: #409EFF;
+  }
+  .red {
+    background-color: rgb(253, 226, 226);
+    color: #F56C6C;
+  }
+}

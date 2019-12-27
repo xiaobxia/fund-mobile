@@ -1,7 +1,7 @@
 .mint-tabbar {
-  border-top: 1px solid $border-color;
   background-color: $body-color;
-  color: $lighter-text-color;
+  color: $main-text-color;
+  box-shadow: 0 0 6px 6px $shadow-color;
   .mint-tab-item {
     height: 90px;
     padding: 5px 0;
@@ -20,7 +20,7 @@
   }
   .mint-tab-item-label {
     font-size: 20px;
-    color: $light-text-color;
+    color: $main-text-color;
     p {
       margin: 0;
     }

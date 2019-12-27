@@ -1,6 +1,7 @@
 @charset "UTF-8";
 
 @import "_var";
+@import "mixin";
 @import "lib/mint";
 @import "component/header";
 @import "component/tabbar";
@@ -37,7 +38,9 @@
 body {
   margin: 0;
   background-color: $body-color;
+  font-family: PingFang SC,Microsoft YaHei,Helvetica Neue,Helvetica,STHeitiSC-Light,Arial,"sans-serif";
   font-size: 30px;
+  color: $main-text-color;
 }
 
 ::-webkit-scrollbar {
@@ -60,17 +63,16 @@ body {
 }
 
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: PingFang SC,Microsoft YaHei,Helvetica Neue,Helvetica,STHeitiSC-Light,Arial,"sans-serif";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: $main-text-color;
 }
-.grey-body {
-  background-color: rgb(247,247,247);
-}
 
 .main-body {
+  position: relative;
   margin-top: 90px;
+  min-height: calc(100vh - 90px);
 }
 
 .tab-view {
@@ -89,23 +91,6 @@ body {
   font-weight: bold;
 }
 
-.red-text {
-  color: $red-color !important;
-}
-
-.green-text {
-  color: $green-color !important;
-}
-
-.purple-text {
-  color: $purple-color !important;
-}
-
-.black-text {
-  color: #000 !important;
-  font-weight: bold;
-}
-
 .grey-back {
   background-color: rgba(180, 180, 180, 0.2);
 }
@@ -114,15 +99,7 @@ body {
   background-color: rgb(231,244,250);
 }
 
-.lock-tag {
-  background-color: $red-color;
-}
-.position-tag {
-  background-color: $purple-color
-}
-.dingtou-tag {
-  background-color: #aaa;
-}
+
 
 ul {
   margin: 0;
@@ -149,40 +126,4 @@ ul {
 input[type="text" i]:disabled {
   background-color: #fff;
   color: #aaa;
-}
-
-.yellow-warn {
-  padding: 5px 20px;
-  font-size: 24px;
-  background-color: #fdf6ec;
-  color: #e6a23c;
-}
-
-.grey-warn {
-  padding: 5px 20px;
-  font-size: 24px;
-  background-color: #f4f4f5;
-  color: #909399;
-}
-
-.green-warn {
-  padding: 5px 20px;
-  font-size: 24px;
-  background-color: #f0f9eb;
-  color: #67c23a;
-}
-
-.blue-warn {
-  padding: 5px 20px;
-  font-size: 24px;
-  background-color: rgb(198, 226, 255);
-  color: #409EFF;
-}
-
-
-.red-warn {
-  padding: 5px 20px;
-  font-size: 24px;
-  background-color: rgb(253, 226, 226);
-  color: #F56C6C;
 }

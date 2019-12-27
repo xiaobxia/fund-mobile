@@ -13,23 +13,23 @@
         <square v-if="tabSelect === 'square'"></square>
         <mt-tabbar v-model="tabSelect" :fixed="true">
           <mt-tab-item id="fund">
-            <img src="./assets/fund.png" alt="" slot="icon">
-            <!--<i class="fas fa-donate" slot="icon"></i>-->
+            <img v-if="tabSelect === 'fund'" src="./assets/t-交易.png" alt="" slot="icon">
+            <img v-else src="./assets/t-交易(1).png" alt="" slot="icon">
             <p>基金</p>
           </mt-tab-item>
           <mt-tab-item id="configCenter">
-            <img src="./assets/config.png" alt="" slot="icon">
-            <!--<i class="fas fa-cogs" slot="icon"></i>-->
+            <img v-if="tabSelect === 'configCenter'" src="./assets/t-配置.png" alt="" slot="icon">
+            <img v-else src="./assets/t-配置(1).png" alt="" slot="icon">
             <p>配置</p>
           </mt-tab-item>
           <mt-tab-item id="square">
-            <img src="./assets/find.png" alt="" slot="icon">
-            <!--<i class="far fa-compass" slot="icon"></i>-->
+            <img v-if="tabSelect === 'square'" src="./assets/t-广场.png" alt="" slot="icon">
+            <img v-else src="./assets/t-广场(1).png" alt="" slot="icon">
             <p>广场</p>
           </mt-tab-item>
           <mt-tab-item id="mine">
-            <img src="./assets/my.png" alt="" slot="icon">
-            <!--<i class="far fa-user" slot="icon"></i>-->
+            <img v-if="tabSelect === 'mine'" src="./assets/t-我的.png" alt="" slot="icon">
+            <img v-else src="./assets/t-我的(1).png" alt="" slot="icon">
             <p>我的</p>
           </mt-tab-item>
         </mt-tabbar>
@@ -55,9 +55,6 @@ export default {
     }
   },
   watch: {
-    tabSelect (val) {
-
-    }
   },
   computed: {
     tabSelect: {
@@ -65,7 +62,7 @@ export default {
         return this.$store.state.tabSelect
       },
       set (val) {
-        storageUtil.setAppConfig('homeTabSelect', val)
+        storageUtil.setData('appConfig', 'homeTabSelect', val)
         this.$store.dispatch('setTabSelect', val)
       }
     }
@@ -73,9 +70,6 @@ export default {
   components: {Index, Mine, Fund, ConfigCenter, Square},
   mounted () {
     this.initPage()
-    setInterval(() => {
-      storageUtil.clearQueryCache()
-    }, 1000 * 60 * 5)
   },
   methods: {
     initPage () {
@@ -105,21 +99,21 @@ export default {
       this.$http.get('auth/checkLogin', {token}).then((data) => {
         window._token = data.data.token
         if (data.data.isLogin === false) {
-          storageUtil.initUserInfo({
+          storageUtil.setData('userInfo', {
             isLogin: false
           })
-          const user = storageUtil.getUserInfo()
+          const user = storageUtil.getData('userInfo')
           this.ifChecked = true
           if (user.isLogin !== true) {
             this.$router.push('/page/login')
           }
         } else {
-          this.$http.get('userFund/getUserFundAccountInfo').then((res) => {
-            storageUtil.initUserFundAccountInfo(res.data)
+          this.$http.get('user/getUserAccountInfo').then((res) => {
+            this.$store.commit('updateUserFundAccountInfo', res.data)
             this.ifChecked = true
             this.otherDataInit()
           })
-          storageUtil.initUserInfo({
+          storageUtil.getData('userInfo', {
             ...data.data,
             isLogin: true
           })
@@ -128,7 +122,6 @@ export default {
     },
     checkSubPath (path) {
       this.subPath = path !== '/'
-      // this.subPath = path.startsWith('/page')
     },
     checkAuthPath (current) {
       const now = current || this.$router.history.current
@@ -186,17 +179,11 @@ export default {
       }
     },
     otherDataInit () {
-      this.$http.get('market/getIndexNiuXiong').then((res) => {
-        let list = res.data
-        list.map((item) => {
-          storageUtil.setIndexNiuXiong(item.key, item.value)
-        })
+      this.$http.get('stock/getStockIndexAll').then((res) => {
+        this.$store.commit('updateStockIndexAll', res.data)
       })
-      this.$http.get('market/getMarketQuestion').then((res) => {
-        let list = res.data
-        list.map((item) => {
-          storageUtil.setMarketStatus(item.key, item.value)
-        })
+      this.$http.get('stock/getStockMarketQuestion').then((res) => {
+        this.$store.commit('updateStockMarketQuestion', res.data)
       })
     }
   }

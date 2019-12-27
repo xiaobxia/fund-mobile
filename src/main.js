@@ -53,11 +53,11 @@ Vue.prototype.keep100 = function (number) {
   return Math.round(number / 100) * 100
 }
 
-for (let key in numberUtil) {
+for (const key in numberUtil) {
   Vue.prototype[key] = numberUtil[key]
 }
 
-for (let key in dateUtil) {
+for (const key in dateUtil) {
   Vue.prototype[key] = dateUtil[key]
 }
 

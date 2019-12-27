@@ -5,7 +5,7 @@
         <i class="fas fa-chevron-left"></i>
       </mt-button>
     </mt-header>
-    <div class="main-body has-bar simple">
+    <div class="main-body">
       <mt-cell-swipe v-for="(item) in scheduleList" :key="item._id">
         <div slot="title">
           <h3>{{item.name}}</h3>
@@ -38,8 +38,11 @@ export default {
       })
       this.$http.get('schedule/all').then((data) => {
         Indicator.close()
-        let list = data.data.list
-        this.scheduleList = list
+        const list = data.data.list
+        list.forEach((item) => {
+          item.open = item.open === 'open'
+        })
+        this.scheduleList = data.data.list
       })
     },
     stateChangeHandler (name) {
@@ -62,7 +65,5 @@ export default {
   }
 }
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 </style>

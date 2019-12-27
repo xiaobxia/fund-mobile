@@ -1,6 +1,6 @@
 <template>
   <div class="page-login">
-    <h3>基金</h3>
+    <h3>平台</h3>
     <div class="input-item">
       <input type="text" v-model="account">
     </div>
@@ -39,7 +39,7 @@ export default {
           window._token = data.data.token
           localStorage.setItem('token', data.data.token)
           this.$router.push('/')
-          storageUtil.initUserInfo({
+          storageUtil.setData('userInfo', {
             ...data.data,
             isLogin: true
           })
@@ -53,6 +53,5 @@ export default {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 </style>

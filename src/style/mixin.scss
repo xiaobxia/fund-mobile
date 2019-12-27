@@ -1,0 +1,25 @@
+@mixin clearfix {
+  &:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+}
+
+@mixin textShadow {
+  text-shadow:0 0 14px rgba(0,163,240,1);
+}
+
+@mixin redTextShadow {
+  text-shadow:0 0 12px rgba(233,18,52,1);
+}
+
+@mixin boxShadow {
+  box-shadow:0 0 20px 0 rgba(0,163,240,0.4);
+}
+
+@mixin ellipsisText {
+  overflow: hidden;
+  text-overflow:ellipsis;
+  white-space: nowrap;
+}

@@ -5,13 +5,13 @@
         <i class="fas fa-chevron-left"></i>
       </mt-button>
     </mt-header>
-    <div class="main-body has-bar">
+    <div class="main-body">
       <mt-radio
         align="right"
         v-model="dataWay"
         :options="['中金', '东方', '腾讯', '雪球']">
       </mt-radio>
-      <mt-button style="margin-top: 10rem" type="primary" @click="clearHandler" class="main-btn">清除数据缓存</mt-button>
+      <mt-button type="primary" @click="clearHandler" class="main-btn">清除本地存储数据</mt-button>
     </div>
   </div>
 </template>
@@ -40,17 +40,16 @@ export default {
       this.$router.history.go(-1)
     },
     clearHandler () {
-      for (let key in localStorage) {
-        if (key.startsWith('fundMobile-cache-webData')) {
-          localStorage.removeItem(key)
-        }
-      }
+      localStorage.clear()
       Toast.success('操作成功')
     }
   }
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style rel="stylesheet/scss" lang="scss" scoped>
+  .main-btn {
+    position: absolute;
+    bottom: 20px;
+  }
 </style>

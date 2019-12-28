@@ -10,7 +10,7 @@
         <div slot="title">
           <h3>
             <span class="index-name">{{item.name}}</span>
-            <span style="float: right" :class="stockNumberClass(rateInfo[item.key])">{{rateInfo[item.key]}}%</span>
+            <span style="float: right" :class="stockNumberClass(item.netChangeRatio)">{{item.netChangeRatio}}%</span>
           </h3>
           <p class="netChange wn">
             <span v-for="(subItem, index) in klineMap[item.key]" :key="index"
@@ -27,11 +27,8 @@
 </template>
 
 <script>
-import indexInfoUtilXiong from '@/util/indexInfoUtilXiong.js'
+import indexList from '@/common/indexList.js'
 import stockApiUtil from '@/util/stockApiUtil.js'
-
-const codeMap = indexInfoUtilXiong.codeMap
-const formatData = indexInfoUtilXiong.formatData
 
 function ifAllDown (list, start, day) {
   let flag = true
@@ -74,26 +71,18 @@ export default {
   data () {
     let allInfo = {}
     let list = []
-    let rateInfo = {}
     let klineMap = {}
-    for (let key in codeMap) {
+    indexList.forEach((item) => {
       list.push({
-        key: key,
-        code: codeMap[key].code,
-        name: codeMap[key].name,
-        mix: codeMap[key].mix,
-        threshold: codeMap[key].threshold,
-        wave: codeMap[key].wave,
-        rate: codeMap[key].rate
+        ...item,
+        netChangeRatio: 0
       })
-      allInfo[key] = []
-      rateInfo[key] = 0
-      klineMap[key] = [{}]
-    }
+      allInfo[item.key] = []
+      klineMap[item.key] = [{}]
+    })
     return {
       list: list,
       allInfo: allInfo,
-      rateInfo: rateInfo,
       klineMap
     }
   },
@@ -123,14 +112,17 @@ export default {
       }
     },
     queryData (item) {
-      this.$http.getWithCache(`webData/${stockApiUtil.getAllUrl()}`, {
+      this.$http.getWithCache(`stock/${stockApiUtil.getAllUrl()}`, {
         code: item.code,
         days: 22
       }, {interval: 30}).then((data) => {
         if (data.success) {
-          const list = data.data.list
-          const info = formatData(list)
-          const recentNetValue = info.list
+          const recentNetValue = []
+          data.data.list.forEach((item) => {
+            recentNetValue.push({
+              ...item.kline
+            })
+          })
           let infoList = []
           let kline = []
           // 近的在前
@@ -144,7 +136,7 @@ export default {
               if (ifAllDown(recentNetValue, i, 4).rate < -5) {
                 infoList[i] = '4'
               } else {
-                infoList[i] = '4' + '-少'
+                infoList[i] = '4' + '少'
               }
             }
             if (ifAllDown(recentNetValue, i, 5).flag) {
@@ -161,10 +153,10 @@ export default {
             }
             // 连续涨
             if (ifAllUp(recentNetValue, i, 4).flag) {
-              infoList[i] = '涨-4'
+              infoList[i] = '涨4'
             }
             if (ifAllUp(recentNetValue, i, 5).flag) {
-              infoList[i] = '牛-5'
+              infoList[i] = '牛5'
             }
             if (!infoList[i]) {
               infoList[i] = ''
@@ -172,8 +164,7 @@ export default {
           }
           this.klineMap[item.key] = kline
           this.allInfo[item.key] = infoList
-          console.log(infoList)
-          this.rateInfo[item.key] = this.keepTwoDecimals(recentNetValue[0].netChangeRatio)
+          item.netChangeRatio = this.keepTwoDecimals(recentNetValue[0].netChangeRatio)
         }
       })
     },

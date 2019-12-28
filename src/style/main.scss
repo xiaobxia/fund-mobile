@@ -87,13 +87,19 @@ body {
   color: $main-text-color;
   padding: 30px 0;
   font-size: 28px;
+  .ct {
+    padding: 0 20px;
+    font-size: 28px;
+    .value {
+      float: right;
+    }
+  }
   .item {
     padding: 0 20px;
     display: inline-block;
     width: 49%;
     box-sizing: border-box;
     margin-bottom: 10px;
-
     .value {
       float: right;
     }

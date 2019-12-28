@@ -3,6 +3,10 @@
   padding: 20px 30px;
   min-height: 0;
   border: none;
+  outline: none!important;
+  .mint-cell-allow-right::after {
+    border-color: $main-text-color;
+  }
   .mint-cell-wrapper {
     padding: 0;
     min-height: 0;

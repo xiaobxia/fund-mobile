@@ -64,7 +64,6 @@
           <span :class="['value',stockNumberClass(wulinChangeRatio)]">{{wulinChangeRatio}}%</span>
         </span>
       </div>
-      <div class="lastUpdateValuationTime">更新于：{{lastUpdateValuationTime}}</div>
       <my-fund-card  v-for="(item) in cardInfo" :key="item.name"  :listData="item.list" :title="item.name"/>
     </div>
   </div>
@@ -77,6 +76,7 @@ import fundAccountUtil from '@/util/fundAccountUtil.js'
 import indexList from '@/common/indexList.js'
 import stockApiUtil from '@/util/stockApiUtil.js'
 import storageUtil from '@/util/storageUtil.js'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'MyFund',
@@ -112,7 +112,6 @@ export default {
       hushenChangeRatio: 0,
       wulinChangeRatio: 0,
       chuangyeChangeRatio: 0,
-      lastUpdateValuationTime: '',
       fundNumber: 0,
       lockCostSum: 0,
       lastTradingDay: '',
@@ -141,7 +140,10 @@ export default {
       } else {
         return 0
       }
-    }
+    },
+    ...mapGetters([
+      'userFundAccountInfo'
+    ])
   },
   beforeDestroy () {
   },
@@ -199,8 +201,6 @@ export default {
         }
         this.canSellSum = canSellSum
         this.myPosition = this.countRate(this.info.totalSum, this.todayAsset)
-        storageUtil.setAppConfig('nowPosition', parseFloat(this.myPosition))
-        this.lastUpdateValuationTime = moment(list[0].valuation_date).format('YYYY-MM-DD HH:mm:ss')
         this.lastBuy = lastBuy
         this.lastBuyChange = lastBuyValuation - lastBuy
         this.lastBuyChangeRatio = this.countDifferenceRate(lastBuyValuation, lastBuy)
@@ -209,6 +209,7 @@ export default {
         this.lockIncome = lockValuationSum - lockCostSum
         this.lockIncomeRatio = this.countDifferenceRate(lockValuationSum, lockCostSum)
         this.todayIncomeRatio = this.countDifferenceRate(valuationTotalSum, totalSum)
+        storageUtil.setData('appConfig', 'nowPosition', parseFloat(this.myPosition))
       }).then(() => {
         setTimeout(() => {
           this.addFundPosition()
@@ -243,15 +244,15 @@ export default {
       })
     },
     addFundPosition () {
-      const userFundAccountInfo = storageUtil.getUserFundAccountInfo()
+      const marketOpen = this.userFundAccountInfo.marketOpen
       // 是交易日
-      if (userFundAccountInfo.market_open === true) {
+      if (marketOpen === true) {
         const d = this.getDate()
         const hour = d.getHours()
         const minute = d.getMinutes()
         if (hour >= 10 && minute >= 10) {
-          const position = this.countRate(this.info.totalSum, this.todayAsset)
-          this.$http.post('userFund/addUserFundPosition', {
+          const position = this.myPosition
+          this.$http.post('userFund/updateUserNetValuePosition', {
             date: moment().format('YYYY-MM-DD'),
             position
           })

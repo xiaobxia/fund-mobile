@@ -66,11 +66,6 @@ const routers = [
     component: lazyLoading('AverageHalfYearIndex')
   },
   {
-    name: 'Market',
-    path: '/page/market',
-    component: lazyLoading('Market')
-  },
-  {
     name: 'Schedule',
     path: '/page/schedule',
     component: lazyLoading('Schedule')

@@ -167,8 +167,8 @@ export default {
   methods: {
     initPage () {
       let indexList = this.list
-      this.$http.get('userFund/getUserNetValueNowMonthRate').then((res) => {
-        this.nowMonthRate = res.data.rate
+      this.$http.get('userFund/getUserNetValueNowMonthNetChangeRatio').then((res) => {
+        this.nowMonthRate = res.data.netChangeRatio
       })
       Promise.all([
         this.$http.get('userFund/getUserFunds').then((data) => {
@@ -183,11 +183,9 @@ export default {
                   totalSum += item.sum
                   if (item.ifAllLock) {
                     if (this.lockMap[item.theme] !== '') {
-                      // this.lockMap[item.theme] = true
                     }
                   } else {
                     if (item.canSellSum < 100) {
-                      // this.lockMap[item.theme] = true
                     } else {
                       this.lockMap[item.theme] = false
                     }
@@ -236,7 +234,7 @@ export default {
       return qs.stringify(query)
     },
     queryData (item) {
-      this.$http.getWithCache(`webData/${stockApiUtil.getAllUrl()}`, {
+      this.$http.getWithCache(`stock/${stockApiUtil.getAllUrl()}`, {
         code: item.code,
         days: 12
       }, {interval: 30}).then((data) => {

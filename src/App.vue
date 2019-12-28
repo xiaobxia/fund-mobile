@@ -88,8 +88,9 @@ export default {
         } else {
           this.$http.get('user/getUserAccountInfo').then((res) => {
             this.$store.commit('updateUserFundAccountInfo', res.data)
-            this.ifChecked = true
-            this.otherDataInit()
+            this.otherDataInit().then(() => {
+              this.ifChecked = true
+            })
           })
           storageUtil.setData('userInfo', {
             ...data.data,
@@ -165,16 +166,18 @@ export default {
       }
     },
     otherDataInit () {
-      this.$http.get('stock/getStockIndexAll').then((res) => {
-        this.$store.commit('updateStockIndexAll', res.data)
-      })
-      this.$http.get('stock/getStockMarketQuestion').then((res) => {
-        const data = {}
-        res.data.forEach((item) => {
-          data[item.key] = item.value
+      return Promise.all([
+        this.$http.get('stock/getStockIndexAll').then((res) => {
+          this.$store.commit('updateStockIndexAll', res.data)
+        }),
+        this.$http.get('stock/getStockMarketQuestion').then((res) => {
+          const data = {}
+          res.data.forEach((item) => {
+            data[item.key] = item.value
+          })
+          storageUtil.setData('stockMarketQuestion', data)
         })
-        storageUtil.setData('stockMarketQuestion', data)
-      })
+      ])
     }
   }
 }

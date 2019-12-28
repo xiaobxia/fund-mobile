@@ -14,19 +14,16 @@
         <div slot="title">
           <h3>
             <span class="name">{{item.name}}</span>
-            <span v-if="hasCount[item.name]" class="has-count">{{hasCount[item.name]}}</span>
-            <span v-if="hasCount[item.name]" :class="['income', stockNumberClass(rateInfo[item.key])]">{{parseInt(rateInfo[item.key]*hasCount[item.name] / 100)}}</span>
-            <span style="float: right" :class="stockNumberClass(rateInfo[item.key])">{{rateInfo[item.key]}}%</span>
+            <span class="has-count">{{item.hasCount}}</span>
+            <span :class="['income', stockNumberClass(item.netChangeRatio)]">{{parseInt(item.netChangeRatio * item.hasCount / 100)}}</span>
+            <span style="float: right" :class="stockNumberClass(item.netChangeRatio)">{{item.netChangeRatio}}%</span>
           </h3>
           <div class="rate-info-icon">
-            <i v-if="indexRateInfo[item.key] === 'up'" class="fas fa-long-arrow-alt-up up"></i>
-            <i v-if="indexRateInfo[item.key] === 'down'" class="fas fa-long-arrow-alt-down down"></i>
+            <i v-if="indexUpDown[item.key] === 'up'" class="fas fa-long-arrow-alt-up up"></i>
+            <i v-if="indexUpDown[item.key] === 'down'" class="fas fa-long-arrow-alt-down down"></i>
           </div>
         </div>
       </mt-cell-swipe>
-    </div>
-    <div class="btn-list-wrap">
-      <mt-button type="primary" @click="sortChangeHandler" class="main-btn">排序</mt-button>
     </div>
   </div>
 </template>
@@ -35,217 +32,108 @@
 import moment from 'moment'
 import storageUtil from '@/util/storageUtil.js'
 import stockApiUtil from '@/util/stockApiUtil.js'
+import indexListAll from '@/common/indexListAll.js'
+import { mapGetters } from 'vuex'
 
-const codeMap = {
-  'chuangye': {
-    code: 'sz399006',
-    name: '创业',
-    mix: true
-  },
-  'gangtie': {
-    code: 'sz399440',
-    name: '钢铁'
-  },
-  'jungong': {
-    code: 'sz399959',
-    name: '军工'
-  },
-  'yiyao': {
-    code: 'sh000037',
-    name: '医药'
-  },
-  'meitan': {
-    code: 'sz399998',
-    name: '煤炭'
-  },
-  'youse': {
-    code: 'sh000823',
-    name: '有色'
-  },
-  'jisuanji': {
-    code: 'sz399363',
-    name: '计算机'
-  },
-  'baijiu': {
-    code: 'sz399997',
-    name: '白酒'
-  },
-  'xinxi': {
-    code: 'sh000993',
-    name: '信息'
-  },
-  'shipin': {
-    code: 'sz399396',
-    name: '食品'
-  },
-  'baoxian': {
-    code: 'sz399809',
-    name: '保险'
-  },
-  'wulin': {
-    code: 'sh000016',
-    name: '50',
-    mix: true
-  },
-  'chuanmei': {
-    code: 'sz399971',
-    name: '传媒'
-  },
-  'dianzi': {
-    code: 'sz399811',
-    name: '电子'
-  },
-  'yiliao': {
-    code: 'sz399989',
-    name: '医疗'
-  },
-  'shengwu': {
-    code: 'sz399441',
-    name: '生物'
-  },
-  'sanbai': {
-    code: 'sh000300',
-    name: '300',
-    mix: true
-  },
-  'wubai': {
-    code: 'sh000905',
-    name: '500',
-    mix: true
-  },
-  'yinhang': {
-    code: 'sz399986',
-    name: '银行'
-  },
-  'dichan': {
-    code: 'sz399393',
-    name: '地产'
-  },
-  'huanbao': {
-    code: 'sh000827',
-    name: '环保'
-  },
-  'shangzheng': {
-    code: 'sh000001',
-    name: '上证',
-    mix: true
-  },
-  'zhengquan': {
-    code: 'sz399437',
-    name: '证券'
-  },
-  'jijian': {
-    code: 'sz399995',
-    name: '基建'
-  },
-  'qiche': {
-    code: 'sz399432',
-    name: '汽车'
-  },
-  'yiqian': {
-    code: 'sh000852',
-    name: '1000',
-    mix: true
-  }
-}
 export default {
   name: 'TodayIndex',
   data () {
-    const userFundAccountInfo = storageUtil.getUserFundAccountInfo()
     let list = []
-    let rateInfo = {}
-    let hasCount = {}
-    let sortRate = {}
-    let indexRateInfo = {}
-    for (let key in codeMap) {
+    let indexUpDown = {}
+    let hasCountMap = {}
+    indexListAll.forEach((item) => {
       list.push({
-        key: key,
-        code: codeMap[key].code,
-        name: codeMap[key].name,
-        mix: codeMap[key].mix,
-        sortRate: 0
+        ...item,
+        rank: 0,
+        netChangeRatio: 0,
+        hasCount: 0
       })
-      rateInfo[key] = 0
-      sortRate[codeMap[key].name] = 0
-      indexRateInfo[key] = 0
-      hasCount[codeMap[key].name] = 0
-    }
+      indexUpDown[item.key] = 0
+      hasCountMap[item.name] = 0
+    })
     return {
       list: list,
-      rateInfo: rateInfo,
-      sortRate,
       timer: null,
-      hasCount,
-      indexRateInfo,
-      todayAsset: userFundAccountInfo.today_asset,
-      preAssetCost: userFundAccountInfo.pre_asset_cost,
-      assetCost: userFundAccountInfo.fund_asset_cost,
+      indexUpDown,
+      hasCountMap,
+      todayAsset: 0,
+      preAssetCost: 0,
+      assetCost: 0,
       tradeTime: '',
-      fundShares: userFundAccountInfo.fund_shares,
-      lastNetValue: {}
+      fundShares: 0,
+      lastNetValue: {},
+      marketOpen: false
     }
   },
   computed: {
     income () {
       let income = 0
-      for (let key in this.rateInfo) {
-        income += this.rateInfo[key] * (this.hasCount[codeMap[key].name] || 0)
-      }
+      this.list.forEach((item) => {
+        income += item.netChangeRatio * (item.hasCount || 0)
+      })
       return parseInt((income / 100) * 0.95)
     },
     incomeRate () {
       let income = 0
       let asset = 0
-      for (let key in this.rateInfo) {
-        let hasCount = (this.hasCount[codeMap[key].name] || 0)
-        income += this.rateInfo[key] * hasCount
+      this.list.forEach((item) => {
+        let hasCount = (item.hasCount || 0)
+        income += item.netChangeRatio * (item.hasCount || 0)
         asset += hasCount
-      }
+      })
       income = parseInt((income / 100) * 0.95)
       return this.countRate(income, asset)
     },
     incomeRelativeRate () {
+      const user = this.userFundAccountInfo.user
       let income = 0
-      for (let key in this.rateInfo) {
-        income += this.rateInfo[key] * (this.hasCount[codeMap[key].name] || 0)
-      }
+      this.list.forEach((item) => {
+        income += item.netChangeRatio * (item.hasCount || 0)
+      })
       income = parseInt((income / 100) * 0.95)
-      return this.countRate(income, this.todayAsset)
+      return this.countRate(income, user.asset)
     },
     incomeDiff () {
-      if (this.todayAsset === 0) {
+      const user = this.userFundAccountInfo.user
+      if (user.asset === 0) {
         return 0
       }
       let income = 0
       let asset = 0
-      for (let key in this.rateInfo) {
-        let hasCount = (this.hasCount[codeMap[key].name] || 0)
-        income += this.rateInfo[key] * hasCount
+      this.list.forEach((item) => {
+        let hasCount = (item.hasCount || 0)
+        income += item.netChangeRatio * (item.hasCount || 0)
         asset += hasCount
-      }
+      })
       income = parseInt((income / 100) * 0.95)
       let rate = this.countRate(income, asset)
-      return parseInt((asset - this.todayAsset) * rate / 100)
-    }
+      return parseInt((asset - user.asset) * rate / 100)
+    },
+    ...mapGetters([
+      'userFundAccountInfo'
+    ])
   },
   beforeDestroy () {
     clearInterval(this.timer)
   },
   created () {
+    this.marketOpen = this.userFundAccountInfo.marketOpen
     this.$http.get('userFund/getUserFunds').then((data) => {
       if (data.success) {
         const list = data.data.list
         for (let i = 0; i < list.length; i++) {
           const item = list[i]
           if (item.theme) {
-            // 计入定投
-            if (this.hasCount[item.theme]) {
-              this.hasCount[item.theme] += parseInt(item.sum)
+            if (this.hasCountMap[item.theme]) {
+              this.hasCountMap[item.theme] += parseInt(item.sum)
             } else {
-              this.hasCount[item.theme] = parseInt(item.sum)
+              this.hasCountMap[item.theme] = parseInt(item.sum)
             }
           }
         }
+        this.list.forEach((item) => {
+          item.hasCount = this.hasCountMap[item.name]
+        })
       }
     })
     this.timer = setInterval(() => {
@@ -256,17 +144,6 @@ export default {
   },
   methods: {
     initPage () {
-      // 最新的
-      this.$http.get('userFund/getUserLastNetValue').then((res) => {
-        const nowNetValue = res.data.record
-        if (nowNetValue) {
-          this.lastNetValue = nowNetValue
-          storageUtil.setUserFundAccountInfo('last_asset', nowNetValue.asset)
-          storageUtil.setUserFundAccountInfo('last_net_value', nowNetValue.net_value)
-          storageUtil.setUserFundAccountInfo('last_net_value_date', nowNetValue.net_value_date)
-          storageUtil.setUserFundAccountInfo('last_shares', nowNetValue.shares)
-        }
-      })
       let queryList = []
       let list = this.list
       for (let i = 0; i < list.length; i++) {
@@ -277,77 +154,52 @@ export default {
         this.updateMyNetValue()
       })
     },
-    updateMyNetValue () {
-      const d = this.getDate()
-      const hour = d.getHours()
-      const minute = d.getMinutes()
-      // 10点开始，15点结束
-      if ((hour >= 10 && hour < 16) || (hour === 16 && minute < 30)) {
-        // 和交易日是同一天
-        if (moment().isSame(this.tradeTime, 'day')) {
-          const netValueDate = this.lastNetValue.net_value_date
-          if (netValueDate) {
-            let income = 0
-            for (let key in this.rateInfo) {
-              income += this.rateInfo[key] * (this.hasCount[codeMap[key].name] || 0)
-            }
-            income = parseInt((income / 100) * 0.95)
-            let form = {
-              asset: (this.todayAsset + income),
-              shares: this.fundShares,
-              asset_cost: this.assetCost,
-              net_value_date: moment().format('YYYY-MM-DD')
-            }
-            let url = moment(netValueDate).isSame(this.tradeTime, 'day') ? 'userFund/updateUserNetValue' : 'userFund/addUserNetValue'
-            this.$http.post(url, form)
-          }
-        }
-      }
-    },
     queryData (item) {
-      return this.$http.getWithCache(`webData/${stockApiUtil.getTodayUrl()}`, {
+      return this.$http.getWithCache(`stock/${stockApiUtil.getTodayUrl()}`, {
         code: item.code
-      }, {interval: 30}).then((data) => {
+      }, {interval: 20}).then((data) => {
         if (data.success) {
           if (this.tradeTime === '') {
             this.tradeTime = data.data.tradeTime
           }
           const netChangeRatio = parseFloat(data.data.netChangeRatio)
-          this.sortRate[item.key] = netChangeRatio
-          this.rateInfo[item.key] = this.keepTwoDecimals(netChangeRatio)
-          let lastRateJson = storageUtil.getIndexRate(item.key)
-          // 上次的数据
-          let indexRateInfo = ''
-          if (lastRateJson) {
-            let lastRate = JSON.parse(lastRateJson)
-            if (moment().isSame(lastRate.date, 'day')) {
-              if (netChangeRatio < lastRate.rate) {
-                indexRateInfo = 'down'
-              }
-              if (netChangeRatio > lastRate.rate) {
-                indexRateInfo = 'up'
+          item.netChangeRatio = this.keepTwoDecimals(netChangeRatio)
+          // 如果不是交易日那就不执行
+          if (this.marketOpen) {
+            // 涨跌标志
+            let lastRateJson = storageUtil.getData('indexUpDown', item.key)
+            let indexUpDown = ''
+            if (lastRateJson) {
+              let lastRate = JSON.parse(lastRateJson)
+              if (moment().isSame(lastRate.date, 'day')) {
+                if (netChangeRatio < lastRate.rate) {
+                  indexUpDown = 'down'
+                }
+                if (netChangeRatio > lastRate.rate) {
+                  indexUpDown = 'up'
+                }
+              } else {
+                if (netChangeRatio < 0) {
+                  indexUpDown = 'down'
+                }
+                if (netChangeRatio > 0) {
+                  indexUpDown = 'up'
+                }
               }
             } else {
               if (netChangeRatio < 0) {
-                indexRateInfo = 'down'
+                indexUpDown = 'down'
               }
               if (netChangeRatio > 0) {
-                indexRateInfo = 'up'
+                indexUpDown = 'up'
               }
             }
-          } else {
-            if (netChangeRatio < 0) {
-              indexRateInfo = 'down'
-            }
-            if (netChangeRatio > 0) {
-              indexRateInfo = 'up'
-            }
+            this.indexUpDown[item.key] = indexUpDown
+            storageUtil.setData('indexUpDown', item.key, JSON.stringify({
+              date: moment().format('YYYY-MM-DD'),
+              rate: netChangeRatio
+            }))
           }
-          this.indexRateInfo[item.key] = indexRateInfo
-          storageUtil.setIndexRate(item.key, JSON.stringify({
-            date: moment().format('YYYY-MM-DD'),
-            rate: netChangeRatio
-          }))
         }
       })
     },
@@ -355,16 +207,42 @@ export default {
       this.$router.history.go(-1)
     },
     sortChangeHandler () {
-      for (let key in this.sortRate) {
-        for (let i = 0; i < this.list.length; i++) {
-          if (this.list[i].key === key) {
-            this.list[i].sortRate = this.sortRate[key]
+      this.list.sort((a, b) => {
+        return b.netChangeRatio - a.netChangeRatio
+      })
+    },
+    updateMyNetValue () {
+      const user = this.userFundAccountInfo.user
+      const userNewestNetValue = this.userFundAccountInfo.userNewestNetValue
+      // 如果不是交易日那就不执行
+      if (this.marketOpen) {
+        const d = this.getDate()
+        const hour = d.getHours()
+        const minute = d.getMinutes()
+        // 10点开始，16点半结束
+        if ((hour >= 10 && hour < 16) || (hour === 16 && minute < 30)) {
+          // 和交易日是同一天
+          if (moment().isSame(this.tradeTime, 'day')) {
+            const newestNetValueData = userNewestNetValue.net_value_date
+            // 当日收益
+            let income = 0
+            this.list.forEach((item) => {
+              income += item.netChangeRatio * (item.hasCount || 0)
+            })
+            income = parseInt((income / 100) * 0.95)
+            let form = {
+              shares: user.shares,
+              asset: user.asset + income,
+              asset_cost: user.asset_cost,
+              net_value_date: moment().format('YYYY-MM-DD'),
+              today_income: income,
+              income: user.income + income
+            }
+            let url = moment(newestNetValueData).isSame(this.tradeTime, 'day') ? 'userFund/updateUserNetValue' : 'userFund/addUserNetValue'
+            this.$http.post(url, form)
           }
         }
       }
-      this.list.sort((a, b) => {
-        return b.sortRate - a.sortRate
-      })
     }
   }
 }

@@ -33,6 +33,7 @@
 <script>
 import fixedInvestment from '@/util/platformFixedInvestment.js'
 import stockApiUtil from '@/util/stockApiUtil.js'
+import { mapGetters } from 'vuex'
 
 const codeMap = fixedInvestment.codeMap
 const InfoUtil = fixedInvestment.Util
@@ -128,22 +129,6 @@ function ifSixFive (netChangeRatioList) {
   return false
 }
 
-function getNetChangeRatioRateFactor (averageRate, rate) {
-  let rateAbs = Math.abs(rate)
-  // 暂时只对买入有影响
-  if (rate <= 0) {
-    if (rateAbs < (1.5 * averageRate)) {
-      return 0.1 + (rateAbs * 0.9 / (1.5 * averageRate))
-    } else if (rateAbs > (3 * averageRate)) {
-      return 1
-    } else {
-      return 1 + ((rateAbs - (1.5 * averageRate)) * 0.5 / (1.5 * averageRate))
-    }
-  } else {
-    return 1
-  }
-}
-
 export default {
   name: 'FixedInvestment',
   data () {
@@ -234,6 +219,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters([
+      'stockIndexAll'
+    ])
   },
   created () {
     this.initPage()
@@ -263,39 +251,35 @@ export default {
       }
     },
     initPage () {
-      this.$http.get('stock/getFixYearAverage').then((res) => {
-        const list = res.data
-        for (let i = 0; i < list.length; i++) {
-          this.averageMap[list[i].describe] = parseInt(list[i].value)
-        }
-      }).then(() => {
-        let list = this.list
-        for (let i = 0; i < list.length; i++) {
-          this.queryData(list[i])
-        }
-        this.$http.get('userFund/getUserFunds').then((data) => {
-          if (data.success) {
-            const list = data.data.list
-            for (let i = 0; i < list.length; i++) {
-              const item = list[i]
-              if (item.theme) {
-                // 只计入定投
-                if (item.strategy === '2') {
-                  this.hasInfo[item.theme] = true
-                  if (this.hasCount[item.theme]) {
-                    this.hasCount[item.theme] += parseInt(item.sum)
-                  } else {
-                    this.hasCount[item.theme] = parseInt(item.sum)
-                  }
+      this.stockIndexAll.forEach((item) => {
+        this.averageMap[item.code] = item.year_average
+      })
+      let list = this.list
+      for (let i = 0; i < list.length; i++) {
+        this.queryData(list[i])
+      }
+      this.$http.get('userFund/getUserFunds').then((data) => {
+        if (data.success) {
+          const list = data.data.list
+          for (let i = 0; i < list.length; i++) {
+            const item = list[i]
+            if (item.theme) {
+              // 只计入定投
+              if (item.strategy === '2') {
+                this.hasInfo[item.theme] = true
+                if (this.hasCount[item.theme]) {
+                  this.hasCount[item.theme] += parseInt(item.sum)
+                } else {
+                  this.hasCount[item.theme] = parseInt(item.sum)
                 }
               }
             }
           }
-        })
+        }
       })
     },
     queryData (item) {
-      this.$http.getWithCache(`webData/${stockApiUtil.getAllUrl()}`, {
+      this.$http.getWithCache(`stock/${stockApiUtil.getAllUrl()}`, {
         code: item.code,
         days: 16
       }, {interval: 30}).then((data) => {
@@ -357,7 +341,6 @@ export default {
             }
           }
           this.klineMap[item.key] = kline
-          // const buyFactor = getNetChangeRatioRateFactor(item.rate, recentNetValue[0].netChangeRatio)
           this.averageDiff[item.key] = this.countDifferenceRate(nowClose, this.averageMap[item.code])
           this.canBuy[item.key] = parseInt(getBuyRate(this.countDifferenceRate(nowClose, this.averageMap[item.code])) * (120000 / 162.5) * this.indexParams[item.code] / 10) * 10
           this.canSell[item.key] = parseInt(getBuyRate(-this.countDifferenceRate(nowClose, this.averageMap[item.code])) * (120000 / 162.5) * this.indexParamSell[item.code] / 10) * 10

@@ -109,7 +109,6 @@ export default{
     indexList.forEach((item) => {
       distribution[item.name] = 0
     })
-    distribution['定投'] = 0
     return {
       distribution,
       totalSum: 0,
@@ -144,6 +143,7 @@ export default{
           let totalSum = 0
           let otherTotal = 0
           let monthFix = 0
+          let fixTotal = 0
           let fixTotalCost = 0
           let monthFixCost = 0
           let yearFix = 0
@@ -160,11 +160,7 @@ export default{
                 }
                 otherTotal += parseInt(item.valuationSum)
               } else {
-                if (this.distribution['定投']) {
-                  this.distribution['定投'] += parseInt(item.valuationSum)
-                } else {
-                  this.distribution['定投'] = parseInt(item.valuationSum)
-                }
+                fixTotal += item.sum
                 fixTotalCost += item.costSum
                 item.position_record.forEach((record) => {
                   if (moment().isSame(record.confirm_date, 'month')) {
@@ -179,8 +175,6 @@ export default{
               }
             }
           }
-          this.totalSum = totalSum
-          this.otherTotal = otherTotal
           let proportionList = []
           for (let name in this.distribution) {
             if (this.distribution[name]) {
@@ -195,10 +189,12 @@ export default{
               })
             }
           }
-          this.fixTotal = this.distribution['定投']
           proportionList.sort((a, b) => {
             return b.proportion - a.proportion
           })
+          this.totalSum = totalSum
+          this.otherTotal = otherTotal
+          this.fixTotal = fixTotal
           this.fixTotalCost = fixTotalCost
           this.monthFix = monthFix
           this.monthFixCost = monthFixCost

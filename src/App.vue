@@ -169,7 +169,11 @@ export default {
         this.$store.commit('updateStockIndexAll', res.data)
       })
       this.$http.get('stock/getStockMarketQuestion').then((res) => {
-        this.$store.commit('updateStockMarketQuestion', res.data)
+        const data = {}
+        res.data.forEach((item) => {
+          data[item.key] = item.value
+        })
+        storageUtil.setData('stockMarketQuestion', data)
       })
     }
   }

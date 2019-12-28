@@ -2,8 +2,12 @@
   width: 100%;
   background-color: $active-color;
   color: #fff;
-  height: 90px;
-  font-size: 34px;
-  border-radius: 18px;
+}
+
+.main-btn {
+  height: 80px;
+  line-height: 80px;
+  border-radius: 80px;
+  font-size: 28px;
 }
 

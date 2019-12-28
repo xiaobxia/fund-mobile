@@ -1,0 +1,29 @@
+.filter-select-wrap {
+  padding: 20px 30px;
+  font-size: 30px;
+  span {
+
+  }
+  .select-btn {
+  }
+  button {
+    float: right;
+    width: auto;
+    border-radius: 18px;
+    height: 40px;
+    line-height: 40px;
+    font-size: 24px;
+  }
+}
+.filter-select-list {
+  margin: 0;
+  padding: 0;
+  font-size: 30px;
+  .filter-select-item {
+    display: block;
+    margin: 0;
+    padding: 20px 30px;
+    border-bottom: 1px solid $border-color;
+    text-align: center;
+  }
+}

@@ -13,8 +13,7 @@
         <div class="simple">
           <mt-cell-swipe v-for="(item) in showList" :key="item.code" :to="'/page/fundDetail?code='+item.code">
             <div slot="title">
-              <h3 :class="{lowRate: item.low_rate}">{{item.code}} {{formatFundName(item.name)}} <span style="float: right"
-                                                                                                     :class="stockNumberClass(item.change_ratio)">{{item.change_ratio}}%</span></h3>
+              <h3>{{item.code}} {{formatFundName(item.name)}} <span style="float: right" :class="stockNumberClass(item.change_ratio)">{{item.change_ratio}}%</span></h3>
             </div>
           </mt-cell-swipe>
         </div>
@@ -40,7 +39,7 @@ export default {
       this.onSearch(val)
     }
   },
-  mounted () {
+  created () {
     this.initPage()
   },
   methods: {
@@ -49,7 +48,7 @@ export default {
     onSearch (searchText) {
       clearTimeout(searchTimer)
       searchTimer = setTimeout(() => {
-        this.$http.get('userFund/getFundsBySearch', {
+        this.$http.get('fund/searchFunds', {
           keyword: searchText,
           current: 1,
           pageSize: 40

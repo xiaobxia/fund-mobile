@@ -15,11 +15,8 @@
 </template>
 
 <script>
-import Http from '@/util/httpUtil.js'
 import {MessageBox} from 'mint-ui'
 import Toast from '@/common/toast.js'
-import moment from 'moment'
-import storageUtil from '@/util/storageUtil.js'
 
 export default {
   name: 'AddFund',
@@ -29,14 +26,14 @@ export default {
     }
   },
   computed: {},
-  mounted () {
+  created () {
   },
   methods: {
     backHandler () {
       this.$router.history.go(-1)
     },
     okHandler () {
-      Http.post('fund/addFund', {
+      this.$http.post('fund/addFund', {
         code: this.code
       }).then((data) => {
         if (data.success) {

@@ -158,7 +158,7 @@ export default {
       return month === 10 || month === 11
     }
   },
-  mounted () {
+  created () {
   },
   methods: {
   }

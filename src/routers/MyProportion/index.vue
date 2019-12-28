@@ -6,23 +6,81 @@
       </mt-button>
     </mt-header>
     <div class="main-body">
-      <div class="content info">
-        <span class="item">当前资金：{{todayAsset}}</span>
-        <span class="item">当前持仓：{{parseInt(totalSum)}}</span>
-        <span class="item">波段资金：{{otherTotal}}</span>
-        <span class="item"></span>
-        <span class="item">总定投:{{fixTotal}}<span :class="stockNumberClass(fixTotal-fixTotalCost)">({{parseInt(fixTotal-fixTotalCost)}})</span></span>
-        <span class="item">总成本:{{parseInt(fixTotalCost)}}<span :class="stockNumberClass(fixTotal-fixTotalCost)">({{countDifferenceRate(fixTotal, fixTotalCost)}}%)</span></span>
-        <span class="item">年定投:{{parseInt(yearFix)}}<span :class="stockNumberClass(yearFix-yearFixCost)">({{parseInt(yearFix-yearFixCost)}})</span></span>
-        <span class="item">年成本:{{parseInt(yearFixCost)}}<span :class="stockNumberClass(yearFix-yearFixCost)">({{countDifferenceRate(yearFix, yearFixCost)}}%)</span></span>
-        <span class="item">月定投:{{parseInt(monthFix)}}<span :class="stockNumberClass(monthFix-monthFixCost)">({{parseInt(monthFix-monthFixCost)}})</span></span>
-        <span class="item">月成本:{{parseInt(monthFixCost)}}<span :class="stockNumberClass(monthFix-monthFixCost)">({{countDifferenceRate(monthFix, monthFixCost)}}%)</span></span>
+      <div class="detail-info-wrap">
+        <span class="item">
+          <span class="label">总资金：</span>
+          <span class="value">{{parseInt(asset)}}</span>
+        </span>
+        <span class="item">
+          <span class="label">总持仓：</span>
+          <span class="value">{{parseInt(totalSum)}}</span>
+        </span>
+        <span class="item">
+          <span class="label">定投资金：</span>
+          <span class="value">{{parseInt(fixTotal)}}</span>
+        </span>
+        <span class="item">
+          <span class="label">定投成本：</span>
+          <span class="value">{{parseInt(fixTotalCost)}}</span>
+        </span>
+        <span class="item">
+          <span class="label">定投收益：</span>
+          <span class="value">
+            <span :class="stockNumberClass(fixTotal-fixTotalCost)">{{parseInt(fixTotal-fixTotalCost)}}</span>
+          </span>
+        </span>
+        <span class="item">
+          <span class="label">定投收益率：</span>
+          <span class="value">
+            <span :class="stockNumberClass(fixTotal-fixTotalCost)">{{countDifferenceRate(fixTotal, fixTotalCost)}}%</span>
+          </span>
+        </span>
+        <span class="item">
+          <span class="label">年定投：</span>
+          <span class="value">{{parseInt(yearFix)}}</span>
+        </span>
+        <span class="item">
+          <span class="label">年成本：</span>
+          <span class="value">{{parseInt(yearFixCost)}}</span>
+        </span>
+        <span class="item">
+          <span class="label">年定投收益：</span>
+          <span class="value">
+            <span :class="stockNumberClass(yearFix-yearFixCost)">{{parseInt(yearFix-yearFixCost)}}</span>
+          </span>
+        </span>
+        <span class="item">
+          <span class="label">年定投收益率：</span>
+          <span class="value">
+            <span :class="stockNumberClass(yearFix-yearFixCost)">{{countDifferenceRate(yearFix, yearFixCost)}}%</span>
+          </span>
+        </span>
+        <span class="item">
+          <span class="label">月定投：</span>
+          <span class="value">{{parseInt(monthFix)}}</span>
+        </span>
+        <span class="item">
+          <span class="label">月成本：</span>
+          <span class="value">{{parseInt(monthFixCost)}}</span>
+        </span>
+        <span class="item">
+          <span class="label">月定投收益：</span>
+          <span class="value">
+            <span :class="stockNumberClass(monthFix-monthFixCost)">{{parseInt(monthFix-monthFixCost)}}</span>
+          </span>
+        </span>
+        <span class="item">
+          <span class="label">月定投收益率：</span>
+          <span class="value">
+            <span :class="stockNumberClass(monthFix-monthFixCost)">{{countDifferenceRate(monthFix, monthFixCost)}}%</span>
+          </span>
+        </span>
       </div>
       <div class="content">
         <p>定投资金占比</p>
         <div class="proportion-item">
-          <div class="title">定投<span class="rate">{{parseInt((fixTotal/todayAsset) * 100)}}%</span></div>
-          <mt-progress :value="parseInt((fixTotal/todayAsset) * 100)" :bar-height="barHeight"></mt-progress>
+          <div class="title">定投<span class="rate">{{countRate(fixTotal,asset)}}%</span></div>
+          <mt-progress :value="countRate(fixTotal,asset)" :bar-height="barHeight"></mt-progress>
         </div>
       </div>
       <div class="content">
@@ -37,28 +95,25 @@
 </template>
 <script>
 import moment from 'moment'
-import indexInfoUtilXiong from '@/util/indexInfoUtilXiong.js'
-import storageUtil from '@/util/storageUtil.js'
+import indexList from '@/common/indexList.js'
 import operatingTooltip from '@/util/operatingTooltip.js'
 
 const jigouName = operatingTooltip.jigouName
 const lajiName = operatingTooltip.lajiName
 
-const codeMap = indexInfoUtilXiong.codeMap
-
 const zoom = window.adaptive.zoom
 export default{
   name: 'MyProportion',
   data () {
-    const userFundAccountInfo = storageUtil.getUserFundAccountInfo()
     let distribution = {}
-    for (let key in codeMap) {
-      distribution[codeMap[key].name] = 0
-    }
+    indexList.forEach((item) => {
+      distribution[item.name] = 0
+    })
+    distribution['定投'] = 0
     return {
       distribution,
       totalSum: 0,
-      barHeight: 30 * zoom,
+      barHeight: 12 * zoom,
       fixTotalCost: 0,
       fixTotal: 0,
       monthFixCost: 0,
@@ -67,12 +122,12 @@ export default{
       yearFix: 0,
       yearFixCost: 0,
       list: [],
-      todayAsset: userFundAccountInfo.today_asset
+      asset: 0
     }
   },
   computed: {
   },
-  mounted () {
+  created () {
     this.queryRecord()
   },
   methods: {
@@ -127,23 +182,19 @@ export default{
           this.totalSum = totalSum
           this.otherTotal = otherTotal
           let proportionList = []
-          for (let key in codeMap) {
-            if (this.distribution[codeMap[key].name]) {
+          for (let name in this.distribution) {
+            if (this.distribution[name]) {
               proportionList.push({
-                name: codeMap[key].name,
-                proportion: this.keepTwoDecimals(100 * this.distribution[codeMap[key].name] / otherTotal)
+                name: name,
+                proportion: this.countRate(this.distribution[name], otherTotal)
               })
             } else {
               proportionList.push({
-                name: codeMap[key].name,
+                name: name,
                 proportion: 0
               })
             }
           }
-          // proportionList.push({
-          //   name: '定投',
-          //   proportion: this.keepTwoDecimals(100 * this.distribution['定投'] / totalSum)
-          // })
           this.fixTotal = this.distribution['定投']
           proportionList.sort((a, b) => {
             return b.proportion - a.proportion

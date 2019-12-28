@@ -1,12 +1,9 @@
 <template>
-  <div class="tab-view-mine has-bar grey-body">
+  <div class="tab-view-mine has-bar">
     <div class="info-wrap">
-      <img class="b-g" src="../../assets/wallhaven-683638.jpg" alt="">
-      <div class="mask"></div>
       <div class="user-img-wrap">
-        <img src="../../assets/头像.png" alt="">
+        <img src="../../assets/app-icon.png" alt="">
       </div>
-      <h3 class="user-name">{{userName}}</h3>
     </div>
     <div class="my-info-wrap simple large">
       <mt-cell-swipe :to="'/page/myFund'" is-link>
@@ -37,33 +34,32 @@
 </template>
 
 <script>
-import Http from '@/util/httpUtil.js'
 import Toast from '@/common/toast.js'
-import storageUtil from '@/util/storageUtil.js'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'Mine',
   data () {
-    const userInfo = storageUtil.getUserInfo()
     return {
-      userName: userInfo.name
     }
   },
-  computed: {},
-  mounted () {
+  computed: {
+    ...mapGetters([
+      'userFundAccountInfo'
+    ])
+  },
+  created () {
     this.initPage()
   },
   methods: {
     initPage () {
     },
     okHandler () {
-      Http.get('auth/logout', {token: window._token, platform: 'mobile'}).then((data) => {
+      this.$http.get('auth/logout', {token: window._token}).then((data) => {
         if (data.success) {
           localStorage.removeItem('token')
-          storageUtil.initUserInfo({
-            isLogin: false
-          })
           this.$router.push('/page/login')
+          location.reload()
         } else {
           Toast.error('操作失败')
         }
@@ -73,6 +69,5 @@ export default {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style rel="stylesheet/scss" lang="scss" scoped>
 </style>

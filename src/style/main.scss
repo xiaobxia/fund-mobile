@@ -4,7 +4,9 @@
 @import "mixin";
 @import "lib/mint";
 @import "text";
+@import "warn";
 @import "component/header";
+@import "component/select";
 @import "component/tabbar";
 @import "component/switch";
 @import "component/cell";
@@ -71,6 +73,7 @@ body {
 }
 
 .main-body {
+  box-sizing: border-box;
   position: relative;
   margin-top: 90px;
   min-height: calc(100vh - 90px);
@@ -80,6 +83,22 @@ body {
   margin-bottom: 90px;
 }
 
+.detail-info-wrap {
+  color: $main-text-color;
+  padding: 30px 0;
+  font-size: 28px;
+  .item {
+    padding: 0 20px;
+    display: inline-block;
+    width: 49%;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+
+    .value {
+      float: right;
+    }
+  }
+}
 .has-bar {
   margin-bottom: 145px;
 }

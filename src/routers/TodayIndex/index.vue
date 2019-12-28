@@ -231,7 +231,7 @@ export default {
   beforeDestroy () {
     clearInterval(this.timer)
   },
-  mounted () {
+  created () {
     this.$http.get('userFund/getUserFunds').then((data) => {
       if (data.success) {
         const list = data.data.list

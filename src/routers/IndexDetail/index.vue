@@ -193,7 +193,7 @@ export default {
       }
     }
   },
-  mounted () {
+  created () {
     const query = this.$router.history.current.query
     this.type = query.type
     if (query.type === 'jian') {

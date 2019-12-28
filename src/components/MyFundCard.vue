@@ -59,7 +59,7 @@ export default{
     listData: Array,
     title: String
   },
-  mounted () {
+  created () {
   },
   methods: {
   }

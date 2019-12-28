@@ -2,11 +2,9 @@
   <div>
     <div class="has-bar">
       <div class="img-card" @click="toPath('/page/schedule')">
-        <!--<img src="../../assets/timg.jpg" alt="">-->
         <div class="container">
           <div class="content">
             <img src="../../assets/定时.png" alt="">
-            <!--<i class="far fa-calendar-alt"></i>-->
           </div>
           <div class="bottom">定时任务</div>
         </div>
@@ -15,7 +13,6 @@
         <div class="container">
           <div class="content">
             <img src="../../assets/数据.png" alt="">
-            <!--<i class="fas fa-database"></i>-->
           </div>
           <div class="bottom">数据配置</div>
         </div>
@@ -24,7 +21,6 @@
         <div class="container">
           <div class="content">
             <img src="../../assets/保险条款.png" alt="">
-            <!--<i class="fas fa-book"></i>-->
           </div>
           <div class="bottom">买卖原则</div>
         </div>
@@ -33,7 +29,6 @@
         <div class="container">
           <div class="content">
             <img src="../../assets/资产管理.png" alt="">
-            <!--<i class="fas fa-book"></i>-->
           </div>
           <div class="bottom">资产管理</div>
         </div>
@@ -42,7 +37,6 @@
         <div class="container">
           <div class="content">
             <img src="../../assets/手动更新.png" alt="">
-            <!--<i class="fas fa-book"></i>-->
           </div>
           <div class="bottom">手动更新</div>
         </div>
@@ -51,18 +45,8 @@
         <div class="container">
           <div class="content">
             <img src="../../assets/仓位.png" alt="">
-            <!--<i class="fas fa-book"></i>-->
           </div>
           <div class="bottom">仓位配置</div>
-        </div>
-      </div>
-      <div class="img-card" @click="toPath('/page/buySellConfig')">
-        <div class="container">
-          <div class="content">
-            <img src="../../assets/买卖.png" alt="">
-            <!--<i class="fas fa-book"></i>-->
-          </div>
-          <div class="bottom">买卖配置</div>
         </div>
       </div>
     </div>
@@ -75,7 +59,7 @@ export default {
   data () {
     return {}
   },
-  mounted () {
+  created () {
     this.initPage()
   },
 

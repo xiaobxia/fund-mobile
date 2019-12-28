@@ -11,7 +11,9 @@
         v-model="stockApiWay"
         :options="['东方', '腾讯', '雪球']">
       </mt-radio>
-      <mt-button type="primary" @click="clearHandler" class="bottom-bar">清除本地存储数据</mt-button>
+      <div class="bottom-bar">
+        <mt-button type="primary" @click="clearHandler" class="main-btn">清除本地存储数据</mt-button>
+      </div>
     </div>
   </div>
 </template>
@@ -51,8 +53,4 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-  .main-btn {
-    position: absolute;
-    bottom: 20px;
-  }
 </style>

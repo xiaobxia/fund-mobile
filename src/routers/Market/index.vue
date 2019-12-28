@@ -68,7 +68,7 @@ export default{
       ifLowRate: lowRate === 'true'
     }
   },
-  mounted () {
+  created () {
     this.queryRecord()
   },
   methods: {

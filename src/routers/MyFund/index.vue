@@ -6,21 +6,63 @@
       </mt-button>
     </mt-header>
     <div class="main-body">
-      <div class="info-wrap">
-        <span class="item">持仓金额：{{parseInt(info.totalSum)}}</span>
-        <span class="item">估算金额：{{parseInt(info.valuationTotalSum)}}</span>
-        <span class="item">仓位信息：{{myPosition}}%</span>
-        <span class="item">可卖金额：{{parseInt(canSellSum)}}</span>
-        <span class="item">锁仓金额：{{parseInt(lockCostSum)}}</span>
-        <span class="item">锁仓收益：<span :class="stockNumberClass(lockIncome)">{{parseInt(lockIncome)}}</span></span>
-        <span class="item">估算收益：<span :class="stockNumberClass(valuationInfo)">{{parseInt(valuationInfo)}}</span></span>
-        <span class="item">估算比率：<span :class="stockNumberClass(todayIncomeRatio)">{{todayIncomeRatio}}%</span></span>
-        <span class="item">最新购买：{{parseInt(lastBuy)}}</span>
-        <span class="item">新买收益：<span :class="stockNumberClass(lastBuyChange)">{{parseInt(lastBuyChange)}}</span></span>
-        <span class="item">净值波动：<span :class="stockNumberClass(relativeRate)">{{relativeRate}}%</span></span>
-        <span class="item">沪深300：<span :class="stockNumberClass(hushenChangeRatio)">{{hushenChangeRatio}}%</span></span>
-        <span class="item">创业板：<span :class="stockNumberClass(chuangyeChangeRatio)">{{chuangyeChangeRatio}}%</span></span>
-        <span class="item">上证50：<span :class="stockNumberClass(wulinChangeRatio)">{{wulinChangeRatio}}%</span></span>
+      <div class="detail-info-wrap">
+        <span class="item">
+          <span class="label">持仓金额：</span>
+          <span class="value">{{parseInt(info.totalSum)}}</span>
+        </span>
+        <span class="item">
+          <span class="label">估算金额：</span>
+          <span class="value">{{parseInt(info.valuationTotalSum)}}</span>
+        </span>
+        <span class="item">
+          <span class="label">仓位信息：</span>
+          <span class="value">{{myPosition}}%</span>
+        </span>
+        <span class="item">
+          <span class="label">可卖金额：</span>
+          <span class="value">{{parseInt(canSellSum)}}</span>
+        </span>
+        <span class="item">
+          <span class="label">锁仓金额：</span>
+          <span class="value">{{parseInt(lockCostSum)}}</span>
+        </span>
+        <span class="item">
+          <span class="label">锁仓收益：</span>
+          <span :class="['value',stockNumberClass(lockIncome)]">{{parseInt(lockIncome)}}</span>
+        </span>
+        <span class="item">
+          <span class="label">估算收益：</span>
+          <span :class="['value',stockNumberClass(valuationInfo)]">{{parseInt(valuationInfo)}}</span>
+        </span>
+        <span class="item">
+          <span class="label">估算涨幅：</span>
+          <span :class="['value',stockNumberClass(todayIncomeRatio)]">{{todayIncomeRatio}}%</span>
+        </span>
+        <span class="item">
+          <span class="label">最新购买：</span>
+          <span class="value">{{parseInt(lastBuy)}}</span>
+        </span>
+        <span class="item">
+          <span class="label">新买收益：</span>
+          <span :class="['value',stockNumberClass(lastBuyChange)]">{{parseInt(lastBuyChange)}}</span>
+        </span>
+        <span class="item">
+          <span class="label">净值波动：</span>
+          <span :class="['value',stockNumberClass(relativeRate)]">{{relativeRate}}%</span>
+        </span>
+        <span class="item">
+          <span class="label">沪深300：</span>
+          <span :class="['value',stockNumberClass(hushenChangeRatio)]">{{hushenChangeRatio}}%</span>
+        </span>
+        <span class="item">
+          <span class="label">创业板：</span>
+          <span :class="['value',stockNumberClass(chuangyeChangeRatio)]">{{chuangyeChangeRatio}}%</span>
+        </span>
+        <span class="item">
+          <span class="label">上证50：</span>
+          <span :class="['value',stockNumberClass(wulinChangeRatio)]">{{wulinChangeRatio}}%</span>
+        </span>
       </div>
       <div class="lastUpdateValuationTime">更新于：{{lastUpdateValuationTime}}</div>
       <my-fund-card  v-for="(item) in cardInfo" :key="item.name"  :listData="item.list" :title="item.name"/>
@@ -32,22 +74,20 @@
 import moment from 'moment'
 import MyFundCard from '@/components/MyFundCard.vue'
 import fundAccountUtil from '@/util/fundAccountUtil.js'
-import indexInfoUtil from '@/util/indexInfoUtilXiong.js'
+import indexList from '@/common/indexList.js'
 import stockApiUtil from '@/util/stockApiUtil.js'
 import storageUtil from '@/util/storageUtil.js'
 
-const codeMap = indexInfoUtil.codeMap
 export default {
   name: 'MyFund',
   data () {
-    const userFundAccountInfo = storageUtil.getUserFundAccountInfo()
     let cardInfo = []
-    for (let key in codeMap) {
+    indexList.forEach((item) => {
       cardInfo.push({
-        name: codeMap[key].name,
+        name: item.name,
         list: []
       })
-    }
+    })
     cardInfo.push({
       name: '其他',
       list: []
@@ -67,7 +107,7 @@ export default {
       todayIncomeRatio: 0,
       lockIncome: 0,
       lockIncomeRatio: 0,
-      todayAsset: userFundAccountInfo.today_asset,
+      todayAsset: 0,
       cardInfo,
       hushenChangeRatio: 0,
       wulinChangeRatio: 0,
@@ -75,7 +115,7 @@ export default {
       lastUpdateValuationTime: '',
       fundNumber: 0,
       lockCostSum: 0,
-      lastTradingDay: userFundAccountInfo.pre_net_value_date,
+      lastTradingDay: '',
       lastBuy: 0,
       lastBuyChange: 0,
       lastBuyChangeRatio: 0,
@@ -104,20 +144,16 @@ export default {
     }
   },
   beforeDestroy () {
-    clearInterval(this.timer)
   },
-  mounted () {
-    this.timer = setInterval(() => {
-      this.initPage()
-    }, 1000 * 60)
+  created () {
     this.initPage()
   },
   methods: {
     initPage () {
       let dataMap = {}
-      for (let key in codeMap) {
-        dataMap[codeMap[key].name] = []
-      }
+      indexList.forEach((item) => {
+        dataMap[item.name] = []
+      })
       dataMap['其他'] = []
       dataMap['定投'] = []
       this.$http.get('userFund/getUserFunds').then((res) => {
@@ -182,7 +218,7 @@ export default {
     },
     queryStockData () {
       // 沪深300
-      this.$http.getWithCache(`webData/${stockApiUtil.getTodayUrl()}`, {
+      this.$http.getWithCache(`stock/${stockApiUtil.getTodayUrl()}`, {
         code: 'sh000300'
       }, {interval: 30}).then((data) => {
         if (data.success) {
@@ -190,7 +226,7 @@ export default {
         }
       })
       // 创业板
-      this.$http.getWithCache(`webData/${stockApiUtil.getTodayUrl()}`, {
+      this.$http.getWithCache(`stock/${stockApiUtil.getTodayUrl()}`, {
         code: 'sz399006'
       }, {interval: 30}).then((data) => {
         if (data.success) {
@@ -198,7 +234,7 @@ export default {
         }
       })
       // 上证50
-      this.$http.getWithCache(`webData/${stockApiUtil.getTodayUrl()}`, {
+      this.$http.getWithCache(`stock/${stockApiUtil.getTodayUrl()}`, {
         code: 'sh000016'
       }, {interval: 30}).then((data) => {
         if (data.success) {

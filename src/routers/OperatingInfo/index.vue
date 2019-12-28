@@ -151,7 +151,7 @@ export default {
       return count
     }
   },
-  mounted () {
+  created () {
     const query = this.$router.history.current.query
     this.type = query.type
     this.typeName = query.type === 'jian' ? '简' : '熊'

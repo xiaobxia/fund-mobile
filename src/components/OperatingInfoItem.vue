@@ -410,7 +410,7 @@ export default {
       return fake === '假'
     }
   },
-  mounted () {
+  created () {
   },
   methods: {
     // 是否涨得太快

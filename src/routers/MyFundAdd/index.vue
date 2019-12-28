@@ -1,29 +1,29 @@
 <template>
   <div class="my-fund-add">
-    <mt-header :title="type==='add'?'添加':'编辑'" :fixed="true">
+    <mt-header :title="ifHas?'编辑':'添加'" :fixed="true">
       <mt-button slot="left" @click="backHandler">
         <i class="fas fa-chevron-left"></i>
       </mt-button>
-      <mt-button slot="right" v-if="type==='edit'">
+      <mt-button slot="right" v-if="ifHas">
         <i class="far fa-trash-alt red-text" @click="deleteHandler"></i>
       </mt-button>
     </mt-header>
     <div class="main-body has-bar">
       <mt-field label="代码" v-model="fundInfo.code" disabled></mt-field>
       <mt-field label="名称" v-model="fundInfo.name" disabled></mt-field>
-      <template v-if="type === 'edit'">
-        <div class="edit-type-wrap">
+      <template v-if="ifHas">
+        <div class="filter-select-wrap">
           <span class="name">{{editType}}</span>
           <mt-button type="primary" @click="editTypeChangeHandler">改变</mt-button>
         </div>
       </template>
       <div class="edit-type-body">
-        <template v-if="type === 'add' || (type === 'edit' && editType === '修改')">
-          <div class="strategy-wrap">
+        <template v-if="!ifHas || (ifHas && editType === '修改')">
+          <div class="filter-select-wrap">
             <span class="name">{{form.strategy === '1' ? '波段':'定投'}}</span>
             <mt-button type="primary" @click="strategyChangeHandler">改变</mt-button>
           </div>
-          <template v-if="type === 'add'">
+          <template v-if="!ifHas">
             <mt-field label="成本" placeholder="请输入成本" v-model="form.cost"></mt-field>
             <mt-field label="金额" placeholder="请输入金额" v-model="form.asset"></mt-field>
             <mt-field label="确认日期" placeholder="请输入确认日期" v-model="form.confirm_date"></mt-field>
@@ -36,12 +36,12 @@
             </div>
           </template>
         </template>
-        <template v-if="type === 'edit' && editType === '加仓'">
+        <template v-if="ifHas && editType === '加仓'">
           <mt-field label="加仓金额" placeholder="加仓金额" v-model="addForm.asset"></mt-field>
           <mt-field label="确认日期" placeholder="确认日期" v-model="addForm.confirm_date"></mt-field>
           <div class="content">成本：{{fundInfo.net_value}}</div>
         </template>
-        <template v-if="type === 'edit' && editType === '减仓'">
+        <template v-if="ifHas && editType === '减仓'">
           <mt-field label="减仓份额" placeholder="减仓份额" v-model="cutForm.shares"></mt-field>
           <div class="position_record_list">
             <div v-for="(item, index) in positionRecord" :key="index" :class="{lock: item.ifLock}">成本：{{item.costSum}}，市值：{{item.sum}}，份额：{{keepTwoDecimals(item.shares)}}，确认日期：{{item.confirm_date}}</div>
@@ -55,8 +55,8 @@
     <mt-popup
       v-model="editTypePopupVisible"
       position="bottom">
-      <ul class="strategy-list">
-        <li class="strategy-item" v-for="(item) in editTypeList" :key="item.code"
+      <ul class="filter-select-list">
+        <li class="filter-select-item" v-for="(item) in editTypeList" :key="item.code"
             @click="onEditTypeChangeHandler(item.name)">{{item.name}}
         </li>
       </ul>
@@ -64,8 +64,8 @@
     <mt-popup
       v-model="popupVisible"
       position="bottom">
-      <ul class="strategy-list">
-        <li class="strategy-item" v-for="(item) in strategyList" :key="item.code"
+      <ul class="filter-select-list">
+        <li class="filter-select-item" v-for="(item) in strategyList" :key="item.code"
             @click="onStrategyChangeHandler(item.name)">{{item.name}}
         </li>
       </ul>
@@ -99,11 +99,12 @@ export default {
       cutForm: {
         shares: ''
       },
-      editType: '修改'
+      editType: '修改',
+      ifHas: false
     }
   },
   computed: {},
-  mounted () {
+  created () {
     this.initPage()
   },
   methods: {
@@ -118,14 +119,15 @@ export default {
       }).then((res) => {
         if (res.success === true && res.data.code) {
           const userFund = res.data
+          if (userFund.has) {
+            this.ifHas = true
+            this.positionRecord = userFund.position_record
+            this.form.strategy = userFund.strategy
+          }
           this.fundInfo = userFund
           this.form.cost = userFund.net_value
           this.form.strategy = '1'
           this.form.code = query.code
-          if (this.type === 'edit') {
-            this.positionRecord = userFund.position_record
-            this.form.strategy = userFund.strategy
-          }
         }
       })
     },

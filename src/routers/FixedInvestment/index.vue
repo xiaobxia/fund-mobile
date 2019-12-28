@@ -235,7 +235,7 @@ export default {
   },
   computed: {
   },
-  mounted () {
+  created () {
     this.initPage()
   },
   methods: {

@@ -1,6 +1,8 @@
 <template>
   <div class="page-login">
-    <h3>平台</h3>
+    <div class="app-icon">
+      <img src="../../assets/app-icon.png" alt="">
+    </div>
     <div class="input-item">
       <input type="text" v-model="account">
     </div>
@@ -53,5 +55,18 @@ export default {
 }
 </script>
 
-<style scoped>
+<style rel="stylesheet/scss" lang="scss" scoped>
+  .app-icon {
+    position: relative;
+    margin: auto;
+    height: 120px;
+    width: 120px;
+    border-radius: 120px;
+    overflow: hidden;
+    margin-bottom: 100px;
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
 </style>

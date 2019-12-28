@@ -12,33 +12,9 @@
             <th>指数</th>
             <th>总收益（基于本账户）</th>
           </tr>
-          <tr>
-            <td>我的</td>
-            <td>{{allRate.my}}%</td>
-          </tr>
-          <tr>
-            <td>上证</td>
-            <td>{{allRate.shangzheng}}% <span :class="stockNumberClass(allRate.my - allRate.shangzheng)">( {{keepTwoDecimals(allRate.my - allRate.shangzheng)}}% )</span></td>
-          </tr>
-          <tr>
-            <td>创业</td>
-            <td>{{allRate.chuangye}}% <span :class="stockNumberClass(allRate.my - allRate.chuangye)">( {{keepTwoDecimals(allRate.my - allRate.chuangye)}}% )</span></td>
-          </tr>
-          <tr>
-            <td>上证50</td>
-            <td>{{allRate.wulin}}% <span :class="stockNumberClass(allRate.my - allRate.wulin)">( {{keepTwoDecimals(allRate.my - allRate.wulin)}}% )</span></td>
-          </tr>
-          <tr>
-            <td>沪深300</td>
-            <td>{{allRate.hushen}}% <span :class="stockNumberClass(allRate.my - allRate.hushen)">( {{keepTwoDecimals(allRate.my - allRate.hushen)}}% )</span></td>
-          </tr>
-          <tr>
-            <td>沪深500</td>
-            <td>{{allRate.wubai}}% <span :class="stockNumberClass(allRate.my - allRate.wubai)">( {{keepTwoDecimals(allRate.my - allRate.wubai)}}% )</span></td>
-          </tr>
-          <tr>
-            <td>沪深1000</td>
-            <td>{{allRate.yiqian}}% <span :class="stockNumberClass(allRate.my - allRate.yiqian)">( {{keepTwoDecimals(allRate.my - allRate.yiqian)}}% )</span></td>
+          <tr v-for="(item, index) in list" :key="index">
+            <td>{{item.name}}</td>
+            <td>{{item.netChangeRatio}}%<span v-if="item.key !== 'my'" :class="stockNumberClass(myNetChangeRatio - item.netChangeRatio)">( {{keepTwoDecimals(myNetChangeRatio - item.netChangeRatio)}}% )</span></td>
           </tr>
         </table>
       </div>
@@ -48,78 +24,73 @@
 
 <script>
 import {Indicator} from 'mint-ui'
-
-let webDataMap = {
-  shangzheng: {
-    code: 'sh000001',
-    name: '上证'
-  },
-  chuangye: {
-    code: 'sz399006',
-    name: '创业'
-  },
-  wulin: {
-    code: 'sh000016',
-    name: '上证50'
-  },
-  hushen: {
-    code: 'sh000300',
-    name: '沪深300'
-  },
-  'wubai': {
-    code: 'sh000905',
-    name: '500'
-  },
-  'yiqian': {
-    code: 'sh000852',
-    name: '1000'
-  }
-}
-
-let webDataKeyRateMap = {}
-for (let key in webDataMap) {
-  webDataKeyRateMap[key] = 0
-}
+import indexListAll from '@/common/indexListAll.js'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'IncomeAll',
   data () {
-    return {
-      allRate: {
-        my: 0,
-        ...webDataKeyRateMap
+    let list = []
+    indexListAll.forEach((item) => {
+      if (item.mix) {
+        list.push({
+          ...item,
+          netChangeRatio: 0
+        })
       }
+    })
+    return {
+      list,
+      myNetChangeRatio: 0
     }
   },
-
   computed: {
+    ...mapGetters([
+      'userFundAccountInfo'
+    ])
   },
-  mounted () {
+  created () {
     this.initPage()
   },
-
   methods: {
     initPage () {
-      Indicator.open({
-        spinnerType: 'fading-circle'
-      })
-      let queryList = []
-      this.$http.get('userFund/getUserIncomeInfo').then((res) => {
-        const data = res.data
-        const startDate = data.first_net_value_date
-        this.allRate.my = this.countDifferenceRate(data.last_net_value, data.first_net_value)
-        for (let key in webDataMap) {
-          queryList.push(this.$http.get(`stock/getStockPriceRateByLocal`, {
-            code: webDataMap[key].code,
-            start: startDate
-          }).then((res) => {
-            if (res.success) {
-              this.allRate[key] = res.data.rate
-            }
-          }))
-        }
-        Indicator.close()
-      })
+      this.myNetChangeRatio = this.countDifferenceRate(
+        this.userFundAccountInfo.userLastTradeDateNetValue.net_value,
+        this.userFundAccountInfo.userFirstNetValue.net_value
+      )
+      const start = this.userFundAccountInfo.firstNetValueDate
+      if (start) {
+        Indicator.open({
+          spinnerType: 'fading-circle'
+        })
+        const opList = []
+        this.list.forEach((item) => {
+          opList.push(
+            this.$http.get(`stock/getStockPriceNetChangeRatioByStart`, {
+              code: item.code,
+              start: start
+            }).then((res) => {
+              if (res.success) {
+                item.netChangeRatio = res.data.netChangeRatio
+              }
+            })
+          )
+        })
+        Promise.all(opList).then(() => {
+          this.list.push({
+            key: 'my',
+            name: '我的',
+            netChangeRatio: this.myNetChangeRatio
+          })
+          Indicator.close()
+        })
+      } else {
+        this.list.push({
+          key: 'my',
+          name: '我的',
+          netChangeRatio: this.myNetChangeRatio
+        })
+      }
     },
     toPath (path) {
       this.$router.push(path)

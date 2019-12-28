@@ -52,7 +52,7 @@ export default{
   },
   computed: {
   },
-  mounted () {
+  created () {
     this.queryRecord()
   },
   methods: {

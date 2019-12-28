@@ -30,7 +30,7 @@ export default {
   computed: {},
   watch: {
   },
-  mounted () {
+  created () {
   },
   methods: {
     backHandler () {
@@ -104,6 +104,8 @@ export default {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style rel="stylesheet/scss" lang="scss" scoped>
+  .main-body {
+    padding: 50px 20px 0 20px;
+  }
 </style>

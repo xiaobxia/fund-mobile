@@ -1,24 +1,28 @@
 <template>
-  <div class="my-fund-add">
+  <div class="my-asset">
     <mt-header title="编辑" :fixed="true">
       <mt-button slot="left" @click="backHandler">
         <i class="fas fa-chevron-left"></i>
       </mt-button>
     </mt-header>
     <div class="main-body">
-      <div class="yellow-warn">申购在每月的月底进行</div>
-      <div class="strategy-wrap">
+      <div class="yellow fm-warn">申购在每月的月底进行</div>
+      <div class="filter-select-wrap">
         <span class="name">{{editType}}</span>
         <mt-button type="primary" @click="editTypeChangeHandler">改变</mt-button>
       </div>
       <template v-if="editType === '修改'">
-        <mt-field label="基金资产成本" placeholder="请输入" v-model="form.fundAssetCost"></mt-field>
-        <mt-field label="基金份额" placeholder="请输入" v-model="form.fundShares"></mt-field>
+        <mt-field label="资产" placeholder="请输入" v-model="form.asset"></mt-field>
+        <mt-field label="资产成本" placeholder="请输入" v-model="form.asset_cost"></mt-field>
+        <mt-field label="份额" placeholder="请输入" v-model="form.shares"></mt-field>
+        <mt-field label="总收益" placeholder="请输入" v-model="form.income"></mt-field>
       </template>
       <template v-if="editType === '申购'">
         <mt-field label="加仓金额" placeholder="请输入" v-model="buyForm.asset"></mt-field>
-        <p class="infoP">净值：{{this.netValueInfo.net_value}}</p>
-        <p class="infoP">日期：{{this.netValueInfo.net_value_date}}</p>
+        <div class="content">
+          <p class="infoP">净值：{{this.netValueInfo.net_value}}</p>
+          <p class="infoP">日期：{{this.netValueInfo.net_value_date}}</p>
+        </div>
       </template>
       <template v-if="editType === '赎回'">
         <mt-field label="赎回份额" placeholder="请输入" v-model="sellForm.shares"></mt-field>
@@ -30,8 +34,8 @@
     <mt-popup
       v-model="editTypePopupVisible"
       position="bottom">
-      <ul class="strategy-list">
-        <li class="strategy-item" v-for="(item) in editTypeList" :key="item.code"
+      <ul class="filter-select-list">
+        <li class="filter-select-item" v-for="(item) in editTypeList" :key="item.code"
             @click="onEditTypeChangeHandler(item.name)">{{item.name}}
         </li>
       </ul>
@@ -40,21 +44,20 @@
 </template>
 
 <script>
-import storageUtil from '@/util/storageUtil.js'
-import Http from '@/util/httpUtil.js'
 import Toast from '@/common/toast.js'
-import numberUtil from '@/util/numberUtil.js'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'MyAsset',
   data () {
-    const userFundAccountInfo = storageUtil.getUserFundAccountInfo()
     return {
       editTypePopupVisible: false,
       editTypeList: [{name: '修改'}, {name: '申购'}, {name: '赎回'}],
       form: {
-        fundAssetCost: userFundAccountInfo.fund_asset_cost,
-        fundShares: userFundAccountInfo.fund_shares
+        shares: 0,
+        asset: 0,
+        asset_cost: 0,
+        income: 0
       },
       buyForm: {
         asset: 0
@@ -64,15 +67,31 @@ export default {
       },
       editType: '修改',
       netValueInfo: {
-        net_value: userFundAccountInfo.last_net_value,
-        net_value_date: userFundAccountInfo.last_net_value_date
+        net_value: 1,
+        net_value_date: ''
       }
     }
   },
-  computed: {},
+  computed: {
+    ...mapGetters([
+      'userFundAccountInfo'
+    ])
+  },
   watch: {
   },
-  mounted () {
+  created () {
+    const user = this.userFundAccountInfo.user
+    const userLastTradeDateNetValue = this.userFundAccountInfo.userLastTradeDateNetValue
+    this.form = {
+      shares: user.shares,
+      asset: user.asset,
+      asset_cost: user.asset_cost,
+      income: user.income
+    }
+    this.netValueInfo = {
+      net_value: userLastTradeDateNetValue.net_value,
+      net_value_date: userLastTradeDateNetValue.net_value_date || ''
+    }
     this.initPage()
   },
   methods: {
@@ -100,29 +119,22 @@ export default {
       }
     },
     okHandler () {
-      let fundAssetCost = 0
-      let fundShares = 0
-      if (this.editType === '修改') {
-        fundAssetCost = this.form.fundAssetCost
-        fundShares = this.form.fundShares
+      let updateData = {
+        ...this.form
       }
       if (this.editType === '申购') {
         let buyAsset = parseInt(this.buyForm.asset)
-        fundAssetCost = this.form.fundAssetCost + buyAsset
-        fundShares = this.form.fundShares + (buyAsset / (this.netValueInfo.net_value || 1))
+        updateData.asset_cost = this.form.asset_cost + buyAsset
+        updateData.asset = this.form.asset + buyAsset
+        updateData.shares = this.form.shares + (buyAsset / this.netValueInfo.net_value)
       }
       if (this.editType === '赎回') {
         let sellShares = parseInt(this.sellForm.shares)
-        fundShares = this.form.fundShares - sellShares
-        fundAssetCost = fundShares * (this.form.fundAssetCost / this.form.fundShares)
+        updateData.shares = this.form.shares - sellShares
+        updateData.asset = this.form.asset * (updateData.shares / this.form.shares)
+        updateData.asset_cost = this.form.asset_cost * (updateData.shares / this.form.shares)
       }
-      Http.post('userFund/updateUserFundAssetInfo', {
-        fundAssetCost: numberUtil.keepTwoDecimals(fundAssetCost),
-        fundShares: numberUtil.keepTwoDecimals(fundShares)
-      }).then((res) => {
-        this.$http.get('userFund/getUserFundAccountInfo').then((res) => {
-          storageUtil.initUserFundAccountInfo(res.data)
-        })
+      this.$http.post('user/updateUserAsset', updateData).then((res) => {
         this.toast(res)
       })
     }

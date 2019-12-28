@@ -12,12 +12,9 @@
         :sellCount="sellCount"
         :countUpNumber="countUpNumber"
         :countDownNumber="countDownNumber"
-        :sellCountLastDay="sellCountLastDay"
-        :buyCountLastDay="buyCountLastDay"
         :lastDayBuy="lastDayBuy"
         :lastDaySell="lastDaySell"
         :nowMonthRate="nowMonthRate"
-        :type="typeName"
         :niuxiong="niuxiong"
       />
       <operating-info-item
@@ -32,10 +29,10 @@
         :totalSum="totalSum"
         :buyCount="buyCount"
         :sellCount="sellCount"
+        :nowMonthRate="nowMonthRate"
         :buySellList="buySellMap[item.key]"
         :netChangeRatioList="netChangeRatioMap[item.key]"
         :closeList="closeListMap[item.key]"
-        :buySellListLarge="buySellLargeMap[item.key]"
         :netChangeRatioListLarge="netChangeRatioLargeMap[item.key]"
         :closeListLarge="closeListLargeMap[item.key]"
         :countUpNumber="countUpNumber"
@@ -66,7 +63,6 @@ export default {
   name: 'OperatingInfo',
   data () {
     let buySellMap = {}
-    let buySellLargeMap = {}
     let netChangeRatioMap = {}
     let netChangeRatioLargeMap = {}
     let closeListMap = {}
@@ -83,7 +79,6 @@ export default {
         key: key
       })
       buySellMap[key] = []
-      buySellLargeMap[key] = []
       closeListMap[key] = []
       closeListLargeMap[key] = []
       netChangeRatioMap[key] = []
@@ -99,7 +94,6 @@ export default {
       typeName: '简',
       list: list,
       buySellMap,
-      buySellLargeMap,
       netChangeRatioMap,
       netChangeRatioLargeMap,
       closeListMap,
@@ -125,12 +119,6 @@ export default {
     },
     sellCount () {
       return this.countFlag(this.buySellMap, 0, 'sell')
-    },
-    buyCountLastDay () {
-      return this.countFlag(this.buySellMap, 1, 'buy')
-    },
-    sellCountLastDay () {
-      return this.countFlag(this.buySellMap, 1, 'sell')
     },
     countUpNumber () {
       let count = 0
@@ -216,7 +204,7 @@ export default {
         let dingtou = 0
         for (let i = 0; i < indexList.length; i++) {
           this.queryData(indexList[i])
-          const niuxiong = storageUtil.getIndexNiuXiong(indexList[i].key)
+          const niuxiong = storageUtil.getData('stockIndexFlag', indexList[i].key)
           if (niuxiong === '大反') {
             dafan++
           } else if (niuxiong === '小反') {
@@ -249,7 +237,6 @@ export default {
           let buySellList = []
           let netChangeRatioList = []
           let closeList = []
-          let buySellListLarge = []
           let netChangeRatioListLarge = []
           let closeListLarge = []
           for (let i = 0; i < 10; i++) {
@@ -261,13 +248,6 @@ export default {
             if (i <= 7) {
               netChangeRatioListLarge[i] = recentNetValue[i].netChangeRatio
               closeListLarge[i] = recentNetValue[i].close
-              if ((buyFlag === true) || (buyFlag !== false && buyFlag.flag === true)) {
-                buySellListLarge[i] = 'buy'
-              } else if ((sellFlag === true) || (sellFlag !== false && sellFlag.flag === true)) {
-                buySellListLarge[i] = 'sell'
-              } else {
-                buySellListLarge[i] = ''
-              }
             }
             if (i < 5) {
               netChangeRatioList[i] = recentNetValue[i].netChangeRatio
@@ -297,17 +277,14 @@ export default {
           this.buySellMap[item.key] = buySellList
           this.closeListMap[item.key] = closeList
           this.netChangeRatioMap[item.key] = netChangeRatioList
-          this.buySellLargeMap[item.key] = buySellListLarge
           this.closeListLargeMap[item.key] = closeListLarge
           this.netChangeRatioLargeMap[item.key] = netChangeRatioListLarge
           this.firstClass[item.key] = buySellList[0]
           this.rateMap[item.key] = this.keepTwoDecimals(recentNetValue[0].netChangeRatio)
           if (this.type === 'jian') {
-            storageUtil.setJianBuySellList(item.key, buySellList)
-            storageUtil.setJianBuySellListLarge(item.key, buySellListLarge)
+            storageUtil.setData('jianBuySellList', item.key, buySellList)
           } else {
-            storageUtil.setXiongBuySellList(item.key, buySellList)
-            storageUtil.setXiongBuySellListLarge(item.key, buySellListLarge)
+            storageUtil.setData('xiongBuySellList', item.key, buySellList)
           }
           if (buySellList[1] === 'buy') {
             this.lastDayBuy[1]++
@@ -321,7 +298,7 @@ export default {
               this.lastDaySell[0]++
             }
           }
-          if (storageUtil.getNoSell(item.key)) {
+          if (storageUtil.getData('noSell', item.key)) {
             this.noSellCount = this.noSellCount + 1
           }
         }

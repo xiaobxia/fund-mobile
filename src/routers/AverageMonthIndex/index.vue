@@ -86,15 +86,6 @@ export default {
           // 保存锁仓信息
           storageUtil.setData('noSell', item.key, lock)
           storageUtil.setData('averageMonth', item.key, averageDiff)
-          // let factor = 1
-          // if (averageDiff > 0) {
-          //   // 越靠近-10越小
-          //   factor = 1 - (0.5 * (averageDiff / item.reduceLine))
-          // }
-          // if (factor < 0.5) {
-          //   factor = 0.5
-          // }
-          // storageUtil.setMonthFactor(item.key, factor)
         }
       })
     },

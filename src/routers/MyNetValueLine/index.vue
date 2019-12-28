@@ -32,35 +32,10 @@
             <td>{{nowMonthRate.my}}%</td>
             <td>{{nowYearRate.my}}%</td>
           </tr>
-          <tr>
-            <td>上证</td>
-            <td>{{nowMonthRate.shangzheng}}%<div :class="stockNumberClass(nowMonthRate.my - nowMonthRate.shangzheng)">({{keepTwoDecimals(nowMonthRate.my - nowMonthRate.shangzheng)}}%)</div></td>
-            <td>{{nowYearRate.shangzheng}}%<div :class="stockNumberClass(nowYearRate.my - nowYearRate.shangzheng)">({{keepTwoDecimals(nowYearRate.my - nowYearRate.shangzheng)}}%)</div></td>
-          </tr>
-          <tr>
-            <td>创业</td>
-            <td>{{nowMonthRate.chuangye}}%<div :class="stockNumberClass(nowMonthRate.my - nowMonthRate.chuangye)">({{keepTwoDecimals(nowMonthRate.my - nowMonthRate.chuangye)}}%)</div></td>
-            <td>{{nowYearRate.chuangye}}%<div :class="stockNumberClass(nowYearRate.my - nowYearRate.chuangye)">({{keepTwoDecimals(nowYearRate.my - nowYearRate.chuangye)}}%)</div></td>
-          </tr>
-          <tr>
-            <td>300</td>
-            <td>{{nowMonthRate.hushen}}%<div :class="stockNumberClass(nowMonthRate.my - nowMonthRate.hushen)">({{keepTwoDecimals(nowMonthRate.my - nowMonthRate.hushen)}}%)</div></td>
-            <td>{{nowYearRate.hushen}}%<div :class="stockNumberClass(nowYearRate.my - nowYearRate.hushen)">({{keepTwoDecimals(nowYearRate.my - nowYearRate.hushen)}}%)</div></td>
-          </tr>
-          <tr>
-            <td>50</td>
-            <td>{{nowMonthRate.wulin}}%<div :class="stockNumberClass(nowMonthRate.my - nowMonthRate.wulin)">({{keepTwoDecimals(nowMonthRate.my - nowMonthRate.wulin)}}%)</div></td>
-            <td>{{nowYearRate.wulin}}%<div :class="stockNumberClass(nowYearRate.my - nowYearRate.wulin)">({{keepTwoDecimals(nowYearRate.my - nowYearRate.wulin)}}%)</div></td>
-          </tr>
-          <tr>
-            <td>500</td>
-            <td>{{nowMonthRate.wubai}}%<div :class="stockNumberClass(nowMonthRate.my - nowMonthRate.wubai)">({{keepTwoDecimals(nowMonthRate.my - nowMonthRate.wubai)}}%)</div></td>
-            <td>{{nowYearRate.wubai}}%<div :class="stockNumberClass(nowYearRate.my - nowYearRate.wubai)">({{keepTwoDecimals(nowYearRate.my - nowYearRate.wubai)}}%)</div></td>
-          </tr>
-          <tr>
-            <td>1000</td>
-            <td>{{nowMonthRate.yiqian}}%<div :class="stockNumberClass(nowMonthRate.my - nowMonthRate.yiqian)">({{keepTwoDecimals(nowMonthRate.my - nowMonthRate.yiqian)}}%)</div></td>
-            <td>{{nowYearRate.yiqian}}%<div :class="stockNumberClass(nowYearRate.my - nowYearRate.yiqian)">({{keepTwoDecimals(nowYearRate.my - nowYearRate.yiqian)}}%)</div></td>
+          <tr v-for="(item, index) in webDataKeys" :key="index">
+            <td>{{webDataMap[item].name}}</td>
+            <td>{{nowMonthRate[item]}}%<div :class="stockNumberClass(nowMonthRate.my - nowMonthRate[item])">({{keepTwoDecimals(nowMonthRate.my - nowMonthRate[item])}}%)</div></td>
+            <td>{{nowYearRate[item]}}%<div :class="stockNumberClass(nowYearRate.my - nowYearRate[item])">({{keepTwoDecimals(nowYearRate.my - nowYearRate[item])}}%)</div></td>
           </tr>
         </table>
         <ve-histogram :grid="monthRateGrid"
@@ -76,59 +51,33 @@
 
 <script>
 import moment from 'moment'
+import indexListAll from '@/common/indexListAll.js'
 import dateUtil from '@/util/dateUtil.js'
 import arrayUtil from '@/util/arrayUtil.js'
 import {Indicator} from 'mint-ui'
-import storageUtil from '@/util/storageUtil.js'
-import stockApiUtil from '@/util/stockApiUtil.js'
+import { mapGetters } from 'vuex'
 
 const zoom = window.adaptive.zoom
 const baseFontSize = 22
-
-let webDataMap = {
-  shangzheng: {
-    code: 'sh000001',
-    name: '上证',
-    selected: false
-  },
-  chuangye: {
-    code: 'sz399006',
-    name: '创业',
-    selected: false
-  },
-  hushen: {
-    code: 'sh000300',
-    name: '沪深300',
-    selected: true
-  },
-  wulin: {
-    code: 'sh000016',
-    name: '上证50',
-    selected: false
-  },
-  wubai: {
-    code: 'sh000905',
-    name: '沪深500',
-    selected: false
-  },
-  yiqian: {
-    code: 'sh000852',
-    name: '沪深1000',
-    selected: false
-  }
-}
 
 let rateChartSelected = {}
 let webDataNames = []
 let webDataKeyRateMap = {}
 let webDataListMap = {}
-for (let key in webDataMap) {
-  rateChartSelected[webDataMap[key].name] = webDataMap[key].selected
-  webDataNames.push(webDataMap[key].name)
-  webDataKeyRateMap[key] = 0
-  webDataListMap[key + 'DataList'] = []
-}
-
+let webDataMap = {}
+let webDataKeys = []
+indexListAll.forEach((item) => {
+  if (item.mix) {
+    rateChartSelected[item.name] = item.name === '300'
+    webDataNames.push(item.name)
+    webDataKeys.push(item.key)
+    webDataKeyRateMap[item.key] = 0
+    webDataListMap[item.key + 'DataList'] = []
+    webDataMap[item.key] = {
+      ...item
+    }
+  }
+})
 export default {
   name: 'MyNetValueLine',
   data () {
@@ -194,6 +143,8 @@ export default {
       popupVisible: false,
       myList: [],
       ...webDataListMap,
+      webDataKeys,
+      webDataMap,
       nowMonthRate: {
         my: 0,
         ...webDataKeyRateMap
@@ -211,6 +162,9 @@ export default {
   },
 
   computed: {
+    ...mapGetters([
+      'userFundAccountInfo'
+    ]),
     chartData () {
       if (!(this.myList.length > 0)) {
         return {}
@@ -309,7 +263,6 @@ export default {
   created () {
     this.initPage()
   },
-
   methods: {
     initPage () {
       // 近一年的最大
@@ -317,12 +270,12 @@ export default {
       Indicator.open({
         spinnerType: 'fading-circle'
       })
-      const userFundAccountInfo = storageUtil.getUserFundAccountInfo()
-      this.myIncomeRateInfo.all = this.countDifferenceRate(userFundAccountInfo.last_net_value, 1)
+      // 总涨幅
+      const userNewestNetValue = this.userFundAccountInfo.userNewestNetValue
+      this.myIncomeRateInfo.all = this.countDifferenceRate(userNewestNetValue.net_value, 1)
       // 获取我的净值数据
-      this.$http.get('userFund/getUserNetValues', {
-        current: 1,
-        pageSize: days
+      this.$http.get('userFund/getUserNetValuesByStart', {
+        start: moment().format('YYYY-MM')
       }).then((data) => {
         if (data.success) {
           this.myList = data.data.list.reverse()
@@ -331,42 +284,42 @@ export default {
       let queryList = []
       // 我的
       // 年涨幅
-      queryList.push(this.$http.get('userFund/getUserNetValueNowYearRate').then((res) => {
-        this.nowYearRate.my = (res.data && res.data.rate) || 0
-        this.myIncomeRateInfo.nowYear = (res.data && res.data.rate) || 0
+      queryList.push(this.$http.get('userFund/getUserNetValueNowYearNetChangeRatio').then((res) => {
+        this.nowYearRate.my = (res.data && res.data.netChangeRatio) || 0
+        this.myIncomeRateInfo.nowYear = (res.data && res.data.netChangeRatio) || 0
       }))
       // 月涨幅
-      queryList.push(this.$http.get('userFund/getUserNetValueNowMonthRate').then((res) => {
-        this.nowMonthRate.my = (res.data && res.data.rate) || 0
-        this.myIncomeRateInfo.nowMonth = (res.data && res.data.rate) || 0
+      queryList.push(this.$http.get('userFund/getUserNetValueNowMonthNetChangeRatio').then((res) => {
+        this.nowMonthRate.my = (res.data && res.data.netChangeRatio) || 0
+        this.myIncomeRateInfo.nowMonth = (res.data && res.data.netChangeRatio) || 0
       }))
       for (let key in webDataMap) {
-        queryList.push(this.$http.get(`webData/${stockApiUtil.getAllUrl()}`, {
+        queryList.push(this.$http.get(`stock/getStockPriceDayKlineByStart`, {
           code: webDataMap[key].code,
-          days
+          start: moment().format('YYYY-MM')
         }).then((data) => {
           if (data.success) {
-            this[key + 'DataList'] = this.formatWebDataList(data.data.list)
+            this[key + 'DataList'] = data.data.list
           }
         }))
         // 年涨幅
-        queryList.push(this.$http.get('stock/getStockPriceNowYearRate', {
+        queryList.push(this.$http.get('stock/getStockPriceNowYearNetChangeRatio', {
           code: webDataMap[key].code
         }).then((res) => {
-          this.nowYearRate[key] = (res.data && res.data.rate) || 0
+          this.nowYearRate[key] = (res.data && res.data.netChangeRatio) || 0
         }))
         // 月涨幅
-        queryList.push(this.$http.get('stock/getStockPriceNowMonthRate', {
+        queryList.push(this.$http.get('stock/getStockPriceNowMonthNetChangeRatio', {
           code: webDataMap[key].code
         }).then((res) => {
-          this.nowMonthRate[key] = (res.data && res.data.rate) || 0
+          this.nowMonthRate[key] = (res.data && res.data.netChangeRatio) || 0
         }))
       }
       Promise.all(queryList).then(() => {
         Indicator.close()
       })
       // 每月收益数据
-      this.$http.get('userFund/getUserNetValueMonthRate').then((data) => {
+      this.$http.get('userFund/getUserNetValueMonthKline').then((data) => {
         if (data.success) {
           this.netValueMonthRate = data.data.list
         }

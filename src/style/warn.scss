@@ -5,19 +5,19 @@
     background-color: #fdf6ec;
     color: #e6a23c;
   }
-  .grey {
+  &.grey {
     background-color: #f4f4f5;
     color: #909399;
   }
-  .green {
+  &.green {
     background-color: #f0f9eb;
     color: #67c23a;
   }
-  .blue {
+  &.blue {
     background-color: rgb(198, 226, 255);
     color: #409EFF;
   }
-  .red {
+  &.red {
     background-color: rgb(253, 226, 226);
     color: #F56C6C;
   }

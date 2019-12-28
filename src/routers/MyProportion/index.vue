@@ -96,10 +96,10 @@
 <script>
 import moment from 'moment'
 import indexList from '@/common/indexList.js'
-import operatingTooltip from '@/util/operatingTooltip.js'
+import indexType from '@/common/indexType.js'
 
-const jigouName = operatingTooltip.jigouName
-const lajiName = operatingTooltip.lajiName
+const jigouName = indexType.jigouName
+const lajiName = indexType.lajiName
 
 const zoom = window.adaptive.zoom
 export default{

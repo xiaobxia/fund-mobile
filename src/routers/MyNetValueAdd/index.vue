@@ -9,18 +9,13 @@
       </mt-button>
     </mt-header>
     <div class="main-body">
-      <template v-if="type==='edit'">
-        <mt-field label="总盈亏" placeholder="请输入总盈亏" v-model="income"></mt-field>
-          <mt-field label="份额" placeholder="请输入份额" v-model="form.shares"></mt-field>
-          <mt-field label="资产成本" placeholder="请输入资产成本" v-model="form.asset_cost"></mt-field>
-          <mt-field label="净值日期" placeholder="请输入净值日期" v-model="form.net_value_date"></mt-field>
-      </template>
-      <template v-if="type==='add'">
-          <mt-field label="总盈亏" placeholder="请输入总盈亏" v-model="income"></mt-field>
-          <mt-field label="份额" placeholder="请输入份额" v-model="form.shares"></mt-field>
-          <mt-field label="资产成本" placeholder="请输入资产成本" v-model="form.asset_cost"></mt-field>
-          <mt-field label="净值日期" placeholder="请输入净值日期" v-model="form.net_value_date"></mt-field>
-      </template>
+      <mt-field label="今日盈亏" placeholder="请输入今日盈亏" v-model="form.today_income"></mt-field>
+      <mt-field label="总盈亏" placeholder="请输入总盈亏" v-model="form.income"></mt-field>
+      <mt-field label="份额" placeholder="请输入份额" v-model="form.shares"></mt-field>
+      <mt-field label="资产" placeholder="请输入资产" v-model="form.asset"></mt-field>
+      <mt-field label="资产成本" placeholder="请输入资产成本" v-model="form.asset_cost"></mt-field>
+      <mt-field label="净值日期" placeholder="请输入净值日期" v-model="form.net_value_date"></mt-field>
+      <mt-field label="仓位" placeholder="请输入仓位" v-model="form.position"></mt-field>
     </div>
     <div class="bottom-bar">
       <mt-button type="primary" @click="okHandler" class="main-btn">完成</mt-button>
@@ -31,26 +26,37 @@
 <script>
 import {MessageBox} from 'mint-ui'
 import Toast from '@/common/toast.js'
-import moment from 'moment'
-import storageUtil from '@/util/storageUtil.js'
+
+function createFormKey (tar) {
+  const raw = {
+    shares: 0,
+    asset: 0,
+    asset_cost: 0,
+    net_value_date: '',
+    today_income: 0,
+    income: 0,
+    position: 100
+  }
+  if (tar) {
+    for (const key in raw) {
+      raw[key] = tar[key]
+    }
+  }
+  return raw
+}
 
 export default {
   name: 'MyNetValueAdd',
   data () {
-    const userFundAccountInfo = storageUtil.getUserFundAccountInfo()
     return {
       type: 'add',
       form: {},
-      assetCost: userFundAccountInfo.fund_asset_cost,
+      assetCost: 0,
       income: 0,
-      fundShares: userFundAccountInfo.fund_shares,
-      selected: storageUtil.getAppConfig('netValueAddSelected') || '1'
+      fundShares: 0
     }
   },
   watch: {
-    selected (val) {
-      storageUtil.setAppConfig('netValueAddSelected', val)
-    }
   },
   computed: {},
   created () {
@@ -63,13 +69,14 @@ export default {
     initQuery () {
       const query = this.$router.history.current.query
       this.type = query.type
-      this.form = Object.assign({
-        shares: this.fundShares,
-        asset_cost: this.assetCost,
-        net_value_date: moment().format('YYYY-MM-DD')
-      }, query)
-      if (query.asset_cost && query.asset) {
-        this.income = parseFloat(query.asset) - parseFloat(query.asset_cost)
+      if (query.type === 'add') {
+        this.form = createFormKey()
+      } else {
+        this.$http.get('userFund/getUserNetValue', {
+          date: query.net_value_date
+        }).then((res) => {
+
+        })
       }
     },
     backHandler () {
@@ -90,7 +97,6 @@ export default {
       })
     },
     okHandler () {
-      this.form.asset = parseFloat(this.form.asset_cost) + parseFloat(this.income)
       this.$http.post(this.type === 'add' ? 'userFund/addUserNetValue' : 'userFund/updateUserNetValue', this.form).then((data) => {
         if (data.success) {
           Toast.success('操作成功')

@@ -87,6 +87,10 @@ export default {
           this.$router.push('/page/login')
         } else {
           this.$http.get('user/getUserAccountInfo').then((res) => {
+            storageUtil.setData('userAccountInfo', {
+              ...res.data.user,
+              positionConfig: res.data.positionConfig
+            })
             this.$store.commit('updateUserFundAccountInfo', res.data)
             this.otherDataInit().then(() => {
               this.ifChecked = true
@@ -169,6 +173,11 @@ export default {
       return Promise.all([
         this.$http.get('stock/getStockIndexAll').then((res) => {
           this.$store.commit('updateStockIndexAll', res.data)
+          const data = {}
+          res.data.forEach((item) => {
+            data[item.key] = item.flag
+          })
+          storageUtil.setData('stockIndexFlag', data)
         }),
         this.$http.get('stock/getStockMarketQuestion').then((res) => {
           const data = {}

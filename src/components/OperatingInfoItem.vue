@@ -20,14 +20,13 @@
         <span v-if="ifDafan()" class="buy-s has-tag">大</span>
         <span v-if="ifDafan() || ifxiaofan()" class="warn-s has-tag">买原</span>
         <span v-if="ifFiveUp" class="warn-s has-tag">涨5</span>
-        <span v-if="indexNiuXiong === '定投' && quarterAverage >= 0" class="info-s has-tag">解定</span>
+        <span v-if="indexNiuXiong === '定投' && averageHalfYear >= 0" class="info-s has-tag">解定</span>
         <span v-if="ifJieFantan()" class="info-s has-tag">解反</span>
         <span v-if="ifUpQuick()" class="sell-s must-tag">涨快</span>
         <span v-if="ifThreeUp && ifLaji" class="sell-s must-tag">卖</span>
         <span v-if="ifFourUp && ifLaji" class="sell-s must-tag">卖1/3</span>
         <span v-if="ifFiveUp && ifLaji" class="sell-s must-tag">卖1/2</span>
         <span v-if="jukui" class="danger-tag-s operate-tag">巨亏</span>
-        <span v-if="ifFakeAsset" class="info-s has-tag">假</span>
         <span v-if="ifDownQuick()" class="buy-s has-tag">跌快</span>
         <span style="float: right" :class="stockNumberClass(rate)">{{rate}}%</span>
       </h3>
@@ -124,12 +123,6 @@ export default {
         return [0, 0, 0, 0, 0]
       }
     },
-    buySellListLarge: {
-      type: Array,
-      default: function () {
-        return ['', '', '', '', '', '', '', '']
-      }
-    },
     netChangeRatioListLarge: {
       type: Array,
       default: function () {
@@ -157,6 +150,10 @@ export default {
     type: {
       type: String,
       default: '简'
+    },
+    nowMonthRate: {
+      type: Number,
+      default: 0
     }
   },
   computed: {
@@ -188,16 +185,13 @@ export default {
     },
     otherBuySellList () {
       if (this.type === '简') {
-        return storageUtil.getXiongBuySellList(this.indexInfo.key)
+        return storageUtil.getData('xiongBuySellList', this.indexInfo.key) || []
       } else {
-        return storageUtil.getJianBuySellList(this.indexInfo.key)
+        return storageUtil.getData('jianBuySellList', this.indexInfo.key) || []
       }
     },
-    indexAverage () {
-      return storageUtil.getAverage(this.indexInfo.key) || 0
-    },
     indexNiuXiong () {
-      const niuXiong = storageUtil.getIndexNiuXiong(this.indexInfo.key)
+      const niuXiong = storageUtil.getData('stockIndexFlag', this.indexInfo.key)
       return niuXiong === '正常' ? '' : niuXiong
     },
     indexBuyNumber () {
@@ -397,17 +391,13 @@ export default {
       return false
     },
     averageMonthIndex () {
-      return storageUtil.getMonthAverage(this.indexInfo.key) || 0
+      return storageUtil.getData('averageMonth', this.indexInfo.key) || 0
     },
-    quarterAverage () {
-      return storageUtil.getQuarterAverage(this.indexInfo.key) || 0
+    averageHalfYear () {
+      return storageUtil.getData('averageHalfYearIndex', this.indexInfo.key) || 0
     },
     noSellIndex () {
-      return storageUtil.getNoSell(this.indexInfo.key) || false
-    },
-    ifFakeAsset () {
-      const fake = storageUtil.getAppConfig('fake') || '真'
-      return fake === '假'
+      return storageUtil.getData('stockIndexFlag', this.indexInfo.key) || false
     }
   },
   created () {
@@ -476,8 +466,7 @@ export default {
     },
     getItemClass () {
       // 市场阶段
-      const question9 = storageUtil.getMarketStatus('question_9')
-      const myMonthRate = storageUtil.getAppConfig('myMonthRate')
+      const question1 = storageUtil.getData('stockMarketQuestion', 'question_1')
       const buyClass = 'buy'
       const sellClass = 'sell'
       const classList = []
@@ -503,8 +492,8 @@ export default {
         // 如果是买入信号，那就直接红色，返回
         classList.push(buyClass)
       } else if (buySellList[0] === sellClass) {
-        if (question9 !== '筑顶后大跌') {
-          if (this.jukui && this.quarterAverage < 0) {
+        if (question1 !== '筑顶后大跌') {
+          if (this.jukui && this.averageHalfYear < 0) {
             // 巨亏的那就得卖
             classList.push(sellClass)
           } else if (this.averageMonthIndex < 0) {

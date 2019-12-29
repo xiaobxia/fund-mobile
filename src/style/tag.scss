@@ -3,6 +3,47 @@
   font-size: 20px;
   border-radius: 0.4em;
   vertical-align: middle;
+  line-height: 1;
+  &.s-yellow {
+    background-color: #e6a23c;
+    color: #fff;
+  }
+  &.s-grey {
+    background-color: #909399;
+    color: #fff;
+  }
+  &.s-green {
+    background-color: #67c23a;
+    color: #fff;
+  }
+  &.s-blue {
+    background-color: #409EFF;
+    color: #fff;
+  }
+  &.s-red {
+    background-color: #F56C6C;
+    color: #fff;
+  }
+  &.b-yellow {
+    border: 1px solid #e6a23c;
+    color: #e6a23c;
+  }
+  &.b-grey {
+    border: 1px solid #909399;
+    color: #909399;
+  }
+  &.b-green {
+    border: 1px solid #67c23a;
+    color: #67c23a;
+  }
+  &.b-blue {
+    border: 1px solid #409EFF;
+    color: #409EFF;
+  }
+  &.b-red {
+    border: 1px solid #F56C6C;
+    color: #F56C6C;
+  }
   &.yellow {
     background-color: #fdf6ec;
     color: #e6a23c;

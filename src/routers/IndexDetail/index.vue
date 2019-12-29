@@ -23,8 +23,8 @@
           <div slot="title">
             <h3>
               {{item.code}} {{formatFundName(item.name)}}
-              <i class="lock-tag" v-if="item.ifAllLock"></i>
-              <i class="dingtou-tag" v-if="ifFixedInvestment(item)"></i>
+              <i class="fm-icon lock" v-if="item.ifAllLock"></i>
+              <i class="fm-icon dingtou" v-if="ifFixedInvestment(item)"></i>
               <span style="float: right" :class="stockNumberClass(item.change_ratio)">{{item.change_ratio}}%</span>
             </h3>
           </div>

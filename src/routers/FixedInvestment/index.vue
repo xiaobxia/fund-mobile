@@ -6,14 +6,10 @@
       </mt-button>
     </mt-header>
     <div class="main-body">
-      <mt-cell-swipe v-for="(item) in list" :key="item.code" :class="[hasInfo[item.name] ? 'has':'no-has']">
+      <mt-cell-swipe v-for="(item) in list" :key="item.code" :class="[hasInfo[item.name] ? 'has':'no-has', 'line-type']">
         <div slot="title">
           <h3>
             <span class="index-name">{{item.name}}</span>
-            <span :class="stockNumberClass(averageDiff[item.key])">{{averageDiff[item.key]}}</span>
-            <span>{{canBuy[item.key]}}</span>
-            <span class="green-text">{{canSell[item.key]}}</span>
-            <span v-if="hasCount[item.name]" class="has-count">{{hasCount[item.name]}}</span>
             <span style="float: right" :class="stockNumberClass(rateInfo[item.key])">{{rateInfo[item.key]}}%</span>
           </h3>
           <p class="netChange wn">
@@ -24,6 +20,26 @@
             <span v-for="(subItem, index) in allInfo[item.key]" :key="subItem + index"
                   :class="getClass(subItem)">{{subItem}}</span>
           </p>
+          <div class="other-text">
+            <span class="item">
+              <span class="label">年线偏离：</span>
+              <span class="value">
+                <span :class="stockNumberClass(averageDiff[item.key])">{{averageDiff[item.key]}}</span>
+              </span>
+            </span>
+            <span class="item">
+              <span class="label">持有金额：</span>
+              <span class="value">{{hasCount[item.name]}}</span>
+            </span>
+            <span class="item">
+              <span class="label">买入金额：</span>
+              <span class="value red-text">{{canBuy[item.key]}}</span>
+            </span>
+            <span class="item">
+              <span class="label">卖出金额：</span>
+              <span class="value green-text">{{canSell[item.key]}}</span>
+            </span>
+          </div>
         </div>
       </mt-cell-swipe>
     </div>

@@ -2,32 +2,29 @@
   <mt-cell-swipe :to="toUrl"
                  :class="['operating-info-item', ...getItemClass()]">
     <div slot="title">
-      <h3 class="op">
+      <h3>
         <span class="index-name">{{indexInfo.name}}</span>
-        <span v-if="ifHas" class="has-count">{{hasCount}}</span>
-        <span v-if="positionWarn === 'danger'" class="danger-tag-s operate-tag">危</span>
-        <span v-if="positionWarn === 'warn'" class="warn-tag-s operate-tag">高</span>
-        <span v-if="ifLaji" class="warn-tag-s operate-tag">垃圾</span>
-        <span class="buy-info">{{indexBuyNumber}}</span>
-        <span class="buy-info">{{indexSellNumber}}</span>
-        <span v-if="indexNiuXiong === '定投'" class="buy-s has-tag">{{indexNiuXiong}}</span>
-        <span v-if="indexNiuXiong === '大反'" class="buy-s has-tag">{{indexNiuXiong}}</span>
-        <span v-if="indexNiuXiong === '小反'" class="buy has-tag">{{indexNiuXiong}}</span>
-        <span v-if="noSellIndex || noSellCount >= 18" class="buy-s has-tag">锁仓</span>
-        <span v-if="averageMonthIndex > 0" class="buy has-tag">乐观</span>
-        <span v-if="averageMonthIndex <= 0" class="sell-s has-tag">空</span>
-        <span v-if="!ifDafan() && ifxiaofan()" class="buy-s has-tag">小</span>
-        <span v-if="ifDafan()" class="buy-s has-tag">大</span>
-        <span v-if="ifDafan() || ifxiaofan()" class="warn-s has-tag">买原</span>
-        <span v-if="ifFiveUp" class="warn-s has-tag">涨5</span>
-        <span v-if="indexNiuXiong === '定投' && averageHalfYear >= 0" class="info-s has-tag">解定</span>
-        <span v-if="ifJieFantan()" class="info-s has-tag">解反</span>
-        <span v-if="ifUpQuick()" class="sell-s must-tag">涨快</span>
-        <span v-if="ifThreeUp && ifLaji" class="sell-s must-tag">卖</span>
-        <span v-if="ifFourUp && ifLaji" class="sell-s must-tag">卖1/3</span>
-        <span v-if="ifFiveUp && ifLaji" class="sell-s must-tag">卖1/2</span>
-        <span v-if="jukui" class="danger-tag-s operate-tag">巨亏</span>
-        <span v-if="ifDownQuick()" class="buy-s has-tag">跌快</span>
+        <span class="fm-icon lock"></span>
+        <span v-if="positionWarn === 'danger'" class="fm-tag s-yellow">危</span>
+        <span v-if="positionWarn === 'warn'" class="fm-tag s-green">高</span>
+        <span v-if="indexNiuXiong === '定投'" class="fm-tag s-red">{{indexNiuXiong}}</span>
+        <span v-if="indexNiuXiong === '大反'" class="fm-tag s-red">{{indexNiuXiong}}</span>
+        <span v-if="indexNiuXiong === '小反'" class="fm-tag s-red">{{indexNiuXiong}}</span>
+        <span v-if="noSellIndex || noSellCount >= 18" class="fm-tag s-red">锁仓</span>
+        <span v-if="averageMonthIndex > 0" class="fm-tag b-red">乐观</span>
+        <span v-if="averageMonthIndex <= 0" class="fm-tag s-green">空</span>
+        <span v-if="!ifDafan() && ifxiaofan()" class="fm-tag s-red">小</span>
+        <span v-if="ifDafan()" class="fm-tag s-red">大</span>
+        <span v-if="ifDafan() || ifxiaofan()" class="fm-tag s-yellow">买原</span>
+        <span v-if="ifFiveUp" class="fm-tag s-yellow">涨5</span>
+        <span v-if="indexNiuXiong === '定投' && averageHalfYear >= 0" class="fm-tag s-blue">解定</span>
+        <span v-if="ifJieFantan()" class="fm-tag s-blue">解反</span>
+        <span v-if="ifUpQuick()" class="fm-tag b-green">涨快</span>
+        <span v-if="ifThreeUp && ifLaji" class="fm-tag s-green">卖</span>
+        <span v-if="ifFourUp && ifLaji" class="fm-tag s-green">卖1/3</span>
+        <span v-if="ifFiveUp && ifLaji" class="fm-tag s-green">卖1/2</span>
+        <span v-if="jukui" class="fm-tag s-yellow">巨亏</span>
+        <span v-if="ifDownQuick()" class="fm-tag s-red">跌快</span>
         <span style="float: right" :class="stockNumberClass(rate)">{{rate}}%</span>
       </h3>
       <p class="explain">
@@ -43,13 +40,22 @@
                   :class="subItem">{{subItem}}</span>
       </p>
       <div class="other-text">
-        <p>原买：{{indexRawBuyNumber}}</p>
-        <p class="purple-text" v-if="ifFiveUp">当天可以卖，第二天可以接回来</p>
-        <p v-if="rate <= -3">是否有利空？是就先不接，标记利空，不是也不要接太多</p>
-      </div>
-      <div class="left-tag"></div>
-      <div class="right-tag">
-        <span v-if="lock" class="lock-tag top"></span>
+            <span class="item">
+              <span class="label">原买：</span>
+              <span class="value">{{indexRawBuyNumber}}</span>
+            </span>
+        <span class="item">
+              <span class="label">持有金额：</span>
+              <span class="value">{{hasCount}}</span>
+            </span>
+        <span class="item">
+              <span class="label">买入金额：</span>
+              <span class="value red-text">{{indexBuyNumber}}</span>
+            </span>
+        <span class="item">
+              <span class="label">卖出金额：</span>
+              <span class="value green-text">{{indexSellNumber}}</span>
+            </span>
       </div>
     </div>
   </mt-cell-swipe>
@@ -398,7 +404,7 @@ export default {
       return storageUtil.getData('averageHalfYearIndex', this.indexInfo.key) || 0
     },
     noSellIndex () {
-      return storageUtil.getData('stockIndexFlag', this.indexInfo.key) || false
+      return storageUtil.getData('noSell', this.indexInfo.key) || false
     }
   },
   created () {

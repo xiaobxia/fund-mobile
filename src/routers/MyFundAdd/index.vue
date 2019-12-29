@@ -143,10 +143,10 @@ export default {
             this.form.strategy = userFund.strategy
           } else {
             this.type = 'add'
+            this.form.strategy = '1'
           }
           this.fundInfo = userFund
           this.form.cost = userFund.net_value
-          this.form.strategy = '1'
           this.form.code = query.code
         }
       })

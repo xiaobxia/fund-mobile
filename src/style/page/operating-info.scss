@@ -1,33 +1,36 @@
 .operating-info {
+  .warn-wrap {
+    margin-bottom: 30px;
+  }
   .mint-cell {
+    padding: 20px;
     border-radius: 20px;
     border: none;
     margin-bottom: 10px;
+    &.line-type {
+      padding: 20px;
+      border-radius: 0;
+      border-bottom: 1px solid #ddd;
+      margin: 0;
+    }
   }
   .mint-cell {
     &.duo {
-      background-color: rgba(208, 153, 183, 0.2);
+      background-color: rgba(246, 67, 70, 0.2);
     }
     &.leguan {
-      background-color: rgba(112, 220, 240, 0.2);
+      background-color: rgba(244, 148, 110, 0.2);
     }
     &.kong {
-      background-color: rgba(254, 255, 153, 0.2);
+      background-color: rgba(21, 187, 113, 0.2);
     }
   }
-  h3.op {
+  h3 {
     font-size: 28px;
-  }
-  .average-number {
-    position: absolute;
-    left: 270px;
-    .fas {
-      color: $red-color;
-      font-size: 28px;
+    .fm-tag {
+      vertical-align: middle;
+      font-size: 18px;
     }
-  }
-  .operating-info-item {
-    padding: 20px;
   }
   .netChange {
     position: relative;
@@ -57,31 +60,33 @@
     }
     &.wn {
       height: 24px;
-      line-height: 24px;
       margin: 10px 0;
       span {
         text-align: center;
         display: inline-block;
-        width: 15%;
+        width: 16%;
         padding: 2px 10px;
         border-radius: 10px;
         margin-right: 10px;
         font-size: 20px;
+        line-height: 1;
         color: #fff;
+        &:last-child{
+          margin-right: 0;
+        }
       }
     }
-  }
-  .buy-info {
-    color: #aaa;
-    font-size: 20px;
   }
   .otherBuySellList {
     position: relative;
     border-radius: 10px;
-    margin: 5px 0 0 0;
+    margin: 0 0 0 0;
+    height: 14px;
+    line-height: 1;
+    font-size: 10px;
     span {
       display: inline-block;
-      width: 15%;
+      width: 16%;
       color: #fff;
       padding: 0 10px;
       background-color: #fff;
@@ -89,6 +94,10 @@
       border-radius: 10px;
       margin-right: 10px;
       font-size: 10px;
+      line-height: 1;
+      &:last-child {
+        margin-right: 0;
+      }
       &.buy {
         padding: 2px 10px;
         background-color: $red-color;
@@ -104,28 +113,33 @@
     border-radius: 10px;
     span {
       display: inline-block;
-      width: 15%;
+      width: 16%;
       color: #fff;
       padding: 0 10px;
       background-color: #fff;
       text-align: center;
       border-radius: 10px;
       margin-right: 10px;
+      font-size: 24px;
+      line-height: 1;
+      &:last-child {
+        margin-right: 0;
+      }
       &.buy {
-        padding: 5px 10px;
+        padding: 2px 10px;
         background-color: $red-color;
       }
       &.sell {
-        padding: 5px 10px;
+        padding: 2px 10px;
         background-color: $green-color;
       }
       &.active {
-        padding: 5px 10px;
+        padding: 2px 10px;
         background-color: #ccc;
         color:  #ccc;
       }
       &.active-2 {
-        padding: 5px 10px;
+        padding: 2px 10px;
         background-color: $purple-color;
         color:  $purple-color;
       }
@@ -133,7 +147,7 @@
         color:  #fff;
       }
       &.niu {
-        padding: 5px 10px;
+        padding: 2px 10px;
         background-color: $yellow-color;
       }
     }
@@ -192,226 +206,31 @@
     }
     background-color: $red-color-back-3!important;
   }
-  .operate-tag {
-    margin: 0;
-    font-size: 20px;
-    padding: 0 0.1em;
-    border-radius: 4px;
-    vertical-align: middle;
-  }
-  .warn-tag {
-    border: 2px solid $yellow-color;
-    color: $yellow-color;
-  }
-  .danger-tag {
-    border: 2px solid $yellow-color;
-    color: $yellow-color;
-  }
-  .warn-tag-s {
-    border: 2px solid rgb(230,200,30);
-    background-color: rgb(230,200,30);
-    color: #fff;
-  }
-  .danger-tag-s {
-    border: 2px solid $yellow-color;
-    background-color: $yellow-color;
-    color: #fff;
-  }
-  .must-tag {
-    font-size: 16px;
-    padding: 5px;
-    border-radius: 20px;
-    vertical-align: middle;
-    &.sell-s {
-      background-color: $green-color;
-      color: #fff;
-    }
-    &.buy-s {
-      background-color: $red-color;
-      color: #fff;
-    }
-  }
-  // 持有标签
-  .has-tag {
-    font-size: 22px;
-    padding: 0 2px;
-    border-radius: 4px;
-    vertical-align: middle;
-    &.sell {
-      border: 2px solid $green-color;
-      color: $green-color;
-    }
-    &.buy {
-      border: 2px solid $red-color;
-      color: $red-color;
-    }
-    &.buy-s {
-      border: 2px solid $red-color;
-      background-color: $red-color;
-      color: #fff;
-    }
-    &.sell-s {
-      border: 2px solid $green-color;
-      background-color: $green-color;
-      color: #fff;
-    }
-    &.warn-s {
-      border: 2px solid $yellow-color;
-      background-color: $yellow-color;
-      color: #fff;
-    }
-    &.info-s {
-      border: 2px solid $blue-color;
-      background-color: $blue-color;
-      color: #fff;
-    }
-  }
-
-  .has-icon {
-    font-size: 26px;
-    &.sell {
-      color: $green-color;
-    }
-    &.buy {
-      color: $red-color;
-    }
-  }
-
-  .incomeHighRate-tag {
-    margin: 0 .25em;
-    font-size: 26px;
-    padding: 0 0.3em;
-    border-radius: 4px;
-    vertical-align: top;
-    border: 2px solid $purple-color;
-    color: $purple-color;
-  }
-  .stable-tag {
-    margin: 0 .25em;
-    font-size: 26px;
-    padding: 0 0.3em;
-    border-radius: 4px;
-    vertical-align: top;
-    border: 2px solid $blue-color;
-    color: $blue-color;
-  }
-  .no-long-tag {
-    margin: 0 .25em;
-    font-size: 26px;
-    padding: 0 0.3em;
-    border-radius: 4px;
-    vertical-align: top;
-    border: 2px solid  $red-color;
-    color:  $red-color;
-  }
-  .good-bad-tag {
-    margin: 0;
-    font-size: 20px;
-    color:  #d4237a;
-  }
-
-  .count-wrap {
-    padding: 20px;
-    font-size: 30px;
+  .other-text {
+    margin-top: 10px;
+    color: $light-text-color;
+    font-size: 24px;
     .item {
+      &:nth-of-type(even) {
+        padding-right: 0;
+      }
+      &:nth-of-type(odd) {
+        padding-left: 0;
+      }
+      padding: 0 20px;
       display: inline-block;
       width: 49%;
-    }
-  }
-  .left-tag, .right-tag {
-    z-index: 10;
-    position: absolute;
-    bottom: 0;
-    height: 100%;
-    .top {
-      position: absolute;
-      top: 0;
-    }
-    .bottom {
-      position: absolute;
-      bottom: 0;
-    }
-    .mid {
-      top: 0;
-      position: absolute;
-      bottom: 0;
-    }
-  }
-  .left-tag {
-    left: -20px;
-  }
-  .right-tag {
-    right: -5px;
-  }
-  .up-tag, .down-tag  {
-    width: 20px;
-    display: block;
-    height: 20px;
-    font-size: 20px;
-    margin: auto;
-  }
-  .lock-tag {
-    width: 20px;
-    height: 20px;
-    border-radius: 20px;
-    display: block;
-    background-color: $red-color;
-  }
-  .low-sell, .up-buy {
-    width: 20px;
-    height: 30px;
-    display: block;
-  }
-  .low-sell {
-    color: $green-color;
-  }
-  .up-buy {
-    color: $red-color;
-  }
-  .buysell {
-    width: 20px;
-    display: block;
-    font-size: 20px;
-  }
-  .change-tag {
-    width: 20px;
-    display: block;
-    color: blue;
-    font-size: 20px;
-  }
-  .mint-cell-wrapper {
-    overflow: visible;
-  }
-  .btn-list-wrap {
-    .main-btn {
-      display: inline-block;
-      width: 49.5%;
-    }
-  }
-  .other-text {
-    margin-top: 15px;
-    color: #888;
-    p {
-      font-size: 24px;
-      margin: 0 0 10px 0;
-      &:last-child{
-        margin: 0;
-      }
-    }
-  }
-  .warn-wrap {
-    padding: 20px 0;
-    font-size: 24px;
-    p {
-      margin: 0 0 10px 0;
-      &:last-child{
-        margin: 0;
+      box-sizing: border-box;
+      margin-bottom: 10px;
+      .value {
+        float: right;
       }
     }
   }
   .index-name {
     font-size: 26px;
     display: inline-block;
+    margin-right: 10px;
   }
 }
 

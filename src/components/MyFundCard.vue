@@ -7,7 +7,7 @@
         <h3>
           {{item.code}}
           {{formatFundName(item.name, 11)}}
-          <i class="lock-tag" v-if="item.ifAllLock"></i>
+          <i class="fm-icon lock" v-if="item.ifAllLock"></i>
           <span style="float: right" :class="stockNumberClass(countDifferenceRate(item.valuationSum, item.sum))">{{countDifferenceRate(item.valuationSum, item.sum)}}%</span>
         </h3>
         <p class="explain">

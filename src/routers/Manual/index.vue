@@ -14,6 +14,7 @@
       <mt-button type="primary" @click="closeWork" class="main-btn">闭市工作</mt-button>
       <mt-button type="primary" @click="reInitPreNetValue" class="main-btn">重新初始化pre_net_value</mt-button>
       <mt-button type="primary" @click="addStockPrice" class="main-btn">添加最新股票数据</mt-button>
+      <mt-button type="primary" @click="updateUserAsset" class="main-btn">更新用户资产</mt-button>
     </div>
   </div>
 </template>
@@ -89,6 +90,14 @@ export default {
         spinnerType: 'fading-circle'
       })
       this.$http.get('sys/reInitPreNetValue').then(() => {
+        Indicator.close()
+      })
+    },
+    updateUserAsset () {
+      Indicator.open({
+        spinnerType: 'fading-circle'
+      })
+      this.$http.get('sys/updateUserAsset').then(() => {
         Indicator.close()
       })
     },

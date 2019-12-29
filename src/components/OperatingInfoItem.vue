@@ -4,7 +4,7 @@
     <div slot="title">
       <h3>
         <span class="index-name">{{indexInfo.name}}</span>
-        <span class="fm-icon lock"></span>
+        <span v-if="lock" class="fm-icon lock"></span>
         <span v-if="positionWarn === 'danger'" class="fm-tag s-yellow">危</span>
         <span v-if="positionWarn === 'warn'" class="fm-tag s-green">高</span>
         <span v-if="indexNiuXiong === '定投'" class="fm-tag s-red">{{indexNiuXiong}}</span>

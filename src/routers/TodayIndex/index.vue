@@ -214,6 +214,7 @@ export default {
     updateMyNetValue () {
       const user = this.userFundAccountInfo.user
       const userNewestNetValue = this.userFundAccountInfo.userNewestNetValue
+      const userLastTradeDateNetValue = this.userFundAccountInfo.userLastTradeDateNetValue
       // 如果不是交易日那就不执行
       if (this.marketOpen) {
         const d = this.getDate()
@@ -236,7 +237,8 @@ export default {
               asset_cost: user.asset_cost,
               net_value_date: moment().format('YYYY-MM-DD'),
               today_income: income,
-              income: user.income + income
+              income: user.income + income,
+              pre_net_value: userLastTradeDateNetValue.net_value
             }
             let url = moment(newestNetValueData).isSame(this.tradeTime, 'day') ? 'userFund/updateUserNetValue' : 'userFund/addUserNetValue'
             this.$http.post(url, form)

@@ -75,7 +75,7 @@ export default {
         this.$http.get('userFund/getUserNetValue', {
           date: query.net_value_date
         }).then((res) => {
-
+          this.form = createFormKey(res.data)
         })
       }
     },

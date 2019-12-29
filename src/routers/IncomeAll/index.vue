@@ -6,8 +6,8 @@
       </mt-button>
     </mt-header>
     <div class="main-body">
-      <div class="">
-        <table width="100%" cellspacing="1" cellpadding="20">
+      <div class="table-wrap">
+        <table width="100%" cellspacing="0" cellpadding="15">
           <tr>
             <th>指数</th>
             <th>总收益（基于本账户）</th>

@@ -10,10 +10,18 @@
         <span class="name">{{niuXiong}}</span>
         <mt-button type="primary" @click="niuXiongChangeHandler">改变</mt-button>
       </div>
-      <div class="content-body">
-        <ve-line :mark-point="chartPoint" :yAxis="chartYAxis" :textStyle="chartTextStyle"
-                 :height="chartHeight" :data="chartDataNetValue" :theme="lineTheme"
-                 :settings="chartSettings" :tooltip="chartTooltip" :grid="grid" :dataZoom="dataZoom"></ve-line>
+      <div class="chart-wrap">
+        <ve-line
+          :mark-point="chartPoint"
+          :yAxis="chartYAxis"
+          :textStyle="chartTextStyle"
+          :height="chartHeight"
+          :data="chartDataNetValue"
+          :theme="lineTheme"
+          :settings="chartSettings"
+          :tooltip="chartTooltip"
+          :grid="grid">
+        </ve-line>
       </div>
       <div class="index-rate">
         <span :class="stockNumberClass(indexChangeRatio)">{{indexChangeRatio}}%</span>
@@ -49,7 +57,6 @@ import storageUtil from '@/util/storageUtil.js'
 import Toast from '@/common/toast.js'
 import fundAccountUtil from '@/util/fundAccountUtil.js'
 
-const codeMap = indexInfoUtilXiong.codeMap
 const formatData = indexInfoUtilXiong.formatData
 
 let InfoUtil = indexInfoUtilXiong.Util
@@ -65,15 +72,11 @@ export default {
       filterList: ['正常', '小反', '大反', '定投'],
       niuXiong: '',
       grid: {
-        top: '15%',
-        left: '-8%',
-        bottom: '0%'
+        top: '10%',
+        left: '0%',
+        bottom: '0%',
+        right: '0%'
       },
-      dataZoom: [{
-        type: 'inside',
-        start: 80,
-        end: 100
-      }],
       chartTooltip: {
         trigger: 'axis',
         axisPointer: {
@@ -89,13 +92,16 @@ export default {
           fontSize: baseFontSize * zoom
         }
       },
-      chartHeight: (650 / 20) + 'rem',
+      chartHeight: (400 / 20) + 'rem',
       chartTextStyle: {
         fontSize: baseFontSize * zoom
       },
       chartYAxis: {
         axisLabel: {
           fontSize: baseFontSize * zoom
+        },
+        axisLine: {
+          show: false
         },
         scale: [true, true],
         splitLine: {
@@ -106,12 +112,14 @@ export default {
       },
       chartSettings: {
         lineStyle: {
-          width: 3 * zoom
+          width: 4 * zoom,
+          color: 'rgba(18,150,219, 1)'
         }
       },
       lineTheme: {
         line: {
-          smooth: false
+          smooth: false,
+          showSymbol: false
         }
       },
       queryData: {},
@@ -134,7 +142,7 @@ export default {
           coord: [item['date'], item['close']],
           itemStyle: {
             normal: {
-              color: 'rgb(244, 51, 60)'
+              color: 'rgb(246, 67, 70)'
             }
           },
           label: {
@@ -147,7 +155,7 @@ export default {
           coord: [item['date'], item['close']],
           itemStyle: {
             normal: {
-              color: 'rgb(62, 179, 121)'
+              color: 'rgb(21, 187, 113)'
             }
           },
           label: {
@@ -171,7 +179,7 @@ export default {
       return {
         data: dataList,
         symbol: 'circle',
-        symbolSize: 10 * zoom
+        symbolSize: 14 * zoom
       }
     },
     chartDataNetValue () {
@@ -211,9 +219,9 @@ export default {
     },
     onNiuXiongChangeHandler (text) {
       const query = this.$router.history.current.query
-      this.$http.post('market/updateIndexNiuXiong', {
+      this.$http.post('stock/updateStockIndex', {
         key: query.key,
-        value: text
+        flag: text
       }).then((data) => {
         if (data.success) {
           Toast.success('操作成功')
@@ -229,7 +237,7 @@ export default {
       this.niuXiong = storageUtil.getData('stockIndexFlag', query.key)
       this.$http.get(`stock/${stockApiUtil.getAllUrl()}`, {
         code: query.code,
-        days: 200
+        days: 40
       }).then((data) => {
         if (data.success) {
           const list = data.data.list
@@ -250,7 +258,6 @@ export default {
           let buyList = []
           let sellList = []
           let sameList = []
-          console.log(infoUtil.getFlag(recentNetValue[0]))
           for (let i = 0; i < (recentNetValue.length - 3); i++) {
             const nowRecord = recentNetValue[i]
             const oneDayRecord = recentNetValue[i + 1]
@@ -304,11 +311,7 @@ export default {
     queryRecord () {
       const query = this.$router.history.current.query
       this.$http.get('userFund/getFundsByThemeWithUserFund', {theme: query.name}).then((res) => {
-        let funds = res.data.list
-        funds.sort((a, b) => {
-          return (a.buy_rate_one + a.sell_rate_two) - (b.buy_rate_one + b.sell_rate_two)
-        })
-        this.list = funds
+        this.list = res.data.list
       })
     },
     ifFixedInvestment (item) {

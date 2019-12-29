@@ -8,7 +8,6 @@
         <i class="fas fa-plus" @click="addHandler"></i>
       </mt-button>
     </mt-header>
-    <div class="yellow-warn">如果出金了盈亏就不等于APP内的累计收益</div>
     <div class="main-body">
       <ul
         v-infinite-scroll="loadMore"
@@ -21,9 +20,12 @@
               <span style="float: right" :class="stockNumberClass(item.net_value - item.pre_net_value)">{{countDifferenceRate(item.net_value, item.pre_net_value)}}%</span>
             </h3>
             <p class="explain">
+              <span class="item">资产：<span>{{item.asset}}</span></span>
               <span class="item">成本：<span>{{item.asset_cost}}</span></span>
               <span class="item">份额：<span>{{item.shares}}</span></span>
               <span class="item">净值：<span>{{item.net_value}}</span></span>
+              <span class="item">仓位：<span>{{item.position}}</span></span>
+              <span class="item">当日收益：<span>{{item.today_income}}</span></span>
             </p>
           </div>
         </mt-cell-swipe>

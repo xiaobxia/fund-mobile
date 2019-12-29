@@ -163,7 +163,7 @@ export default{
                 }
                 otherTotal += parseInt(item.valuationSum)
               } else {
-                fixTotal += item.sum
+                fixTotal += item.valuationSum
                 fixTotalCost += item.costSum
                 item.position_record.forEach((record) => {
                   if (moment().isSame(record.confirm_date, 'month')) {

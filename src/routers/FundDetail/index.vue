@@ -198,7 +198,7 @@ export default {
         if (canSellShares < shares) {
           item.shares = canSellShares
         }
-        item.sum = Math.round(item.shares * this.currentFund.valuation)
+        item.sum = Math.ceil(item.shares * this.currentFund.valuation)
         newSharesList.push({
           ...item
         })

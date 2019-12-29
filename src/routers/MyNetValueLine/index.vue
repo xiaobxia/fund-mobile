@@ -9,19 +9,23 @@
       </mt-button>
     </mt-header>
     <div class="main-body">
-      <div class="">
-        <ve-line :yAxis="chartYAxis" :textStyle="chartTextStyle"
-                 :height="chartHeight" :legend="chartLegend"
-                 :data="chartData" :settings="chartSettings"
-                 :tooltip="tooltip" :grid="grid"
-                 :theme="lineTheme"
+      <div class="page-content-title">月K线</div>
+      <div class="chart-wrap">
+        <ve-line
+          :yAxis="chartYAxis"
+          :textStyle="chartTextStyle"
+          :height="chartHeight"
+          :legend="chartLegend"
+          :data="chartData"
+          :settings="chartSettings"
+          :tooltip="tooltip"
+          :grid="grid"
+          :theme="lineTheme"
         ></ve-line>
-        <div class="my-net-value-info">
-          <span>本月：{{myIncomeRateInfo.nowMonth}}%</span>
-          <span>总收益：{{myIncomeRateInfo.all}}%</span>
-          <span>本年：{{myIncomeRateInfo.nowYear}}%</span>
-        </div>
-        <table width="100%" cellspacing="1" cellpadding="20">
+      </div>
+      <div class="page-content-title">收益表</div>
+      <div class="table-wrap">
+        <table width="100%" cellspacing="0" cellpadding="15">
           <tr>
             <th>指数</th>
             <th>本月</th>
@@ -38,12 +42,21 @@
             <td>{{nowYearRate[item]}}%<div :class="stockNumberClass(nowYearRate.my - nowYearRate[item])">({{keepTwoDecimals(nowYearRate.my - nowYearRate[item])}}%)</div></td>
           </tr>
         </table>
-        <ve-histogram :grid="monthRateGrid"
-                      :yAxis="chartYAxis" :textStyle="chartTextStyle"
-                      :height="chartHeight" :legend="chartLegend"
-                      :settings="chartSettings" :tooltip="tooltip"
-                      :series="monthRateChartSeries" :xAxis="chartXAxis"
-        ></ve-histogram>
+      </div>
+      <div class="page-content-title">月收益图</div>
+      <div class="chart-wrap">
+        <ve-histogram
+          :grid="monthRateGrid"
+          :yAxis="chartYAxis"
+          :textStyle="chartTextStyle"
+          :height="monthRateChartHeight"
+          :legend="monthRateChartLegend"
+          :settings="chartSettings"
+          :tooltip="tooltip"
+          :series="monthRateChartSeries"
+          :xAxis="monthRateChartXAxis"
+        >
+        </ve-histogram>
       </div>
     </div>
   </div>
@@ -72,24 +85,28 @@ indexListAll.forEach((item) => {
     webDataNames.push(item.name)
     webDataKeys.push(item.key)
     webDataKeyRateMap[item.key] = 0
-    webDataListMap[item.key + 'DataList'] = []
+    webDataListMap[item.key] = []
     webDataMap[item.key] = {
       ...item
     }
   }
 })
+
 export default {
   name: 'MyNetValueLine',
   data () {
     // 图表部分
     const chartPart = {
       grid: {
-        top: '18%',
+        top: '10%',
         left: '8%',
-        right: '2%'
+        right: '0%'
       },
       monthRateGrid: {
-        top: '10%'
+        top: '10%',
+        left: '0%',
+        right: '0%',
+        bottom: '0%'
       },
       tooltip: {
         trigger: 'axis',
@@ -97,7 +114,8 @@ export default {
           fontSize: baseFontSize * zoom
         }
       },
-      chartHeight: (700 / 20) + 'rem',
+      chartHeight: (500 / 20) + 'rem',
+      monthRateChartHeight: (500 / 20) + 'rem',
       chartTextStyle: {
         fontSize: baseFontSize * zoom
       },
@@ -117,10 +135,9 @@ export default {
           show: false
         }
       },
+      monthRateChartLegend: {
+      },
       chartLegend: {
-        itemGap: 20 * zoom,
-        itemWidth: 50 * zoom,
-        itemHeight: 30 * zoom,
         selected: {
           '我的组合': true,
           ...rateChartSelected
@@ -128,13 +145,13 @@ export default {
       },
       chartSettings: {
         lineStyle: {
-          width: 3.5 * zoom
-        },
-        offsetY: 350 * zoom
+          width: 4 * zoom
+        }
       },
       lineTheme: {
         line: {
-          smooth: false
+          smooth: false,
+          showSymbol: false
         }
       }
     }
@@ -142,7 +159,7 @@ export default {
       ...chartPart,
       popupVisible: false,
       myList: [],
-      ...webDataListMap,
+      webDataListMap,
       webDataKeys,
       webDataMap,
       nowMonthRate: {
@@ -170,32 +187,31 @@ export default {
         return {}
       }
       let myList = this.copy(this.myList)
-      // 近一年数据
-      let startIndex = dateUtil.findSameRangeStartNetValueIndex(myList, 'month')
-      myList = myList.slice(startIndex)
-      const baseMy = myList[0]['net_value']
-      const baseDate = myList[0]['net_value_date']
-      let webDataList = {}
-      let webDataDay = 0
-      for (let key in webDataListMap) {
-        if (!(this[key].length > 0)) {
+      const baseMy = myList[0]['pre_net_value']
+      for (let key in this.webDataListMap) {
+        if (!(this.webDataListMap[key] && this.webDataListMap[key].length > 0)) {
           return {}
         }
-        let temp = this.copy(this[key])
-        webDataList[key] = temp.slice(arrayUtil.findIndex(temp, 'net_value_date', baseDate))
-        webDataDay = webDataList[key].length
       }
-      let row = []
+      const firstData = {
+        '日期': moment().format('YYYY-MM'),
+        '我的组合': 0
+      }
+      for (let key in this.webDataMap) {
+        firstData[webDataMap[key].name] = 0
+      }
+      let row = [firstData]
       myList.forEach((item, index) => {
         let data = {}
         data['日期'] = item['net_value_date']
-        data['我的组合'] = this.keepTwoDecimals(((item['net_value'] - baseMy) / baseMy) * 100)
-        for (let key in webDataMap) {
-          const base = webDataList[key + 'DataList'][0].close
-          data[webDataMap[key].name] = this.keepTwoDecimals(((webDataList[key + 'DataList'][index].close - base) / base) * 100)
+        data['我的组合'] = this.countDifferenceRate(item['net_value'], baseMy)
+        for (let key in this.webDataListMap) {
+          const base = this.webDataListMap[key][0].preClose
+          data[webDataMap[key].name] = this.countDifferenceRate(this.webDataListMap[key][index].close, base)
         }
         row.push(data)
       })
+      console.log(row)
       return {
         columns: ['日期', '我的组合', ...webDataNames],
         rows: row
@@ -231,9 +247,9 @@ export default {
       let row = []
       listMonth.forEach(function (item) {
         row.push({
-          value: item['rate'],
+          value: item['netChangeRatio'],
           itemStyle: {
-            color: item['rate'] > 0 ? 'rgb(244, 51, 60)' : 'rgb(62, 179, 121)'
+            color: item['netChangeRatio'] > 0 ? 'rgb(244, 51, 60)' : 'rgb(62, 179, 121)'
           }
         })
       })
@@ -243,7 +259,7 @@ export default {
         data: row
       }]
     },
-    chartXAxis () {
+    monthRateChartXAxis () {
       if (!this.netValueMonthRate.length > 0) {
         return {}
       }
@@ -278,7 +294,7 @@ export default {
         start: moment().format('YYYY-MM')
       }).then((data) => {
         if (data.success) {
-          this.myList = data.data.list.reverse()
+          this.myList = data.data.list
         }
       })
       let queryList = []
@@ -299,7 +315,7 @@ export default {
           start: moment().format('YYYY-MM')
         }).then((data) => {
           if (data.success) {
-            this[key + 'DataList'] = data.data.list
+            this.webDataListMap[key] = data.data
           }
         }))
         // 年涨幅
@@ -319,7 +335,9 @@ export default {
         Indicator.close()
       })
       // 每月收益数据
-      this.$http.get('userFund/getUserNetValueMonthKline').then((data) => {
+      this.$http.get('userFund/getUserNetValueMonthKline', {
+        start: moment().subtract(24, 'months').format('YYYY-MM')
+      }).then((data) => {
         if (data.success) {
           this.netValueMonthRate = data.data.list
         }

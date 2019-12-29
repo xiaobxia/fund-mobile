@@ -1,14 +1,12 @@
 .my-fund {
   .card {
     position: relative;
-    margin: 20px 6px;
-    border-radius: 20px;
-    box-shadow: 0 0 30px rgb(230,230,230);
     overflow: hidden;
+    border-bottom: 1px solid #eee;
     .title {
       margin: 0;
       padding: 15px 30px;
-      font-size: 40px;
+      font-size: 28px;
       font-weight: 400;
       background-color: #fff;
       span {
@@ -27,6 +25,9 @@
     display: inline-block;
     width: 49%;
     box-sizing: border-box;
+    .value {
+      float: right;
+    }
   }
   .lastUpdateValuationTime{
     padding: 20px 0 0 0;

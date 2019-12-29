@@ -12,10 +12,8 @@
     border-bottom: 20px solid #eee;
   }
   .position-record {
-    border: 10px solid #eee;
-    border-bottom: 0;
+    border-bottom: 1px solid #eee;
     &:last-child {
-      border-bottom: 10px solid #eee;
     }
   }
   .strategy-list {
@@ -33,17 +31,23 @@
   .mint-popup-bottom {
   }
   .content {
-    padding: 0 30px;
+    padding: 20px 30px;
   }
   .position_record_list {
-    padding: 0 10px;
     div {
-      padding: 10px;
-      border: 10px solid #eee;
-      border-bottom: 0;
+      padding: 10px 0;
       font-size: 30px;
+      .item {
+        padding: 0 20px;
+        display: inline-block;
+        width: 49%;
+        box-sizing: border-box;
+        margin-bottom: 10px;
+        .value {
+          float: right;
+        }
+      }
       &:last-child {
-        border-bottom: 10px solid #eee;
       }
       &.lock{
         color: #fff;

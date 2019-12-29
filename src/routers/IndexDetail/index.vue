@@ -6,7 +6,7 @@
       </mt-button>
     </mt-header>
     <div class="main-body">
-      <div class="theme-wrap">
+      <div class="filter-select-wrap">
         <span class="name">{{niuXiong}}</span>
         <mt-button type="primary" @click="niuXiongChangeHandler">改变</mt-button>
       </div>
@@ -21,13 +21,12 @@
       <div class="fund-list simple">
         <mt-cell-swipe v-for="(item) in list" :key="item.code" :to="'/page/fundDetail?code='+item.code" :class="item.has?'has-back':''">
           <div slot="title">
-            <h3 :class="{lowRate: item.low_rate}">
+            <h3>
               {{item.code}} {{formatFundName(item.name)}}
               <i class="lock-tag" v-if="item.ifAllLock"></i>
               <i class="dingtou-tag" v-if="ifFixedInvestment(item)"></i>
               <span style="float: right" :class="stockNumberClass(item.change_ratio)">{{item.change_ratio}}%</span>
             </h3>
-            <p class="buysell"><span>买入: {{item.buy_rate_one}}</span><span>卖出: {{item.sell_rate_two}}</span><span>成本: {{keepTwoDecimals(item.buy_rate_one + item.sell_rate_two)}}</span></p>
           </div>
         </mt-cell-swipe>
       </div>
@@ -35,8 +34,8 @@
     <mt-popup
       v-model="popupVisible"
       position="bottom">
-      <ul class="theme-list">
-        <li class="theme-item" v-for="(item) in filterList" :key="item" @click="onNiuXiongChangeHandler(item)">{{item || '正常'}}</li>
+      <ul class="filter-select-list">
+        <li class="filter-select-item" v-for="(item) in filterList" :key="item" @click="onNiuXiongChangeHandler(item)">{{item || '正常'}}</li>
       </ul>
     </mt-popup>
   </div>
@@ -227,8 +226,8 @@ export default {
     initPage () {
       const query = this.$router.history.current.query
       this.queryData = Object.assign({}, query)
-      this.niuXiong = storageUtil.getIndexNiuXiong(query.key)
-      this.$http.get(`webData/${stockApiUtil.getAllUrl()}`, {
+      this.niuXiong = storageUtil.getData('stockIndexFlag', query.key)
+      this.$http.get(`stock/${stockApiUtil.getAllUrl()}`, {
         code: query.code,
         days: 200
       }).then((data) => {

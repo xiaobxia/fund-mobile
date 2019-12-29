@@ -58,10 +58,11 @@
 <script>
 import storageUtil from '@/util/storageUtil.js'
 import operatingTooltip from '@/util/operatingTooltip.js'
+import indexType from '@/common/indexType.js'
 
-const jigou = operatingTooltip.jigou
-const laji = operatingTooltip.laji
-const kuanji = operatingTooltip.kuanji
+const jigou = indexType.jigou
+const laji = indexType.laji
+const kuanji = indexType.kuanji
 
 export default {
   name: 'OperatingInfoItem',

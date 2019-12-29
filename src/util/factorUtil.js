@@ -1,5 +1,6 @@
 import storageUtil from '@/util/storageUtil.js'
 import dateUtil from './dateUtil'
+import moment from 'moment'
 import indexType from '@/common/indexType.js'
 
 const jigou = indexType.jigou
@@ -263,8 +264,7 @@ export default {
   getIndexAverageMonthFactor: function (indexKey, reduceLine, buySell) {
     let indexAverage = storageUtil.getData('averageMonth', indexKey) || 0
     let factor = 1
-    if (averageDiff > 0) {
-      // 越靠近-10越小
+    if (indexAverage > 0) {
       factor = 1 - (0.5 * (indexAverage / reduceLine))
     }
     if (factor < 0.5) {

@@ -29,6 +29,7 @@
             <mt-field label="确认日期" placeholder="请输入确认日期" v-model="form.confirm_date"></mt-field>
           </template>
           <template v-else>
+            <div class="page-content-title">持仓记录</div>
             <div class="position-record" v-for="(item, index) in positionRecord" :key="index">
               <mt-field label="成本" placeholder="请输入成本" v-model="item.cost"></mt-field>
               <mt-field label="份额" placeholder="请输入份额" v-model="item.shares"></mt-field>
@@ -44,7 +45,24 @@
         <template v-if="ifHas && editType === '减仓'">
           <mt-field label="减仓份额" placeholder="减仓份额" v-model="cutForm.shares"></mt-field>
           <div class="position_record_list">
-            <div v-for="(item, index) in positionRecord" :key="index" :class="{lock: item.ifLock}">成本：{{item.costSum}}，市值：{{item.sum}}，份额：{{keepTwoDecimals(item.shares)}}，确认日期：{{item.confirm_date}}</div>
+            <div v-for="(item, index) in positionRecord" :key="index" :class="{lock: item.ifLock}">
+              <span class="item">
+                <span class="label">成本：</span>
+                <span class="value">{{item.costSum}}</span>
+              </span>
+              <span class="item">
+                <span class="label">市值：</span>
+                <span class="value">{{item.sum}}</span>
+              </span>
+              <span class="item">
+                <span class="label">份额：</span>
+                <span class="value">{{keepTwoDecimals(item.shares)}}</span>
+              </span>
+              <span class="item">
+                <span class="label">确认日期：</span>
+                <span class="value">{{item.confirm_date}}</span>
+              </span>
+            </div>
           </div>
         </template>
       </div>
@@ -113,7 +131,6 @@ export default {
     },
     initQuery () {
       const query = this.$router.history.current.query
-      this.type = query.type || 'add'
       this.$http.get('userFund/getUserFund', {
         code: query.code
       }).then((res) => {
@@ -121,8 +138,11 @@ export default {
           const userFund = res.data
           if (userFund.has) {
             this.ifHas = true
+            this.type = 'edit'
             this.positionRecord = userFund.position_record
             this.form.strategy = userFund.strategy
+          } else {
+            this.type = 'add'
           }
           this.fundInfo = userFund
           this.form.cost = userFund.net_value

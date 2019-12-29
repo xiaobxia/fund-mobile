@@ -55,8 +55,8 @@ export default {
   methods: {
     initPage () {
       this.myNetChangeRatio = this.countDifferenceRate(
-        this.userFundAccountInfo.userLastTradeDateNetValue.net_value,
-        this.userFundAccountInfo.userFirstNetValue.net_value
+        this.userFundAccountInfo.userNewestNetValue.net_value,
+        1
       )
       const start = this.userFundAccountInfo.firstNetValueDate
       if (start) {

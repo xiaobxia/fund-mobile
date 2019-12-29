@@ -15,26 +15,40 @@
         <span class="item"><span class="label">基金净值：</span><span class="value">{{currentFund.net_value}}</span></span>
         <span class="item"><span class="label">估算净值：</span><span class="value">{{currentFund.valuation}}</span></span>
         <span class="item"><span class="label">估算涨幅：</span><span :class="['value', stockNumberClass(currentFund.change_ratio)]">{{currentFund.change_ratio}}%</span></span>
-        <span v-if="ifHas"  class="item"><span class="label">可卖金额：</span><span class="value">{{parseInt(canSellInfo.valuationSum || 0)}}</span></span>
-        <span v-if="ifHas"  class="item"><span class="label">可卖份额：</span><span class="value">{{parseInt(canSellInfo.shares || 0)}}</span></span>
+        <template v-if="ifHas">
+          <span class="item"><span class="label">持仓金额：</span><span class="value">{{parseInt(sum || 0)}}</span></span>
+          <span class="item"><span class="label">持仓份额：</span><span class="value">{{parseInt(shares || 0)}}</span></span>
+          <span class="item"><span class="label">可卖金额：</span><span class="value">{{parseInt(canSellInfo.valuationSum || 0)}}</span></span>
+          <span class="item"><span class="label">可卖份额：</span><span class="value">{{parseInt(canSellInfo.shares || 0)}}</span></span>
+        </template>
         <div class="ct"><span class="label">估值时间：</span><span class="value">{{formatDate(currentFund.valuation_date)}}</span></div>
+        <div class="page-content-title">主题</div>
+        <div class="filter-select-wrap">
+          <span class="name">{{filterTheme}}</span>
+          <mt-button class="select-btn" type="primary" @click="themeChangeHandler">改变</mt-button>
+        </div>
         <div  v-if="ifHas">
+          <div class="page-content-title">份额计算</div>
           <div>
-            <mt-field label="输入金额" placeholder="请输入" v-model="sellMoney"></mt-field>
-            <div>{{sellShare}}</div>
+            <mt-field label="金额" placeholder="请输入" v-model="sellMoney"></mt-field>
+            <mt-field label="份额" placeholder="请输入" :disabled="true" v-model="sellShare"></mt-field>
           </div>
+          <div class="page-content-title">份额表</div>
           <div class="shares-list-wrap">
             <div v-for="(item, index) in countSharesListByMoney(canSellInfo.shares)" :key="index">
-              <div>{{item.name}}</div>
               <div>
-                <span>份额 {{item.shares}}</span><span>金额 {{item.sum}}</span></div>
+                <span class="item">
+                  <span class="label">份额：</span>
+                  <span class="value">{{item.shares}}</span>
+                </span>
+                <span class="item">
+                  <span class="label">金额：</span>
+                  <span class="value">{{item.sum}}</span>
+                </span>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div class="filter-select-wrap">
-        <span class="name">{{filterTheme}}</span>
-        <mt-button class="select-btn" type="primary" @click="themeChangeHandler">改变</mt-button>
       </div>
     </div>
     <mt-popup
@@ -78,6 +92,7 @@ export default {
       },
       queryData: {},
       shares: 0,
+      sum: 0,
       filterTheme: '',
       filterList,
       popupVisible: false,
@@ -110,6 +125,7 @@ export default {
             if (userFund.position_record) {
               this.canSellInfo = fundAccountUtil.getUnLockInfo(userFund)
             }
+            this.sum = userFund.sum
             this.shares = userFund.shares
           }
           this.currentFund = userFund
@@ -164,8 +180,7 @@ export default {
       this.popupVisible = false
       this.updateFundTheme(theme)
     },
-    countSharesListByMoney (shares) {
-      shares = shares || 0
+    countSharesListByMoney () {
       let sharesList = []
       let number = 20
       for (let i = 1; i < (number + 1); i++) {
@@ -174,16 +189,24 @@ export default {
           money: i * 100
         })
       }
-      sharesList.map((item) => {
-        const canSellShares = parseInt(this.canSellInfo.shares || 0)
+      const canSellShares = parseInt(this.canSellInfo.shares || 0)
+      const newSharesList = []
+      for (let i = 0; i < number; i++) {
+        const item = sharesList[i]
         const shares = parseInt(item.money / this.currentFund.valuation)
         item.shares = shares
         if (canSellShares < shares) {
           item.shares = canSellShares
         }
-        item.sum = parseInt(item.shares * this.currentFund.valuation)
-      })
-      return sharesList
+        item.sum = Math.round(item.shares * this.currentFund.valuation)
+        newSharesList.push({
+          ...item
+        })
+        if (canSellShares < shares) {
+          break
+        }
+      }
+      return newSharesList
     }
   }
 }

@@ -4,6 +4,9 @@
   min-height: 0;
   border: none;
   outline: none!important;
+  .mint-field-core {
+    text-align: right;
+  }
   .mint-cell-allow-right::after {
     border-color: $main-text-color;
   }

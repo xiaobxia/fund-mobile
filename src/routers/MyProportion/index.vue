@@ -86,7 +86,7 @@
       <div class="content">
         <p>波段主题分布</p>
         <div v-for="(item, index) in list" :key="index" class="proportion-item">
-          <div class="title">{{item.name}}<span v-if="ifLaji(item.name)" class="tag laji">垃圾</span><span v-if="ifJigou(item.name)" class="tag jigou">机构</span><span class="rate">{{item.proportion}}%</span></div>
+          <div class="title">{{item.name}}<span v-if="ifLaji(item.name)" class="fm-tag green">垃圾</span><span v-if="ifJigou(item.name)" class="fm-tag red">机构</span><span class="rate">{{item.proportion}}%</span></div>
           <mt-progress :value="item.proportion" :bar-height="barHeight"></mt-progress>
         </div>
       </div>
@@ -97,6 +97,7 @@
 import moment from 'moment'
 import indexList from '@/common/indexList.js'
 import indexType from '@/common/indexType.js'
+import storageUtil from '@/util/storageUtil.js'
 
 const jigouName = indexType.jigouName
 const lajiName = indexType.lajiName
@@ -127,6 +128,8 @@ export default{
   computed: {
   },
   created () {
+    const userFundAccountInfo = storageUtil.getData('userAccountInfo')
+    this.asset = userFundAccountInfo.asset || 0
     this.queryRecord()
   },
   methods: {

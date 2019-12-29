@@ -5,6 +5,7 @@
 @import "lib/mint";
 @import "text";
 @import "warn";
+@import "tag";
 @import "component/header";
 @import "component/select";
 @import "component/tabbar";
@@ -70,6 +71,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: $main-text-color;
+  position: relative;
 }
 
 .main-body {
@@ -81,6 +83,13 @@ body {
 
 .tab-view {
   margin-bottom: 90px;
+}
+
+.page-content-title {
+  padding: 20px 20px 0 20px;
+  font-size: 36px;
+  font-weight: 600;
+  color: $main-text-color;
 }
 
 .detail-info-wrap {
@@ -106,7 +115,7 @@ body {
   }
 }
 .has-bar {
-  margin-bottom: 145px;
+  padding-bottom: 145px;
 }
 
 .net-line {

@@ -1,5 +1,10 @@
 import storageUtil from '@/util/storageUtil.js'
 import factorUtil from '@/util/factorUtil.js'
+import indexType from '@/common/indexType.js'
+
+const highRate = indexType.highRate
+const laji = indexType.laji
+const kuanji = indexType.kuanji
 
 // 定投占比
 const fixedInvestmentRatio = 0.4
@@ -21,7 +26,6 @@ function operateStandard () {
 
 // 基于市场的购买基准
 function getBuyBase (type, marketInfo) {
-  const userFundAccountInfo = storageUtil.getUserFundAccountInfo()
   let finalFactor = type === '熊' ? 1 : 0.8
   // 买卖信号因子
   let buySellFactor = 0.34 * ((marketInfo.buyFlagCount - marketInfo.sellFlagCount) / indexNumber)
@@ -30,23 +34,17 @@ function getBuyBase (type, marketInfo) {
   let noSellCountFactor = 0.34 * (marketInfo.noSellCount / indexNumber)
   finalFactor = finalFactor * (1 + noSellCountFactor)
   // 市场状况
-  let marketStateFactor = stockMarketQuestionFactor('buy')
-  finalFactor = finalFactor * marketStateFactor
+  finalFactor = finalFactor * factorUtil.stockMarketQuestionFactor('buy')
   // 市场择时
-  let marketTimeFactor = assetMarketTimeFactor()
-  finalFactor = finalFactor * marketTimeFactor
+  finalFactor = finalFactor * factorUtil.assetMarketTimeFactor('buy')
   // 仓位修正
-  const position = userFundAccountInfo.position_config || 100
-  const nowPosition = storageUtil.getAppConfig('nowPosition') || 100
-  let positionFactor = ((position - nowPosition) / 100) + 1
-  finalFactor = finalFactor * positionFactor
+  finalFactor = finalFactor * factorUtil.positionFactor('buy')
   // 结果
   return finalFactor * operateStandard()
 }
 // 基于市场的卖出基准
 
 function getSellBase (type, marketInfo) {
-  const userFundAccountInfo = storageUtil.getUserFundAccountInfo()
   let finalFactor = type === '熊' ? 1 : 0.8
   // 买卖信号因子
   let buySellFactor = 0.34 * ((marketInfo.sellFlagCount - marketInfo.buyFlagCount) / indexNumber)
@@ -55,16 +53,11 @@ function getSellBase (type, marketInfo) {
   let noSellCountFactor = 0.34 * (marketInfo.noSellCount / indexNumber)
   finalFactor = finalFactor * (1 - noSellCountFactor)
   // 市场状况
-  let marketStateFactor = stockMarketQuestion('sell')
-  finalFactor = finalFactor * (2 - marketStateFactor)
+  finalFactor = finalFactor * factorUtil.stockMarketQuestionFactor('sell')
   // 市场择时
-  let marketTimeFactor = assetMarketTimeFactor()
-  finalFactor = finalFactor * (2 - marketTimeFactor)
+  finalFactor = finalFactor * factorUtil.assetMarketTimeFactor('sell')
   // 仓位修正
-  const position = userFundAccountInfo.position_config || 100
-  const nowPosition = storageUtil.getAppConfig('nowPosition') || 100
-  let positionFactor = ((nowPosition - position) / 100) + 1
-  finalFactor = finalFactor * positionFactor
+  finalFactor = finalFactor * factorUtil.positionFactor('sell')
   // 结果
   // 卖的标准大一点
   return finalFactor * operateStandard() * 3 / 2
@@ -144,23 +137,23 @@ const operatingTooltip = {
   getIndexBuyNumber (type, indexItem, marketInfo, hasCount, ifChange) {
     // 标准到百
     let buyBase = getBuyBase(type, marketInfo)
-    let indexQuarterAverageFactor = getQuarterAverageFactor(indexItem.key)
-    let indexAverageFactor = getIndexAverageFactor(indexItem.key)
-    let monthAverageFactor = storageUtil.getMonthFactor(indexItem.key) || 1
-    let indexMonthDiffFactor = getIndexMonthDiffFactor(indexItem.key)
-    let indexYearDiffFactor = getIndexYearDiffFactor(indexItem.key)
-    let indexMarketTimeFactor = getIndexMarketTimeFactor(indexItem.key)
-    let indexJigouFactor = getIndexJigouFactor(indexItem.key, 'buy')
-    let indexLajiFactor = getIndexLajiFactor(indexItem.key, 'buy')
-    let indexHighRateFactor = getIndexHighRateFactor(indexItem.key, 'buy')
+    let indexAverageHalfYearFactor = factorUtil.getAverageHalfYearFactor(indexItem.key, 'buy')
+    let indexAverageFactor = factorUtil.getIndexAverageFactor(indexItem.key, 'buy')
+    let monthAverageFactor = factorUtil.getIndexAverageMonthFactor(indexItem.key, indexItem.reduceLine, 'buy') || 1
+    let indexMonthDiffFactor = factorUtil.getIndexMonthDiffFactor(indexItem.key, 'buy')
+    let indexYearDiffFactor = factorUtil.getIndexYearDiffFactor(indexItem.key, 'buy')
+    let indexMarketTimeFactor = factorUtil.getIndexMarketTimeFactor(indexItem.key, 'buy')
+    let indexJigouFactor = factorUtil.getIndexJigouFactor(indexItem.key, 'buy')
+    let indexLajiFactor = factorUtil.getIndexLajiFactor(indexItem.key, 'buy')
+    let indexHighRateFactor = factorUtil.getIndexHighRateFactor(indexItem.key, 'buy')
     let indexNetChangeRatioRateFactor = 1
     if (ifChange) {
-      indexNetChangeRatioRateFactor = getIndexNetChangeRatioRateFactor(indexItem.rate, marketInfo.netChangeRatio, 'buy')
+      indexNetChangeRatioRateFactor = factorUtil.getIndexNetChangeRatioRateFactor(indexItem.rate, marketInfo.netChangeRatio, 'buy')
     }
-    let indexManyDownFactor = getIndexManyDownFactor(indexItem.rate, marketInfo.netChangeRatioList)
+    let indexManyDownFactor = factorUtil.getIndexManyDownFactor(indexItem.rate, marketInfo.netChangeRatioList, 'buy')
     let buyNumber =
       buyBase *
-      indexQuarterAverageFactor *
+      indexAverageHalfYearFactor *
       indexAverageFactor *
       indexMonthDiffFactor *
       indexYearDiffFactor *
@@ -177,24 +170,24 @@ const operatingTooltip = {
   getIndexSellNumber (type, indexItem, marketInfo, hasCount) {
     // 标准到百
     let sellBase = getSellBase(type, marketInfo)
-    let indexQuarterAverageFactor = getQuarterAverageFactor(indexItem.key)
-    let indexAverageFactor = getIndexAverageFactor(indexItem.key)
-    let monthAverageFactor = storageUtil.getMonthFactor(indexItem.key) || 1
-    let indexMonthDiffFactor = getIndexMonthDiffFactor(indexItem.key)
-    let indexYearDiffFactor = getIndexYearDiffFactor(indexItem.key)
-    let indexMarketTimeFactor = getIndexMarketTimeFactor(indexItem.key)
-    let indexJigouFactor = getIndexJigouFactor(indexItem.key, 'sell')
-    let indexLajiFactor = getIndexLajiFactor(indexItem.key, 'sell')
-    let indexHighRateFactor = getIndexHighRateFactor(indexItem.key, 'sell')
-    let indexNetChangeRatioRateFactor = getIndexNetChangeRatioRateFactor(indexItem.rate, marketInfo.netChangeRatio, 'sell')
+    let indexAverageHalfYearFactor = factorUtil.getAverageHalfYearFactor(indexItem.key, 'buy')
+    let indexAverageFactor = factorUtil.getIndexAverageFactor(indexItem.key, 'sell')
+    let monthAverageFactor = factorUtil.getIndexAverageMonthFactor(indexItem.key, indexItem.reduceLine, 'sell') || 1
+    let indexMonthDiffFactor = factorUtil.getIndexMonthDiffFactor(indexItem.key, 'sell')
+    let indexYearDiffFactor = factorUtil.getIndexYearDiffFactor(indexItem.key, 'sell')
+    let indexMarketTimeFactor = factorUtil.getIndexMarketTimeFactor(indexItem.key, 'sell')
+    let indexJigouFactor = factorUtil.getIndexJigouFactor(indexItem.key, 'sell')
+    let indexLajiFactor = factorUtil.getIndexLajiFactor(indexItem.key, 'sell')
+    let indexHighRateFactor = factorUtil.getIndexHighRateFactor(indexItem.key, 'sell')
+    let indexNetChangeRatioRateFactor = factorUtil.getIndexNetChangeRatioRateFactor(indexItem.rate, marketInfo.netChangeRatio, 'sell')
     let sellNumber =
       sellBase *
-      (2 - indexQuarterAverageFactor) *
-      (2 - indexAverageFactor) *
-      (2 - indexMonthDiffFactor) *
-      (2 - indexYearDiffFactor) *
-      (2 - indexMarketTimeFactor) *
-      (2 - monthAverageFactor) *
+      indexAverageHalfYearFactor *
+      indexAverageFactor *
+      indexMonthDiffFactor *
+      indexYearDiffFactor *
+      indexMarketTimeFactor *
+       monthAverageFactor *
       indexJigouFactor *
       indexHighRateFactor *
       indexNetChangeRatioRateFactor *

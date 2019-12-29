@@ -148,6 +148,8 @@ export default {
   beforeDestroy () {
   },
   created () {
+    const user = this.userFundAccountInfo.user
+    this.todayAsset = user.asset
     this.initPage()
   },
   methods: {
@@ -183,7 +185,7 @@ export default {
           if (item.strategy !== '1') {
             dataMap['定投'].push(item)
           } else {
-            canSellSum += item.canSellSum
+            canSellSum += (item.canSellShares * item.valuation)
             if (item.theme && dataMap[item.theme]) {
               dataMap[item.theme].push(item)
             } else {

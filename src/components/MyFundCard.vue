@@ -4,22 +4,43 @@
     <mt-cell-swipe v-for="(item) in listData" :key="item.code" :to="'/page/fundDetail?type=edit&code='+item.code"
                    >
       <div slot="title">
-        <h3 :class="{lowRate: item.low_rate}">
+        <h3>
           {{item.code}}
           {{formatFundName(item.name, 11)}}
           <i class="lock-tag" v-if="item.ifAllLock"></i>
           <span style="float: right" :class="stockNumberClass(countDifferenceRate(item.valuationSum, item.sum))">{{countDifferenceRate(item.valuationSum, item.sum)}}%</span>
         </h3>
         <p class="explain">
-          <span class="item">持仓成本：{{parseInt(item.costSum)}}</span>
-          <span class="item">持仓金额：{{item.sum}}</span>
-          <span class="item">估算收益：<span
-            :class="stockNumberClass(keepTwoDecimals(item.valuationSum-item.sum))">{{keepTwoDecimals(item.valuationSum-item.sum)}}</span></span>
-          <span class="item">估算金额：{{item.valuationSum}}</span>
-          <span class="item">总收益：<span
-            :class="stockNumberClass(keepTwoDecimals(item.valuationSum-item.costSum))">{{keepTwoDecimals(item.valuationSum-item.costSum)}}</span></span>
-          <span class="item">总收益率：<span
-            :class="stockNumberClass(countDifferenceRate(item.valuationSum, item.costSum))">{{countDifferenceRate(item.valuationSum, item.costSum)}}%</span></span>
+          <span class="item">
+            <span class="label">持仓成本：</span>
+            <span class="value">{{parseInt(item.costSum)}}</span>
+          </span>
+          <span class="item">
+            <span class="label">持仓金额：</span>
+            <span class="value">{{item.sum}}</span>
+          </span>
+          <span class="item">
+            <span class="label">估算收益：</span>
+            <span class="value">
+              <span :class="stockNumberClass(keepTwoDecimals(item.valuationSum-item.sum))">{{keepTwoDecimals(item.valuationSum-item.sum)}}</span>
+            </span>
+          </span>
+          <span class="item">
+            <span class="label">估算金额：</span>
+            <span class="value">{{item.valuationSum}}</span>
+          </span>
+          <span class="item">
+            <span class="label">总收益：</span>
+            <span class="value">
+              <span :class="stockNumberClass(keepTwoDecimals(item.valuationSum-item.costSum))">{{keepTwoDecimals(item.valuationSum-item.costSum)}}</span>
+            </span>
+          </span>
+          <span class="item">
+            <span class="label">总收益率：</span>
+            <span class="value">
+              <span :class="stockNumberClass(countDifferenceRate(item.valuationSum, item.costSum))">{{countDifferenceRate(item.valuationSum, item.costSum)}}%</span>
+            </span>
+          </span>
         </p>
       </div>
       <div class="right-wrap">

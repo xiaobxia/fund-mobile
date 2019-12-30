@@ -21,15 +21,15 @@
                   :class="getClass(subItem)">{{subItem}}</span>
           </p>
           <div class="other-text">
+             <span class="item">
+              <span class="label">持有金额：</span>
+              <span class="value">{{hasCount[item.name]}}</span>
+            </span>
             <span class="item">
               <span class="label">年线偏离：</span>
               <span class="value">
                 <span :class="stockNumberClass(averageDiff[item.key])">{{averageDiff[item.key]}}</span>
               </span>
-            </span>
-            <span class="item">
-              <span class="label">持有金额：</span>
-              <span class="value">{{hasCount[item.name]}}</span>
             </span>
             <span class="item">
               <span class="label">买入金额：</span>

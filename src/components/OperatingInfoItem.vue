@@ -40,21 +40,21 @@
                   :class="subItem">{{subItem}}</span>
       </p>
       <div class="other-text">
-            <span class="item">
-              <span class="label">原买：</span>
-              <span class="value">{{indexRawBuyNumber}}</span>
-            </span>
-        <span class="item">
+          <span class="item">
               <span class="label">持有金额：</span>
               <span class="value">{{hasCount}}</span>
+            </span>
+        <span class="item">
+              <span class="label">卖出金额：</span>
+              <span class="value green-text">{{indexSellNumber}}</span>
             </span>
         <span class="item">
               <span class="label">买入金额：</span>
               <span class="value red-text">{{indexBuyNumber}}</span>
             </span>
-        <span class="item">
-              <span class="label">卖出金额：</span>
-              <span class="value green-text">{{indexSellNumber}}</span>
+            <span class="item">
+              <span class="label">原买：</span>
+              <span class="value">{{indexRawBuyNumber}}</span>
             </span>
       </div>
     </div>

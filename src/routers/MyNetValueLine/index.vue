@@ -183,16 +183,20 @@ export default {
       'userFundAccountInfo'
     ]),
     chartData () {
+      // 起码有一个不然没有显示的必要
       if (!(this.myList.length > 0)) {
         return {}
       }
-      let myList = this.copy(this.myList)
-      const baseMy = myList[0]['pre_net_value']
+      // 验证指数的数据
+      let oneKey = ''
       for (let key in this.webDataListMap) {
+        oneKey = key
         if (!(this.webDataListMap[key] && this.webDataListMap[key].length > 0)) {
           return {}
         }
       }
+      let myList = this.copy(this.myList)
+      const baseMy = myList[0]['pre_net_value']
       const firstData = {
         '日期': moment().format('YYYY-MM'),
         '我的组合': 0
@@ -200,18 +204,35 @@ export default {
       for (let key in this.webDataMap) {
         firstData[webDataMap[key].name] = 0
       }
+      // 创建第一个
       let row = [firstData]
-      myList.forEach((item, index) => {
+      let myNewestNetValue = 1
+      this.webDataListMap[oneKey].forEach((item, index) => {
         let data = {}
-        data['日期'] = item['net_value_date']
-        data['我的组合'] = this.countDifferenceRate(item['net_value'], baseMy)
+        let my = 0
+        data['日期'] = item['trade_date']
+        for (let i = 0; i < myList.length; i++) {
+          if (moment(myList[i]['net_value_date']).format('YYYYMMDD') === item['trade_date']) {
+            my = this.countDifferenceRate(myList[i]['net_value'], baseMy)
+            myNewestNetValue = myList[i]['net_value']
+            break
+          }
+        }
+        if (my) {
+          data['我的组合'] = my
+        } else {
+          if (myNewestNetValue === 1) {
+            data['我的组合'] = 0
+          } else {
+            data['我的组合'] = this.countDifferenceRate(myNewestNetValue, baseMy)
+          }
+        }
         for (let key in this.webDataListMap) {
           const base = this.webDataListMap[key][0].preClose
           data[webDataMap[key].name] = this.countDifferenceRate(this.webDataListMap[key][index].close, base)
         }
         row.push(data)
       })
-      console.log(row)
       return {
         columns: ['日期', '我的组合', ...webDataNames],
         rows: row
@@ -281,8 +302,6 @@ export default {
   },
   methods: {
     initPage () {
-      // 近一年的最大
-      const days = 30
       Indicator.open({
         spinnerType: 'fading-circle'
       })

@@ -10,8 +10,8 @@
       <mt-button type="primary" @click="reInitPreNetValue" class="main-btn">重新初始化pre_net_value</mt-button>
       <mt-button type="primary" @click="verifyMarketOpening" class="main-btn">验证股票开盘</mt-button>
       <mt-button type="primary" @click="openWork" class="main-btn">开盘工作</mt-button>
-      <mt-button type="primary" @click="updateFundBaseInfo" class="main-btn">更新净值</mt-button>
-      <mt-button type="primary" @click="updateValuation" class="main-btn">更新估值</mt-button>
+      <mt-button type="primary" @click="updateFundBaseInfo" class="main-btn">更新基金净值</mt-button>
+      <mt-button type="primary" @click="updateValuation" class="main-btn">更新基金估值</mt-button>
       <mt-button type="primary" @click="updateFixYearAverage" class="main-btn">更新定投年线</mt-button>
       <mt-button type="primary" @click="closeWork" class="main-btn">闭市工作</mt-button>
       <mt-button type="primary" @click="addStockPrice" class="main-btn">添加最新股票数据</mt-button>

@@ -110,6 +110,11 @@ body {
     width: 49%;
     box-sizing: border-box;
     margin-bottom: 10px;
+    vertical-align: top;
+    line-height: 1;
+    span {
+      vertical-align: top;
+    }
     .value {
       float: right;
     }

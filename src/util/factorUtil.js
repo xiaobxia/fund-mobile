@@ -23,6 +23,24 @@ function getJiesuan () {
 }
 
 export default {
+  // 买卖信号因子
+  buySellFactor: function (buyFlagCount, sellFlagCount, indexNumber, buySell) {
+    let buySellFactor = 1
+    if (buySell === 'buy') {
+      buySellFactor = 0.34 * ((buyFlagCount - sellFlagCount) / indexNumber)
+    } else {
+      buySellFactor = 0.34 * ((sellFlagCount - buyFlagCount) / indexNumber)
+    }
+    return 1 + buySellFactor
+  },
+  noSellCountFactor: function (noSellCount, indexNumber, buySell) {
+    let noSellCountFactor = 0.34 * (noSellCount / indexNumber) + 1
+    if (buySell === 'buy') {
+      return noSellCountFactor
+    } else {
+      return 1 / noSellCountFactor
+    }
+  },
   // 市场情况因子
   stockMarketQuestionFactor: function (buySell) {
     let factor = 1
@@ -63,7 +81,7 @@ export default {
     }
     factor = factor * question3Factor
     // 是否悲观
-    const question7 = storageUtil.getData('stockMarketQuestion', 'question_6')
+    const question7 = storageUtil.getData('stockMarketQuestion', 'question_7')
     let question7Factor = 1
     if (question7 === '乐观') {
       question7Factor = 1.1
@@ -73,7 +91,7 @@ export default {
     }
     factor = factor * question7Factor
     // 是否吃力
-    const question8 = storageUtil.getData('stockMarketQuestion', 'question_7')
+    const question8 = storageUtil.getData('stockMarketQuestion', 'question_8')
     let question8Factor = 1
     if (question8 === '不吃力') {
       question8Factor = 1.1

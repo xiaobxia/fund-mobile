@@ -28,11 +28,14 @@ function operateStandard () {
 function getBuyBase (type, marketInfo) {
   let finalFactor = type === '熊' ? 1 : 0.8
   // 买卖信号因子
-  let buySellFactor = 0.34 * ((marketInfo.buyFlagCount - marketInfo.sellFlagCount) / indexNumber)
-  finalFactor = finalFactor * (1 + buySellFactor)
+  finalFactor = finalFactor * factorUtil.buySellFactor(
+    marketInfo.buyFlagCount,
+    marketInfo.sellFlagCount,
+    indexNumber,
+    'buy'
+  )
   // 锁仓因子
-  let noSellCountFactor = 0.34 * (marketInfo.noSellCount / indexNumber)
-  finalFactor = finalFactor * (1 + noSellCountFactor)
+  finalFactor = finalFactor * factorUtil.noSellCountFactor(marketInfo.noSellCount, indexNumber, 'buy')
   // 市场状况
   finalFactor = finalFactor * factorUtil.stockMarketQuestionFactor('buy')
   // 市场择时
@@ -47,11 +50,14 @@ function getBuyBase (type, marketInfo) {
 function getSellBase (type, marketInfo) {
   let finalFactor = type === '熊' ? 1 : 0.8
   // 买卖信号因子
-  let buySellFactor = 0.34 * ((marketInfo.sellFlagCount - marketInfo.buyFlagCount) / indexNumber)
-  finalFactor = finalFactor * (1 + buySellFactor)
+  finalFactor = finalFactor * factorUtil.buySellFactor(
+    marketInfo.buyFlagCount,
+    marketInfo.sellFlagCount,
+    indexNumber,
+    'sell'
+  )
   // 锁仓因子
-  let noSellCountFactor = 0.34 * (marketInfo.noSellCount / indexNumber)
-  finalFactor = finalFactor * (1 - noSellCountFactor)
+  finalFactor = finalFactor * factorUtil.noSellCountFactor(marketInfo.noSellCount, indexNumber, 'sell')
   // 市场状况
   finalFactor = finalFactor * factorUtil.stockMarketQuestionFactor('sell')
   // 市场择时
@@ -170,7 +176,7 @@ const operatingTooltip = {
   getIndexSellNumber (type, indexItem, marketInfo, hasCount) {
     // 标准到百
     let sellBase = getSellBase(type, marketInfo)
-    let indexAverageHalfYearFactor = factorUtil.getAverageHalfYearFactor(indexItem.key, 'buy')
+    let indexAverageHalfYearFactor = factorUtil.getAverageHalfYearFactor(indexItem.key, 'sell')
     let indexAverageFactor = factorUtil.getIndexAverageFactor(indexItem.key, 'sell')
     let monthAverageFactor = factorUtil.getIndexAverageMonthFactor(indexItem.key, indexItem.reduceLine, 'sell') || 1
     let indexMonthDiffFactor = factorUtil.getIndexMonthDiffFactor(indexItem.key, 'sell')

@@ -135,12 +135,12 @@ export default {
           item.hasCount = this.hasCountMap[item.name]
         })
       }
+      this.initPage()
     })
     this.timer = setInterval(() => {
       this.initPage()
       // 半分钟一刷
     }, 1000 * 30)
-    this.initPage()
   },
   methods: {
     initPage () {

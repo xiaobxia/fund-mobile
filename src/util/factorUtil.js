@@ -254,6 +254,12 @@ export default {
         factor = factor * 1.2
       }
     }
+    // 年底炒传媒
+    if (month === 12 && day > 26) {
+      if (key === 'chuanmei') {
+        factor = factor * 1.2
+      }
+    }
     if (buySell === 'buy') {
       return factor
     } else {

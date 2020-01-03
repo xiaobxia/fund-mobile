@@ -25,7 +25,7 @@
               <span class="item">份额：<span>{{item.shares}}</span></span>
               <span class="item">净值：<span>{{item.net_value}}</span></span>
               <span class="item">仓位：<span>{{item.position}}</span></span>
-              <span class="item">当日收益：<span>{{item.today_income}}</span></span>
+              <span class="item">当日收益：<span :class="stockNumberClass(item.today_income)">{{item.today_income}}</span></span>
             </p>
           </div>
         </mt-cell-swipe>

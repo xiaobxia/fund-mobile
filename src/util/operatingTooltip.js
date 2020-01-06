@@ -152,6 +152,7 @@ const operatingTooltip = {
     let indexJigouFactor = factorUtil.getIndexJigouFactor(indexItem.key, 'buy')
     let indexLajiFactor = factorUtil.getIndexLajiFactor(indexItem.key, 'buy')
     let indexHighRateFactor = factorUtil.getIndexHighRateFactor(indexItem.key, 'buy')
+    let indexDaVFactor = factorUtil.getDaVFactor(indexItem.key, 'buy')
     let indexNetChangeRatioRateFactor = 1
     if (ifChange) {
       indexNetChangeRatioRateFactor = factorUtil.getIndexNetChangeRatioRateFactor(indexItem.rate, marketInfo.netChangeRatio, 'buy')
@@ -169,7 +170,8 @@ const operatingTooltip = {
       indexNetChangeRatioRateFactor *
       indexLajiFactor *
       indexManyDownFactor *
-      monthAverageFactor
+      monthAverageFactor *
+      indexDaVFactor
     let finalBuyNumber = buyNumberRedistribution(indexItem, hasCount, buyNumber)
     return Math.round(finalBuyNumber / 100) * 100
   },
@@ -186,6 +188,7 @@ const operatingTooltip = {
     let indexLajiFactor = factorUtil.getIndexLajiFactor(indexItem.key, 'sell')
     let indexHighRateFactor = factorUtil.getIndexHighRateFactor(indexItem.key, 'sell')
     let indexNetChangeRatioRateFactor = factorUtil.getIndexNetChangeRatioRateFactor(indexItem.rate, marketInfo.netChangeRatio, 'sell')
+    let indexDaVFactor = factorUtil.getDaVFactor(indexItem.key, 'sell')
     let sellNumber =
       sellBase *
       indexAverageHalfYearFactor *
@@ -197,7 +200,8 @@ const operatingTooltip = {
       indexJigouFactor *
       indexHighRateFactor *
       indexNetChangeRatioRateFactor *
-      indexLajiFactor
+      indexLajiFactor *
+      indexDaVFactor
     let finalSellNumber = sellNumberRedistribution(indexItem, hasCount, sellNumber)
     return Math.round(finalSellNumber / 100) * 100
   },

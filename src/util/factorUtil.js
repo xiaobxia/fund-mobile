@@ -368,5 +368,28 @@ export default {
     } else {
       return 1 / factor
     }
+  },
+  getDaVFactor: function (indexKey, buySell) {
+    let factor = 1
+    const d = dateUtil.getDate()
+    const day = d.getDate()
+    const month = d.getMonth() + 1
+    if (month === 1) {
+      // 春节前都看好
+      factor = 1.1
+      // 资源
+      if (indexKey === 'youse') {
+        factor = 1.2
+      }
+      // 传媒
+      if (indexKey === 'chuanmei') {
+        factor = 1.2
+      }
+    }
+    if (buySell === 'buy') {
+      return factor
+    } else {
+      return 1 / factor
+    }
   }
 }

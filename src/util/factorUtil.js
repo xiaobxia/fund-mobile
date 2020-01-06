@@ -181,9 +181,9 @@ export default {
   getIndexJigouFactor: function (key, buySell) {
     if (jigou.indexOf(key) !== -1) {
       if (buySell === 'buy') {
-        return 1 + (0.25 * getJiesuan())
+        return 1 + (0.1 * getJiesuan())
       } else {
-        return 1 - (0.25 * getJiesuan())
+        return 1 - (0.1 * getJiesuan())
       }
     }
     return 1

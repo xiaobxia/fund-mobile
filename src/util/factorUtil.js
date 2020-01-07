@@ -17,7 +17,7 @@ function getJiesuan () {
     return (1 - (2 * day / 31))
   }
   if (month === 12) {
-    return (-1 + (2 * day / 31))
+    return (-1 + (1 * day / 31))
   }
   return 1
 }

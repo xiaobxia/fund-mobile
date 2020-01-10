@@ -385,6 +385,10 @@ export default {
       if (indexKey === 'chuanmei') {
         factor = 1.2
       }
+      // 地产
+      if (indexKey === 'dichan') {
+        factor = 1.2
+      }
     }
     // 出高点
     if (month === 1 && day > 19) {

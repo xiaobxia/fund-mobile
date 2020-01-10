@@ -374,7 +374,7 @@ export default {
     const d = dateUtil.getDate()
     const day = d.getDate()
     const month = d.getMonth() + 1
-    if (month === 1) {
+    if (month === 1 && day < 19) {
       // 春节前都看好
       factor = 1.1
       // 资源
@@ -385,6 +385,14 @@ export default {
       if (indexKey === 'chuanmei') {
         factor = 1.2
       }
+    }
+    // 出高点
+    if (month === 1 && day > 19) {
+      factor = 0.8
+    }
+    // 出高点，有待观察
+    if (month > 1) {
+      factor = 0.8
     }
     if (buySell === 'buy') {
       return factor

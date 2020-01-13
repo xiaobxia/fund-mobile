@@ -60,7 +60,7 @@ export default {
           const list = data.data.list
           let averageList = []
           // 近的在前
-          for (let i = 0; i < 5; i++) {
+          for (let i = 0; i < 6; i++) {
             averageList.push(this.countDiff(list, i))
           }
           averageList.reverse()
@@ -68,20 +68,20 @@ export default {
           const averageDiff = averageList[averageList.length - 1]
           item.averageDiff = averageDiff
           let lock = stockAnalysisUtil.ifNoSell(averageList)
-          // 移动均线策略
-          let now = 0
-          let last = 0
-          // 近的在前
-          for (let i = 0; i < 7; i++) {
-            now += parseFloat(list[i].kline.close)
-          }
-          for (let j = 1; j < 8; j++) {
-            last += parseFloat(list[j].kline.close)
-          }
-          const diff = this.countDifferenceRate(now / 7, last / 7)
-          if (diff < 0.2) {
-            lock = false
-          }
+          // // 移动均线策略
+          // let now = 0
+          // let last = 0
+          // // 近的在前
+          // for (let i = 0; i < 7; i++) {
+          //   now += parseFloat(list[i].kline.close)
+          // }
+          // for (let j = 1; j < 8; j++) {
+          //   last += parseFloat(list[j].kline.close)
+          // }
+          // const diff = this.countDifferenceRate(now / 7, last / 7)
+          // if (diff < 0.2) {
+          //   lock = false
+          // }
           item.lock = lock
           // 保存锁仓信息
           storageUtil.setData('noSell', item.key, lock)

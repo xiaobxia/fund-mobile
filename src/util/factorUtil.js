@@ -113,6 +113,7 @@ export default {
     const position = storageUtil.getData('userAccountInfo', 'positionConfig') || 100
     const nowPosition = storageUtil.getData('appConfig', 'nowPosition') || 100
     let positionFactor = 1
+    // 现在-配置
     if (buySell === 'buy') {
       positionFactor = ((position - nowPosition) / 100) + 1
     } else {

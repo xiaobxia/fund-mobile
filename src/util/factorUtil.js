@@ -71,7 +71,7 @@ export default {
       question3Factor = 1.2
     }
     if (question3 === '略强') {
-      question3Factor = 0.1
+      question3Factor = 1.1
     }
     if (question3 === '略弱') {
       question3Factor = 0.9

@@ -110,10 +110,12 @@ export default {
   positionFactor: function (buySell) {
     let factor = 1
     // 仓位修正
+    // 配置
     const position = storageUtil.getData('userAccountInfo', 'positionConfig') || 100
+    // 现在
     const nowPosition = storageUtil.getData('appConfig', 'nowPosition') || 100
     let positionFactor = 1
-    // 现在-配置
+    // 配置-现在
     if (buySell === 'buy') {
       positionFactor = ((position - nowPosition) / 100) + 1
     } else {

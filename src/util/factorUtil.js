@@ -121,6 +121,9 @@ export default {
     } else {
       positionFactor = ((nowPosition - position) / 100) + 1
     }
+    if (positionFactor < 0) {
+      positionFactor = 0
+    }
     return factor * positionFactor
   },
   // 资产择时因子

@@ -9,6 +9,10 @@
       </mt-button>
     </mt-header>
     <div class="main-body">
+      <div class="detail-info-wrap">
+        <span class="item"><span class="label">年收益：</span><span :class="['value', stockNumberClass(yearIncome)]">{{yearIncome}}</span></span>
+        <span class="item"><span class="label">月收益：</span><span :class="['value', stockNumberClass(monthIncome)]">{{monthIncome}}</span></span>
+      </div>
       <div class="page-content-title">月K线</div>
       <div class="chart-wrap">
         <ve-line
@@ -65,8 +69,6 @@
 <script>
 import moment from 'moment'
 import indexListAll from '@/common/indexListAll.js'
-import dateUtil from '@/util/dateUtil.js'
-import arrayUtil from '@/util/arrayUtil.js'
 import {Indicator} from 'mint-ui'
 import { mapGetters } from 'vuex'
 
@@ -174,7 +176,9 @@ export default {
         nowMonth: 0,
         all: 0
       },
-      netValueMonthRate: []
+      netValueMonthRate: [],
+      monthIncome: 0,
+      yearIncome: 0
     }
   },
 
@@ -359,6 +363,22 @@ export default {
       }).then((data) => {
         if (data.success) {
           this.netValueMonthRate = data.data.list
+        }
+      })
+      this.$http.get('user/getUserIncome', {
+        start: moment().format('YYYY-MM'),
+        end: moment().add(1, 'months').format('YYYY-MM')
+      }).then((data) => {
+        if (data.success) {
+          this.monthIncome = data.data
+        }
+      })
+      this.$http.get('user/getUserIncome', {
+        start: moment().format('YYYY'),
+        end: moment().add(1, 'years').format('YYYY')
+      }).then((data) => {
+        if (data.success) {
+          this.yearIncome = data.data
         }
       })
     },

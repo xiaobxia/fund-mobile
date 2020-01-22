@@ -248,6 +248,12 @@ export default {
     const month = d.getMonth() + 1
     const day = d.getDate()
     let factor = 1
+    // 流感高发季
+    if (month >= 1 && month <= 3) {
+      if (key === 'shengwu') {
+        factor = factor * 1.2
+      }
+    }
     // 4月炒周期
     if (month === 4 || (month === 3 && day > 26)) {
       if (['meitan', 'gangtie', 'youse'].indexOf(key) !== -1) {

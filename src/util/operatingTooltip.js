@@ -112,10 +112,12 @@ function getBuyNumber (hasCount, rowBuy, indexRedistributionStandard) {
 // 买入金额再分配
 function buyNumberRedistribution (indexItem, hasCount, buyNumber) {
   const asset = getUserAsset()
-  let mix = indexItem.mix ? 1.5 : 1.2
+  let mix = indexItem.mix ? 1.25 : 1
   const indexAssetStandard = mix * asset / indexNumber
   const indexRedistributionStandard = indexAssetStandard / 2
-  return getBuyNumber(hasCount, buyNumber, indexRedistributionStandard)
+  // 年排行在前面的，给更高仓位配比
+  let indexYearDiffFactor = factorUtil.getIndexYearDiffFactor(indexItem.key, 'buy')
+  return getBuyNumber(hasCount, buyNumber, indexRedistributionStandard * indexYearDiffFactor)
 }
 
 function getSellNumber (hasCount, rowSell, indexRedistributionStandard) {
@@ -136,7 +138,9 @@ function sellNumberRedistribution (indexItem, hasCount, sellNumber) {
   let mix = indexItem.mix ? 1.25 : 1
   const indexAssetStandard = mix * asset / indexNumber
   const indexRedistributionStandard = indexAssetStandard / 2
-  return getSellNumber(hasCount, sellNumber, indexRedistributionStandard)
+  // 年排行在前面的，给更高仓位配比，卖出也用buy的
+  let indexYearDiffFactor = factorUtil.getIndexYearDiffFactor(indexItem.key, 'buy')
+  return getSellNumber(hasCount, sellNumber, indexRedistributionStandard * indexYearDiffFactor)
 }
 
 const operatingTooltip = {

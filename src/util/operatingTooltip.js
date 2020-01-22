@@ -112,7 +112,7 @@ function getBuyNumber (hasCount, rowBuy, indexRedistributionStandard) {
 // 买入金额再分配
 function buyNumberRedistribution (indexItem, hasCount, buyNumber) {
   const asset = getUserAsset()
-  let mix = indexItem.mix ? 1.25 : 1
+  let mix = indexItem.mix ? 1.5 : 1.2
   const indexAssetStandard = mix * asset / indexNumber
   const indexRedistributionStandard = indexAssetStandard / 2
   return getBuyNumber(hasCount, buyNumber, indexRedistributionStandard)

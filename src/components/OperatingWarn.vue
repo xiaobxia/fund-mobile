@@ -57,6 +57,7 @@
       </div>
     </div>
     <div class="warn-wrap">
+      <div class="fm-warn green" v-if="keepLow">仓位配置100以内</div>
       <div class="fm-warn green" v-if="ifCut">仓位配置为{{ifCut}}</div>
       <div class="fm-warn red" v-if="ifFull">仓位配置为{{ifFull}}</div>
       <div class="fm-warn green" v-if="ifNiandi">年底机构结账，保护收益</div>
@@ -118,6 +119,10 @@ export default {
     }
   },
   computed: {
+    keepLow () {
+      const position = storageUtil.getData('userAccountInfo', 'positionConfig') || 100
+      return this.noSellCount <= 12 && position > 100
+    },
     ifNiandi () {
       const d = this.getDate()
       const month = d.getMonth() + 1

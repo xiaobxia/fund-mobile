@@ -20,13 +20,10 @@ const highRate = [
 
 // 垃圾指数
 const laji = [
-  // 'gangtie',
-  // 'huanbao',
-  // 'meitan',
-  // 'jijian',
-  // 'qiche',
-  // 'youse',
-  // 'chuanmei'
+  'gangtie',
+  'meitan',
+  'jijian',
+  'dichan'
 ]
 
 // 宽指数

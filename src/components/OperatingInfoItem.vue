@@ -21,9 +21,9 @@
         <span v-if="indexNiuXiong === '定投' && averageHalfYear >= 0" class="fm-tag s-blue">解定</span>
         <span v-if="ifJieFantan()" class="fm-tag s-blue">解反</span>
         <span v-if="ifUpQuick()" class="fm-tag b-green">涨快</span>
-        <span v-if="ifThreeUp && ifLaji" class="fm-tag s-green">卖</span>
-        <span v-if="ifFourUp && ifLaji" class="fm-tag s-green">卖1/3</span>
-        <span v-if="ifFiveUp && ifLaji" class="fm-tag s-green">卖1/2</span>
+        <!--<span v-if="ifThreeUp && ifLaji" class="fm-tag s-green">卖</span>-->
+        <!--<span v-if="ifFourUp && ifLaji" class="fm-tag s-green">卖1/3</span>-->
+        <!--<span v-if="ifFiveUp && ifLaji" class="fm-tag s-green">卖1/2</span>-->
         <span v-if="jukui" class="fm-tag s-yellow">巨亏</span>
         <span v-if="ifDownQuick()" class="fm-tag s-red">跌快</span>
         <span style="float: right" :class="stockNumberClass(rate)">{{rate}}%</span>
@@ -502,7 +502,10 @@ export default {
       }
       if (buySellList[0] === buyClass) {
         // 如果是买入信号，那就直接红色，返回
-        classList.push(buyClass)
+        // 垃圾指数的买入信号，不会提示买入
+        if (!this.ifLaji) {
+          classList.push(buyClass)
+        }
       } else if (buySellList[0] === sellClass) {
         if (question1 !== '筑顶后大跌') {
           if (this.jukui && this.averageHalfYear < 0) {

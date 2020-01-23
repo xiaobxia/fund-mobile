@@ -433,7 +433,8 @@ export default {
     ifDownTrend () {
       const averageMonthClose = storageUtil.getData('averageMonthClose', this.indexInfo.key) || 0
       const averageHalfYearIndexClose = storageUtil.getData('averageHalfYearIndexClose', this.indexInfo.key) || 0
-      return averageMonthClose < averageHalfYearIndexClose
+      // 进入定投区域了那就不是下降趋势
+      return averageMonthClose < averageHalfYearIndexClose && this.indexNiuXiong !== '定投'
     },
     noSellIndex () {
       return storageUtil.getData('noSell', this.indexInfo.key) || false

@@ -500,12 +500,10 @@ export default {
           classList.push(sellClass)
         }
       }
-      if (buySellList[0] === buyClass) {
+      if (buySellList[0] === buyClass && !this.ifLaji) {
         // 如果是买入信号，那就直接红色，返回
         // 垃圾指数的买入信号，不会提示买入
-        if (!this.ifLaji) {
-          classList.push(buyClass)
-        }
+        classList.push(buyClass)
       } else if (buySellList[0] === sellClass) {
         if (question1 !== '筑顶后大跌') {
           if (this.jukui && this.averageHalfYear < 0) {

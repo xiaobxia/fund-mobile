@@ -5,6 +5,7 @@
       <h3>
         <span class="index-name">{{indexInfo.name}}</span>
         <span v-if="lock" class="fm-icon lock"></span>
+        <span v-if="ifDownTrend" class="fm-tag s-green">下</span>
         <span v-if="ifHot" class="fm-tag s-green">热</span>
         <span v-if="positionWarn === 'danger'" class="fm-tag s-yellow">危</span>
         <span v-if="positionWarn === 'warn'" class="fm-tag s-green">高</span>
@@ -428,6 +429,12 @@ export default {
     averageHalfYear () {
       return storageUtil.getData('averageHalfYearIndex', this.indexInfo.key) || 0
     },
+    // 是否出于下降趋势
+    ifDownTrend () {
+      const averageMonthClose = storageUtil.getData('averageMonthClose', this.indexInfo.key) || 0
+      const averageHalfYearIndexClose = storageUtil.getData('averageHalfYearIndexClose', this.indexInfo.key) || 0
+      return averageMonthClose < averageHalfYearIndexClose
+    },
     noSellIndex () {
       return storageUtil.getData('noSell', this.indexInfo.key) || false
     },
@@ -464,11 +471,19 @@ export default {
       return false
     },
     ifJieFantan () {
-      return (
-        ((this.indexNiuXiong === '大反' || this.indexNiuXiong === '小反') &&
-        (this.ifThreeUp || this.ifFourUp || this.ifFiveUp)) ||
-        (this.indexNiuXiong === '小反' && this.ifTwoUp)
-      )
+      // 下降趋势两天就解反
+      if (this.ifDownTrend) {
+        return (
+          (this.indexNiuXiong === '大反' || this.indexNiuXiong === '小反') &&
+          (this.ifTwoUp || this.ifThreeUp || this.ifFourUp || this.ifFiveUp)
+        )
+      } else {
+        return (
+          ((this.indexNiuXiong === '大反' || this.indexNiuXiong === '小反') &&
+          (this.ifThreeUp || this.ifFourUp || this.ifFiveUp)) ||
+          (this.indexNiuXiong === '小反' && this.ifTwoUp)
+        )
+      }
     },
     // 获取今天前面的第一个买卖信号
     getBeforeFlagBoth () {
@@ -532,11 +547,12 @@ export default {
       // }
       // 垃圾指数
       if (this.ifLaji) {
-        if (this.ifThreeUp || this.ifFourUp || this.ifFiveUp) {
+        if (this.ifTwoUp || this.ifThreeUp || this.ifFourUp || this.ifFiveUp) {
           classList.push(sellClass)
         }
       }
-      if (buySellList[0] === buyClass && !this.ifLaji) {
+      // 下降趋势不要技术分析的买入信号
+      if (buySellList[0] === buyClass && !this.ifLaji && !this.ifDownTrend) {
         // 如果是买入信号，那就直接红色，返回
         // 垃圾指数的买入信号，不会提示买入
         classList.push(buyClass)
@@ -576,7 +592,8 @@ export default {
         // 没有其他信号
         // 不是筑顶阶段才行
         // 连续跌三天
-        if (this.ifThreeDown) {
+        // 下降趋势不要小反
+        if (this.ifThreeDown && !this.ifDownTrend) {
           if (this.ifKuanji) {
             // 宽基指数可以买
             shouldClass = 'should-buy'

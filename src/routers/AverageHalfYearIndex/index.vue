@@ -54,9 +54,11 @@ export default {
         days: 120
       }, {interval: 20}).then((data) => {
         if (data.success) {
-          const diff = data.data
+          const diff = data.data.rate
+          const close = data.data.close
           item.netChangeRatio = diff
           storageUtil.setData('averageHalfYearIndex', item.key, diff)
+          storageUtil.setData('averageHalfYearIndexClose', item.key, close)
           if (diff <= item.fixLine) {
             this.updateStockIndex(item.key, '定投')
           }

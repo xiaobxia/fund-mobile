@@ -65,9 +65,14 @@ export default {
           }
           averageList.reverse()
           // 20线偏离度
-          const averageDiff = averageList[averageList.length - 1]
+          const averageDiff = averageList[averageList.length - 1].rate
+          const averageDiffClose = averageList[averageList.length - 1].close
           item.averageDiff = averageDiff
-          let lock = stockAnalysisUtil.ifNoSell(averageList)
+          const diffList = []
+          averageList.forEach((subItem) => {
+            diffList.push(subItem.rate)
+          })
+          let lock = stockAnalysisUtil.ifNoSell(diffList)
           // 移动均线策略
           let now = 0
           let last = 0
@@ -86,6 +91,7 @@ export default {
           // 保存锁仓信息
           storageUtil.setData('noSell', item.key, lock)
           storageUtil.setData('averageMonth', item.key, averageDiff)
+          storageUtil.setData('averageMonthClose', item.key, averageDiffClose)
         }
       })
     },
@@ -96,7 +102,11 @@ export default {
       for (let i = index; i < (20 + index); i++) {
         now += parseFloat(list[i].kline.close)
       }
-      return this.countDifferenceRate(parseFloat(list[index].kline.close), now / 20)
+      const close = now / 20
+      return {
+        rate: this.countDifferenceRate(parseFloat(list[index].kline.close), close),
+        close
+      }
     },
     backHandler () {
       this.$router.history.go(-1)

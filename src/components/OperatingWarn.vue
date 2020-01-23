@@ -57,6 +57,7 @@
       </div>
     </div>
     <div class="warn-wrap">
+      <div class="fm-warn green" v-if="ifCut">仓位配置为{{ifCut}}</div>
       <div class="fm-warn red" v-if="ifFull">仓位配置为{{ifFull}}</div>
       <div class="fm-warn green" v-if="ifNiandi">年底机构结账，保护收益</div>
       <div class="fm-warn green" v-if="nowMonthRate>=1.8">建议开始锁定收益，有一个降到60仓的过程，然后再重新按照信号做</div>
@@ -131,6 +132,14 @@ export default {
         return 100
       }
       if (this.niuxiong[3] >= 6 && position < 50) {
+        return 50
+      }
+      return 0
+    },
+    ifCut () {
+      const question9 = storageUtil.getData('stockMarketQuestion', 'question_9')
+      const position = storageUtil.getData('userAccountInfo', 'positionConfig') || 100
+      if (question9 === '是' && position > 50) {
         return 50
       }
       return 0

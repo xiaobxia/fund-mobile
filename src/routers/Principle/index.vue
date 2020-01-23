@@ -7,6 +7,16 @@
     </mt-header>
     <div class="main-body">
       <div class="question">
+        是否有持续恐慌大事件？（大跌后不翻红，才算出清）
+      </div>
+      <div class="answer">
+        <mt-radio
+          align="right"
+          v-model="question_9"
+          :options="['是', '否']">
+        </mt-radio>
+      </div>
+      <div class="question">
         市场阶段？
       </div>
       <div class="answer">
@@ -102,7 +112,8 @@ export default {
       question_5: storageUtil.getData('stockMarketQuestion', 'question_5'),
       question_6: storageUtil.getData('stockMarketQuestion', 'question_6'),
       question_7: storageUtil.getData('stockMarketQuestion', 'question_7'),
-      question_8: storageUtil.getData('stockMarketQuestion', 'question_8')
+      question_8: storageUtil.getData('stockMarketQuestion', 'question_8'),
+      question_9: storageUtil.getData('stockMarketQuestion', 'question_9')
     }
   },
   watch: {
@@ -151,6 +162,12 @@ export default {
     question_8 (val) {
       this.$http.post('stock/updateStockMarketQuestion', {
         key: 'question_8',
+        value: val
+      })
+    },
+    question_9 (val) {
+      this.$http.post('stock/updateStockMarketQuestion', {
+        key: 'question_9',
         value: val
       })
     }

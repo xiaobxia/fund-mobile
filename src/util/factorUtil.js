@@ -44,6 +44,13 @@ export default {
   // 市场情况因子
   stockMarketQuestionFactor: function (buySell) {
     let factor = 1
+    // 恐慌
+    const question9 = storageUtil.getData('stockMarketQuestion', 'question_9')
+    let question9Factor = 1
+    if (question9 === '是') {
+      question9Factor = 0.5
+    }
+    factor = factor * question9Factor
     // 市场阶段
     const question1 = storageUtil.getData('stockMarketQuestion', 'question_1')
     let question1Factor = 1

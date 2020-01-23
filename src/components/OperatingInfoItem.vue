@@ -287,6 +287,13 @@ export default {
         this.netChangeRatioList[4] < 0
       )
     },
+    ifTwoUp () {
+      return (
+        this.netChangeRatioListLarge[0] > 0 &&
+        this.netChangeRatioListLarge[1] > 0 &&
+        this.netChangeRatioListLarge[2] <= 0
+      )
+    },
     ifThreeUp () {
       return (
         this.netChangeRatioListLarge[0] > 0 &&
@@ -458,8 +465,9 @@ export default {
     },
     ifJieFantan () {
       return (
-        (this.indexNiuXiong === '大反' || this.indexNiuXiong === '小反') &&
-        (this.ifThreeUp || this.ifFourUp || this.ifFiveUp)
+        ((this.indexNiuXiong === '大反' || this.indexNiuXiong === '小反') &&
+        (this.ifThreeUp || this.ifFourUp || this.ifFiveUp)) ||
+        (this.indexNiuXiong === '小反' && this.ifTwoUp)
       )
     },
     // 获取今天前面的第一个买卖信号
@@ -482,6 +490,15 @@ export default {
       }
       return newList
     },
+    noBuy (list) {
+      let newList = []
+      for (let i = 0; i < list.length; i++) {
+        if (list[i] !== 'buy' && list[i] !== 'should-buy') {
+          newList.push(list[i])
+        }
+      }
+      return newList
+    },
     ifxiaofan () {
       return this.ifSixFive || (this.averageMonthIndex > 0 && this.ifThreeDown)
     },
@@ -494,6 +511,8 @@ export default {
       return false
     },
     getItemClass () {
+      // 持续恐慌
+      const question9 = storageUtil.getData('stockMarketQuestion', 'question_9')
       // 市场阶段
       const question1 = storageUtil.getData('stockMarketQuestion', 'question_1')
       const buyClass = 'buy'
@@ -522,7 +541,7 @@ export default {
         // 垃圾指数的买入信号，不会提示买入
         classList.push(buyClass)
       } else if (buySellList[0] === sellClass) {
-        if (question1 !== '筑顶后大跌') {
+        if (question1 !== '筑顶后大跌' && question9 !== '是') {
           if (this.jukui && this.averageHalfYear < 0) {
             // 巨亏的那就得卖
             classList.push(sellClass)
@@ -589,20 +608,25 @@ export default {
       }
       classList.push(shouldClass)
       let classListF = classList
-      if (this.noSellIndex || this.noSellCount >= 18) {
-        if (this.rate < 0) {
-          // 锁仓阶段可以跌了就买
-          classList.push('should-buy')
-        }
-        // 在趋势中，什么卖出信号都不用管
-        classListF = this.noSell(classList)
-      }
       // 锁仓的没有卖出高亮
       if (this.lock) {
         classListF = this.noSell(classList)
       }
       // 定投阶段没有卖出高亮
       if (this.indexNiuXiong === '定投') {
+        classListF = this.noSell(classList)
+      }
+      // 持续恐慌事件那就不要买了
+      if (question9 === '是') {
+        classListF = this.noBuy(classList)
+        return classListF
+      }
+      if (this.noSellIndex || this.noSellCount >= 18) {
+        if (this.rate < 0) {
+          // 锁仓阶段可以跌了就买
+          classList.push('should-buy')
+        }
+        // 在趋势中，什么卖出信号都不用管
         classListF = this.noSell(classList)
       }
       return classListF

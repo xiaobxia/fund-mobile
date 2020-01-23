@@ -527,6 +527,7 @@ export default {
       return false
     },
     getItemClass () {
+      const question10 = storageUtil.getData('stockMarketQuestion', 'question_10')
       // 持续恐慌
       const question9 = storageUtil.getData('stockMarketQuestion', 'question_9')
       // 市场阶段
@@ -625,6 +626,11 @@ export default {
         }
       }
       classList.push(shouldClass)
+      // 转弱了，加一个卖出信号
+      // 写在这没问题，因为筑顶的时候的大反，基本都是失效的
+      if (question10 === '是' && this.rate > 0) {
+        classList.push(sellClass)
+      }
       let classListF = classList
       // 锁仓的没有卖出高亮
       if (this.lock) {

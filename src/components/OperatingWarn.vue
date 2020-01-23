@@ -125,6 +125,7 @@ export default {
     },
     ifFull () {
       const position = storageUtil.getData('userAccountInfo', 'positionConfig') || 100
+      // 根据定投判断
       if (this.niuxiong[3] >= 18 && position < 150) {
         return 150
       }

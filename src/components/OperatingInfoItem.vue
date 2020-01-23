@@ -198,6 +198,23 @@ export default {
         return storageUtil.getData('jianBuySellList', this.indexInfo.key) || []
       }
     },
+    allBuySellList () {
+      const xiong = storageUtil.getData('xiongBuySellList', this.indexInfo.key) || []
+      const jian = storageUtil.getData('jianBuySellList', this.indexInfo.key) || []
+      const newList = []
+      xiong.forEach((item, index) => {
+        if (item) {
+          newList[index] = item
+        } else {
+          if (jian[index]) {
+            newList[index] = jian[index]
+          } else {
+            newList[index] = ''
+          }
+        }
+      })
+      return newList
+    },
     indexNiuXiong () {
       const niuXiong = storageUtil.getData('stockIndexFlag', this.indexInfo.key)
       return niuXiong === '正常' ? '' : niuXiong
@@ -563,7 +580,7 @@ export default {
           shouldClass = 'should-buy'
         }
         // ----------------------应该卖的部分
-        if (this.otherBuySellList[0] !== 'buy' && shouldClass === '' && this.rate < 0) {
+        if (this.allBuySellList[0] !== 'buy' && shouldClass === '' && this.rate < 0) {
           // 研究过了，线上确实可以不杀跌
           if (this.averageMonthIndex < 0 && !this.ifInFantan && !this.ifThreeDown) {
             shouldClass = 'should-sell'

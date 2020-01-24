@@ -527,6 +527,7 @@ export default {
       return false
     },
     getItemClass () {
+      // 锁仓转不锁
       const question10 = storageUtil.getData('stockMarketQuestion', 'question_10')
       // 持续恐慌
       const question9 = storageUtil.getData('stockMarketQuestion', 'question_9')
@@ -625,6 +626,7 @@ export default {
           }
         }
       }
+      // 应该的类
       classList.push(shouldClass)
       // 转弱了，加一个卖出信号
       // 写在这没问题，因为筑顶的时候的大反，基本都是失效的

@@ -7,7 +7,8 @@ const laji = indexType.laji
 const kuanji = indexType.kuanji
 
 // 定投占比
-const fixedInvestmentRatio = 0.4
+// 得真实得定，因为这也会影响波段指数的标准仓
+const fixedInvestmentRatio = 0.5
 // 指数数量
 const indexNumber = 24
 

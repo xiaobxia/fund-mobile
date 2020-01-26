@@ -245,10 +245,8 @@ export default {
             const twoDayRecord = recentNetValue[i + 2]
             let buyFlag = infoUtil[fnMap[item.key + 'Buy']](nowRecord, oneDayRecord, twoDayRecord)
             let sellFlag = infoUtil[fnMap[item.key + 'Sell']](nowRecord, oneDayRecord, twoDayRecord)
-            if (i <= 7) {
-              netChangeRatioListLarge[i] = recentNetValue[i].netChangeRatio
-              closeListLarge[i] = recentNetValue[i].close
-            }
+            netChangeRatioListLarge[i] = recentNetValue[i].netChangeRatio
+            closeListLarge[i] = recentNetValue[i].close
             if (i < 5) {
               netChangeRatioList[i] = recentNetValue[i].netChangeRatio
               closeList[i] = recentNetValue[i].close

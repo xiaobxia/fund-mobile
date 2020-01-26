@@ -372,8 +372,8 @@ export default {
       }
       return false
     },
-    ifSevenFive () {
-      if (this.netChangeRatioListLarge[0] < 0 && this.netChangeRatioListLarge[6] < 0) {
+    ifEightSeven () {
+      if (this.netChangeRatioListLarge[0] < 0) {
         let count = 0
         if (this.netChangeRatioListLarge[1] > 0) {
           count++
@@ -390,7 +390,13 @@ export default {
         if (this.netChangeRatioListLarge[5] > 0) {
           count++
         }
-        if (count < 3) {
+        if (this.netChangeRatioListLarge[6] > 0) {
+          count++
+        }
+        if (this.netChangeRatioListLarge[7] > 0) {
+          count++
+        }
+        if (count < 2) {
           return true
         }
       }
@@ -415,6 +421,36 @@ export default {
           count++
         }
         if (this.netChangeRatioListLarge[6] > 0) {
+          count++
+        }
+        if (count < 3) {
+          return true
+        }
+      }
+      return false
+    },
+    ifNineFive () {
+      if (this.netChangeRatioListLarge[0] < 0 && this.netChangeRatioListLarge[8] < 0) {
+        let count = 0
+        if (this.netChangeRatioListLarge[1] > 0) {
+          count++
+        }
+        if (this.netChangeRatioListLarge[2] > 0) {
+          count++
+        }
+        if (this.netChangeRatioListLarge[3] > 0) {
+          count++
+        }
+        if (this.netChangeRatioListLarge[4] > 0) {
+          count++
+        }
+        if (this.netChangeRatioListLarge[5] > 0) {
+          count++
+        }
+        if (this.netChangeRatioListLarge[6] > 0) {
+          count++
+        }
+        if (this.netChangeRatioListLarge[7] > 0) {
           count++
         }
         if (count < 3) {
@@ -527,7 +563,7 @@ export default {
       return this.ifSixFive || (this.averageMonthIndex > 0 && this.ifThreeDown)
     },
     ifDafan () {
-      if (this.ifFourDown || this.ifFiveDown || this.ifSevenSix) {
+      if (this.ifFourDown || this.ifFiveDown || this.ifSevenSix || this.ifEightSeven || this.ifEightSix || this.ifNineFive) {
         return true
       } else if (this.indexInfo.key === 'baoxian' && this.ifSixFive) {
         return true
@@ -552,10 +588,6 @@ export default {
       if (this.ifFiveUp || this.ifFourUp) {
         classList.push(sellClass)
       }
-      // 涨快了
-      // if (this.ifUpQuick()) {
-      //   classList.push(sellClass)
-      // }
       // 垃圾指数
       if (this.ifLaji) {
         if (this.ifTwoUp || this.ifThreeUp || this.ifFourUp || this.ifFiveUp) {
@@ -598,40 +630,42 @@ export default {
         } else {
           classList.push(sellClass)
         }
-      } else {
-        // ----------------------应该买的部分
-        // 没有其他信号
-        // 不是筑顶阶段才行
-        // 连续跌三天
-        // 下降趋势不要小反
-        if (this.ifThreeDown && !this.ifDownTrend) {
-          if (this.ifKuanji) {
-            // 宽基指数可以买
+      }
+      // ----------------------应该买的部分
+      // 没有其他信号
+      // 不是筑顶阶段才行
+      // 连续跌三天
+      // 下降趋势不要小反
+      if (this.ifThreeDown && !this.ifDownTrend) {
+        if (this.ifKuanji) {
+          // 宽基指数可以买
+          shouldClass = 'should-buy'
+        } else {
+          // 其他指数得要线上才能买
+          if (this.averageMonthIndex > 0) {
             shouldClass = 'should-buy'
-          } else {
-            // 其他指数得要线上才能买
-            if (this.averageMonthIndex > 0) {
-              shouldClass = 'should-buy'
-            }
-            if (this.ifDownQuick()) {
-              shouldClass = 'should-buy'
-            }
+          }
+          if (this.ifDownQuick()) {
+            shouldClass = 'should-buy'
           }
         }
-        // 连跌4天或者5天，都能买
-        if (this.ifFourDown || this.ifFiveDown) {
-          shouldClass = 'should-buy'
-        }
-        // 跌很多天
-        if (this.ifSixFive || this.ifSevenSix) {
-          shouldClass = 'should-buy'
-        }
-        // ----------------------应该卖的部分
-        if (this.allBuySellList[0] !== 'buy' && shouldClass === '' && this.rate < 0) {
-          // 研究过了，线上确实可以不杀跌
-          if (this.averageMonthIndex < 0 && !this.ifInFantan && !this.ifThreeDown) {
-            shouldClass = 'should-sell'
-          }
+      }
+      // 连跌4天或者5天，都能买
+      if (this.ifFourDown || this.ifFiveDown) {
+        shouldClass = 'should-buy'
+      }
+      // 跌很多天
+      if (this.ifSixFive || this.ifSevenSix || this.ifEightSeven) {
+        shouldClass = 'should-buy'
+      }
+      if (this.ifEightSix || this.ifNineFive) {
+        shouldClass = 'should-buy'
+      }
+      // ----------------------应该卖的部分
+      if (this.allBuySellList[0] !== 'buy' && shouldClass === '' && this.rate < 0) {
+        // 研究过了，线上确实可以不杀跌
+        if (this.averageMonthIndex < 0 && !this.ifInFantan && !this.ifThreeDown) {
+          shouldClass = 'should-sell'
         }
       }
       // 应该的类

@@ -206,10 +206,10 @@ export default {
     if (highRate.indexOf(key) !== -1) {
       if (buySell === 'buy') {
       // 买
-        return 0.7
+        return 0.8
       } else {
       // 卖
-        return 1.1
+        return 1.2
       }
     }
     return 1
@@ -319,22 +319,24 @@ export default {
       return 1 / factor
     }
   },
+  // 废弃
   // 指数半年线因子
   getAverageHalfYearFactor: function (indexKey, buySell) {
-    let indexAverage = storageUtil.getData('averageHalfYearIndex', indexKey) || 0
-    let factor = 1
-    if (indexAverage < 0 && indexAverage >= -10) {
-    // 越靠近-10越小
-      factor = 1 + (0.5 * (indexAverage / 10))
-    }
-    if (indexAverage < -10 && indexAverage >= -20) {
-      factor = 1 - (0.5 * ((indexAverage + 20) / 10))
-    }
-    if (buySell === 'buy') {
-      return factor
-    } else {
-      return 1 / factor
-    }
+    return 1
+    // let indexAverage = storageUtil.getData('averageHalfYearIndex', indexKey) || 0
+    // let factor = 1
+    // if (indexAverage < 0 && indexAverage >= -10) {
+    // // 越靠近-10越小
+    //   factor = 1 + (0.5 * (indexAverage / 10))
+    // }
+    // if (indexAverage < -10 && indexAverage >= -20) {
+    //   factor = 1 - (0.5 * ((indexAverage + 20) / 10))
+    // }
+    // if (buySell === 'buy') {
+    //   return factor
+    // } else {
+    //   return 1 / factor
+    // }
   },
   // 多跌因子
   getIndexManyDownFactor: function (averageRate, netChangeRatioList, buySell) {

@@ -431,10 +431,18 @@ export default {
     },
     // 是否出于下降趋势
     ifDownTrend () {
-      const averageMonthClose = storageUtil.getData('averageMonthClose', this.indexInfo.key) || 0
+      const indexNowClose = storageUtil.getData('indexNowClose', this.indexInfo.key) || 0
       const averageHalfYearIndexClose = storageUtil.getData('averageHalfYearIndexClose', this.indexInfo.key) || 0
       // 进入定投区域了那就不是下降趋势
-      return averageMonthClose < averageHalfYearIndexClose && this.indexNiuXiong !== '定投'
+      if (this.indexNiuXiong === '定投') {
+        return false
+      }
+      if (indexNowClose < averageHalfYearIndexClose) {
+        if (this.countDifferenceRate(indexNowClose, averageHalfYearIndexClose) < this.indexInfo.downTrendLine) {
+          return true
+        }
+      }
+      return false
     },
     noSellIndex () {
       return storageUtil.getData('noSell', this.indexInfo.key) || false

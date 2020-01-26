@@ -162,6 +162,7 @@ export default {
           if (this.tradeTime === '') {
             this.tradeTime = data.data.tradeTime
           }
+          storageUtil.setData('indexNowClose', item.key, data.data.close)
           const netChangeRatio = parseFloat(data.data.netChangeRatio)
           item.netChangeRatio = this.keepTwoDecimals(netChangeRatio)
           // 如果不是交易日那就不执行

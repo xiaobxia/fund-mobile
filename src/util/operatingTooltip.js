@@ -46,8 +46,8 @@ function getBuyBase (type, marketInfo) {
   // 结果
   return finalFactor * operateStandard()
 }
-// 基于市场的卖出基准
 
+// 基于市场的卖出基准
 function getSellBase (type, marketInfo) {
   let finalFactor = type === '熊' ? 1 : 0.8
   // 买卖信号因子

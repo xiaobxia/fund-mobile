@@ -1,12 +1,29 @@
 import indexList from '@/common/indexList.js'
+import dateUtil from '@/util/dateUtil'
 // 机构指数
-const jigou = [
-  'shengwu',
-  'yiliao',
-  'baijiu',
-  'yiyao',
-  'shipin'
-]
+let jigou = []
+
+// 垃圾指数
+let laji = []
+
+const d = dateUtil.getDate()
+const month = d.getMonth() + 1
+// 在结算期，没有机构和垃圾的概念
+if (month < 11) {
+  jigou = [
+    'shengwu',
+    'yiliao',
+    'baijiu',
+    'yiyao',
+    'shipin'
+  ]
+  laji = [
+    'gangtie',
+    'meitan',
+    'jijian',
+    'dichan'
+  ]
+}
 
 // 高费率指数
 const highRate = [
@@ -16,14 +33,6 @@ const highRate = [
   'gangtie',
   'meitan',
   'baoxian'
-]
-
-// 垃圾指数
-const laji = [
-  'gangtie',
-  'meitan',
-  'jijian',
-  'dichan'
 ]
 
 // 宽指数

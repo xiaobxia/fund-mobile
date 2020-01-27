@@ -429,7 +429,7 @@ export default {
       }
       return false
     },
-    ifNineFive () {
+    ifNineSeven () {
       if (this.netChangeRatioListLarge[0] < 0 && this.netChangeRatioListLarge[8] < 0) {
         let count = 0
         if (this.netChangeRatioListLarge[1] > 0) {
@@ -563,7 +563,7 @@ export default {
       return this.ifSixFive || (this.averageMonthIndex > 0 && this.ifThreeDown)
     },
     ifDafan () {
-      if (this.ifFourDown || this.ifFiveDown || this.ifSevenSix || this.ifEightSeven || this.ifEightSix || this.ifNineFive) {
+      if (this.ifFourDown || this.ifFiveDown || this.ifSevenSix || this.ifEightSeven || this.ifEightSix || this.ifNineSeven) {
         return true
       } else if (this.indexInfo.key === 'baoxian' && this.ifSixFive) {
         return true
@@ -658,7 +658,7 @@ export default {
       if (this.ifSixFive || this.ifSevenSix || this.ifEightSeven) {
         shouldClass = 'should-buy'
       }
-      if (this.ifEightSix || this.ifNineFive) {
+      if (this.ifEightSix || this.ifNineSeven) {
         shouldClass = 'should-buy'
       }
       // ----------------------应该卖的部分

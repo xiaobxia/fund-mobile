@@ -145,6 +145,93 @@ function ifSixFive (netChangeRatioList) {
   return false
 }
 
+function ifEightSeven (netChangeRatioList) {
+  if (netChangeRatioList[0] < 0 && netChangeRatioList[1] < 0) {
+    let count = 0
+    if (netChangeRatioList[2] > 0) {
+      count++
+    }
+    if (netChangeRatioList[3] > 0) {
+      count++
+    }
+    if (netChangeRatioList[4] > 0) {
+      count++
+    }
+    if (netChangeRatioList[5] > 0) {
+      count++
+    }
+    if (netChangeRatioList[6] > 0) {
+      count++
+    }
+    if (netChangeRatioList[7] > 0) {
+      count++
+    }
+    if (count < 2) {
+      return true
+    }
+  }
+  return false
+}
+
+function ifEightSix (netChangeRatioList) {
+  if (netChangeRatioList[0] < 0 && netChangeRatioList[7] < 0) {
+    let count = 0
+    if (netChangeRatioList[1] > 0) {
+      count++
+    }
+    if (netChangeRatioList[2] > 0) {
+      count++
+    }
+    if (netChangeRatioList[3] > 0) {
+      count++
+    }
+    if (netChangeRatioList[4] > 0) {
+      count++
+    }
+    if (netChangeRatioList[5] > 0) {
+      count++
+    }
+    if (netChangeRatioList[6] > 0) {
+      count++
+    }
+    if (count < 3) {
+      return true
+    }
+  }
+  return false
+}
+
+function ifNineSeven (netChangeRatioList) {
+  if (netChangeRatioList[0] < 0 && netChangeRatioList[8] < 0) {
+    let count = 0
+    if (netChangeRatioList[1] > 0) {
+      count++
+    }
+    if (netChangeRatioList[2] > 0) {
+      count++
+    }
+    if (netChangeRatioList[3] > 0) {
+      count++
+    }
+    if (netChangeRatioList[4] > 0) {
+      count++
+    }
+    if (netChangeRatioList[5] > 0) {
+      count++
+    }
+    if (netChangeRatioList[6] > 0) {
+      count++
+    }
+    if (netChangeRatioList[7] > 0) {
+      count++
+    }
+    if (count < 3) {
+      return true
+    }
+  }
+  return false
+}
+
 export default {
   name: 'FixedInvestment',
   data () {
@@ -352,6 +439,15 @@ export default {
                 infoList[i] = '跌多'
               }
               if (ifSevenSix(netChangeRatioList)) {
+                infoList[i] = '跌多'
+              }
+              if (ifEightSeven(netChangeRatioList)) {
+                infoList[i] = '跌多'
+              }
+              if (ifEightSix(netChangeRatioList)) {
+                infoList[i] = '跌多'
+              }
+              if (ifNineSeven(netChangeRatioList)) {
                 infoList[i] = '跌多'
               }
             }

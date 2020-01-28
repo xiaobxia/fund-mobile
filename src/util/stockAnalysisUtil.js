@@ -40,5 +40,51 @@ export default {
       }
     }
     return false
+  },
+  // 计算跌的数量
+  countDown (netChangeRatioList, all, has) {
+    let rate = 0
+    const last = netChangeRatioList[all - 1]
+    if (netChangeRatioList[0] < 0 && last < 0) {
+      let count = 0
+      for (let i = 0; i < all; i++) {
+        if (netChangeRatioList[i] < 0) {
+          count++
+        }
+        rate += netChangeRatioList[i]
+      }
+      if (count >= has) {
+        return {
+          rate,
+          flag: true
+        }
+      }
+    }
+    return {
+      flag: false
+    }
+  },
+  // 计算涨的数量
+  countUp (netChangeRatioList, all, has) {
+    let rate = 0
+    const last = netChangeRatioList[all - 1]
+    if (netChangeRatioList[0] > 0 && last > 0) {
+      let count = 0
+      for (let i = 0; i < all; i++) {
+        if (netChangeRatioList[i] > 0) {
+          count++
+        }
+        rate += netChangeRatioList[i]
+      }
+      if (count >= has) {
+        return {
+          rate,
+          flag: true
+        }
+      }
+    }
+    return {
+      flag: false
+    }
   }
 }

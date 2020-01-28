@@ -22,9 +22,6 @@
         <span v-if="indexNiuXiong === '定投' && averageHalfYear >= 0" class="fm-tag s-blue">解定</span>
         <span v-if="ifJieFantan()" class="fm-tag s-blue">解反</span>
         <span v-if="ifUpQuick()" class="fm-tag b-green">涨快</span>
-        <!--<span v-if="ifThreeUp && ifLaji" class="fm-tag s-green">卖</span>-->
-        <!--<span v-if="ifFourUp && ifLaji" class="fm-tag s-green">卖1/3</span>-->
-        <!--<span v-if="ifFiveUp && ifLaji" class="fm-tag s-green">卖1/2</span>-->
         <span v-if="jukui" class="fm-tag s-yellow">巨亏</span>
         <span v-if="ifDownQuick()" class="fm-tag s-red">跌快</span>
         <span style="float: right" :class="stockNumberClass(rate)">{{rate}}%</span>
@@ -66,6 +63,7 @@
 <script>
 import storageUtil from '@/util/storageUtil.js'
 import operatingTooltip from '@/util/operatingTooltip.js'
+import stockAnalysisUtil from '@/util/stockAnalysisUtil.js'
 import indexType from '@/common/indexType.js'
 
 const jigou = indexType.jigou
@@ -265,199 +263,40 @@ export default {
       return this.buySellList[0] === 'sell' && this.buySellList[1] === 'sell' && this.buySellList[2] === 'sell'
     },
     ifThreeDown () {
-      return (
-        this.netChangeRatioList[0] < 0 &&
-        this.netChangeRatioList[1] < 0 &&
-        this.netChangeRatioList[2] < 0
-      )
+      return stockAnalysisUtil.countDown(this.netChangeRatioListLarge, 3, 3).flag
     },
     ifFourDown () {
-      return (
-        this.netChangeRatioList[0] < 0 &&
-        this.netChangeRatioList[1] < 0 &&
-        this.netChangeRatioList[2] < 0 &&
-        this.netChangeRatioList[3] < 0
-      )
+      return stockAnalysisUtil.countDown(this.netChangeRatioListLarge, 4, 4).flag
     },
     ifFiveDown () {
-      return (
-        this.netChangeRatioList[0] < 0 &&
-        this.netChangeRatioList[1] < 0 &&
-        this.netChangeRatioList[2] < 0 &&
-        this.netChangeRatioList[3] < 0 &&
-        this.netChangeRatioList[4] < 0
-      )
+      return stockAnalysisUtil.countDown(this.netChangeRatioListLarge, 5, 5).flag
     },
     ifTwoUp () {
-      return (
-        this.netChangeRatioListLarge[0] > 0 &&
-        this.netChangeRatioListLarge[1] > 0 &&
-        this.netChangeRatioListLarge[2] <= 0
-      )
+      return stockAnalysisUtil.countUp(this.netChangeRatioListLarge, 2, 2).flag
     },
     ifThreeUp () {
-      return (
-        this.netChangeRatioListLarge[0] > 0 &&
-        this.netChangeRatioListLarge[1] > 0 &&
-        this.netChangeRatioListLarge[2] > 0 &&
-        this.netChangeRatioListLarge[3] <= 0
-      )
+      return stockAnalysisUtil.countUp(this.netChangeRatioListLarge, 3, 3).flag
     },
     ifFourUp () {
-      return (
-        this.netChangeRatioListLarge[0] > 0 &&
-        this.netChangeRatioListLarge[1] > 0 &&
-        this.netChangeRatioListLarge[2] > 0 &&
-        this.netChangeRatioListLarge[3] > 0 &&
-        this.netChangeRatioListLarge[4] <= 0
-      )
+      return stockAnalysisUtil.countUp(this.netChangeRatioListLarge, 4, 4).flag
     },
     ifFiveUp () {
-      return (
-        this.netChangeRatioListLarge[0] > 0 &&
-        this.netChangeRatioListLarge[1] > 0 &&
-        this.netChangeRatioListLarge[2] > 0 &&
-        this.netChangeRatioListLarge[3] > 0 &&
-        this.netChangeRatioListLarge[4] > 0
-      )
+      return stockAnalysisUtil.countUp(this.netChangeRatioListLarge, 5, 5).flag
     },
     ifSixFive () {
-      if (this.netChangeRatioListLarge[0] < 0) {
-        let count = 0
-        if (this.netChangeRatioListLarge[1] > 0) {
-          count++
-        }
-        if (this.netChangeRatioListLarge[2] > 0) {
-          count++
-        }
-        if (this.netChangeRatioListLarge[3] > 0) {
-          count++
-        }
-        if (this.netChangeRatioListLarge[4] > 0) {
-          count++
-        }
-        if (this.netChangeRatioListLarge[5] > 0) {
-          count++
-        }
-        if (count < 2) {
-          return true
-        }
-      }
-      return false
+      return stockAnalysisUtil.countDown(this.netChangeRatioListLarge, 6, 5).flag
     },
     ifSevenSix () {
-      if (this.netChangeRatioListLarge[0] < 0) {
-        let count = 0
-        if (this.netChangeRatioListLarge[1] > 0) {
-          count++
-        }
-        if (this.netChangeRatioListLarge[2] > 0) {
-          count++
-        }
-        if (this.netChangeRatioListLarge[3] > 0) {
-          count++
-        }
-        if (this.netChangeRatioListLarge[4] > 0) {
-          count++
-        }
-        if (this.netChangeRatioListLarge[5] > 0) {
-          count++
-        }
-        if (this.netChangeRatioListLarge[6] > 0) {
-          count++
-        }
-        if (count < 2) {
-          return true
-        }
-      }
-      return false
+      return stockAnalysisUtil.countDown(this.netChangeRatioListLarge, 7, 6).flag
     },
     ifEightSeven () {
-      if (this.netChangeRatioListLarge[0] < 0) {
-        let count = 0
-        if (this.netChangeRatioListLarge[1] > 0) {
-          count++
-        }
-        if (this.netChangeRatioListLarge[2] > 0) {
-          count++
-        }
-        if (this.netChangeRatioListLarge[3] > 0) {
-          count++
-        }
-        if (this.netChangeRatioListLarge[4] > 0) {
-          count++
-        }
-        if (this.netChangeRatioListLarge[5] > 0) {
-          count++
-        }
-        if (this.netChangeRatioListLarge[6] > 0) {
-          count++
-        }
-        if (this.netChangeRatioListLarge[7] > 0) {
-          count++
-        }
-        if (count < 2) {
-          return true
-        }
-      }
-      return false
+      return stockAnalysisUtil.countDown(this.netChangeRatioListLarge, 8, 7).flag
     },
     ifEightSix () {
-      if (this.netChangeRatioListLarge[0] < 0 && this.netChangeRatioListLarge[7] < 0) {
-        let count = 0
-        if (this.netChangeRatioListLarge[1] > 0) {
-          count++
-        }
-        if (this.netChangeRatioListLarge[2] > 0) {
-          count++
-        }
-        if (this.netChangeRatioListLarge[3] > 0) {
-          count++
-        }
-        if (this.netChangeRatioListLarge[4] > 0) {
-          count++
-        }
-        if (this.netChangeRatioListLarge[5] > 0) {
-          count++
-        }
-        if (this.netChangeRatioListLarge[6] > 0) {
-          count++
-        }
-        if (count < 3) {
-          return true
-        }
-      }
-      return false
+      return stockAnalysisUtil.countDown(this.netChangeRatioListLarge, 8, 6).flag
     },
     ifNineSeven () {
-      if (this.netChangeRatioListLarge[0] < 0 && this.netChangeRatioListLarge[8] < 0) {
-        let count = 0
-        if (this.netChangeRatioListLarge[1] > 0) {
-          count++
-        }
-        if (this.netChangeRatioListLarge[2] > 0) {
-          count++
-        }
-        if (this.netChangeRatioListLarge[3] > 0) {
-          count++
-        }
-        if (this.netChangeRatioListLarge[4] > 0) {
-          count++
-        }
-        if (this.netChangeRatioListLarge[5] > 0) {
-          count++
-        }
-        if (this.netChangeRatioListLarge[6] > 0) {
-          count++
-        }
-        if (this.netChangeRatioListLarge[7] > 0) {
-          count++
-        }
-        if (count < 3) {
-          return true
-        }
-      }
-      return false
+      return stockAnalysisUtil.countDown(this.netChangeRatioListLarge, 9, 7).flag
     },
     averageMonthIndex () {
       return storageUtil.getData('averageMonth', this.indexInfo.key) || 0
@@ -494,13 +333,15 @@ export default {
     // 是否涨得太快
     ifUpQuick () {
       // 两天涨得多
-      if (this.netChangeRatioListLarge[0] > 0 && this.netChangeRatioListLarge[1] > 0) {
-        if ((this.netChangeRatioListLarge[0] + this.netChangeRatioListLarge[1]) > this.indexInfo.rate * 4) {
+      const two = stockAnalysisUtil.countUp(this.netChangeRatioListLarge, 2, 2)
+      if (two.flag) {
+        if (two.rate > this.indexInfo.rate * 4) {
           return true
         }
       }
-      if (this.netChangeRatioListLarge[0] > 0 && this.netChangeRatioListLarge[1] > 0 && this.netChangeRatioListLarge[2] > 0) {
-        if ((this.netChangeRatioListLarge[0] + this.netChangeRatioListLarge[1] + this.netChangeRatioListLarge[2]) > this.indexInfo.rate * 6) {
+      const three = stockAnalysisUtil.countUp(this.netChangeRatioListLarge, 3, 3)
+      if (three.flag) {
+        if (three.rate > this.indexInfo.rate * 6) {
           return true
         }
       }
@@ -508,8 +349,9 @@ export default {
     },
     // 是否跌得太快
     ifDownQuick () {
-      if (this.netChangeRatioListLarge[0] < 0 && this.netChangeRatioListLarge[1] < 0 && this.netChangeRatioListLarge[2] < 0) {
-        if ((this.netChangeRatioListLarge[0] + this.netChangeRatioListLarge[1] + this.netChangeRatioListLarge[2]) < -(this.indexInfo.rate * 4)) {
+      const three = stockAnalysisUtil.countDown(this.netChangeRatioListLarge, 3, 3)
+      if (three.flag) {
+        if (three.rate < -(this.indexInfo.rate * 4)) {
           return true
         }
       }
@@ -520,12 +362,12 @@ export default {
       if (this.ifDownTrend) {
         return (
           (this.indexNiuXiong === '大反' || this.indexNiuXiong === '小反') &&
-          (this.ifTwoUp || this.ifThreeUp || this.ifFourUp || this.ifFiveUp)
+          (this.ifTwoUp)
         )
       } else {
         return (
           ((this.indexNiuXiong === '大反' || this.indexNiuXiong === '小反') &&
-          (this.ifThreeUp || this.ifFourUp || this.ifFiveUp)) ||
+          this.ifThreeUp) ||
           (this.indexNiuXiong === '小反' && this.ifTwoUp)
         )
       }
@@ -584,13 +426,13 @@ export default {
       const buySellList = this.buySellList
       classList.push(this.ifHas ? 'has' : 'no-has')
       classList.push(this.lock ? 'lock' : 'no-lock')
-      // 涨4,5天了必须开始卖
-      if (this.ifFiveUp || this.ifFourUp) {
+      // 涨4天了必须开始卖
+      if (this.ifFourUp) {
         classList.push(sellClass)
       }
       // 垃圾指数
       if (this.ifLaji) {
-        if (this.ifTwoUp || this.ifThreeUp || this.ifFourUp || this.ifFiveUp) {
+        if (this.ifTwoUp) {
           classList.push(sellClass)
         }
       }

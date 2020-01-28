@@ -49,6 +49,7 @@
 <script>
 import fixedInvestment from '@/util/platformFixedInvestment.js'
 import stockApiUtil from '@/util/stockApiUtil.js'
+import stockAnalysisUtil from '@/util/stockAnalysisUtil.js'
 import { mapGetters } from 'vuex'
 
 const codeMap = fixedInvestment.codeMap
@@ -57,18 +58,20 @@ const fnMap = fixedInvestment.fnMap
 const formatData = fixedInvestment.formatData
 
 // 和年线分析有关
-function getBuyRate (rate) {
+function getBuyRate (rate, a, b) {
+  a = a || 30
+  b = b || -20
   if (rate >= 0) {
-    if (rate <= 30) {
-      return 1 - ((rate / 30) * 0.8)
+    if (rate <= a) {
+      return 1 - ((rate / a) * 0.8)
     } else {
       return 0.2
     }
   }
   // 年线下
   if (rate < 0) {
-    if (rate >= -20) {
-      return 1 - (rate / 20)
+    if (rate >= -b) {
+      return 1 - (rate / (-b))
     } else {
       return 2
     }
@@ -76,22 +79,16 @@ function getBuyRate (rate) {
   return 1
 }
 
-function ifAllDown (list, start, day) {
-  let flag = true
-  let rate = 0
-  for (let i = 0; i < day; i++) {
-    if (list[start + i].netChangeRatio > 0) {
-      return {
-        flag: false
-      }
-    } else {
-      rate += list[start + i].netChangeRatio
-    }
+// 为以后做准备，偏离度60以上的时候
+function getSellRate (rate) {
+  // 年线下
+  if (rate <= 0) {
+    return 0
   }
-  return {
-    flag,
-    rate
+  if (rate > 0) {
+
   }
+  return 0
 }
 
 function getNetChangeRatioList (list, index) {
@@ -100,140 +97,6 @@ function getNetChangeRatioList (list, index) {
     newList.push(list[index + i].netChangeRatio)
   }
   return newList
-}
-
-function ifSevenSix (netChangeRatioList) {
-  if (netChangeRatioList[0] < 0 && netChangeRatioList[1] < 0) {
-    let count = 0
-    if (netChangeRatioList[2] > 0) {
-      count++
-    }
-    if (netChangeRatioList[3] > 0) {
-      count++
-    }
-    if (netChangeRatioList[4] > 0) {
-      count++
-    }
-    if (netChangeRatioList[5] > 0) {
-      count++
-    }
-    if (netChangeRatioList[6] > 0) {
-      count++
-    }
-    if (count < 2) {
-      return true
-    }
-  }
-  return false
-}
-
-function ifSixFive (netChangeRatioList) {
-  if (netChangeRatioList[0] < 0 && netChangeRatioList[1] < 0) {
-    let count = 0
-    if (netChangeRatioList[2] > 0) {
-      count++
-    }
-    if (netChangeRatioList[3] > 0) {
-      count++
-    }
-    if (netChangeRatioList[4] > 0) {
-      count++
-    }
-    if (netChangeRatioList[5] > 0) {
-      count++
-    }
-    if (count < 2) {
-      return true
-    }
-  }
-  return false
-}
-
-function ifEightSeven (netChangeRatioList) {
-  if (netChangeRatioList[0] < 0 && netChangeRatioList[1] < 0) {
-    let count = 0
-    if (netChangeRatioList[2] > 0) {
-      count++
-    }
-    if (netChangeRatioList[3] > 0) {
-      count++
-    }
-    if (netChangeRatioList[4] > 0) {
-      count++
-    }
-    if (netChangeRatioList[5] > 0) {
-      count++
-    }
-    if (netChangeRatioList[6] > 0) {
-      count++
-    }
-    if (netChangeRatioList[7] > 0) {
-      count++
-    }
-    if (count < 2) {
-      return true
-    }
-  }
-  return false
-}
-
-function ifEightSix (netChangeRatioList) {
-  if (netChangeRatioList[0] < 0 && netChangeRatioList[7] < 0) {
-    let count = 0
-    if (netChangeRatioList[1] > 0) {
-      count++
-    }
-    if (netChangeRatioList[2] > 0) {
-      count++
-    }
-    if (netChangeRatioList[3] > 0) {
-      count++
-    }
-    if (netChangeRatioList[4] > 0) {
-      count++
-    }
-    if (netChangeRatioList[5] > 0) {
-      count++
-    }
-    if (netChangeRatioList[6] > 0) {
-      count++
-    }
-    if (count < 3) {
-      return true
-    }
-  }
-  return false
-}
-
-function ifNineSeven (netChangeRatioList) {
-  if (netChangeRatioList[0] < 0 && netChangeRatioList[8] < 0) {
-    let count = 0
-    if (netChangeRatioList[1] > 0) {
-      count++
-    }
-    if (netChangeRatioList[2] > 0) {
-      count++
-    }
-    if (netChangeRatioList[3] > 0) {
-      count++
-    }
-    if (netChangeRatioList[4] > 0) {
-      count++
-    }
-    if (netChangeRatioList[5] > 0) {
-      count++
-    }
-    if (netChangeRatioList[6] > 0) {
-      count++
-    }
-    if (netChangeRatioList[7] > 0) {
-      count++
-    }
-    if (count < 3) {
-      return true
-    }
-  }
-  return false
 }
 
 export default {
@@ -289,39 +152,45 @@ export default {
       // 配比根据估值，还有行业中和判断
       indexParams: {
         // 中证1000
-        'sh000852': 0.7,
+        'sh000852': {
+          buy: 0.7,
+          sell: 1.3
+        },
         // 沪深500
-        'sh000905': 1.3,
+        'sh000905': {
+          buy: 1.3,
+          sell: 0.7
+        },
         // 沪深300
-        'sh000300': 1.15,
+        'sh000300': {
+          buy: 1.15,
+          sell: 0.85
+        },
         // 上证50
-        'sh000016': 1.3,
+        'sh000016': {
+          buy: 1.3,
+          sell: 0.7
+        },
         // 创业板
-        'sz399006': 0.85,
+        'sz399006': {
+          buy: 0.85,
+          sell: 1.15
+        },
         // 白酒
-        'sz399997': 1,
+        'sz399997': {
+          buy: 1,
+          sell: 1
+        },
         // 医疗
-        'sz399989': 1,
+        'sz399989': {
+          buy: 1,
+          sell: 1
+        },
         // 生物
-        'sz399441': 1
-      },
-      indexParamSell: {
-        // 中证1000
-        'sh000852': 1.3,
-        // 沪深500
-        'sh000905': 0.7,
-        // 沪深300
-        'sh000300': 0.85,
-        // 上证50
-        'sh000016': 0.7,
-        // 创业板
-        'sz399006': 1.15,
-        // 白酒
-        'sz399997': 1,
-        // 医疗
-        'sz399989': 1,
-        // 生物
-        'sz399441': 1
+        'sz399441': {
+          buy: 1,
+          sell: 1
+        }
       },
       klineMap
     }
@@ -401,6 +270,7 @@ export default {
           let kline = []
           // 近的在前
           for (let i = 0; i < 5; i++) {
+            // 截取10个
             const netChangeRatioList = getNetChangeRatioList(recentNetValue, i)
             const nowRecord = recentNetValue[i]
             const oneDayRecord = recentNetValue[i + 1]
@@ -420,9 +290,9 @@ export default {
             }
             // 不是卖，也没有让买的时候
             if (infoList[i] === '') {
-              let threeDay = ifAllDown(recentNetValue, i, 3)
-              let fourDay = ifAllDown(recentNetValue, i, 4)
-              let fiveDay = ifAllDown(recentNetValue, i, 5)
+              let threeDay = stockAnalysisUtil.countDown(netChangeRatioList, 3, 3)
+              let fourDay = stockAnalysisUtil.countDown(netChangeRatioList, 4, 4)
+              let fiveDay = stockAnalysisUtil.countDown(netChangeRatioList, 5, 5)
               // 先判断是不是买少的
               if (fourDay.flag) {
                 infoList[i] = '跌少'
@@ -430,7 +300,7 @@ export default {
               if (threeDay.flag && threeDay.rate < -(3 * item.rate)) {
                 infoList[i] = '跌少'
               }
-              if (ifSixFive(netChangeRatioList)) {
+              if (stockAnalysisUtil.countDown(netChangeRatioList, 6, 5).flag) {
                 infoList[i] = '跌少'
               }
               // 判断是不是买大的，如果是那就可以覆盖他
@@ -443,24 +313,27 @@ export default {
               if (fiveDay.flag) {
                 infoList[i] = '跌多'
               }
-              if (ifSevenSix(netChangeRatioList)) {
+              if (stockAnalysisUtil.countDown(netChangeRatioList, 7, 6).flag) {
                 infoList[i] = '跌多'
               }
-              if (ifEightSeven(netChangeRatioList)) {
+              if (stockAnalysisUtil.countDown(netChangeRatioList, 8, 7).flag) {
                 infoList[i] = '跌多'
               }
-              if (ifEightSix(netChangeRatioList)) {
+              if (stockAnalysisUtil.countDown(netChangeRatioList, 8, 6).flag) {
                 infoList[i] = '跌多'
               }
-              if (ifNineSeven(netChangeRatioList)) {
+              if (stockAnalysisUtil.countDown(netChangeRatioList, 9, 7).flag) {
                 infoList[i] = '跌多'
               }
             }
           }
+          const diff = this.countDifferenceRate(nowClose, this.averageMap[item.code])
           this.klineMap[item.key] = kline
-          this.averageDiff[item.key] = this.countDifferenceRate(nowClose, this.averageMap[item.code])
-          this.canBuy[item.key] = parseInt(getBuyRate(this.countDifferenceRate(nowClose, this.averageMap[item.code])) * (120000 / 162.5) * this.indexParams[item.code] / 10) * 10
-          this.canSell[item.key] = parseInt(getBuyRate(-this.countDifferenceRate(nowClose, this.averageMap[item.code])) * (120000 / 162.5) * this.indexParamSell[item.code] / 10) * 10
+          this.averageDiff[item.key] = diff
+          const buyS = 120000 / 162.5
+          const params = this.indexParams[item.code]
+          this.canBuy[item.key] = parseInt(getBuyRate(diff) * buyS * params.buy / 10) * 10
+          this.canSell[item.key] = parseInt(getBuyRate(-diff) * buyS * params.sell / 10) * 10
           this.allInfo[item.key] = infoList
           this.rateInfo[item.key] = this.keepTwoDecimals(recentNetValue[0].netChangeRatio)
         }

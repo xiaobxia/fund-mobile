@@ -251,7 +251,9 @@ export default {
               netChangeRatioList[i] = recentNetValue[i].netChangeRatio
               closeList[i] = recentNetValue[i].close
               if ((buyFlag === true) || (buyFlag !== false && buyFlag.flag === true)) {
-                buySellList[i] = 'buy'
+                if (nowRecord.netChangeRatio <= -(item.rate)) {
+                  buySellList[i] = 'buy'
+                }
               } else if ((sellFlag === true) || (sellFlag !== false && sellFlag.flag === true)) {
                 buySellList[i] = 'sell'
               } else {

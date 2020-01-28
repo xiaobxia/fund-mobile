@@ -355,6 +355,12 @@ export default {
           return true
         }
       }
+      const two = stockAnalysisUtil.countDown(this.netChangeRatioListLarge, 2, 2)
+      if (two.flag) {
+        if (two.rate < -(this.indexInfo.rate * 3)) {
+          return true
+        }
+      }
       return false
     },
     ifJieFantan () {

@@ -56,18 +56,22 @@ const InfoUtil = fixedInvestment.Util
 const fnMap = fixedInvestment.fnMap
 const formatData = fixedInvestment.formatData
 
+// 和年线分析有关
 function getBuyRate (rate) {
-  if (rate >= 0 && rate < 40) {
-    return 1 - (rate / 40)
+  if (rate >= 0) {
+    if (rate <= 30) {
+      return 1 - ((rate / 30) * 0.8)
+    } else {
+      return 0.2
+    }
   }
-  if (rate >= 40) {
-    return 0
-  }
-  if (rate < 0 && rate >= -40) {
-    return 1 - (rate / 40)
-  }
-  if (rate < -40) {
-    return 2
+  // 年线下
+  if (rate < 0) {
+    if (rate >= -20) {
+      return 1 - (rate / 20)
+    } else {
+      return 2
+    }
   }
   return 1
 }
@@ -282,6 +286,7 @@ export default {
         'sz399989': 7464,
         'sz399441': 2537
       },
+      // 配比根据估值，还有行业中和判断
       indexParams: {
         // 中证1000
         'sh000852': 0.7,

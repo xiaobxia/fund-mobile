@@ -7,8 +7,8 @@
         <span v-if="lock" class="fm-icon lock"></span>
         <span v-if="ifDownTrend" class="fm-tag s-green">下</span>
         <span v-if="ifHot" class="fm-tag s-green">热</span>
-        <span v-if="positionWarn === 'danger'" class="fm-tag s-yellow">危</span>
-        <span v-if="positionWarn === 'warn'" class="fm-tag s-green">高</span>
+        <!--<span v-if="positionWarn === 'danger'" class="fm-tag s-yellow">危</span>-->
+        <!--<span v-if="positionWarn === 'warn'" class="fm-tag s-green">高</span>-->
         <span v-if="indexNiuXiong === '定投'" class="fm-tag s-red">{{indexNiuXiong}}</span>
         <span v-if="indexNiuXiong === '大反'" class="fm-tag s-red">{{indexNiuXiong}}</span>
         <span v-if="indexNiuXiong === '小反'" class="fm-tag s-red">{{indexNiuXiong}}</span>
@@ -22,7 +22,7 @@
         <span v-if="indexNiuXiong === '定投' && averageHalfYear >= 0" class="fm-tag s-blue">解定</span>
         <span v-if="ifJieFantan()" class="fm-tag s-blue">解反</span>
         <span v-if="ifUpQuick()" class="fm-tag b-green">涨快</span>
-        <span v-if="jukui" class="fm-tag s-yellow">巨亏</span>
+        <!--<span v-if="jukui" class="fm-tag s-yellow">巨亏</span>-->
         <span v-if="ifDownQuick()" class="fm-tag s-red">跌快</span>
         <span style="float: right" :class="stockNumberClass(rate)">{{rate}}%</span>
       </h3>

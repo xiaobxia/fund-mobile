@@ -81,6 +81,14 @@
           <div class="bottom">指数年收益</div>
         </div>
       </div>
+      <div class="img-card" @click="toPath('/page/averageYearIndex')">
+        <div class="container">
+          <div class="content">
+            <img src="../../assets/阴.png" alt="">
+          </div>
+          <div class="bottom">年线策略</div>
+        </div>
+      </div>
     </div>
   </div>
 </template>

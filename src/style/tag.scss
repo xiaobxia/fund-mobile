@@ -24,6 +24,10 @@
     background-color: #F56C6C;
     color: #fff;
   }
+  &.s-black {
+    background-color: #000;
+    color: #fff;
+  }
   &.b-yellow {
     border: 1px solid #e6a23c;
     color: #e6a23c;
@@ -63,5 +67,9 @@
   &.red {
     background-color: rgb(253, 226, 226);
     color: #F56C6C;
+  }
+  &.black {
+    background-color: rgb(120, 120, 120);
+    color: #000;
   }
 }

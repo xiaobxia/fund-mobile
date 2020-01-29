@@ -151,6 +151,11 @@ const routers = [
     component: lazyLoading('AverageMonthIndex')
   },
   {
+    name: 'AverageYearIndex',
+    path: '/page/averageYearIndex',
+    component: lazyLoading('AverageYearIndex')
+  },
+  {
     name: 'BuySellConfig',
     path: '/page/buySellConfig',
     component: lazyLoading('BuySellConfig')

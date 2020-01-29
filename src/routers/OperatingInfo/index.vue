@@ -202,6 +202,7 @@ export default {
         let xiaofan = 0
         let zhengchang = 0
         let dingtou = 0
+        let jinmai = 0
         for (let i = 0; i < indexList.length; i++) {
           this.queryData(indexList[i])
           const niuxiong = storageUtil.getData('stockIndexFlag', indexList[i].key)
@@ -213,9 +214,11 @@ export default {
             zhengchang++
           } else if (niuxiong === '定投') {
             dingtou++
+          } else if (niuxiong === '禁买') {
+            jinmai++
           }
         }
-        this.niuxiong = [dafan, xiaofan, zhengchang, dingtou]
+        this.niuxiong = [dafan, xiaofan, zhengchang, dingtou, jinmai]
       })
     },
     qsStringify (query) {

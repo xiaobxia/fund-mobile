@@ -6,6 +6,7 @@
       </mt-button>
     </mt-header>
     <div class="main-body">
+      <div class="yellow fm-warn">设置禁买的条件:在高位,持续利空,大V不看好</div>
       <div class="filter-select-wrap">
         <span class="name">{{niuXiong}}</span>
         <mt-button type="primary" @click="niuXiongChangeHandler">改变</mt-button>
@@ -69,7 +70,7 @@ export default {
   data () {
     return {
       popupVisible: false,
-      filterList: ['正常', '小反', '大反', '定投'],
+      filterList: ['正常', '小反', '大反', '定投', '禁买'],
       niuXiong: '',
       grid: {
         top: '10%',

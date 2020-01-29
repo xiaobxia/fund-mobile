@@ -58,20 +58,19 @@ const fnMap = fixedInvestment.fnMap
 const formatData = fixedInvestment.formatData
 
 // 和年线分析有关
-function getBuyRate (rate, a, b) {
-  a = a || 30
-  b = b || -20
+function getBuyRate (rate, a, b, c) {
+  rate = rate - c
   if (rate >= 0) {
     if (rate <= a) {
-      return 1 - ((rate / a) * 0.8)
+      return 1 - ((rate / a) * 0.75)
     } else {
-      return 0.2
+      return 0.25
     }
   }
   // 年线下
   if (rate < 0) {
-    if (rate >= -b) {
-      return 1 - (rate / (-b))
+    if (rate >= b) {
+      return 1 + (rate / b)
     } else {
       return 2
     }
@@ -82,12 +81,6 @@ function getBuyRate (rate, a, b) {
 // 为以后做准备，偏离度60以上的时候
 function getSellRate (rate) {
   // 年线下
-  if (rate <= 0) {
-    return 0
-  }
-  if (rate > 0) {
-
-  }
   return 0
 }
 
@@ -154,42 +147,66 @@ export default {
         // 中证1000
         'sh000852': {
           buy: 0.7,
-          sell: 1.3
+          sell: 1.3,
+          a: 20,
+          b: -20,
+          c: -8.5
         },
         // 沪深500
         'sh000905': {
           buy: 1.3,
-          sell: 0.7
+          sell: 0.7,
+          a: 20,
+          b: -20,
+          c: -10
         },
         // 沪深300
         'sh000300': {
           buy: 1.15,
-          sell: 0.85
+          sell: 0.85,
+          a: 15,
+          b: -15,
+          c: -5.5
         },
         // 上证50
         'sh000016': {
           buy: 1.3,
-          sell: 0.7
+          sell: 0.7,
+          a: 20,
+          b: -15,
+          c: -5
         },
         // 创业板
         'sz399006': {
           buy: 0.85,
-          sell: 1.15
+          sell: 1.15,
+          a: 25,
+          b: -20,
+          c: -8.5
         },
         // 白酒
         'sz399997': {
           buy: 1,
-          sell: 1
+          sell: 1,
+          a: 20,
+          b: -15,
+          c: -5
         },
         // 医疗
         'sz399989': {
           buy: 1,
-          sell: 1
+          sell: 1,
+          a: 20,
+          b: -15,
+          c: -5
         },
         // 生物
         'sz399441': {
           buy: 1,
-          sell: 1
+          sell: 1,
+          a: 20,
+          b: -10,
+          c: 0
         }
       },
       klineMap
@@ -332,8 +349,8 @@ export default {
           this.averageDiff[item.key] = diff
           const buyS = 120000 / 162.5
           const params = this.indexParams[item.code]
-          this.canBuy[item.key] = parseInt(getBuyRate(diff) * buyS * params.buy / 10) * 10
-          this.canSell[item.key] = parseInt(getBuyRate(-diff) * buyS * params.sell / 10) * 10
+          this.canBuy[item.key] = parseInt(getBuyRate(diff, params.a, params.b, params.c) * buyS / 10) * 10
+          this.canSell[item.key] = parseInt(getSellRate(diff) * buyS / 10) * 10
           this.allInfo[item.key] = infoList
           this.rateInfo[item.key] = this.keepTwoDecimals(recentNetValue[0].netChangeRatio)
         }

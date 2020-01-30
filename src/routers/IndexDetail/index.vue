@@ -243,6 +243,7 @@ export default {
         if (data.success) {
           const list = data.data.list
           const info = formatData(list)
+          const indexRate = parseFloat(query.rate)
           const infoUtil = new InfoUtil({
             threshold: parseFloat(query.threshold),
             rate: parseFloat(query.rate),
@@ -266,20 +267,22 @@ export default {
             let buyFlag = infoUtil[fnMap[query.key + 'Buy']](nowRecord, oneDayRecord, twoDayRecord)
             let sellFlag = infoUtil[fnMap[query.key + 'Sell']](nowRecord, oneDayRecord, twoDayRecord)
             if ((buyFlag === true) || (buyFlag !== false && buyFlag.flag === true)) {
-              if (!hasOne) {
-                hasOne = true
-                pointType = 'buy'
-                if (buyFlag !== true && buyFlag !== false) {
-                  sameType = buyFlag.text
-                  sameList.push(nowRecord)
+              if (nowRecord.netChangeRatio <= -(indexRate)) {
+                if (!hasOne) {
+                  hasOne = true
+                  pointType = 'buy'
+                  if (buyFlag !== true && buyFlag !== false) {
+                    sameType = buyFlag.text
+                    sameList.push(nowRecord)
+                  } else {
+                    buyList.push(nowRecord)
+                  }
                 } else {
-                  buyList.push(nowRecord)
-                }
-              } else {
-                if (buyFlag !== true && buyFlag !== false && buyFlag.text === sameType) {
-                  sameList.push(nowRecord)
-                } else {
-                  buyList.push(nowRecord)
+                  if (buyFlag !== true && buyFlag !== false && buyFlag.text === sameType) {
+                    sameList.push(nowRecord)
+                  } else {
+                    buyList.push(nowRecord)
+                  }
                 }
               }
             } else if ((sellFlag === true) || (sellFlag !== false && sellFlag.flag === true)) {

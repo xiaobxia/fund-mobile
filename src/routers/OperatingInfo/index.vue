@@ -203,22 +203,27 @@ export default {
         let zhengchang = 0
         let dingtou = 0
         let jinmai = 0
+        let dingbu = 0
         for (let i = 0; i < indexList.length; i++) {
           this.queryData(indexList[i])
           const niuxiong = storageUtil.getData('stockIndexFlag', indexList[i].key)
+          const status = storageUtil.getData('stockIndexStatus', indexList[i].key)
           if (niuxiong === '大反') {
             dafan++
           } else if (niuxiong === '小反') {
             xiaofan++
           } else if (niuxiong === '正常') {
             zhengchang++
-          } else if (niuxiong === '定投') {
-            dingtou++
           } else if (niuxiong === '禁买') {
             jinmai++
           }
+          if (status === '定投') {
+            dingtou++
+          } else if (status === '顶部') {
+            dingbu++
+          }
         }
-        this.niuxiong = [dafan, xiaofan, zhengchang, dingtou, jinmai]
+        this.niuxiong = [dafan, xiaofan, zhengchang, dingtou, jinmai, dingbu]
       })
     },
     qsStringify (query) {

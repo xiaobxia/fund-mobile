@@ -40,10 +40,6 @@
         <span class="value">{{noSellCount}}</span>
       </div>
       <div class="item">
-        <span class="label">定投：</span>
-        <span class="value">{{niuxiong[3]}}</span>
-      </div>
-      <div class="item">
         <span class="label">大反：</span>
         <span class="value">{{niuxiong[0]}}</span>
       </div>
@@ -52,13 +48,21 @@
         <span class="value">{{niuxiong[1]}}</span>
       </div>
       <div class="item">
+        <span class="label">定投：</span>
+        <span class="value">{{niuxiong[3]}}</span>
+      </div>
+      <div class="item">
+        <span class="label">正常：</span>
+        <span class="value">{{niuxiong[2]}}</span>
+      </div>
+      <div class="item">
         <span class="label">禁买：</span>
         <span class="value">{{niuxiong[4]}}</span>
       </div>
-      <!--<div class="item">-->
-        <!--<span class="label">正常：</span>-->
-        <!--<span class="value">{{niuxiong[2]}}</span>-->
-      <!--</div>-->
+      <div class="item">
+        <span class="label">顶部：</span>
+        <span class="value">{{niuxiong[5]}}</span>
+      </div>
     </div>
     <div class="warn-wrap">
       <div class="fm-warn green" v-if="keepLow">仓位配置100以内</div>

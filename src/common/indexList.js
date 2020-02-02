@@ -6,9 +6,12 @@ export default [
     threshold: 0.94,
     wave: 0.9277112676056345,
     rate: 0.9621341463414633,
-    fixLine: -20,
+    fixLine: -19,
     reduceLine: 6,
-    mix: true
+    downTrendLine: -3.3,
+    mix: true,
+    days: 1200,
+    topLine: 20
   },
   {
     key: 'yiyao',
@@ -18,8 +21,11 @@ export default [
     threshold: 0.94,
     rate: 0.9339416058394158,
     wave: 0.9391726618705037,
-    fixLine: -19,
+    fixLine: -18,
     reduceLine: 5,
+    downTrendLine: -3.3,
+    days: 1200,
+    topLine: 18,
     mix: false
   },
   {
@@ -30,8 +36,11 @@ export default [
     threshold: 1.04,
     rate: 1.0100719424460431,
     wave: 1.06308,
-    fixLine: -20,
+    fixLine: -19,
     reduceLine: 8,
+    downTrendLine: -3.3,
+    days: 1200,
+    topLine: 20,
     mix: false
   },
   {
@@ -42,8 +51,11 @@ export default [
     threshold: 0.9,
     rate: 0.8832450331125826,
     wave: 0.9248263888888891,
-    fixLine: -20,
+    fixLine: -20.5,
     reduceLine: 6.5,
+    downTrendLine: -3.3,
+    days: 1200,
+    topLine: 20,
     mix: false
   },
   {
@@ -55,7 +67,10 @@ export default [
     wave: 0.7482424242424242,
     fixLine: -10,
     reduceLine: 4,
-    mix: true
+    downTrendLine: -3.3,
+    mix: true,
+    days: 1200,
+    topLine: 16
   },
   {
     key: 'yinhang',
@@ -65,8 +80,11 @@ export default [
     threshold: 0.7,
     rate: 0.6845000000000002,
     wave: 0.7059375,
-    fixLine: -13,
+    fixLine: -10,
     reduceLine: 4,
+    downTrendLine: -3.3,
+    days: 1000,
+    topLine: 14,
     mix: false
   },
   {
@@ -77,8 +95,11 @@ export default [
     threshold: 0.85,
     rate: 0.7876623376623377,
     wave: 0.9127884615384618,
-    fixLine: -18,
+    fixLine: -15,
     reduceLine: 8,
+    downTrendLine: -3.3,
+    days: 1200,
+    topLine: 30,
     mix: false
   },
   {
@@ -89,8 +110,11 @@ export default [
     threshold: 0.93,
     wave: 0.9716906474820142,
     rate: 0.8817687074829932,
-    fixLine: -16,
+    fixLine: -15,
     reduceLine: 5.5,
+    downTrendLine: -3.3,
+    days: 1200,
+    topLine: 17,
     mix: false
   },
   {
@@ -103,6 +127,9 @@ export default [
     wave: 0.9838741721854306,
     fixLine: -20,
     reduceLine: 6,
+    downTrendLine: -3.3,
+    days: 1200,
+    topLine: 20,
     mix: false
   },
   {
@@ -114,6 +141,9 @@ export default [
     wave: 0.628292682926829,
     fixLine: -20,
     reduceLine: 5,
+    downTrendLine: 0,
+    days: 1200,
+    topLine: 20,
     mix: false
   },
   {
@@ -125,6 +155,9 @@ export default [
     wave: 0.6393312101910825,
     fixLine: -20,
     reduceLine: 5,
+    downTrendLine: -3.3,
+    days: 1200,
+    topLine: 7,
     mix: false
   },
   {
@@ -136,6 +169,9 @@ export default [
     wave: 0.6542647058823531,
     fixLine: -18,
     reduceLine: 5,
+    downTrendLine: -3.3,
+    days: 1200,
+    topLine: 8,
     mix: false
   },
   {
@@ -145,9 +181,12 @@ export default [
     threshold: 0.81,
     rate: 0.8312195121951221,
     wave: 0.7816081871345026,
-    fixLine: -20,
+    fixLine: -19,
     reduceLine: 5,
-    mix: true
+    downTrendLine: -3.3,
+    mix: true,
+    days: 1200,
+    topLine: 20
   },
   {
     key: 'chuanmei',
@@ -159,6 +198,9 @@ export default [
     wave: 0.8754518072289161,
     fixLine: -21,
     reduceLine: 5,
+    downTrendLine: 0,
+    days: 1200,
+    topLine: 20,
     mix: false
   },
   {
@@ -170,6 +212,9 @@ export default [
     wave: 0.8370723684210525,
     fixLine: -18,
     reduceLine: 9,
+    downTrendLine: -3.3,
+    days: 1200,
+    topLine: 30,
     mix: false
   },
   {
@@ -181,6 +226,9 @@ export default [
     rate: 0.9762650602409638,
     fixLine: -22,
     reduceLine: 5,
+    downTrendLine: 0,
+    days: 1200,
+    topLine: 20,
     mix: false
   },
   {
@@ -191,8 +239,11 @@ export default [
     threshold: 0.94,
     rate: 0.9072847682119207,
     wave: 0.9646258503401361,
-    fixLine: -20,
+    fixLine: -18,
     reduceLine: 5,
+    downTrendLine: -3.3,
+    days: 1200,
+    topLine: 20,
     mix: false
   },
   {
@@ -203,8 +254,11 @@ export default [
     threshold: 0.97,
     wave: 1.0519615384615388,
     rate: 0.8889999999999998,
-    fixLine: -15,
+    fixLine: -16,
     reduceLine: 6,
+    downTrendLine: -3.3,
+    days: 1000,
+    topLine: 30,
     mix: false
   },
   {
@@ -217,6 +271,9 @@ export default [
     wave: 0.9630645161290321,
     fixLine: -15,
     reduceLine: 5,
+    downTrendLine: -3.3,
+    days: 1200,
+    topLine: 30,
     mix: false
   },
   {
@@ -226,9 +283,12 @@ export default [
     threshold: 0.75,
     wave: 0.6947452229299363,
     rate: 0.7977976190476194,
-    fixLine: -18,
+    fixLine: -17.5,
     reduceLine: 5,
-    mix: true
+    downTrendLine: -3.3,
+    mix: true,
+    days: 1200,
+    topLine: 20
   },
   {
     key: 'gangtie',
@@ -239,6 +299,9 @@ export default [
     rate: 0.8308843537414968,
     fixLine: -20,
     reduceLine: 5,
+    downTrendLine: 0,
+    days: 1200,
+    topLine: 20,
     mix: false
   },
   {
@@ -250,6 +313,9 @@ export default [
     rate: 0.8109589041095889,
     fixLine: -20,
     reduceLine: 5,
+    downTrendLine: 0,
+    days: 1200,
+    topLine: 20,
     mix: false
   },
   {
@@ -260,8 +326,11 @@ export default [
     threshold: 1,
     wave: 1.022290322580645,
     rate: 0.9797972972972975,
-    fixLine: -15.5,
+    fixLine: -16,
     reduceLine: 5,
+    downTrendLine: -3.3,
+    days: 900,
+    top: 35,
     mix: false
   },
   {
@@ -273,6 +342,9 @@ export default [
     wave: 0.7182926829268294,
     fixLine: -11.5,
     reduceLine: 5,
-    mix: true
+    downTrendLine: -3.3,
+    mix: true,
+    days: 1200,
+    topLine: 15
   }
 ]

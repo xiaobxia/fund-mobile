@@ -69,16 +69,11 @@ export default {
       this.$router.history.go(-1)
     },
     updateStockIndex (key, value) {
-      const d = this.getDate()
-      const hour = d.getHours()
-      const minute = d.getMinutes()
-      if (hour >= 14 && minute >= 40) {
-        this.$http.post('stock/updateStockIndex', {
-          key: key,
-          flag: value
-        }).then((data) => {
-        })
-      }
+      this.$http.post('stock/updateStockIndex', {
+        key: key,
+        status: value
+      }).then((data) => {
+      })
     }
   }
 }

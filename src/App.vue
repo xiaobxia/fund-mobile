@@ -175,11 +175,14 @@ export default {
           this.$store.commit('updateStockIndexAll', res.data)
           const data = {}
           const yearAverage = {}
+          const status = {}
           res.data.forEach((item) => {
-            data[item.key] = item.flag
+            data[item.key] = item.flag || ''
+            status[item.key] = item.status || ''
             yearAverage[item.key] = item.year_average
           })
           storageUtil.setData('stockIndexFlag', data)
+          storageUtil.setData('stockIndexStatus', status)
           storageUtil.setData('yearAverageIndex', yearAverage)
         }),
         this.$http.get('stock/getStockMarketQuestion').then((res) => {

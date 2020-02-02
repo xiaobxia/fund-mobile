@@ -5,13 +5,16 @@
       <h3>
         <span class="index-name">{{indexInfo.name}}</span>
         <span v-if="lock" class="fm-icon lock"></span>
+        <span v-if="indexStatus === '顶部'" class="fm-tag s-yellow">{{indexStatus}}</span>
+        <span v-if="indexStatus === '定投'" class="fm-tag s-red">{{indexStatus}}</span>
         <span v-if="ifUnderYear" class="fm-tag s-green">年下</span>
         <span v-if="ifDownTrend" class="fm-tag s-green">下趋</span>
         <span v-if="ifHot" class="fm-tag b-green">热</span>
+        <span v-if="ifUpQuick()" class="fm-tag b-green">涨快</span>
+        <!--<span v-if="jukui" class="fm-tag s-yellow">巨亏</span>-->
+        <span v-if="ifDownQuick()" class="fm-tag s-red">跌快</span>
         <!--<span v-if="positionWarn === 'danger'" class="fm-tag s-yellow">危</span>-->
         <!--<span v-if="positionWarn === 'warn'" class="fm-tag s-green">高</span>-->
-        <span v-if="indexNiuXiong === '禁买'" class="fm-tag s-black">{{indexNiuXiong}}</span>
-        <span v-if="indexNiuXiong === '定投'" class="fm-tag s-red">{{indexNiuXiong}}</span>
         <span v-if="indexNiuXiong === '大反'" class="fm-tag s-red">{{indexNiuXiong}}</span>
         <span v-if="indexNiuXiong === '小反'" class="fm-tag s-red">{{indexNiuXiong}}</span>
         <span v-if="noSellIndex || noSellCount >= 18" class="fm-tag s-red">锁仓</span>
@@ -20,13 +23,12 @@
         <span v-if="!ifDafan() && ifxiaofan()" class="fm-tag s-red">小</span>
         <span v-if="ifDafan()" class="fm-tag s-red">大</span>
         <!--<span v-if="ifDafan() || ifxiaofan()" class="fm-tag s-yellow">买原</span>-->
-        <span v-if="ifFiveUp" class="fm-tag s-yellow">涨5</span>
-        <span v-if="indexNiuXiong === '定投' && averageHalfYear >= 0" class="fm-tag s-blue">解定</span>
+        <!--<span v-if="ifFiveUp" class="fm-tag s-yellow">涨5</span>-->
+        <span v-if="indexStatus === '定投' && averageHalfYear >= 0" class="fm-tag s-blue">解定</span>
         <span v-if="ifJieFantan()" class="fm-tag s-blue">解反</span>
+        <span v-if="ifClearAll()" class="fm-tag s-black">清空</span>
+        <span v-if="indexNiuXiong === '禁买'" class="fm-tag s-black">{{indexNiuXiong}}</span>
         <span v-if="indexNiuXiong === '禁买' && (!ifUnderYear || !ifDownTrend)" class="fm-tag s-blue">解禁</span>
-        <span v-if="ifUpQuick()" class="fm-tag b-green">涨快</span>
-        <!--<span v-if="jukui" class="fm-tag s-yellow">巨亏</span>-->
-        <span v-if="ifDownQuick()" class="fm-tag s-red">跌快</span>
         <span style="float: right" :class="stockNumberClass(rate)">{{rate}}%</span>
       </h3>
       <p class="explain">
@@ -221,6 +223,10 @@ export default {
       const niuXiong = storageUtil.getData('stockIndexFlag', this.indexInfo.key)
       return niuXiong === '正常' ? '' : niuXiong
     },
+    indexStatus () {
+      const status = storageUtil.getData('stockIndexStatus', this.indexInfo.key)
+      return status || ''
+    },
     indexBuyNumber () {
       return operatingTooltip.getIndexBuyNumber(
         this.type,
@@ -312,7 +318,7 @@ export default {
       const indexNowClose = storageUtil.getData('indexNowClose', this.indexInfo.key) || 0
       const averageHalfYearIndexClose = storageUtil.getData('averageHalfYearIndexClose', this.indexInfo.key) || 0
       // 进入定投区域了那就不是下降趋势
-      if (this.indexNiuXiong === '定投') {
+      if (this.indexStatus === '定投') {
         return false
       }
       if (indexNowClose < averageHalfYearIndexClose) {
@@ -337,6 +343,12 @@ export default {
   created () {
   },
   methods: {
+    // 是否清仓
+    ifClearAll () {
+      // 锁仓转不锁
+      const question10 = storageUtil.getData('stockMarketQuestion', 'question_10')
+      return question10 === '是' && this.indexStatus === '顶部' && !this.noSellIndex
+    },
     // 是否涨得太快
     ifUpQuick () {
       // 两天涨得多
@@ -412,6 +424,15 @@ export default {
       }
       return newList
     },
+    ifHasSell (list) {
+      let newList = []
+      for (let i = 0; i < list.length; i++) {
+        if (list[i] === 'sell' || list[i] === 'should-sell') {
+          return true
+        }
+      }
+      return false
+    },
     noBuy (list) {
       let newList = []
       for (let i = 0; i < list.length; i++) {
@@ -420,6 +441,15 @@ export default {
         }
       }
       return newList
+    },
+    ifHasBuy (list) {
+      let newList = []
+      for (let i = 0; i < list.length; i++) {
+        if (list[i] === 'buy' || list[i] === 'should-buy') {
+          return true
+        }
+      }
+      return false
     },
     ifxiaofan () {
       return this.ifSixFive || (this.averageMonthIndex > 0 && this.ifThreeDown)
@@ -557,12 +587,17 @@ export default {
           classListF.push('sell')
         }
       }
+      // 指数处于顶部区间
+      if (this.indexStatus === '顶部' && !this.ifHasBuy(classListF)) {
+        // 没有买入,那就卖
+        classListF.push('sell')
+      }
       // 锁仓的没有卖出高亮
       if (this.lock) {
         classListF = this.noSell(classListF)
       }
       // 定投阶段没有卖出高亮
-      if (this.indexNiuXiong === '定投') {
+      if (this.indexStatus === '定投') {
         classListF = this.noSell(classListF)
       }
       if (this.noSellIndex || this.noSellCount >= 18) {

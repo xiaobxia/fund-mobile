@@ -22,13 +22,13 @@
 <script>
 import storageUtil from '@/util/storageUtil.js'
 import stockApiUtil from '@/util/stockApiUtil.js'
-import indexListAll from '@/common/indexListAll.js'
+import indexList from '@/common/indexList.js'
 
 export default {
   name: 'AverageYearIndex',
   data () {
     let list = []
-    indexListAll.forEach((item) => {
+    indexList.forEach((item) => {
       list.push({
         ...item,
         diff: 0,
@@ -72,11 +72,21 @@ export default {
             item.jinmai = true
           }
           storageUtil.setData('yearAverageIndexDiff', item.key, diff)
+          if (diff >= item.topLine) {
+            this.updateStockIndex(item.key, '顶部')
+          }
         }
       })
     },
     backHandler () {
       this.$router.history.go(-1)
+    },
+    updateStockIndex (key, value) {
+      this.$http.post('stock/updateStockIndex', {
+        key: key,
+        status: value
+      }).then((data) => {
+      })
     }
   }
 }

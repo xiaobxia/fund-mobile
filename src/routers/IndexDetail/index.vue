@@ -6,6 +6,10 @@
       </mt-button>
     </mt-header>
     <div class="main-body">
+      <div class="filter-select-wrap">
+        <span class="name">{{status}}</span>
+        <mt-button type="primary" @click="statusChangeHandler">改变</mt-button>
+      </div>
       <div class="yellow fm-warn">设置禁买的条件:在高位,持续利空,大V不看好</div>
       <div class="filter-select-wrap">
         <span class="name">{{niuXiong}}</span>
@@ -47,6 +51,13 @@
         <li class="filter-select-item" v-for="(item) in filterList" :key="item" @click="onNiuXiongChangeHandler(item)">{{item || '正常'}}</li>
       </ul>
     </mt-popup>
+    <mt-popup
+      v-model="popupSVisible"
+      position="bottom">
+      <ul class="filter-select-list">
+        <li class="filter-select-item" v-for="(item) in filterSList" :key="item" @click="onStatusChangeHandler(item)">{{item || '正常'}}</li>
+      </ul>
+    </mt-popup>
   </div>
 </template>
 
@@ -70,8 +81,11 @@ export default {
   data () {
     return {
       popupVisible: false,
-      filterList: ['正常', '小反', '大反', '定投', '禁买'],
+      popupSVisible: false,
+      filterList: ['正常', '小反', '大反', '禁买'],
+      filterSList: ['正常', '定投', '顶部'],
       niuXiong: '',
+      status: '',
       grid: {
         top: '10%',
         left: '0%',
@@ -218,6 +232,9 @@ export default {
     niuXiongChangeHandler () {
       this.popupVisible = true
     },
+    statusChangeHandler () {
+      this.popupSVisible = true
+    },
     onNiuXiongChangeHandler (text) {
       const query = this.$router.history.current.query
       this.$http.post('stock/updateStockIndex', {
@@ -232,10 +249,25 @@ export default {
       })
       this.popupVisible = false
     },
+    onStatusChangeHandler (text) {
+      const query = this.$router.history.current.query
+      this.$http.post('stock/updateStockIndex', {
+        key: query.key,
+        status: text
+      }).then((data) => {
+        if (data.success) {
+          Toast.success('操作成功')
+        } else {
+          Toast.error('操作失败')
+        }
+      })
+      this.popupSVisible = false
+    },
     initPage () {
       const query = this.$router.history.current.query
       this.queryData = Object.assign({}, query)
       this.niuXiong = storageUtil.getData('stockIndexFlag', query.key)
+      this.status = storageUtil.getData('stockIndexStatus', query.key)
       this.$http.get(`stock/${stockApiUtil.getAllUrl()}`, {
         code: query.code,
         days: 40

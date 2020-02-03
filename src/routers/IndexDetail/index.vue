@@ -83,7 +83,7 @@ export default {
       popupVisible: false,
       popupSVisible: false,
       filterList: ['正常', '小反', '大反', '禁买'],
-      filterSList: ['正常', '定投', '顶部'],
+      filterSList: ['正常', '定投', '顶部', '探底'],
       niuXiong: '',
       status: '',
       grid: {

@@ -18,6 +18,7 @@
         <span v-if="indexNiuXiong === '大反'" class="fm-tag s-red">{{indexNiuXiong}}</span>
         <span v-if="indexNiuXiong === '小反'" class="fm-tag s-red">{{indexNiuXiong}}</span>
         <span v-if="noSellIndex || noSellCount >= 18" class="fm-tag s-red">锁仓</span>
+        <span v-if="indexNiuXiong === '禁买'" class="fm-tag s-black">{{indexNiuXiong}}</span>
         <span v-if="averageMonthIndex > 0" class="fm-tag b-red">乐观</span>
         <span v-if="averageMonthIndex <= 0" class="fm-tag b-green">空</span>
         <span v-if="!ifDafan() && ifxiaofan()" class="fm-tag s-red">小</span>
@@ -27,7 +28,7 @@
         <span v-if="indexStatus === '定投' && averageHalfYear >= 0" class="fm-tag s-blue">解定</span>
         <span v-if="ifJieFantan()" class="fm-tag s-blue">解反</span>
         <span v-if="ifClearAll()" class="fm-tag s-black">清空</span>
-        <span v-if="indexNiuXiong === '禁买'" class="fm-tag s-black">{{indexNiuXiong}}</span>
+        <span v-if="ifUnderYear && ifDownTrend && (indexStatus !== '定投' && indexStatus !== '探底')" class="fm-tag black">禁买</span>
         <span v-if="indexNiuXiong === '禁买' && (!ifUnderYear || !ifDownTrend)" class="fm-tag s-blue">解禁</span>
         <span style="float: right" :class="stockNumberClass(rate)">{{rate}}%</span>
       </h3>

@@ -52,7 +52,7 @@
         <span class="value">{{niuxiong[3]}}</span>
       </div>
       <div class="item">
-        <span class="label">正常：</span>
+        <span class="label">探底：</span>
         <span class="value">{{niuxiong[2]}}</span>
       </div>
       <div class="item">

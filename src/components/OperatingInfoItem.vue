@@ -1,6 +1,8 @@
 <template>
-  <mt-cell-swipe :to="toUrl"
-                 :class="['operating-info-item', ...getItemClass()]">
+  <mt-cell-swipe
+    :to="toUrl"
+    :class="['operating-info-item', ...getItemClass()]"
+  >
     <div slot="title">
       <h3>
         <span class="index-name">{{indexInfo.name}}</span>

@@ -73,7 +73,13 @@ export default {
           }
           storageUtil.setData('yearAverageIndexDiff', item.key, diff)
           if (diff >= item.topLine) {
+            storageUtil.setData('stockIndexIsTop', item.key, true)
             this.updateStockIndex(item.key, '顶部')
+          } else {
+            storageUtil.setData('stockIndexIsTop', item.key, false)
+          }
+          if (diff < 0) {
+            this.updateStockIndex(item.key, '正常')
           }
         }
       })

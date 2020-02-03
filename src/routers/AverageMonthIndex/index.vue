@@ -92,6 +92,12 @@ export default {
           storageUtil.setData('noSell', item.key, lock)
           storageUtil.setData('averageMonth', item.key, averageDiff)
           storageUtil.setData('averageMonthClose', item.key, averageDiffClose)
+          if (lock) {
+            this.updateStockIndex(item.key, '锁仓')
+          }
+          if (diff <= 0) {
+            this.updateStockIndex(item.key, '正常')
+          }
         }
       })
     },
@@ -110,6 +116,18 @@ export default {
     },
     backHandler () {
       this.$router.history.go(-1)
+    },
+    updateStockIndex (key, value) {
+      const d = this.getDate()
+      const hour = d.getHours()
+      // const minute = d.getMinutes()
+      if (hour >= 15) {
+        this.$http.post('stock/updateStockIndex', {
+          key: key,
+          no_sell_status: value
+        }).then((data) => {
+        })
+      }
     }
   }
 }

@@ -6,6 +6,12 @@
       </mt-button>
     </mt-header>
     <div class="main-body">
+      <div class="grey fm-warn">指数锁仓状态</div>
+      <div class="filter-select-wrap">
+        <span class="name">{{noSellStatus}}</span>
+        <mt-button type="primary" @click="noSellStatusChangeHandler">改变</mt-button>
+      </div>
+      <div class="grey fm-warn">指数所处阶段</div>
       <div class="filter-select-wrap">
         <span class="name">{{status}}</span>
         <mt-button type="primary" @click="statusChangeHandler">改变</mt-button>
@@ -58,6 +64,13 @@
         <li class="filter-select-item" v-for="(item) in filterSList" :key="item" @click="onStatusChangeHandler(item)">{{item || '正常'}}</li>
       </ul>
     </mt-popup>
+    <mt-popup
+      v-model="popupNVisible"
+      position="bottom">
+      <ul class="filter-select-list">
+        <li class="filter-select-item" v-for="(item) in filterNList" :key="item" @click="onNoSellStatusChangeHandler(item)">{{item || '正常'}}</li>
+      </ul>
+    </mt-popup>
   </div>
 </template>
 
@@ -82,10 +95,13 @@ export default {
     return {
       popupVisible: false,
       popupSVisible: false,
+      popupNVisible: false,
       filterList: ['正常', '小反', '大反', '禁买'],
       filterSList: ['正常', '定投', '顶部', '探底'],
+      filterNList: ['正常', '锁仓', '锁转交'],
       niuXiong: '',
       status: '',
+      noSellStatus: '',
       grid: {
         top: '10%',
         left: '0%',
@@ -235,6 +251,9 @@ export default {
     statusChangeHandler () {
       this.popupSVisible = true
     },
+    noSellStatusChangeHandler () {
+      this.popupNVisible = true
+    },
     onNiuXiongChangeHandler (text) {
       const query = this.$router.history.current.query
       this.$http.post('stock/updateStockIndex', {
@@ -263,11 +282,26 @@ export default {
       })
       this.popupSVisible = false
     },
+    onNoSellStatusChangeHandler (text) {
+      const query = this.$router.history.current.query
+      this.$http.post('stock/updateStockIndex', {
+        key: query.key,
+        no_sell_status: text
+      }).then((data) => {
+        if (data.success) {
+          Toast.success('操作成功')
+        } else {
+          Toast.error('操作失败')
+        }
+      })
+      this.popupNVisible = false
+    },
     initPage () {
       const query = this.$router.history.current.query
       this.queryData = Object.assign({}, query)
       this.niuXiong = storageUtil.getData('stockIndexFlag', query.key)
-      this.status = storageUtil.getData('stockIndexStatus', query.key)
+      this.status = storageUtil.getData('stockIndexStatus', query.key) || '正常'
+      this.noSellStatus = storageUtil.getData('stockIndexNoSellStatus', query.key) || '正常'
       this.$http.get(`stock/${stockApiUtil.getAllUrl()}`, {
         code: query.code,
         days: 40

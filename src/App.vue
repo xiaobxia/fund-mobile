@@ -176,13 +176,16 @@ export default {
           const data = {}
           const yearAverage = {}
           const status = {}
+          const noSellStatus = {}
           res.data.forEach((item) => {
             data[item.key] = item.flag || ''
             status[item.key] = item.status || ''
+            noSellStatus[item.key] = item.no_sell_status || ''
             yearAverage[item.key] = item.year_average
           })
           storageUtil.setData('stockIndexFlag', data)
           storageUtil.setData('stockIndexStatus', status)
+          storageUtil.setData('stockIndexNoSellStatus', noSellStatus)
           storageUtil.setData('yearAverageIndex', yearAverage)
         }),
         this.$http.get('stock/getStockMarketQuestion').then((res) => {

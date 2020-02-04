@@ -9853,9 +9853,9 @@ const IndexInfoUtilXiong = {
     // console.log(xData)
     // console.log(count)
     // console.log(count2)
-    console.log('wave:  ' + a)
-    console.log('rate:  ' + c)
-    console.log(threshold)
+    // console.log('wave:  ' + a)
+    // console.log('rate:  ' + c)
+    // console.log(threshold)
     return {list: listTemp, threshold: threshold, rate: c, wave: a}
   }
 }

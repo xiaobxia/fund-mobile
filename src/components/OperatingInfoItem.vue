@@ -546,6 +546,11 @@ export default {
     ifJieDingbu () {
       return this.indexStatus === '顶部' && !this.ifTopNow && this.ifNoSell()
     },
+    localConsole (text) {
+      if (this.indexInfo.key === 'chuangye') {
+        console.log(text)
+      }
+    },
     getItemClass () {
       // 锁仓转不锁
       const question10 = storageUtil.getData('stockMarketQuestion', 'question_10')
@@ -580,7 +585,7 @@ export default {
         if (question1 !== '筑顶后大跌' && question9 !== '是') {
           if (this.averageMonthIndex < 0) {
             // 在月线以下，就得卖，除了大反
-            if (this.isDafan()) {
+            if (!this.isDafan()) {
               classList.push(sellClass)
             }
           } else {
@@ -656,11 +661,11 @@ export default {
         // 没有任何买入
         classListF = this.noBuy(classListF)
         if (this.rate > 0) {
-          classListF.push('sell')
+          classListF.push(sellClass)
         }
         // 叠加持续恐慌的话直接卖
         if (question9 === '是') {
-          classListF.push('sell')
+          classListF.push(sellClass)
         }
       }
       // 指数处于阶段顶部区间
@@ -674,7 +679,7 @@ export default {
       if (this.isCutDown()) {
         // 纯买信号没有了
         classListF = this.noBuy(classListF)
-        classListF.push('sell')
+        classListF.push(sellClass)
       }
       // 权重最大的-------------
       // 锁仓的没有卖出高亮

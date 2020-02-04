@@ -27,7 +27,7 @@
         </mt-radio>
       </div>
       <div class="question">
-        市场阶段？
+        市场阶段？（根据年线判断）
       </div>
       <div class="answer">
         <mt-radio

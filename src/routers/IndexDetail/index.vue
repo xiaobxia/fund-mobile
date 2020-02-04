@@ -337,6 +337,7 @@ export default {
       this.queryData = Object.assign({}, query)
       this.niuXiong = storageUtil.getData('stockIndexFlag', query.key)
       this.status = storageUtil.getData('stockIndexStatus', query.key) || '正常'
+      this.cutDown = storageUtil.getData('stockIndexCutDown', query.key) || '关闭'
       this.noSellStatus = storageUtil.getData('stockIndexNoSellStatus', query.key) || '正常'
       this.$http.get(`stock/${stockApiUtil.getAllUrl()}`, {
         code: query.code,

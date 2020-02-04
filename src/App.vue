@@ -177,15 +177,18 @@ export default {
           const yearAverage = {}
           const status = {}
           const noSellStatus = {}
+          const cutDown = {}
           res.data.forEach((item) => {
-            data[item.key] = item.flag || ''
-            status[item.key] = item.status || ''
-            noSellStatus[item.key] = item.no_sell_status || ''
+            data[item.key] = item.flag || '正常'
+            status[item.key] = item.status || '正常'
+            noSellStatus[item.key] = item.no_sell_status || '正常'
+            cutDown[item.key] = item.cut_down || '关闭'
             yearAverage[item.key] = item.year_average
           })
           storageUtil.setData('stockIndexFlag', data)
           storageUtil.setData('stockIndexStatus', status)
           storageUtil.setData('stockIndexNoSellStatus', noSellStatus)
+          storageUtil.setData('stockIndexCutDown', cutDown)
           storageUtil.setData('yearAverageIndex', yearAverage)
         }),
         this.$http.get('stock/getStockMarketQuestion').then((res) => {

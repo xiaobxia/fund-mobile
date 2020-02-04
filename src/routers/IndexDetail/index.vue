@@ -6,6 +6,11 @@
       </mt-button>
     </mt-header>
     <div class="main-body">
+      <div class="grey fm-warn">指数是否开启止盈策略</div>
+      <div class="filter-select-wrap">
+        <span class="name">{{cutDown}}</span>
+        <mt-button type="primary" @click="cutDownChangeHandler">改变</mt-button>
+      </div>
       <div class="grey fm-warn">指数锁仓状态</div>
       <div class="filter-select-wrap">
         <span class="name">{{noSellStatus}}</span>
@@ -71,6 +76,13 @@
         <li class="filter-select-item" v-for="(item) in filterNList" :key="item" @click="onNoSellStatusChangeHandler(item)">{{item || '正常'}}</li>
       </ul>
     </mt-popup>
+    <mt-popup
+      v-model="popupCVisible"
+      position="bottom">
+      <ul class="filter-select-list">
+        <li class="filter-select-item" v-for="(item) in filterCList" :key="item" @click="onCutDownChangeHandler(item)">{{item || '关闭'}}</li>
+      </ul>
+    </mt-popup>
   </div>
 </template>
 
@@ -96,12 +108,15 @@ export default {
       popupVisible: false,
       popupSVisible: false,
       popupNVisible: false,
+      popupCVisible: false,
       filterList: ['正常', '小反', '大反', '禁买'],
       filterSList: ['正常', '定投', '顶部', '探底'],
       filterNList: ['正常', '锁仓', '锁转交'],
+      filterCList: ['关闭', '开启'],
       niuXiong: '',
       status: '',
       noSellStatus: '',
+      cutDown: '',
       grid: {
         top: '10%',
         left: '0%',
@@ -161,7 +176,8 @@ export default {
       list: [],
       indexChangeRatio: 0,
       pointType: '',
-      type: 'xiong'
+      type: 'xiong',
+      nowClose: 0
     }
   },
 
@@ -254,6 +270,9 @@ export default {
     noSellStatusChangeHandler () {
       this.popupNVisible = true
     },
+    cutDownChangeHandler () {
+      this.popupCVisible = true
+    },
     onNiuXiongChangeHandler (text) {
       const query = this.$router.history.current.query
       this.$http.post('stock/updateStockIndex', {
@@ -296,6 +315,23 @@ export default {
       })
       this.popupNVisible = false
     },
+    onCutDownChangeHandler (text) {
+      const query = this.$router.history.current.query
+      if (text === '开启') {
+        storageUtil.setData('stockIndexTopClose', query.key, 0)
+      }
+      this.$http.post('stock/updateStockIndex', {
+        key: query.key,
+        cut_down: text
+      }).then((data) => {
+        if (data.success) {
+          Toast.success('操作成功')
+        } else {
+          Toast.error('操作失败')
+        }
+      })
+      this.popupCVisible = false
+    },
     initPage () {
       const query = this.$router.history.current.query
       this.queryData = Object.assign({}, query)
@@ -317,6 +353,7 @@ export default {
           })
           const infoList = info.list
           this.indexChangeRatio = this.keepTwoDecimals(infoList[0].netChangeRatio) || 0
+          this.nowClose = this.keepTwoDecimals(infoList[0].close) || 0
           const recentNetValue = infoList
           this.netValue = infoList
           // 近的在前

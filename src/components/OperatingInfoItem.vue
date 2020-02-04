@@ -15,6 +15,7 @@
         <span v-if="isXiaofan()" class="fm-tag s-red">小反</span>
         <span v-if="ifNoSell()" class="fm-tag s-red">锁仓</span>
         <span v-if="ifNoSellToCan()" class="fm-tag s-green">锁转交</span>
+        <span v-if="ifCutDown" class="fm-tag s-yellow">开止盈</span>
         <span v-if="indexNiuXiong === '禁买'" class="fm-tag s-black">{{indexNiuXiong}}</span>
         <span v-if="averageMonthIndex > 0" class="fm-tag b-red">月上</span>
         <span v-if="averageMonthIndex <= 0" class="fm-tag b-green">月下</span>
@@ -24,6 +25,7 @@
         <span v-if="ifJieFantan()" class="fm-tag s-blue">解反</span>
         <span v-if="ifJieDingbu()" class="fm-tag s-blue">解顶部</span>
         <span v-if="ifClearAll()" class="fm-tag s-black">清空</span>
+        <span v-if="isCutDown()" class="fm-tag s-black">请止盈</span>
         <span v-if="ifUnderYear && ifDownTrend && (indexStatus !== '定投' && indexStatus !== '探底')" class="fm-tag black">禁买</span>
         <span v-if="indexNiuXiong === '禁买' && (!ifUnderYear || !ifDownTrend)" class="fm-tag s-blue">解禁</span>
         <span style="float: right" :class="stockNumberClass(rate)">{{rate}}%</span>
@@ -331,6 +333,9 @@ export default {
     ifTopNow () {
       return storageUtil.getData('stockIndexIsTop', this.indexInfo.key) || false
     },
+    ifCutDown () {
+      return storageUtil.getData('stockIndexCutDown', this.indexInfo.key) === '开启'
+    },
     ifHot () {
       const averageMonth = storageUtil.getData('averageMonth', this.indexInfo.key) || 0
       return averageMonth >= this.indexInfo.reduceLine
@@ -343,6 +348,18 @@ export default {
   created () {
   },
   methods: {
+    // 满足止盈条件
+    isCutDown () {
+      const nowClose = storageUtil.getData('indexNowClose', this.indexInfo.key) || 0
+      const topClose = storageUtil.getData('stockIndexTopClose', this.indexInfo.key) || 0
+      if (this.ifCutDown) {
+        // 最高处回落5%
+        if (this.countDifferenceRate(nowClose, topClose) <= -5) {
+          return true
+        }
+      }
+      return false
+    },
     // 是否处于反弹
     ifInFantan () {
       return this.isXiaofan() || this.isDafan()
@@ -652,6 +669,12 @@ export default {
         classListF = this.noNormalBuy(classListF)
         // // 没有买入,那就卖
         // classListF.push('sell')
+      }
+      // 止盈
+      if (this.isCutDown()) {
+        // 纯买信号没有了
+        classListF = this.noBuy(classListF)
+        classListF.push('sell')
       }
       // 权重最大的-------------
       // 锁仓的没有卖出高亮

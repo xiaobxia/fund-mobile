@@ -430,9 +430,9 @@ export default {
       return false
     },
     ifJieFantan () {
-      if (this.indexNiuXiong === '小反' && this.averageMonthIndex < 0) {
-        return true
-      }
+      // if (this.indexNiuXiong === '小反' && this.averageMonthIndex < 0) {
+      //   return true
+      // }
       // 下降趋势两天就解反
       if (this.ifDownTrend) {
         return (

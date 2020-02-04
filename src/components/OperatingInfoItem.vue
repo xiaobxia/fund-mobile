@@ -7,7 +7,7 @@
       <h3>
         <span class="index-name">{{indexInfo.name}}</span>
         <span v-if="lock" class="fm-icon lock"></span>
-        <span v-if="indexStatus === '顶部'" class="fm-tag s-yellow">顶部</span>
+        <span v-if="indexStatus === '顶部'" class="fm-tag s-yellow">阶段顶部</span>
         <span v-if="isDingtou()" class="fm-tag s-red">定投</span>
         <span v-if="ifUnderYear" class="fm-tag s-green">年下</span>
         <span v-if="ifDownTrend" class="fm-tag s-green">下趋</span>
@@ -663,7 +663,7 @@ export default {
           classListF.push('sell')
         }
       }
-      // 指数处于顶部区间
+      // 指数处于阶段顶部区间
       if (this.ifDingbu()) {
         // 纯买信号没有了
         classListF = this.noNormalBuy(classListF)

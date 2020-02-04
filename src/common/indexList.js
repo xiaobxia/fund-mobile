@@ -11,7 +11,8 @@ export default [
     downTrendLine: -3.3,
     mix: true,
     days: 1200,
-    topLine: 20
+    topLine: 15,
+    cutDownLine: 30
   },
   {
     key: 'yiyao',
@@ -25,7 +26,8 @@ export default [
     reduceLine: 5,
     downTrendLine: -3.3,
     days: 1200,
-    topLine: 18,
+    topLine: 11,
+    cutDownLine: 19,
     mix: false
   },
   {
@@ -41,6 +43,7 @@ export default [
     downTrendLine: -3.3,
     days: 1200,
     topLine: 20,
+    cutDownLine: 30,
     mix: false
   },
   {
@@ -56,6 +59,7 @@ export default [
     downTrendLine: -3.3,
     days: 1200,
     topLine: 20,
+    cutDownLine: 40,
     mix: false
   },
   {
@@ -70,7 +74,8 @@ export default [
     downTrendLine: -3.3,
     mix: true,
     days: 1200,
-    topLine: 16
+    topLine: 14,
+    cutDownLine: 17
   },
   {
     key: 'yinhang',
@@ -84,7 +89,8 @@ export default [
     reduceLine: 4,
     downTrendLine: -3.3,
     days: 1000,
-    topLine: 14,
+    topLine: 7.5,
+    cutDownLine: 14,
     mix: false
   },
   {
@@ -99,7 +105,8 @@ export default [
     reduceLine: 8,
     downTrendLine: -3.3,
     days: 1200,
-    topLine: 30,
+    topLine: 24,
+    cutDownLine: 30,
     mix: false
   },
   {
@@ -114,7 +121,8 @@ export default [
     reduceLine: 5.5,
     downTrendLine: -3.3,
     days: 1200,
-    topLine: 17,
+    topLine: 16,
+    cutDownLine: 24,
     mix: false
   },
   {
@@ -129,7 +137,8 @@ export default [
     reduceLine: 6,
     downTrendLine: -3.3,
     days: 1200,
-    topLine: 20,
+    topLine: 18,
+    cutDownLine: 27,
     mix: false
   },
   {
@@ -143,7 +152,8 @@ export default [
     reduceLine: 5,
     downTrendLine: 0,
     days: 1200,
-    topLine: 20,
+    topLine: 10,
+    cutDownLine: 20,
     mix: false
   },
   {
@@ -157,7 +167,8 @@ export default [
     reduceLine: 5,
     downTrendLine: -3.3,
     days: 1200,
-    topLine: 7,
+    topLine: 5.5,
+    cutDownLine: 7,
     mix: false
   },
   {
@@ -171,7 +182,8 @@ export default [
     reduceLine: 5,
     downTrendLine: -3.3,
     days: 1200,
-    topLine: 8,
+    topLine: 5,
+    cutDownLine: 7,
     mix: false
   },
   {
@@ -186,7 +198,8 @@ export default [
     downTrendLine: -3.3,
     mix: true,
     days: 1200,
-    topLine: 20
+    topLine: 7.5,
+    cutDownLine: 15
   },
   {
     key: 'chuanmei',
@@ -200,7 +213,8 @@ export default [
     reduceLine: 5,
     downTrendLine: 0,
     days: 1200,
-    topLine: 20,
+    topLine: 12,
+    cutDownLine: 15,
     mix: false
   },
   {
@@ -214,7 +228,8 @@ export default [
     reduceLine: 9,
     downTrendLine: -3.3,
     days: 1200,
-    topLine: 30,
+    topLine: 15,
+    cutDownLine: 30,
     mix: false
   },
   {
@@ -228,7 +243,8 @@ export default [
     reduceLine: 5,
     downTrendLine: 0,
     days: 1200,
-    topLine: 20,
+    topLine: 8.5,
+    cutDownLine: 11,
     mix: false
   },
   {
@@ -243,7 +259,8 @@ export default [
     reduceLine: 5,
     downTrendLine: -3.3,
     days: 1200,
-    topLine: 20,
+    topLine: 5.5,
+    cutDownLine: 20,
     mix: false
   },
   {
@@ -259,6 +276,7 @@ export default [
     downTrendLine: -3.3,
     days: 1000,
     topLine: 30,
+    cutDownLine: 30,
     mix: false
   },
   {
@@ -274,6 +292,7 @@ export default [
     downTrendLine: -3.3,
     days: 1200,
     topLine: 30,
+    cutDownLine: 30,
     mix: false
   },
   {
@@ -288,7 +307,8 @@ export default [
     downTrendLine: -3.3,
     mix: true,
     days: 1200,
-    topLine: 20
+    topLine: 7.5,
+    cutDownLine: 9
   },
   {
     key: 'gangtie',
@@ -301,7 +321,8 @@ export default [
     reduceLine: 5,
     downTrendLine: 0,
     days: 1200,
-    topLine: 20,
+    topLine: 7,
+    cutDownLine: 7,
     mix: false
   },
   {
@@ -316,6 +337,7 @@ export default [
     downTrendLine: 0,
     days: 1200,
     topLine: 20,
+    cutDownLine: 20,
     mix: false
   },
   {
@@ -330,7 +352,8 @@ export default [
     reduceLine: 5,
     downTrendLine: -3.3,
     days: 900,
-    top: 35,
+    topLine: 20,
+    cutDownLine: 35,
     mix: false
   },
   {
@@ -345,6 +368,7 @@ export default [
     downTrendLine: -3.3,
     mix: true,
     days: 1200,
-    topLine: 15
+    topLine: 11,
+    cutDownLine: 15
   }
 ]

@@ -71,15 +71,23 @@ export default {
           if (niuxiong === '禁买') {
             item.jinmai = true
           }
+          const updateData = {}
           storageUtil.setData('yearAverageIndexDiff', item.key, diff)
           if (diff >= item.topLine) {
             storageUtil.setData('stockIndexIsTop', item.key, true)
-            this.updateStockIndex(item.key, '顶部')
+            updateData.status = '顶部'
           } else {
             storageUtil.setData('stockIndexIsTop', item.key, false)
           }
           if (diff < 0) {
-            this.updateStockIndex(item.key, '正常')
+            updateData.status = '正常'
+          }
+          if (diff >= item.cutDownLine) {
+            storageUtil.setData('stockIndexTopClose', item.key, 0)
+            updateData.cut_down = '开启'
+          }
+          if (updateData.status || updateData.cut_down) {
+            this.updateStockIndex(item.key, updateData)
           }
         }
       })
@@ -90,7 +98,7 @@ export default {
     updateStockIndex (key, value) {
       this.$http.post('stock/updateStockIndex', {
         key: key,
-        status: value
+        ...value
       }).then((data) => {
       })
     }

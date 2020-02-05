@@ -21,8 +21,10 @@
         <span v-if="averageMonthIndex <= 0" class="fm-tag b-green">月下</span>
         <span v-if="!ifDafan() && ifXiaofan()" class="fm-tag s-red">小</span>
         <span v-if="ifDafan()" class="fm-tag s-red">大</span>
+        <span v-if="toNoSellToCan()" class="fm-tag blue">更为锁转交</span>
         <span v-if="indexStatus === '定投' && averageHalfYear >= 0" class="fm-tag s-blue">解定</span>
         <span v-if="ifJieFantan()" class="fm-tag s-blue">解反</span>
+        <span v-if="ifJieNoSellToCan()" class="fm-tag s-blue">解锁转交</span>
         <span v-if="ifJieDingbu()" class="fm-tag s-blue">解顶部</span>
         <span v-if="ifClearAll()" class="fm-tag s-black">清空</span>
         <span v-if="isCutDown()" class="fm-tag s-black">请止盈</span>
@@ -382,9 +384,24 @@ export default {
       if (this.averageMonthIndex <= 0) {
         return false
       }
+      if (this.ifJieNoSellToCan()) {
+        return false
+      }
       if (this.indexNoSellStatus === '锁转交') {
         return true
       }
+      if (this.indexNoSellStatus === '锁仓' && !this.ifNoSell()) {
+        return true
+      }
+      return false
+    },
+    ifJieNoSellToCan () {
+      if (this.indexNoSellStatus === '锁转交' && this.ifThreeDown) {
+        return true
+      }
+      return false
+    },
+    toNoSellToCan () {
       if (this.indexNoSellStatus === '锁仓' && !this.ifNoSell()) {
         return true
       }
@@ -648,10 +665,11 @@ export default {
       classList.push(shouldClass)
       // 转弱了，加一个卖出信号
       // 写在这没问题，因为筑顶的时候的大反，基本都是失效的
-      if (question10 === '是' && this.rate > (-this.indexInfo.rate)) {
+      if (question10 === '是' && (this.rate > (-this.indexInfo.rate))) {
         classList.push(sellClass)
       }
-      if (this.ifNoSellToCan() && this.rate > (-this.indexInfo.rate)) {
+      // 前两个跌可以杀跌
+      if (this.ifNoSellToCan() && (this.rate > (-this.indexInfo.rate))) {
         classList.push(sellClass)
       }
       // 清仓

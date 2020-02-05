@@ -79,9 +79,9 @@ export default {
           } else {
             storageUtil.setData('stockIndexIsTop', item.key, false)
           }
-          if (diff < 0) {
-            updateData.status = '正常'
-          }
+          // if (diff < 0) {
+          //   updateData.status = '正常'
+          // }
           if (diff >= item.cutDownLine) {
             storageUtil.setData('stockIndexTopClose', item.key, 0)
             updateData.cut_down = '开启'

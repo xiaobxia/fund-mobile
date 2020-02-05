@@ -19,7 +19,7 @@
         <span v-if="indexNiuXiong === '禁买'" class="fm-tag s-black">{{indexNiuXiong}}</span>
         <span v-if="averageMonthIndex > 0" class="fm-tag b-red">月上</span>
         <span v-if="averageMonthIndex <= 0" class="fm-tag b-green">月下</span>
-        <span v-if="!ifDafan() && ifxiaofan()" class="fm-tag s-red">小</span>
+        <span v-if="!ifDafan() && ifXiaofan()" class="fm-tag s-red">小</span>
         <span v-if="ifDafan()" class="fm-tag s-red">大</span>
         <span v-if="indexStatus === '定投' && averageHalfYear >= 0" class="fm-tag s-blue">解定</span>
         <span v-if="ifJieFantan()" class="fm-tag s-blue">解反</span>
@@ -517,7 +517,7 @@ export default {
       }
       return false
     },
-    ifxiaofan () {
+    ifXiaofan () {
       return this.ifSixFive || (this.averageMonthIndex > 0 && this.ifThreeDown)
     },
     isXiaofan () {
@@ -547,6 +547,10 @@ export default {
       return this.indexStatus === '顶部' && !this.ifJieDingbu() && !this.ifNoSell()
     },
     ifJieDingbu () {
+      // 变成大小反，那阶段顶就解除
+      if (this.indexStatus === '顶部' && (this.ifDafan() || this.ifXiaofan())) {
+        return true
+      }
       return this.indexStatus === '顶部' && !this.ifTopNow && this.ifNoSell()
     },
     localConsole (text) {

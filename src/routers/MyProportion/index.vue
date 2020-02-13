@@ -183,7 +183,7 @@ export default{
             if (this.distribution[name]) {
               proportionList.push({
                 name: name,
-                proportion: this.countRate(this.distribution[name], otherTotal)
+                proportion: this.countRate(this.distribution[name], this.asset)
               })
             } else {
               proportionList.push({

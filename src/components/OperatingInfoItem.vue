@@ -399,6 +399,9 @@ export default {
       if (this.indexNoSellStatus === '锁转交' && this.ifThreeDown) {
         return true
       }
+      if (this.indexNoSellStatus === '锁转交' && this.ifNoSell()) {
+        return true
+      }
       return false
     },
     toNoSellToCan () {

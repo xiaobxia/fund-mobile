@@ -8,7 +8,7 @@
           {{item.code}}
           {{formatFundName(item.name, 11)}}
           <i class="fm-icon lock" v-if="item.ifAllLock"></i>
-          <span style="float: right" :class="stockNumberClass(countDifferenceRate(item.valuationSum, item.sum))">{{countDifferenceRate(item.valuationSum, item.sum)}}%</span>
+          <span style="float: right" :class="stockNumberClass(item.change_ratio)">{{item.change_ratio}}%</span>
         </h3>
         <p class="explain">
           <span class="item">

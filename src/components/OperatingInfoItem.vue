@@ -666,20 +666,30 @@ export default {
       }
       // 应该的类
       classList.push(shouldClass)
-      // 转弱了，加一个卖出信号
-      // 写在这没问题，因为筑顶的时候的大反，基本都是失效的
-      if (question10 === '是' && (this.rate > (-this.indexInfo.rate))) {
-        classList.push(sellClass)
-      }
-      // 前两个跌可以杀跌
+      // 锁转交
       if (this.ifNoSellToCan() && (this.rate > (-this.indexInfo.rate))) {
+        // 普通买入信号在小于rate的时候是不会出现的
+        // 如果是大小反，那么锁转交的信号就会解除
+        // 所以这个逻辑没有问题
         classList.push(sellClass)
       }
-      // 清仓
+      // 清仓信号
       if (this.ifClearAll() && this.rate > (-this.indexInfo.rate)) {
+        // 普通买入信号在小于rate的时候是不会出现的
+        // 如果是大小反，那么清仓的信号就会解除
+        // 所以这个逻辑没有问题
         classList.push(sellClass)
       }
       let classListF = this.copyList(classList)
+      // 整体转弱了
+      if (question10 === '是') {
+        // 纯买信号没有了
+        classListF = this.noNormalBuy(classListF)
+        // 不是大小反，那就加个卖出信号
+        if (classListF.indexOf('should-buy') === -1) {
+          classListF.push(sellClass)
+        }
+      }
       // 持续恐慌事件那就不要买了
       if (question9 === '是') {
         classListF = this.noBuy(classListF)
@@ -688,6 +698,7 @@ export default {
       if (this.isJinMai()) {
         // 没有任何买入
         classListF = this.noBuy(classListF)
+        // 涨了就卖
         if (this.rate > 0) {
           classListF.push(sellClass)
         }
@@ -700,12 +711,11 @@ export default {
       if (this.ifDingbu()) {
         // 纯买信号没有了
         classListF = this.noNormalBuy(classListF)
-        // // 没有买入,那就卖
-        // classListF.push('sell')
       }
       // 止盈
       if (this.isCutDown()) {
-        // 纯买信号没有了
+        // 没有买入信号
+        // 加入卖出信号
         classListF = this.noBuy(classListF)
         classListF.push(sellClass)
       }
@@ -718,6 +728,7 @@ export default {
       if (this.isDingtou()) {
         classListF = this.noSell(classListF)
       }
+      // 锁仓的逻辑
       if (this.ifNoSell()) {
         if (this.rate < 0) {
           // 锁仓阶段可以跌了就买

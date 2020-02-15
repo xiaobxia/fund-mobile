@@ -6,7 +6,7 @@
       </mt-button>
     </mt-header>
     <div class="main-body">
-      <div class="yellow fm-warn">申购在每月的月底进行</div>
+      <div class="yellow fm-warn">申购在每月第一个交易日进行，申购前确保资产校对过</div>
       <div class="filter-select-wrap">
         <span class="name">{{editType}}</span>
         <mt-button type="primary" @click="editTypeChangeHandler">改变</mt-button>

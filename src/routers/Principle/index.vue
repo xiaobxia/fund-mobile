@@ -6,6 +6,7 @@
       </mt-button>
     </mt-header>
     <div class="main-body">
+      <div class="yellow fm-warn">多校验大V因子</div>
       <div class="question">
         锁仓由18以上转12以内
       </div>

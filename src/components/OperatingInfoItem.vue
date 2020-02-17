@@ -356,7 +356,7 @@ export default {
       const topClose = storageUtil.getData('stockIndexTopClose', this.indexInfo.key) || 0
       if (this.ifCutDown) {
         // 最高处回落5%
-        if (this.countDifferenceRate(nowClose, topClose) <= -5) {
+        if (this.countDifferenceRate(nowClose, topClose) < -6) {
           return true
         }
       }

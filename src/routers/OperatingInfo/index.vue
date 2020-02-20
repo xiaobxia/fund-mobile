@@ -267,15 +267,15 @@ export default {
               } else {
                 buySellList[i] = ''
               }
-            }
-            if (buySellList[i] === 'sell') {
-              if (netChangeRatioList[i] <= 0) {
-                buySellList[i] = ''
+              if (buySellList[i] === 'sell') {
+                if (netChangeRatioList[i] <= 0) {
+                  buySellList[i] = ''
+                }
               }
-            }
-            if (buySellList[i] === 'buy') {
-              if (netChangeRatioList[i] >= 0) {
-                buySellList[i] = ''
+              if (buySellList[i] === 'buy') {
+                if (netChangeRatioList[i] >= 0) {
+                  buySellList[i] = ''
+                }
               }
             }
           }

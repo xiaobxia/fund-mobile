@@ -77,10 +77,12 @@
         </span>
       </div>
       <div class="content">
-        <p>定投资金占比</p>
+        <p>定投资金占比<span class="rate" style="float: right">{{countRate(fixTotal,asset)}}%</span></p>
         <div class="proportion-item">
-          <div class="title">定投<span class="rate">{{countRate(fixTotal,asset)}}%</span></div>
-          <mt-progress :value="countRate(fixTotal,asset)" :bar-height="barHeight"></mt-progress>
+          <div v-for="(item, index) in fixList" :key="index" class="proportion-item">
+            <div class="title">{{item.name}}<span class="rate">{{item.proportion}}%</span></div>
+            <mt-progress :value="item.proportion" :bar-height="barHeight"></mt-progress>
+          </div>
         </div>
       </div>
       <div class="content">
@@ -110,8 +112,14 @@ export default{
     indexList.forEach((item) => {
       distribution[item.name] = 0
     })
+    const fixList = ['创业', '50', '300', '500', '1000', '白酒', '医疗', '生物']
+    let fixDistribution = {}
+    fixList.forEach((item) => {
+      fixDistribution[item] = 0
+    })
     return {
       distribution,
+      fixDistribution,
       totalSum: 0,
       barHeight: 12 * zoom,
       fixTotalCost: 0,
@@ -122,6 +130,7 @@ export default{
       yearFix: 0,
       yearFixCost: 0,
       list: [],
+      fixList: [],
       asset: 0
     }
   },
@@ -165,6 +174,11 @@ export default{
               } else {
                 fixTotal += item.valuationSum
                 fixTotalCost += item.costSum
+                if (this.fixDistribution[item.theme]) {
+                  this.fixDistribution[item.theme] += parseInt(item.valuationSum)
+                } else {
+                  this.fixDistribution[item.theme] = parseInt(item.valuationSum)
+                }
                 item.position_record.forEach((record) => {
                   if (moment().isSame(record.confirm_date, 'month')) {
                     monthFixCost += record.costSum
@@ -195,6 +209,23 @@ export default{
           proportionList.sort((a, b) => {
             return b.proportion - a.proportion
           })
+          let fixProportionList = []
+          for (let name in this.fixDistribution) {
+            if (this.fixDistribution[name]) {
+              fixProportionList.push({
+                name: name,
+                proportion: this.countRate(this.fixDistribution[name], this.asset)
+              })
+            } else {
+              fixProportionList.push({
+                name: name,
+                proportion: 0
+              })
+            }
+          }
+          fixProportionList.sort((a, b) => {
+            return b.proportion - a.proportion
+          })
           this.totalSum = totalSum
           this.otherTotal = otherTotal
           this.fixTotal = fixTotal
@@ -204,6 +235,7 @@ export default{
           this.yearFix = yearFix
           this.yearFixCost = yearFixCost
           this.list = proportionList
+          this.fixList = fixProportionList
         }
       })
     },

@@ -399,10 +399,10 @@ export default {
     if (month > 1) {
       // 今年估计有结构牛
       factor = 1.2
-      // 地产
-      if (indexKey === 'dichan') {
-        factor = 1.3
-      }
+    }
+    // 预期3月结束
+    if (month >= 3) {
+      factor = 0.8
     }
     if (buySell === 'buy') {
       return factor

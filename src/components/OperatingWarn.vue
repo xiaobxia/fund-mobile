@@ -151,9 +151,11 @@ export default {
       return 0
     },
     ifCut () {
+      // 锁仓转不锁
+      const question10 = storageUtil.getData('stockMarketQuestion', 'question_10')
       const question9 = storageUtil.getData('stockMarketQuestion', 'question_9')
       const position = storageUtil.getData('userAccountInfo', 'positionConfig') || 100
-      if (question9 === '是' && position > 50) {
+      if ((question9 === '是' || question10 === '是') && position > 50) {
         return 50
       }
       return 0

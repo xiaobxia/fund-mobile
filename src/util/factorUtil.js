@@ -46,8 +46,9 @@ export default {
     let factor = 1
     // 恐慌
     const question9 = storageUtil.getData('stockMarketQuestion', 'question_9')
+    const question10 = storageUtil.getData('stockMarketQuestion', 'question_10')
     let question9Factor = 1
-    if (question9 === '是') {
+    if (question9 === '是' || question10 === '是') {
       question9Factor = 0.5
     }
     factor = factor * question9Factor

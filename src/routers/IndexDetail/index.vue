@@ -317,12 +317,15 @@ export default {
     },
     onCutDownChangeHandler (text) {
       const query = this.$router.history.current.query
+      const other = {}
       if (text === '开启') {
         storageUtil.setData('stockIndexTopClose', query.key, 0)
+        other.top_close = 0
       }
       this.$http.post('stock/updateStockIndex', {
         key: query.key,
-        cut_down: text
+        cut_down: text,
+        ...other
       }).then((data) => {
         if (data.success) {
           Toast.success('操作成功')

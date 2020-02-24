@@ -168,6 +168,9 @@ export default {
             let topClose = storageUtil.getData('stockIndexTopClose', item.key) || 0
             if (data.data.close > topClose) {
               storageUtil.setData('stockIndexTopClose', item.key, data.data.close)
+              this.updateStockIndex(item.key, {
+                top_close: data.data.close
+              })
             }
           }
           const netChangeRatio = parseFloat(data.data.netChangeRatio)
@@ -217,6 +220,13 @@ export default {
     sortChangeHandler () {
       this.list.sort((a, b) => {
         return b.netChangeRatio - a.netChangeRatio
+      })
+    },
+    updateStockIndex (key, value) {
+      this.$http.post('stock/updateStockIndex', {
+        key: key,
+        ...value
+      }).then((data) => {
       })
     },
     updateMyNetValue () {

@@ -86,6 +86,7 @@ export default {
           if (diff >= item.cutDownLine) {
             storageUtil.setData('stockIndexTopClose', item.key, 0)
             updateData.cut_down = '开启'
+            updateData.top_close = 0
           }
           if (updateData.status || updateData.cut_down) {
             this.updateStockIndex(item.key, updateData)

@@ -60,6 +60,7 @@ const formatData = fixedInvestment.formatData
 // 和年线分析有关
 function getBuyRate (rate, a, b, c) {
   rate = rate - c
+  a = a - c
   if (rate >= 0) {
     if (rate <= a) {
       return 1 - ((rate / a) * 0.75)

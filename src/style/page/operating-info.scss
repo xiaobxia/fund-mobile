@@ -176,6 +176,9 @@
     &.should-sell {
       background-color: $green-color-back;
     }
+    &.should-cut {
+      background-color: $blue-color-back;
+    }
   }
   .mint-cell {
     &.should-buy {

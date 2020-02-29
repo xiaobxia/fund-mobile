@@ -7,27 +7,28 @@
       <h3>
         <span class="index-name">{{indexInfo.name}}</span>
         <span v-if="lock" class="fm-icon lock"></span>
-        <span v-if="indexStatus === '顶部'" class="fm-tag s-yellow">阶段顶部</span>
+        <span v-if="indexStatus === '顶部'" class="fm-tag s-yellow">阶顶</span>
         <span v-if="isDingtou()" class="fm-tag s-red">定投</span>
         <span v-if="ifUnderYear" class="fm-tag s-green">年下</span>
         <span v-if="ifDownTrend" class="fm-tag s-green">下趋</span>
         <span v-if="isDafan()" class="fm-tag s-red">大反</span>
         <span v-if="isXiaofan()" class="fm-tag s-red">小反</span>
         <span v-if="ifNoSell()" class="fm-tag s-red">锁仓</span>
-        <span v-if="ifNoSellToCan()" class="fm-tag s-green">锁转交</span>
+        <span v-if="ifNoSellToCan()" class="fm-tag s-green">转交</span>
         <span v-if="ifCutDown" class="fm-tag s-yellow">开止盈</span>
         <span v-if="indexNiuXiong === '禁买'" class="fm-tag s-black">{{indexNiuXiong}}</span>
         <span v-if="averageMonthIndex > 0" class="fm-tag b-red">月上</span>
         <span v-if="averageMonthIndex <= 0" class="fm-tag b-green">月下</span>
         <span v-if="!ifDafan() && ifXiaofan()" class="fm-tag s-red">小</span>
         <span v-if="ifDafan()" class="fm-tag s-red">大</span>
-        <span v-if="toNoSellToCan()" class="fm-tag blue">更为锁转交</span>
+        <span v-if="toNoSellToCan()" class="fm-tag blue">更转交</span>
         <span v-if="indexStatus === '定投' && averageHalfYear >= 0" class="fm-tag s-blue">解定</span>
         <span v-if="ifJieFantan()" class="fm-tag s-blue">解反</span>
-        <span v-if="ifJieNoSellToCan()" class="fm-tag s-blue">解锁转交</span>
-        <span v-if="ifJieDingbu()" class="fm-tag s-blue">解顶部</span>
+        <span v-if="ifJieNoSellToCan()" class="fm-tag s-blue">解转交</span>
+        <span v-if="ifJieDingbu()" class="fm-tag s-blue">解顶</span>
         <span v-if="ifClearAll()" class="fm-tag s-black">清空</span>
-        <span v-if="isCutDown()" class="fm-tag s-black">请止盈</span>
+        <span v-if="isCutDown()" class="fm-tag s-black">止盈</span>
+        <span v-if="ifCutHalf()" class="fm-tag s-blue">减半</span>
         <span v-if="ifUnderYear && ifDownTrend && (indexStatus !== '定投' && indexStatus !== '探底')" class="fm-tag black">禁买</span>
         <span v-if="indexNiuXiong === '禁买' && (!ifUnderYear || !ifDownTrend)" class="fm-tag s-blue">解禁</span>
         <span style="float: right" :class="stockNumberClass(rate)">{{rate}}%</span>
@@ -350,6 +351,11 @@ export default {
   created () {
   },
   methods: {
+    // 减半高月锁仓
+    ifCutHalf () {
+      // 月线危险区，外加阶段顶部
+      return this.ifHot && this.ifTopNow && this.rate > 0
+    },
     // 满足止盈条件
     isCutDown () {
       const nowClose = storageUtil.getData('indexNowClose', this.indexInfo.key) || 0
@@ -667,14 +673,14 @@ export default {
       // 应该的类
       classList.push(shouldClass)
       // 锁转交
-      if (this.ifNoSellToCan() && (this.rate > (-this.indexInfo.rate))) {
+      if (this.ifNoSellToCan() && (this.rate > (-2 * this.indexInfo.rate))) {
         // 普通买入信号在小于rate的时候是不会出现的
         // 如果是大小反，那么锁转交的信号就会解除
         // 所以这个逻辑没有问题
         classList.push(sellClass)
       }
       // 清仓信号
-      if (this.ifClearAll() && this.rate > (-this.indexInfo.rate)) {
+      if (this.ifClearAll() && this.rate > (-2 * this.indexInfo.rate)) {
         // 普通买入信号在小于rate的时候是不会出现的
         // 如果是大小反，那么清仓的信号就会解除
         // 所以这个逻辑没有问题
@@ -728,14 +734,24 @@ export default {
       if (this.isDingtou()) {
         classListF = this.noSell(classListF)
       }
+      let ifNoSellF = false
       // 锁仓的逻辑
       if (this.ifNoSell()) {
+        ifNoSellF = true
         if (this.rate < 0) {
           // 锁仓阶段可以跌了就买
           classListF.push('should-buy')
         }
         // 在趋势中，什么卖出信号都不用管
         classListF = this.noSell(classListF)
+      }
+      // 过热需要减半仓位止盈一次
+      // 首先当天rate>0
+      if (this.ifCutHalf()) {
+        // 没有买背景，也没有卖背景，也不处于大小反
+        if (!this.ifHasBuy(classListF) && !this.ifHasSell(classListF) && !this.ifInFantan()) {
+          classListF.push('should-cut')
+        }
       }
       return classListF
     }

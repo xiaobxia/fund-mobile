@@ -400,8 +400,8 @@ export default {
       // 今年估计有结构牛
       factor = 1.2
     }
-    // 预期3月结束
-    if (month >= 3) {
+    // 3月底4月初季报风险
+    if (month >= 3 && day > 22) {
       factor = 0.8
     }
     if (buySell === 'buy') {

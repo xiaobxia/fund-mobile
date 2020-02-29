@@ -65,6 +65,7 @@
       </div>
     </div>
     <div class="warn-wrap">
+      <div class="fm-warn blue">波段仓砍仓要狠，定投才是大头</div>
       <div class="fm-warn green" v-if="keepLow">仓位配置100以内</div>
       <div class="fm-warn green" v-if="ifCut">仓位配置为{{ifCut}}</div>
       <div class="fm-warn red" v-if="ifFull">仓位配置为{{ifFull}}</div>

@@ -6985,7 +6985,7 @@ const codeMap = {
     wave: 0.99,
     rate: 0.99,
     fixLine: -19,
-    reduceLine: 6,
+    reduceLine: 5,
     downTrendLine: -3.3,
     mix: true,
     days: 1200,
@@ -7003,7 +7003,7 @@ const codeMap = {
     reduceLine: 5,
     downTrendLine: -3.3,
     days: 1200,
-    topLine: 11,
+    topLine: 10,
     cutDownLine: 19
   },
   'jisuanji': {
@@ -7028,7 +7028,7 @@ const codeMap = {
     rate: 0.8853900709219857,
     wave: 1.0019867549668875,
     fixLine: -20.5,
-    reduceLine: 6.5,
+    reduceLine: 8,
     downTrendLine: -3.3,
     days: 1200,
     topLine: 20,
@@ -7087,7 +7087,7 @@ const codeMap = {
     reduceLine: 5.5,
     downTrendLine: -3.3,
     days: 1200,
-    topLine: 16,
+    topLine: 14,
     cutDownLine: 24
   },
   'xinxi': {
@@ -7178,7 +7178,7 @@ const codeMap = {
     rate: 0.8506493506493509,
     wave: 0.8617586206896549,
     fixLine: -18,
-    reduceLine: 9,
+    reduceLine: 7,
     downTrendLine: -3.3,
     days: 1200,
     topLine: 15,
@@ -7208,7 +7208,7 @@ const codeMap = {
     reduceLine: 5,
     downTrendLine: -3.3,
     days: 1200,
-    topLine: 5.5,
+    topLine: 15,
     cutDownLine: 20
   },
   'yiliao': {

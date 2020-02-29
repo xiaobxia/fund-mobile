@@ -33,6 +33,39 @@
             <mt-field label="金额" placeholder="请输入" v-model="sellMoney"></mt-field>
             <mt-field label="份额" placeholder="请输入" :disabled="true" v-model="sellShare"></mt-field>
           </div>
+          <div class="page-content-title">比例表</div>
+          <div class="shares-list-wrap">
+            <div>
+                <span class="item">
+                  <span class="label">份额：</span>
+                  <span class="value">{{parseInt((shares || 0)/3)}}</span>
+                </span>
+              <span class="item">
+                  <span class="label">比例：</span>
+                  <span class="value">1/3</span>
+                </span>
+            </div>
+            <div>
+                <span class="item">
+                  <span class="label">份额：</span>
+                  <span class="value">{{parseInt((shares || 0)/2)}}</span>
+                </span>
+              <span class="item">
+                  <span class="label">比例：</span>
+                  <span class="value">1/2</span>
+                </span>
+            </div>
+            <div>
+                <span class="item">
+                  <span class="label">份额：</span>
+                  <span class="value">{{parseInt((shares || 0) * 2 / 3)}}</span>
+                </span>
+              <span class="item">
+                  <span class="label">比例：</span>
+                  <span class="value">2/3</span>
+                </span>
+            </div>
+          </div>
           <div class="page-content-title">份额表</div>
           <div class="shares-list-wrap">
             <div v-for="(item, index) in countSharesListByMoney(canSellInfo.shares)" :key="index">

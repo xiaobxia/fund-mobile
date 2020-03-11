@@ -93,6 +93,7 @@
           </div>
         </div>
       </div>
+      <mt-button type="primary" @click="updateFund" class="main-btn">更新基金</mt-button>
     </div>
     <mt-popup
       v-model="popupVisible"
@@ -214,6 +215,10 @@ export default {
     updateFundTheme (theme) {
       const code = this.$router.history.current.query.code
       this.$http.post('fund/updateFundTheme', {theme, code})
+    },
+    updateFund () {
+      const code = this.$router.history.current.query.code
+      this.$http.post('fund/updateFund', {code})
     },
     themeChangeHandler () {
       this.popupVisible = true

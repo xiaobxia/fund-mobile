@@ -161,6 +161,11 @@ const routers = [
     component: lazyLoading('BuySellConfig')
   },
   {
+    name: 'DaV',
+    path: '/page/daV',
+    component: lazyLoading('DaV')
+  },
+  {
     name: '404',
     path: '*',
     component: lazyLoading('NotMatch')

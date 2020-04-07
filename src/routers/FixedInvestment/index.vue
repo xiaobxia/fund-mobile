@@ -348,7 +348,8 @@ export default {
           const diff = this.countDifferenceRate(nowClose, this.averageMap[item.code])
           this.klineMap[item.key] = kline
           this.averageDiff[item.key] = diff
-          const buyS = 120000 / 162.5
+          // 一月一万
+          const buyS = (12 * 10000) / 162.5
           const params = this.indexParams[item.code]
           this.canBuy[item.key] = parseInt(getBuyRate(diff, params.a, params.b, params.c) * buyS / 10) * 10
           this.canSell[item.key] = parseInt(getSellRate(diff) * buyS / 10) * 10

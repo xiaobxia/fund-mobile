@@ -7,7 +7,7 @@
     </mt-header>
     <div class="main-body">
       <div class="r">
-        <div>今年整体会有结构牛，因子1.2</div>
+        <div>5月整体会有结构牛，因子1.2</div>
       </div>
     </div>
   </div>

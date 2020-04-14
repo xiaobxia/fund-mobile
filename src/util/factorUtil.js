@@ -396,7 +396,7 @@ export default {
     const d = dateUtil.getDate()
     const day = d.getDate()
     const month = d.getMonth() + 1
-    if (month > 1) {
+    if (month >= 5) {
       // 今年估计有结构牛
       factor = 1.2
     }

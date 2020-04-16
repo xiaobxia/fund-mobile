@@ -686,7 +686,9 @@ export default {
         // 普通买入信号在小于rate的时候是不会出现的
         // 如果是大小反，那么清仓的信号就会解除
         // 所以这个逻辑没有问题
-        classList.push(sellClass)
+        if (!this.isDafan()) {
+          classList.push(sellClass)
+        }
       }
       let classListF = this.copyList(classList)
       // 整体转弱了

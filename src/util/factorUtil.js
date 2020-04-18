@@ -308,6 +308,7 @@ export default {
   getIndexAverageMonthFactor: function (indexKey, reduceLine, buySell) {
     let indexAverage = storageUtil.getData('averageMonth', indexKey) || 0
     let factor = 1
+    // 月线过热的话得要减少买入
     if (indexAverage > 0) {
       factor = 1 - (0.5 * (indexAverage / reduceLine))
     }

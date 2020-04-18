@@ -34,7 +34,7 @@
         <span style="float: right" :class="stockNumberClass(rate)">{{rate}}%</span>
       </h3>
       <p class="explain">
-            <span v-for="(subItem, index) in buySellList" :key="subItem + index"
+            <span v-for="(subItem, index) in buySellList" :key="index"
                   :class="subItem">{{subItem === 'buy'?'买':subItem === 'sell'?'卖':''}}</span>
       </p>
       <p class="netChange wn">

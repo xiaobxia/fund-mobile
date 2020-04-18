@@ -163,6 +163,17 @@ const operatingTooltip = {
       indexNetChangeRatioRateFactor = factorUtil.getIndexNetChangeRatioRateFactor(indexItem.rate, marketInfo.netChangeRatio, 'buy')
     }
     let indexManyDownFactor = factorUtil.getIndexManyDownFactor(indexItem.rate, marketInfo.netChangeRatioList, 'buy')
+    // 指数处于的阶段
+    const indexStatus = storageUtil.getData('stockIndexStatus', indexItem.key)
+    // 定投的可以多买点
+    if (indexStatus === '定投') {
+      if (indexMonthDiffFactor < 1) {
+        indexMonthDiffFactor = 1
+      }
+      if (indexYearDiffFactor < 1) {
+        indexYearDiffFactor = 1
+      }
+    }
     let buyNumber =
       buyBase *
       indexAverageHalfYearFactor *

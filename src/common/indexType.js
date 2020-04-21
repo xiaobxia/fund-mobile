@@ -30,8 +30,6 @@ const highRate = [
   'chuanmei',
   'youse',
   'dichan',
-  'gangtie',
-  'meitan',
   'baoxian',
   'qiche'
 ]

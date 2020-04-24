@@ -673,7 +673,7 @@ export default {
       // 应该的类
       classList.push(shouldClass)
       // 锁转交
-      if (this.ifNoSellToCan() && (this.rate > (-2 * this.indexInfo.rate))) {
+      if (this.ifNoSellToCan() && (this.rate > (-1 * this.indexInfo.rate))) {
         // 普通买入信号在小于rate的时候是不会出现的
         // 如果是大小反，那么锁转交的信号就会解除
         // 所以这个逻辑没有问题
@@ -681,6 +681,7 @@ export default {
           classList.push(sellClass)
         }
       }
+      // 风险等级不一样所以因子乘数也不一样
       // 清仓信号
       if (this.ifClearAll() && this.rate > (-2 * this.indexInfo.rate)) {
         // 普通买入信号在小于rate的时候是不会出现的

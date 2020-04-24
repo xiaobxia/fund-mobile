@@ -29,6 +29,7 @@
         <span v-if="ifClearAll()" class="fm-tag s-black">清空</span>
         <span v-if="isCutDown()" class="fm-tag s-black">止盈</span>
         <span v-if="ifCutHalf()" class="fm-tag s-blue">减半</span>
+        <span v-if="ifCutHalf() && ifTwoUp" class="fm-tag s-black">减半减</span>
         <span v-if="ifUnderYear && ifDownTrend && (indexStatus !== '定投' && indexStatus !== '探底')" class="fm-tag black">禁买</span>
         <span v-if="indexNiuXiong === '禁买' && (!ifUnderYear || !ifDownTrend)" class="fm-tag s-blue">解禁</span>
         <span style="float: right" :class="stockNumberClass(rate)">{{rate}}%</span>

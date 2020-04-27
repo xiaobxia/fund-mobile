@@ -402,6 +402,13 @@ export default {
       }
       return false
     },
+    // 今天刚锁转交，并且又刚3跌就不算
+    ifNoSellToCanNew () {
+      if (this.ifNoSellToCan() && !this.ifThreeDown) {
+        return true
+      }
+      return false
+    },
     ifJieNoSellToCan () {
       if (this.indexNoSellStatus === '锁转交' && this.ifThreeDown) {
         return true
@@ -421,7 +428,7 @@ export default {
     ifClearAll () {
       // 锁仓转不锁
       const question10 = storageUtil.getData('stockMarketQuestion', 'question_10')
-      return this.ifDingbu() && (question10 === '是' || this.ifNoSellToCan())
+      return this.ifDingbu() && (question10 === '是' || this.ifNoSellToCanNew())
     },
     // 是否涨得太快
     ifUpQuick () {
@@ -674,7 +681,7 @@ export default {
       // 应该的类
       classList.push(shouldClass)
       // 锁转交
-      if (this.ifNoSellToCan() && (this.rate > (-1 * this.indexInfo.rate))) {
+      if (this.ifNoSellToCanNew() && (this.rate > (-1 * this.indexInfo.rate))) {
         // 普通买入信号在小于rate的时候是不会出现的
         // 如果是大小反，那么锁转交的信号就会解除
         // 所以这个逻辑没有问题

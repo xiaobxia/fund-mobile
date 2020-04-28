@@ -610,7 +610,7 @@ export default {
       if (this.ifFourUp) {
         classList.push(sellClass)
       }
-      // 垃圾指数
+      // 垃圾指数涨2天就卖
       if (this.ifLaji) {
         if (this.ifTwoUp) {
           classList.push(sellClass)

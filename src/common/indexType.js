@@ -21,7 +21,9 @@ if (month < 11) {
     'gangtie',
     'meitan',
     'jijian',
-    'dichan'
+    'dichan',
+    'youse',
+    'huanbao'
   ]
 }
 

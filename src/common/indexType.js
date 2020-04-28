@@ -17,13 +17,15 @@ if (month < 11) {
     'yiyao',
     'shipin'
   ]
+  // 垃圾不要嫌少，本来其实就没有太大的买的必要
   laji = [
     'gangtie',
     'meitan',
     'jijian',
     'dichan',
     'youse',
-    'huanbao'
+    'huanbao',
+    'jungong'
   ]
 }
 

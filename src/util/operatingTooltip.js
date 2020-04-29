@@ -118,6 +118,14 @@ function buyNumberRedistribution (indexItem, hasCount, buyNumber) {
   const indexRedistributionStandard = indexAssetStandard / 2
   // 年排行在前面的，给更高仓位配比
   let indexYearDiffFactor = factorUtil.getIndexYearDiffFactor(indexItem.key, 'buy')
+  // 指数处于的阶段
+  const indexStatus = storageUtil.getData('stockIndexStatus', indexItem.key)
+  // 定投的可以多买点
+  if (indexStatus === '定投') {
+    if (indexYearDiffFactor < 1) {
+      indexYearDiffFactor = 1
+    }
+  }
   return getBuyNumber(hasCount, buyNumber, indexRedistributionStandard * indexYearDiffFactor)
 }
 

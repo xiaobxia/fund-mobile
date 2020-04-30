@@ -613,7 +613,10 @@ export default {
       // 垃圾指数涨2天就卖
       if (this.ifLaji) {
         if (this.ifTwoUp) {
-          classList.push(sellClass)
+          // 不处于大小反
+          if (!this.isDafan()) {
+            classList.push(sellClass)
+          }
         }
       }
       // 下降趋势不要技术分析的买入信号
@@ -705,7 +708,7 @@ export default {
         // 纯买信号没有了
         classListF = this.noNormalBuy(classListF)
         // 不是大小反，那就加个卖出信号
-        if (classListF.indexOf('should-buy') === -1) {
+        if (classListF.indexOf('should-buy') === -1 && !this.isDafan()) {
           classListF.push(sellClass)
         }
       }
@@ -719,10 +722,12 @@ export default {
         classListF = this.noBuy(classListF)
         // 涨了就卖
         if (this.rate > 0) {
+          // 无视大小反的
           classListF.push(sellClass)
         }
         // 叠加持续恐慌的话直接卖
         if (question9 === '是') {
+          // 无视大小反的
           classListF.push(sellClass)
         }
       }
@@ -736,6 +741,7 @@ export default {
         // 没有买入信号
         // 加入卖出信号
         classListF = this.noBuy(classListF)
+        // 无视大小反
         classListF.push(sellClass)
       }
       // 权重最大的-------------

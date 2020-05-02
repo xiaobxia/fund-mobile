@@ -40,11 +40,14 @@
         :type="typeName"
         :noSellCount="noSellCount"
       />
+      <mt-button type="primary" @click="okHandler" class="main-btn">发送</mt-button>
     </div>
   </div>
 </template>
 
 <script>
+import moment from 'moment'
+import { mapGetters } from 'vuex'
 import indexInfoUtilXiong from '@/util/indexInfoUtilXiong.js'
 import indexInfoUtilJian from '@/util/indexInfoUtilJian.js'
 import qs from 'qs'
@@ -137,7 +140,10 @@ export default {
         }
       }
       return count
-    }
+    },
+    ...mapGetters([
+      'userFundAccountInfo'
+    ])
   },
   created () {
     const query = this.$router.history.current.query
@@ -323,6 +329,24 @@ export default {
         }
       }
       return count
+    },
+    okHandler () {
+      const bandBuyData = storageUtil.getData('bandBuySellData')
+      const list = []
+      for (let key in bandBuyData) {
+        list.push({
+          key,
+          flag: bandBuyData[key]
+        })
+      }
+      // 开盘的才更新
+      if (this.userFundAccountInfo.marketOpen) {
+        const date = moment().format('YYYY-MM-DD')
+        this.$http.post('http://47.92.210.171:3051/fbsServer/signal/updateSignal', {
+          trade_date: date,
+          band_record: JSON.stringify(list)
+        })
+      }
     }
   }
 }

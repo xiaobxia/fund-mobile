@@ -745,10 +745,6 @@ export default {
         classListF.push(sellClass)
       }
       // 权重最大的-------------
-      // 锁仓的没有卖出高亮
-      if (this.lock) {
-        classListF = this.noSell(classListF)
-      }
       // 定投阶段没有卖出高亮
       if (this.isDingtou()) {
         classListF = this.noSell(classListF)
@@ -771,6 +767,21 @@ export default {
         if (!this.ifHasBuy(classListF) && !this.ifHasSell(classListF) && !this.ifInFantan()) {
           classListF.push('should-cut')
         }
+      }
+      // 发送信号
+      if (this.type === '熊') {
+        let flag = ''
+        if (this.ifHasBuy(classListF)) {
+          flag = '加仓'
+        }
+        if (this.ifHasSell(classListF)) {
+          flag = '减仓'
+        }
+        storageUtil.setData('bandBuySellData', this.indexInfo.key, flag)
+      }
+      // 锁仓的没有卖出高亮
+      if (this.lock) {
+        classListF = this.noSell(classListF)
       }
       return classListF
     }

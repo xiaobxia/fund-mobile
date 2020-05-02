@@ -42,11 +42,14 @@
           </div>
         </div>
       </mt-cell-swipe>
+      <mt-button type="primary" @click="okHandler" class="main-btn">发送</mt-button>
     </div>
   </div>
 </template>
 
 <script>
+import moment from 'moment'
+import storageUtil from '@/util/storageUtil.js'
 import fixedInvestment from '@/util/platformFixedInvestment.js'
 import stockApiUtil from '@/util/stockApiUtil.js'
 import stockAnalysisUtil from '@/util/stockAnalysisUtil.js'
@@ -215,7 +218,8 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'stockIndexAll'
+      'stockIndexAll',
+      'userFundAccountInfo'
     ])
   },
   created () {
@@ -351,15 +355,39 @@ export default {
           // 一月一万
           const buyS = (12 * 10000) / 162.5
           const params = this.indexParams[item.code]
-          this.canBuy[item.key] = parseInt(getBuyRate(diff, params.a, params.b, params.c) * buyS / 10) * 10
+          const buyNumber = parseInt(getBuyRate(diff, params.a, params.b, params.c) * buyS / 10) * 10
+          this.canBuy[item.key] = buyNumber
           this.canSell[item.key] = parseInt(getSellRate(diff) * buyS / 10) * 10
           this.allInfo[item.key] = infoList
+          let buyBaseInfo = 0
+          if (['买', '跌少', '跌多'].indexOf(infoList[0]) !== -1) {
+            buyBaseInfo = parseInt(buyNumber / 10)
+          }
+          storageUtil.setData('fixBuyData', item.key, buyBaseInfo)
           this.rateInfo[item.key] = this.keepTwoDecimals(recentNetValue[0].netChangeRatio)
         }
       })
     },
     backHandler () {
       this.$router.history.go(-1)
+    },
+    okHandler () {
+      const fixBuyData = storageUtil.getData('fixBuyData')
+      const list = []
+      for (let key in fixBuyData) {
+        list.push({
+          key,
+          buy: fixBuyData[key]
+        })
+      }
+      // 开盘的才更新
+      if (this.userFundAccountInfo.marketOpen) {
+        const date = moment().format('YYYY-MM-DD')
+        this.$http.post('http://47.92.210.171:3051/fbsServer/signal/updateSignal', {
+          trade_date: date,
+          fix_record: JSON.stringify(list)
+        })
+      }
     }
   }
 }

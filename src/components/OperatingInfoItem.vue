@@ -779,6 +779,8 @@ export default {
         }
         storageUtil.setData('bandBuySellData', this.indexInfo.key, flag)
       }
+
+      // ---------关于个人的限制
       // 锁仓的没有卖出高亮
       if (this.lock) {
         classListF = this.noSell(classListF)

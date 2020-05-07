@@ -756,6 +756,9 @@ export default {
         if (this.rate < 0) {
           // 锁仓阶段可以跌了就买
           classListF.push('should-buy')
+          if (this.ifHasBuy(classListF)) {
+            classListF.push('only-up-buy')
+          }
         }
         // 在趋势中，什么卖出信号都不用管
         classListF = this.noSell(classListF)
@@ -772,7 +775,11 @@ export default {
       if (this.type === '熊') {
         let flag = ''
         if (this.ifHasBuy(classListF)) {
-          flag = '加仓'
+          if (classListF.indexOf('only-up-buy') !== -1) {
+            flag = '小幅加仓'
+          } else {
+            flag = '加仓'
+          }
         }
         if (this.ifHasSell(classListF)) {
           flag = '减仓'

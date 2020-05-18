@@ -268,6 +268,12 @@ export default {
         factor = factor * 1.2
       }
     }
+    // 5月6月有色表现还行
+    if (month === 5 || month === 6) {
+      if (['youse'].indexOf(key) !== -1) {
+        factor = factor * 1.2
+      }
+    }
     // 10月炒小票
     if (month === 9 && day > 26) {
       if (['chuangye', 'chuanmei', 'dianzi', 'jisuanji', 'xinxi'].indexOf(key) !== -1) {

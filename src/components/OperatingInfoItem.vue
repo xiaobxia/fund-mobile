@@ -7,31 +7,31 @@
       <h3>
         <span class="index-name">{{indexInfo.name}}</span>
         <span v-if="lock" class="fm-icon lock"></span>
-        <span v-if="indexStatus === '顶部'" class="fm-tag s-yellow">阶顶</span>
-        <span v-if="isDingtou()" class="fm-tag s-red">定投</span>
+        <span v-if="indexStage === '顶部'" class="fm-tag s-yellow">阶顶</span>
+        <span v-if="isInDingtouStatus()" class="fm-tag s-red">定投</span>
         <span v-if="ifUnderYear" class="fm-tag s-green">年下</span>
         <span v-if="ifDownTrend" class="fm-tag s-green">下趋</span>
-        <span v-if="isDafan()" class="fm-tag s-red">大反</span>
-        <span v-if="isXiaofan()" class="fm-tag s-red">小反</span>
-        <span v-if="ifNoSell()" class="fm-tag s-red">锁仓</span>
+        <span v-if="isDafanOld()" class="fm-tag s-red">大反</span>
+        <span v-if="isXiaofanOld()" class="fm-tag s-red">小反</span>
+        <span v-if="ifInNoSellStatus()" class="fm-tag s-red">锁仓</span>
         <span v-if="ifNoSellToCan()" class="fm-tag s-green">转交</span>
-        <span v-if="ifCutDown" class="fm-tag s-yellow">开止盈</span>
-        <span v-if="indexNiuXiong === '禁买'" class="fm-tag s-black">{{indexNiuXiong}}</span>
+        <span v-if="ifOpenCutDown" class="fm-tag s-yellow">开止盈</span>
+        <span v-if="indexDaXiaoStatusOld === '禁买'" class="fm-tag s-black">{{indexDaXiaoStatusOld}}</span>
         <span v-if="averageMonthIndex > 0" class="fm-tag b-red">月上</span>
         <span v-if="averageMonthIndex <= 0" class="fm-tag b-green">月下</span>
-        <span v-if="!ifDafan() && ifXiaofan()" class="fm-tag s-red">小</span>
-        <span v-if="ifDafan()" class="fm-tag s-red">大</span>
+        <span v-if="!ifDafanToday() && ifXiaofanToday()" class="fm-tag s-red">小</span>
+        <span v-if="ifDafanToday()" class="fm-tag s-red">大</span>
         <span v-if="toNoSellToCan()" class="fm-tag blue">更转交</span>
-        <span v-if="indexStatus === '定投' && averageHalfYear >= 0" class="fm-tag s-blue">解定</span>
-        <span v-if="ifJieFantan()" class="fm-tag s-blue">解反</span>
+        <span v-if="indexStage === '定投' && averageHalfYear >= 0" class="fm-tag s-blue">解定</span>
+        <span v-if="ifJieFantanToday()" class="fm-tag s-blue">解反</span>
         <span v-if="ifJieNoSellToCan()" class="fm-tag s-blue">解转交</span>
         <span v-if="ifJieDingbu()" class="fm-tag s-blue">解顶</span>
         <span v-if="ifClearAll()" class="fm-tag s-black">清空</span>
-        <span v-if="isCutDown()" class="fm-tag s-black">止盈</span>
+        <span v-if="ifStopKeep()" class="fm-tag s-black">止盈</span>
         <span v-if="ifCutHalf()" class="fm-tag s-blue">减半</span>
         <span v-if="ifCutHalf() && ifTwoUp" class="fm-tag s-black">减半减</span>
-        <span v-if="ifUnderYear && ifDownTrend && (indexStatus !== '定投' && indexStatus !== '探底')" class="fm-tag black">禁买</span>
-        <span v-if="indexNiuXiong === '禁买' && (!ifUnderYear || !ifDownTrend)" class="fm-tag s-blue">解禁</span>
+        <span v-if="ifUnderYear && ifDownTrend && (indexStage !== '定投' && indexStage !== '探底')" class="fm-tag black">禁买</span>
+        <span v-if="indexDaXiaoStatusOld === '禁买' && (!ifUnderYear || !ifDownTrend)" class="fm-tag s-blue">解禁</span>
         <span style="float: right" :class="stockNumberClass(rate)">{{rate}}%</span>
       </h3>
       <p class="explain">
@@ -172,28 +172,41 @@ export default {
     }
   },
   computed: {
-    jukui () {
-      const incomeRate = this.countDifferenceRate((this.hasCount * (100 + this.rate) / 100), this.costCount)
-      return incomeRate < -2 && this.positionWarn === 'danger'
-    },
+    // 是否持有
     ifHas () {
       return this.hasCount > 0
     },
+    // 是否机构指数
     ifJigou () {
       return jigou.indexOf(this.indexInfo.key) !== -1
     },
+    // 垃圾指数
     ifLaji () {
       return laji.indexOf(this.indexInfo.key) !== -1
     },
+    // 是不是宽基
     ifKuanji () {
       return kuanji.indexOf(this.indexInfo.key) !== -1
     },
-    ifInDafan () {
-      return this.indexNiuXiong === '大反'
+    // 月线
+    averageMonthIndex () {
+      return storageUtil.getData('averageMonth', this.indexInfo.key) || 0
     },
-    positionWarn () {
-      return operatingTooltip.getPositionWarn(this.indexInfo, this.hasCount)
+    // 半年线
+    averageHalfYear () {
+      return storageUtil.getData('averageHalfYearIndex', this.indexInfo.key) || 0
     },
+    // 指数月线偏离过大
+    ifMonthHot () {
+      const averageMonth = storageUtil.getData('averageMonth', this.indexInfo.key) || 0
+      return averageMonth >= this.indexInfo.reduceLine
+    },
+    // 指数在年线一下
+    ifUnderYear () {
+      const diff = storageUtil.getData('yearAverageIndexDiff', this.indexInfo.key) || 0
+      return diff < 0
+    },
+    // 获取另一种模式的技术性信号
     otherBuySellList () {
       if (this.type === '简') {
         return storageUtil.getData('xiongBuySellList', this.indexInfo.key) || []
@@ -201,6 +214,7 @@ export default {
         return storageUtil.getData('jianBuySellList', this.indexInfo.key) || []
       }
     },
+    // 两种模式合并后信号
     allBuySellList () {
       const xiong = storageUtil.getData('xiongBuySellList', this.indexInfo.key) || []
       const jian = storageUtil.getData('jianBuySellList', this.indexInfo.key) || []
@@ -218,62 +232,35 @@ export default {
       })
       return newList
     },
-    indexNiuXiong () {
+    // ---------------指数的状态
+    // 指数原本的大小反状态
+    indexDaXiaoStatusOld () {
       const niuXiong = storageUtil.getData('stockIndexFlag', this.indexInfo.key)
       return niuXiong === '正常' ? '' : niuXiong
     },
-    indexStatus () {
+    // 指数所处阶段
+    indexStage () {
       const status = storageUtil.getData('stockIndexStatus', this.indexInfo.key)
       return status || ''
     },
-    indexNoSellStatus () {
+    // 原本的锁仓状态
+    indexNoSellStatusOld () {
       const status = storageUtil.getData('stockIndexNoSellStatus', this.indexInfo.key)
       return status || ''
     },
-    indexBuyNumber () {
-      return operatingTooltip.getIndexBuyNumber(
-        this.type,
-        this.indexInfo,
-        {
-          buyFlagCount: this.buyCount,
-          sellFlagCount: this.sellCount,
-          netChangeRatio: this.rate,
-          netChangeRatioList: this.netChangeRatioList,
-          noSellCount: this.noSellCount
-        },
-        this.hasCount,
-        true
-      )
+    // 指数目前的锁仓状态
+    indexNoSellStatusToday () {
+      return storageUtil.getData('noSell', this.indexInfo.key) || false
     },
-    indexRawBuyNumber () {
-      return operatingTooltip.getIndexBuyNumber(
-        this.type,
-        this.indexInfo,
-        {
-          buyFlagCount: this.buyCount,
-          sellFlagCount: this.sellCount,
-          netChangeRatio: this.rate,
-          netChangeRatioList: this.netChangeRatioList,
-          noSellCount: this.noSellCount
-        },
-        this.hasCount
-      )
+    // 指数目前是不是顶部
+    ifIndexTopToday () {
+      return storageUtil.getData('stockIndexIsTop', this.indexInfo.key) || false
     },
-    indexSellNumber () {
-      return operatingTooltip.getIndexSellNumber(
-        this.type,
-        this.indexInfo,
-        {
-          buyFlagCount: this.buyCount,
-          sellFlagCount: this.sellCount,
-          noSellCount: this.noSellCount
-        },
-        this.hasCount
-      )
+    // 指数是否开启止盈
+    ifOpenCutDown () {
+      return storageUtil.getData('stockIndexCutDown', this.indexInfo.key) === '开启'
     },
-    ifThreeSell () {
-      return this.buySellList[0] === 'sell' && this.buySellList[1] === 'sell' && this.buySellList[2] === 'sell'
-    },
+    // ------------连涨连跌信号
     ifThreeDown () {
       return stockAnalysisUtil.countDown(this.netChangeRatioListLarge, 3, 3).flag
     },
@@ -310,18 +297,16 @@ export default {
     ifNineSeven () {
       return stockAnalysisUtil.countDown(this.netChangeRatioListLarge, 9, 7).flag
     },
-    averageMonthIndex () {
-      return storageUtil.getData('averageMonth', this.indexInfo.key) || 0
-    },
-    averageHalfYear () {
-      return storageUtil.getData('averageHalfYearIndex', this.indexInfo.key) || 0
+    // 连续两个-0.2的下跌
+    ifTwoLowDown () {
+      return stockAnalysisUtil.countLowDown(this.netChangeRatioListLarge).flag
     },
     // 是否出于下降趋势
     ifDownTrend () {
       const indexNowClose = storageUtil.getData('indexNowClose', this.indexInfo.key) || 0
       const averageHalfYearIndexClose = storageUtil.getData('averageHalfYearIndexClose', this.indexInfo.key) || 0
       // 进入定投区域了那就不是下降趋势
-      if (this.indexStatus === '定投') {
+      if (this.indexStage === '定投') {
         return false
       }
       if (indexNowClose < averageHalfYearIndexClose) {
@@ -331,56 +316,165 @@ export default {
       }
       return false
     },
-    noSellIndex () {
-      return storageUtil.getData('noSell', this.indexInfo.key) || false
+    // ----------买卖金额的方法
+    // 指数买入金额
+    indexBuyNumber () {
+      return operatingTooltip.getIndexBuyNumber(
+        this.type,
+        this.indexInfo,
+        {
+          buyFlagCount: this.buyCount,
+          sellFlagCount: this.sellCount,
+          netChangeRatio: this.rate,
+          netChangeRatioList: this.netChangeRatioList,
+          noSellCount: this.noSellCount
+        },
+        this.hasCount,
+        true
+      )
     },
-    ifTopNow () {
-      return storageUtil.getData('stockIndexIsTop', this.indexInfo.key) || false
+    // 没有根据涨跌幅重设的买入金额
+    indexRawBuyNumber () {
+      return operatingTooltip.getIndexBuyNumber(
+        this.type,
+        this.indexInfo,
+        {
+          buyFlagCount: this.buyCount,
+          sellFlagCount: this.sellCount,
+          netChangeRatio: this.rate,
+          netChangeRatioList: this.netChangeRatioList,
+          noSellCount: this.noSellCount
+        },
+        this.hasCount
+      )
     },
-    ifCutDown () {
-      return storageUtil.getData('stockIndexCutDown', this.indexInfo.key) === '开启'
-    },
-    ifHot () {
-      const averageMonth = storageUtil.getData('averageMonth', this.indexInfo.key) || 0
-      return averageMonth >= this.indexInfo.reduceLine
-    },
-    ifUnderYear () {
-      const diff = storageUtil.getData('yearAverageIndexDiff', this.indexInfo.key) || 0
-      return diff < 0
+    // 卖出金额
+    indexSellNumber () {
+      return operatingTooltip.getIndexSellNumber(
+        this.type,
+        this.indexInfo,
+        {
+          buyFlagCount: this.buyCount,
+          sellFlagCount: this.sellCount,
+          noSellCount: this.noSellCount
+        },
+        this.hasCount
+      )
     }
   },
   created () {
   },
   methods: {
+    // 复制买卖信号
+    copyList (list) {
+      let newList = []
+      for (let i = 0; i < list.length; i++) {
+        newList.push(list[i])
+      }
+      return newList
+    },
+    // 打印特定指数
+    localConsole (key, text) {
+      if (this.indexInfo.key === key) {
+        console.log(text)
+      }
+    },
+    // ----------判断买卖信号
+    // 删除卖出信号
+    removeSell (list) {
+      let newList = []
+      for (let i = 0; i < list.length; i++) {
+        if (list[i] !== 'sell' && list[i] !== 'should-sell') {
+          newList.push(list[i])
+        }
+      }
+      return newList
+    },
+    // 删除技术性卖出信号
+    removeNormalSell (list) {
+      let newList = []
+      for (let i = 0; i < list.length; i++) {
+        if (list[i] !== 'sell') {
+          newList.push(list[i])
+        }
+      }
+      return newList
+    },
+    // 是否有买入信号
+    ifHasSell (list) {
+      for (let i = 0; i < list.length; i++) {
+        if (list[i] === 'sell' || list[i] === 'should-sell') {
+          return true
+        }
+      }
+      return false
+    },
+    // 删除所有买入信号
+    removeBuy (list) {
+      let newList = []
+      for (let i = 0; i < list.length; i++) {
+        if (list[i] !== 'buy' && list[i] !== 'should-buy') {
+          newList.push(list[i])
+        }
+      }
+      return newList
+    },
+    // 删除技术性买入信号
+    removeNormalBuy (list) {
+      let newList = []
+      for (let i = 0; i < list.length; i++) {
+        if (list[i] !== 'buy') {
+          newList.push(list[i])
+        }
+      }
+      return newList
+    },
+    // 是否有买入信号
+    ifHasBuy (list) {
+      for (let i = 0; i < list.length; i++) {
+        if (list[i] === 'buy' || list[i] === 'should-buy') {
+          return true
+        }
+      }
+      return false
+    },
+    // ----------提示信号
     // 减半高月锁仓
     ifCutHalf () {
-      // 月线危险区，外加阶段顶部
-      return this.ifHot && this.ifTopNow && this.rate > 0
+      // 月线危险区，外加阶段顶部，需要提示减仓一半
+      return this.ifMonthHot && this.ifIndexTopToday && this.rate > 0
     },
     // 满足止盈条件
-    isCutDown () {
+    ifStopKeep () {
       const nowClose = storageUtil.getData('indexNowClose', this.indexInfo.key) || 0
       const topClose = storageUtil.getData('stockIndexTopClose', this.indexInfo.key) || 0
-      if (this.ifCutDown) {
-        // 最高处回落5%
+      if (this.ifOpenCutDown) {
+        // 最高处回落6%
         if (this.countDifferenceRate(nowClose, topClose) < -6) {
           return true
         }
       }
       return false
     },
-    // 是否处于反弹
-    ifInFantan () {
-      return this.isXiaofan() || this.isDafan()
+    // 是否清仓
+    ifClearAll () {
+      const question10 = storageUtil.getData('stockMarketQuestion', 'question_10')
+      // 处于顶部，并且该指数锁转交或者大部分指数同时锁转交
+      return this.ifInDingbuStatus() && (question10 === '是' || this.ifNoSellToCanNew())
     },
-    ifNoSell () {
-      if (this.indexNoSellStatus === '锁仓' && (!this.noSellIndex)) {
+    // 是否处于反弹
+    ifInFantanOld () {
+      return this.isXiaofanOld() || this.isDafanOld()
+    },
+    // 触发锁仓条件
+    ifInNoSellStatus () {
+      if (this.indexNoSellStatusOld === '锁仓' && (!this.indexNoSellStatusToday)) {
         return false
       }
-      if (this.indexNoSellStatus === '锁仓') {
+      if (this.indexNoSellStatusOld === '锁仓') {
         return true
       }
-      if (this.noSellIndex || this.noSellCount >= 18) {
+      if (this.indexNoSellStatusToday || this.noSellCount >= 18) {
         return true
       }
       return false
@@ -391,13 +485,15 @@ export default {
       if (this.averageMonthIndex <= 0) {
         return false
       }
+      // 解锁
       if (this.ifJieNoSellToCan()) {
         return false
       }
-      if (this.indexNoSellStatus === '锁转交') {
+      // 状态就是锁转交
+      if (this.indexNoSellStatusOld === '锁转交') {
         return true
       }
-      if (this.indexNoSellStatus === '锁仓' && !this.ifNoSell()) {
+      if (this.indexNoSellStatusOld === '锁仓' && !this.ifInNoSellStatus()) {
         return true
       }
       return false
@@ -409,41 +505,22 @@ export default {
       }
       return false
     },
+    // 解锁转交
     ifJieNoSellToCan () {
-      if (this.indexNoSellStatus === '锁转交' && this.ifThreeDown) {
+      // 锁转交状态时，触发大小反
+      if (this.indexNoSellStatusOld === '锁转交' && this.ifThreeDown) {
         return true
       }
-      if (this.indexNoSellStatus === '锁转交' && this.ifNoSell()) {
+      // 锁转交的时候又锁上了
+      if (this.indexNoSellStatusOld === '锁转交' && this.ifInNoSellStatus()) {
         return true
       }
       return false
     },
+    // 把锁仓转成不锁的操做信号
     toNoSellToCan () {
-      if (this.indexNoSellStatus === '锁仓' && !this.ifNoSell()) {
+      if (this.indexNoSellStatusOld === '锁仓' && !this.ifInNoSellStatus()) {
         return true
-      }
-      return false
-    },
-    // 是否清仓
-    ifClearAll () {
-      // 锁仓转不锁
-      const question10 = storageUtil.getData('stockMarketQuestion', 'question_10')
-      return this.ifDingbu() && (question10 === '是' || this.ifNoSellToCanNew())
-    },
-    // 是否涨得太快
-    ifUpQuick () {
-      // 两天涨得多
-      const two = stockAnalysisUtil.countUp(this.netChangeRatioListLarge, 2, 2)
-      if (two.flag) {
-        if (two.rate > this.indexInfo.rate * 4) {
-          return true
-        }
-      }
-      const three = stockAnalysisUtil.countUp(this.netChangeRatioListLarge, 3, 3)
-      if (three.flag) {
-        if (three.rate > this.indexInfo.rate * 6) {
-          return true
-        }
       }
       return false
     },
@@ -463,21 +540,19 @@ export default {
       }
       return false
     },
-    ifJieFantan () {
-      // if (this.indexNiuXiong === '小反' && this.averageMonthIndex < 0) {
-      //   return true
-      // }
+    // 是否解反弹
+    ifJieFantanToday () {
       // 下降趋势两天就解反
       if (this.ifDownTrend) {
         return (
-          (this.indexNiuXiong === '大反' || this.indexNiuXiong === '小反') &&
+          (this.indexDaXiaoStatusOld === '大反' || this.indexDaXiaoStatusOld === '小反') &&
           (this.ifTwoUp)
         )
       } else {
         return (
-          ((this.indexNiuXiong === '大反' || this.indexNiuXiong === '小反') &&
+          ((this.indexDaXiaoStatusOld === '大反' || this.indexDaXiaoStatusOld === '小反') &&
           this.ifThreeUp) ||
-          (this.indexNiuXiong === '小反' && this.ifTwoUp)
+          (this.indexDaXiaoStatusOld === '小反' && this.ifTwoUp)
         )
       }
     },
@@ -492,72 +567,16 @@ export default {
       }
       return ''
     },
-    copyList (list) {
-      let newList = []
-      for (let i = 0; i < list.length; i++) {
-        newList.push(list[i])
-      }
-      return newList
-    },
-    noSell (list) {
-      let newList = []
-      for (let i = 0; i < list.length; i++) {
-        if (list[i] !== 'sell' && list[i] !== 'should-sell') {
-          newList.push(list[i])
-        }
-      }
-      return newList
-    },
-    noNormalSell (list) {
-      let newList = []
-      for (let i = 0; i < list.length; i++) {
-        if (list[i] !== 'sell') {
-          newList.push(list[i])
-        }
-      }
-      return newList
-    },
-    ifHasSell (list) {
-      for (let i = 0; i < list.length; i++) {
-        if (list[i] === 'sell' || list[i] === 'should-sell') {
-          return true
-        }
-      }
-      return false
-    },
-    noBuy (list) {
-      let newList = []
-      for (let i = 0; i < list.length; i++) {
-        if (list[i] !== 'buy' && list[i] !== 'should-buy') {
-          newList.push(list[i])
-        }
-      }
-      return newList
-    },
-    noNormalBuy (list) {
-      let newList = []
-      for (let i = 0; i < list.length; i++) {
-        if (list[i] !== 'buy') {
-          newList.push(list[i])
-        }
-      }
-      return newList
-    },
-    ifHasBuy (list) {
-      for (let i = 0; i < list.length; i++) {
-        if (list[i] === 'buy' || list[i] === 'should-buy') {
-          return true
-        }
-      }
-      return false
-    },
-    ifXiaofan () {
+    // 达成小反条件
+    ifXiaofanToday () {
       return this.ifSixFive || (this.averageMonthIndex > 0 && this.ifThreeDown)
     },
-    isXiaofan () {
-      return this.indexNiuXiong === '小反' && !this.ifJieFantan()
+    // 之前是不是小反
+    isXiaofanOld () {
+      return this.indexDaXiaoStatusOld === '小反' && !this.ifJieFantanToday()
     },
-    ifDafan () {
+    // 达成大反条件
+    ifDafanToday () {
       if (this.ifFourDown || this.ifFiveDown || this.ifSevenSix || this.ifEightSeven || this.ifEightSix || this.ifNineSeven) {
         return true
       } else if (this.indexInfo.key === 'baoxian' && this.ifSixFive) {
@@ -565,120 +584,133 @@ export default {
       }
       return false
     },
-    isDafan () {
-      return this.indexNiuXiong === '大反' && !this.ifJieFantan()
+    // 之前是否处于大反
+    isDafanOld () {
+      return this.indexDaXiaoStatusOld === '大反' && !this.ifJieFantanToday()
     },
+    // 处于大反的状态
+    ifInDafanStatus () {
+      return this.ifDafanToday() || this.isDafanOld()
+    },
+    // 是否发出禁买
     isJinMai () {
-      if (this.ifUnderYear && this.ifDownTrend && (this.indexStatus !== '定投' && this.indexStatus !== '探底')) {
+      if (this.ifUnderYear && this.ifDownTrend && (this.indexStage !== '定投' && this.indexStage !== '探底')) {
         return true
       }
-      return this.indexNiuXiong === '禁买' && this.ifUnderYear && this.ifDownTrend
+      return this.indexDaXiaoStatusOld === '禁买' && this.ifUnderYear && this.ifDownTrend
     },
-    isDingtou () {
-      return this.indexStatus === '定投' && this.averageHalfYear < 0
+    // 是否处于定投
+    isInDingtouStatus () {
+      return this.indexStage === '定投' && this.averageHalfYear < 0
     },
-    ifDingbu () {
-      return this.indexStatus === '顶部' && !this.ifJieDingbu() && !this.ifNoSell()
+    // 是不是顶部条件
+    ifInDingbuStatus () {
+      // 锁仓的话顶部条件就不触发
+      return this.indexStage === '顶部' && !this.ifJieDingbu() && !this.ifInNoSellStatus()
     },
+    // 是否解顶部的影响
     ifJieDingbu () {
       // 变成大小反，那阶段顶就解除
-      if (this.indexStatus === '顶部' && (this.ifDafan() || this.ifXiaofan())) {
+      if (this.indexStage === '顶部' && (this.ifDafanToday() || this.ifXiaofanToday())) {
         return true
       }
-      return this.indexStatus === '顶部' && !this.ifTopNow && this.ifNoSell()
-    },
-    localConsole (text) {
-      if (this.indexInfo.key === 'chuangye') {
-        console.log(text)
-      }
+      // 不是顶部了，然后又变成的锁仓状态
+      return this.indexStage === '顶部' && !this.ifIndexTopToday && this.ifInNoSellStatus()
     },
     getItemClass () {
-      // 锁仓转不锁
+      // 指数锁仓转不锁
       const question10 = storageUtil.getData('stockMarketQuestion', 'question_10')
-      // 持续恐慌
+      // 是否是持续恐慌
       const question9 = storageUtil.getData('stockMarketQuestion', 'question_9')
-      // 市场阶段
+      // 目前市场阶段
       const question1 = storageUtil.getData('stockMarketQuestion', 'question_1')
       const buyClass = 'buy'
       const sellClass = 'sell'
+      const shouldBuyClass = 'should-buy'
+      const shouldSellClass = 'should-sell'
       const classList = []
       let shouldClass = ''
       const buySellList = this.buySellList
+      // 有没有
       classList.push(this.ifHas ? 'has' : 'no-has')
       classList.push(this.lock ? 'lock' : 'no-lock')
-      // 涨4天了必须开始卖
-      if (this.ifFourUp) {
-        classList.push(sellClass)
-      }
-      // 垃圾指数涨2天就卖
-      if (this.ifLaji) {
-        if (this.ifTwoUp) {
-          // 不处于大小反
-          if (!this.isDafan()) {
-            classList.push(sellClass)
+      // --------技术性信号部分
+      // 技术性买入
+      if (buySellList[0] === buyClass) {
+        // 不是垃圾指数
+        if (!this.ifLaji) {
+          // 不是下降趋势
+          if (!this.ifDownTrend) {
+            classList.push(buyClass)
           }
         }
       }
-      // 下降趋势不要技术分析的买入信号
-      if (buySellList[0] === buyClass && !this.ifLaji && !this.ifDownTrend) {
-        // 如果是买入信号，那就直接红色，返回
-        // 垃圾指数的买入信号，不会提示买入
-        classList.push(buyClass)
-      }
+      // 技术性卖出
       if (buySellList[0] === sellClass) {
-        if (question1 !== '筑顶后大跌' && question9 !== '是') {
+        if (question1 === '筑顶后大跌' && question9 === '是') {
+          // 是筑顶后大跌，是持续恐慌那就卖
+          classList.push(sellClass)
+        } else {
           if (this.averageMonthIndex < 0) {
             // 在月线以下，就得卖，除了大反
-            if (!this.isDafan()) {
+            if (!this.ifInDafanStatus()) {
               classList.push(sellClass)
             }
           } else {
-            // 如果是卖出信号，那就判断是不是出于大反或者小反
-            if (!this.ifInFantan()) {
-              // 不处于反弹期才可以卖
+            // 在月线以上，并且不是反弹那就卖出
+            if (!this.ifInFantanOld()) {
               classList.push(sellClass)
             }
           }
-        } else {
-          // 是筑顶后大跌，是持续恐慌那就卖
-          classList.push(sellClass)
         }
       }
       // ----------------------应该买的部分
-      // 没有其他信号
-      // 不是筑顶阶段才行
-      // 连续跌三天
-      // 下降趋势不要小反
+      // 连续跌三天，并且不是下降趋势
       if (this.ifThreeDown && !this.ifDownTrend) {
         if (this.ifKuanji) {
           // 宽基指数可以买
-          shouldClass = 'should-buy'
+          shouldClass = shouldBuyClass
         } else {
           // 其他指数得要线上才能买
           if (this.averageMonthIndex > 0) {
-            shouldClass = 'should-buy'
+            shouldClass = shouldBuyClass
           }
+          // 跌得太快也可以买
           if (this.ifDownQuick()) {
-            shouldClass = 'should-buy'
+            shouldClass = shouldBuyClass
           }
         }
       }
       // 连跌4天或者5天，都能买
       if (this.ifFourDown || this.ifFiveDown) {
-        shouldClass = 'should-buy'
+        shouldClass = shouldBuyClass
       }
       // 跌很多天
       if (this.ifSixFive || this.ifSevenSix || this.ifEightSeven) {
-        shouldClass = 'should-buy'
+        shouldClass = shouldBuyClass
       }
       if (this.ifEightSix || this.ifNineSeven) {
-        shouldClass = 'should-buy'
+        shouldClass = shouldBuyClass
       }
       // ----------------------应该卖的部分
+      // 涨4天了发出应该卖
+      if (this.ifFourUp) {
+        shouldClass = shouldBuyClass
+      }
+      // 垃圾指数涨2天就卖
+      if (this.ifLaji) {
+        if (this.ifTwoUp) {
+          // 不处于大反，小反的可以卖
+          if (!this.ifInDafanStatus()) {
+            shouldClass = shouldBuyClass
+          }
+        }
+      }
+      // 没有买入信号，也没有应该买
       if (this.allBuySellList[0] !== 'buy' && shouldClass === '' && this.rate < 0) {
         // 研究过了，线上确实可以不杀跌
-        if (this.averageMonthIndex < 0 && !this.ifInFantan() && !this.ifThreeDown) {
-          shouldClass = 'should-sell'
+        if (this.averageMonthIndex < 0 && !this.ifInFantanOld() && !this.ifThreeDown) {
+          shouldClass = shouldSellClass
         }
       }
       // 应该的类
@@ -688,7 +720,7 @@ export default {
         // 普通买入信号在小于rate的时候是不会出现的
         // 如果是大小反，那么锁转交的信号就会解除
         // 所以这个逻辑没有问题
-        if (!this.isDafan()) {
+        if (!this.ifInDafanStatus()) {
           classList.push(sellClass)
         }
       }
@@ -698,7 +730,7 @@ export default {
         // 普通买入信号在小于rate的时候是不会出现的
         // 如果是大小反，那么清仓的信号就会解除
         // 所以这个逻辑没有问题
-        if (!this.isDafan()) {
+        if (!this.ifInDafanStatus()) {
           classList.push(sellClass)
         }
       }
@@ -706,20 +738,20 @@ export default {
       // 整体转弱了
       if (question10 === '是') {
         // 纯买信号没有了
-        classListF = this.noNormalBuy(classListF)
+        classListF = this.removeNormalBuy(classListF)
         // 不是大小反，那就加个卖出信号
-        if (classListF.indexOf('should-buy') === -1 && !this.isDafan()) {
+        if (classListF.indexOf('should-buy') === -1 && !this.ifInDafanStatus()) {
           classListF.push(sellClass)
         }
       }
       // 持续恐慌事件那就不要买了
       if (question9 === '是') {
-        classListF = this.noBuy(classListF)
+        classListF = this.removeBuy(classListF)
       }
       // 禁买成立
       if (this.isJinMai()) {
         // 没有任何买入
-        classListF = this.noBuy(classListF)
+        classListF = this.removeBuy(classListF)
         // 涨了就卖
         if (this.rate > 0) {
           // 无视大小反的
@@ -732,26 +764,26 @@ export default {
         }
       }
       // 指数处于阶段顶部区间
-      if (this.ifDingbu()) {
+      if (this.ifInDingbuStatus()) {
         // 纯买信号没有了
-        classListF = this.noNormalBuy(classListF)
+        classListF = this.removeNormalBuy(classListF)
       }
       // 止盈
-      if (this.isCutDown()) {
+      if (this.ifStopKeep()) {
         // 没有买入信号
         // 加入卖出信号
-        classListF = this.noBuy(classListF)
+        classListF = this.removeBuy(classListF)
         // 无视大小反
         classListF.push(sellClass)
       }
       // 权重最大的-------------
       // 定投阶段没有卖出高亮
-      if (this.isDingtou()) {
-        classListF = this.noSell(classListF)
+      if (this.isInDingtouStatus()) {
+        classListF = this.removeSell(classListF)
       }
       let ifNoSellF = false
       // 锁仓的逻辑
-      if (this.ifNoSell()) {
+      if (this.ifInNoSellStatus()) {
         ifNoSellF = true
         if (this.rate < 0) {
           // 锁仓阶段可以跌了就买
@@ -761,13 +793,13 @@ export default {
           }
         }
         // 在趋势中，什么卖出信号都不用管
-        classListF = this.noSell(classListF)
+        classListF = this.removeSell(classListF)
       }
       // 过热需要减半仓位止盈一次
       // 首先当天rate>0
       if (this.ifCutHalf()) {
         // 没有买背景，也没有卖背景，也不处于大小反
-        if (!this.ifHasBuy(classListF) && !this.ifHasSell(classListF) && !this.ifInFantan()) {
+        if (!this.ifHasBuy(classListF) && !this.ifHasSell(classListF) && !this.ifInFantanOld()) {
           classListF.push('should-cut')
         }
       }
@@ -790,7 +822,7 @@ export default {
       // ---------关于个人的限制
       // 锁仓的没有卖出高亮
       if (this.lock) {
-        classListF = this.noSell(classListF)
+        classListF = this.removeSell(classListF)
       }
       return classListF
     }

@@ -632,7 +632,7 @@ export default {
     // 两个小幅0.2下跌很危险
     sellLowDownSmall () {
       if (this.ifTwoLowDown) {
-        if (this.ifDafanToday() || this.ifInNoSellStatus()) {
+        if (this.ifDafanToday() || this.ifInNoSellStatus() || this.isInDingtouStatus()) {
           return true
         }
       }

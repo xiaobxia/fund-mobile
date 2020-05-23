@@ -52,7 +52,7 @@ export default {
       }
     },
     queryData (item) {
-      this.$http.getWithCache(`stock/${stockApiUtil.getAllUrl()}`, {
+      this.$http.get(`stock/${stockApiUtil.getAllUrl()}`, {
         code: item.code,
         days: 30
       }, {interval: 20}).then((data) => {

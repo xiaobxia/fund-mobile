@@ -29,6 +29,8 @@
         <span v-if="ifClearAll()" class="fm-tag s-black">清空</span>
         <span v-if="ifStopKeep()" class="fm-tag s-black">止盈</span>
         <span v-if="ifCutHalf()" class="fm-tag s-blue">减半</span>
+        <span v-if="sellLowDownSmall()" class="fm-tag s-blue">危险1/3</span>
+        <span v-if="sellLowDownBig()" class="fm-tag s-blue">危险2/3</span>
         <span v-if="ifCutHalf() && ifTwoUp" class="fm-tag s-black">减半减</span>
         <span v-if="ifUnderYear && ifDownTrend && (indexStage !== '定投' && indexStage !== '探底')" class="fm-tag black">禁买</span>
         <span v-if="indexDaXiaoStatusOld === '禁买' && (!ifUnderYear || !ifDownTrend)" class="fm-tag s-blue">解禁</span>
@@ -542,6 +544,12 @@ export default {
     },
     // 是否解反弹
     ifJieFantanToday () {
+      // 如果两个0.2下跌，必须得解反
+      if (this.ifTwoLowDown) {
+        if (this.indexDaXiaoStatusOld === '大反' || this.indexDaXiaoStatusOld === '小反') {
+          return true
+        }
+      }
       // 下降趋势两天就解反
       if (this.ifDownTrend) {
         return (
@@ -574,6 +582,10 @@ export default {
     // 之前是不是小反
     isXiaofanOld () {
       return this.indexDaXiaoStatusOld === '小反' && !this.ifJieFantanToday()
+    },
+    // 处于大反的状态
+    ifInXiaofanStatus () {
+      return this.ifXiaofanToday() || this.isXiaofanOld()
     },
     // 达成大反条件
     ifDafanToday () {
@@ -616,6 +628,19 @@ export default {
       }
       // 不是顶部了，然后又变成的锁仓状态
       return this.indexStage === '顶部' && !this.ifIndexTopToday && this.ifInNoSellStatus()
+    },
+    // 两个小幅0.2下跌很危险
+    sellLowDownSmall () {
+      if (this.ifTwoLowDown) {
+        if (this.ifDafanToday() || this.ifInNoSellStatus()) {
+          return true
+        }
+      }
+      return false
+    },
+    // 两个小幅0.2下跌很危险
+    sellLowDownBig () {
+      return this.ifTwoLowDown && !this.sellLowDownSmall()
     },
     getItemClass () {
       // 指数锁仓转不锁
@@ -803,6 +828,23 @@ export default {
           classListF.push('should-cut')
         }
       }
+      // 两个小幅0.2
+      if (this.sellLowDownSmall() || this.sellLowDownBig()) {
+        // 没有任何买入
+        classListF = this.removeBuy(classListF)
+        // 加入卖出
+        classListF.push(sellClass)
+      }
+      // 发送到服务端
+      this.sendFlagToServer(classListF)
+      // ---------关于个人的限制
+      // 锁仓的没有卖出高亮
+      if (this.lock) {
+        classListF = this.removeSell(classListF)
+      }
+      return classListF
+    },
+    sendFlagToServer (classListF) {
       // 发送信号
       if (this.type === '熊') {
         let flag = ''
@@ -818,13 +860,6 @@ export default {
         }
         storageUtil.setData('bandBuySellData', this.indexInfo.key, flag)
       }
-
-      // ---------关于个人的限制
-      // 锁仓的没有卖出高亮
-      if (this.lock) {
-        classListF = this.removeSell(classListF)
-      }
-      return classListF
     }
   }
 }

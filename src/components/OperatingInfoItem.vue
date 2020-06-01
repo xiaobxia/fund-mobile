@@ -720,14 +720,14 @@ export default {
       // ----------------------应该卖的部分
       // 涨4天了发出应该卖
       if (this.ifFourUp) {
-        shouldClass = shouldBuyClass
+        shouldClass = shouldSellClass
       }
       // 垃圾指数涨2天就卖
       if (this.ifLaji) {
         if (this.ifTwoUp) {
           // 不处于大反，小反的可以卖
           if (!this.ifInDafanStatus()) {
-            shouldClass = shouldBuyClass
+            shouldClass = shouldSellClass
           }
         }
       }

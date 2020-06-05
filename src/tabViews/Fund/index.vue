@@ -89,6 +89,14 @@
           <div class="bottom">年线策略</div>
         </div>
       </div>
+      <div class="img-card" @click="toPath('/page/daysIncome')">
+        <div class="container">
+          <div class="content">
+            <img src="../../assets/策略-选中.png" alt="">
+          </div>
+          <div class="bottom">近期涨幅</div>
+        </div>
+      </div>
     </div>
   </div>
 </template>

@@ -136,6 +136,11 @@ const routers = [
     component: lazyLoading('YearIncome')
   },
   {
+    name: 'DaysIncome',
+    path: '/page/daysIncome',
+    component: lazyLoading('DaysIncome')
+  },
+  {
     name: 'PositionConfig',
     path: '/page/positionConfig',
     component: lazyLoading('PositionConfig')

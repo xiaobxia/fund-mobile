@@ -401,7 +401,7 @@ export default {
           const buyS = (12 * 10000) / 162.5
           const params = this.indexParams[item.code]
           let buyNumber = 0
-          if (['baijiu', 'yiliao', 'shengwu'].indexOf(item.key) !== -1) {
+          if (['baijiu', 'yiliao', 'shengwu', 'xiaofei'].indexOf(item.key) !== -1) {
             buyNumber = parseInt(getBuyRateH(diff, params.a, params.b, params.c) * buyS / 10) * 10
           } else {
             buyNumber = parseInt(getBuyRate(diff, params.a, params.b, params.c) * buyS / 10) * 10

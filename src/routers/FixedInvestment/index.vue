@@ -60,8 +60,12 @@ const InfoUtil = fixedInvestment.Util
 const fnMap = fixedInvestment.fnMap
 const formatData = fixedInvestment.formatData
 
+// 适用于宽基
 // 和年线分析有关
 function getBuyRate (rate, a, b, c) {
+  // c是0轴线
+  // a是高估线只能0.25得买
+  // b是低估线
   rate = rate - c
   a = a - c
   if (rate >= 0) {
@@ -80,6 +84,32 @@ function getBuyRate (rate, a, b, c) {
     }
   }
   return 1
+}
+
+// 适用于优质行业
+// 和年线分析有关
+function getBuyRateH (rate, a, b, c) {
+  // c是0轴线
+  // a是高估线只能0.25得买
+  // b是低估线
+  rate = rate - c
+  a = a - c
+  if (rate >= 0) {
+    if (rate <= a) {
+      return 2 - ((rate / a) * 1.6)
+    } else {
+      return 0.4
+    }
+  }
+  // 年线下
+  if (rate < 0) {
+    if (rate >= b) {
+      return 2 + 2 * (rate / b)
+    } else {
+      return 4
+    }
+  }
+  return 2
 }
 
 // 为以后做准备，偏离度60以上的时候
@@ -144,11 +174,14 @@ export default {
         'sz399006': 1462.85,
         'sz399997': 5400,
         'sz399989': 7464,
-        'sz399441': 2537
+        'sz399441': 2537,
+        'sz399396': 17800
       },
       // 配比根据估值，还有行业中和判断
       indexParams: {
         // 中证1000
+        // 这东西很危险压根就不能定投，但是现在属于出清了一次，所以又拿出来投
+        // 出清线是年线-25
         'sh000852': {
           buy: 0.7,
           sell: 1.3,
@@ -157,6 +190,8 @@ export default {
           c: -8.5
         },
         // 沪深500
+        // 这东西很危险压根就不能定投，但是现在属于出清了一次，所以又拿出来投
+        // 出清线是年线-20
         'sh000905': {
           buy: 1.3,
           sell: 0.7,
@@ -177,10 +212,12 @@ export default {
           buy: 1.3,
           sell: 0.7,
           a: 20,
-          b: -15,
-          c: -5
+          b: -10,
+          c: -3
         },
         // 创业板
+        // 这东西很危险压根就不能定投，但是现在属于出清了一次，所以又拿出来投
+        // 出清线是年线-20
         'sz399006': {
           buy: 0.85,
           sell: 1.15,
@@ -190,27 +227,35 @@ export default {
         },
         // 白酒
         'sz399997': {
-          buy: 1,
+          buy: 1.3,
           sell: 1,
           a: 40,
-          b: -22,
-          c: -2.5
+          b: -20,
+          c: -8
+        },
+        // 消费
+        'sz399396': {
+          buy: 1.3,
+          sell: 1,
+          a: 30,
+          b: -20,
+          c: -5
         },
         // 医疗
         'sz399989': {
-          buy: 1,
+          buy: 1.3,
           sell: 1,
           a: 20,
-          b: -15,
-          c: -5
+          b: -18,
+          c: -9
         },
         // 生物
         'sz399441': {
-          buy: 1,
+          buy: 1.3,
           sell: 1,
           a: 20,
-          b: -10,
-          c: 0
+          b: -18,
+          c: -9
         }
       },
       klineMap
@@ -355,7 +400,12 @@ export default {
           // 一月一万
           const buyS = (12 * 10000) / 162.5
           const params = this.indexParams[item.code]
-          const buyNumber = parseInt(getBuyRate(diff, params.a, params.b, params.c) * buyS / 10) * 10
+          let buyNumber = 0
+          if (['baijiu', 'yiliao', 'shengwu'].indexOf(item.key) !== -1) {
+            buyNumber = parseInt(getBuyRateH(diff, params.a, params.b, params.c) * buyS / 10) * 10
+          } else {
+            buyNumber = parseInt(getBuyRate(diff, params.a, params.b, params.c) * buyS / 10) * 10
+          }
           this.canBuy[item.key] = buyNumber
           this.canSell[item.key] = parseInt(getSellRate(diff) * buyS / 10) * 10
           this.allInfo[item.key] = infoList

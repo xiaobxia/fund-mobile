@@ -532,6 +532,68 @@ Util.prototype = {
     }
     return false
   },
+  ifBuyXiaofei: function (record, oneDayRecord) {
+    const today = this.getFlag(record, 1.9)
+    // 无抵抗下跌的都要
+    if (ifMatch(today,
+      {'ifHighPreCloseDown': true}
+    )) {
+      return {
+        flag: true,
+        text: 'buy-100-0'
+      }
+    }
+    // 跌幅两倍波动的就要
+    if (ifMatch(today,
+      {'ifUpClose': false, 'ifCloseHigh2': true}
+    )) {
+      return {
+        flag: true,
+        text: 'buy-101-0'
+      }
+    }
+    // 下跌
+    if (ifMatch(today,
+      {'ifCloseHigh': true, 'ifSessionDownHigh': true, 'ifSessionUpClose': false, 'ifSessionUp': false, 'ifSessionDownCloseHigh': true}
+    )) {
+      return {
+        flag: true,
+        text: 'buy-101-0'
+      }
+    }
+    return false
+  },
+  ifSellXiaofei: function (record, oneDayRecord) {
+    const today = this.getFlag(record, 1.9)
+    // 大涨
+    if (ifMatch(today,
+      {'ifHighPreCloseUpHigh': true}
+    )) {
+      return {
+        flag: true,
+        text: 'sell-100-0'
+      }
+    }
+    // 涨幅两倍波动的就要
+    if (ifMatch(today,
+      {'ifUpClose': true, 'ifCloseHigh2': true}
+    )) {
+      return {
+        flag: true,
+        text: 'sell-101-0'
+      }
+    }
+    // 下跌
+    if (ifMatch(today,
+      {'ifCloseHigh': true, 'ifSessionDownHigh': false, 'ifSessionUpClose': true, 'ifSessionUp': true, 'ifSessionDownCloseHigh': false}
+    )) {
+      return {
+        flag: true,
+        text: 'xiong'
+      }
+    }
+    return false
+  },
   ifSellYiliao: function (record, oneDayRecord) {
     const today = this.getFlag(record, 1.9)
     // 大涨
@@ -674,6 +736,13 @@ const codeMap = {
     rate: 1.1202272727272722,
     wave: 1.374864864864865
   },
+  'xiaofei': {
+    code: 'sz399396',
+    name: '消费',
+    threshold: 0.85,
+    rate: 0.7876623376623377,
+    wave: 0.9127884615384618
+  },
   'yiliao': {
     code: 'sz399989',
     name: '医疗',
@@ -702,6 +771,8 @@ const fnMap = {
   yiqianSell: 'ifSellYiqian',
   baijiuBuy: 'ifBuyBaijiu',
   baijiuSell: 'ifSellBaijiu',
+  xiaofeiBuy: 'ifBuyXiaofei',
+  xiaofeiSell: 'ifSellXiaofei',
   yiliaoBuy: 'ifBuyYiliao',
   yiliaoSell: 'ifSellYiliao',
   shengwuBuy: 'ifBuyShengwu',

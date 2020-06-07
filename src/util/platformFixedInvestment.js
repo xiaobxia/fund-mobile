@@ -532,7 +532,7 @@ Util.prototype = {
     }
     return false
   },
-  ifBuyXiaofei: function (record, oneDayRecord) {
+  ifBuyShipin: function (record, oneDayRecord) {
     const today = this.getFlag(record, 1.9)
     // 无抵抗下跌的都要
     if (ifMatch(today,
@@ -563,7 +563,7 @@ Util.prototype = {
     }
     return false
   },
-  ifSellXiaofei: function (record, oneDayRecord) {
+  ifSellShipin: function (record, oneDayRecord) {
     const today = this.getFlag(record, 1.9)
     // 大涨
     if (ifMatch(today,
@@ -736,9 +736,9 @@ const codeMap = {
     rate: 1.1202272727272722,
     wave: 1.374864864864865
   },
-  'xiaofei': {
+  'shipin': {
     code: 'sz399396',
-    name: '消费',
+    name: '食品',
     threshold: 0.85,
     rate: 0.7876623376623377,
     wave: 0.9127884615384618
@@ -771,8 +771,8 @@ const fnMap = {
   yiqianSell: 'ifSellYiqian',
   baijiuBuy: 'ifBuyBaijiu',
   baijiuSell: 'ifSellBaijiu',
-  xiaofeiBuy: 'ifBuyXiaofei',
-  xiaofeiSell: 'ifSellXiaofei',
+  shipinBuy: 'ifBuyShipin',
+  shipinSell: 'ifSellShipin',
   yiliaoBuy: 'ifBuyYiliao',
   yiliaoSell: 'ifSellYiliao',
   shengwuBuy: 'ifBuyShengwu',

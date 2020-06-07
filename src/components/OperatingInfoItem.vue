@@ -22,7 +22,7 @@
         <span v-if="!ifDafanToday() && ifXiaofanToday()" class="fm-tag s-red">小</span>
         <span v-if="ifDafanToday()" class="fm-tag s-red">大</span>
         <span v-if="toNoSellToCan()" class="fm-tag blue">更转交</span>
-        <span v-if="indexStage === '定投' && averageHalfYear >= 0" class="fm-tag s-blue">解定</span>
+        <span v-if="ifRelieveFixLine" class="fm-tag s-blue">解定</span>
         <span v-if="ifJieFantanToday()" class="fm-tag s-blue">解反</span>
         <span v-if="ifJieNoSellToCan()" class="fm-tag s-blue">解转交</span>
         <span v-if="ifJieDingbu()" class="fm-tag s-blue">解顶</span>
@@ -261,6 +261,10 @@ export default {
     // 指数是否开启止盈
     ifOpenCutDown () {
       return storageUtil.getData('stockIndexCutDown', this.indexInfo.key) === '开启'
+    },
+    // 是否解除定投
+    ifRelieveFixLine () {
+      return this.indexStage === '定投' && this.averageHalfYear >= this.indexInfo.relieveFixLine
     },
     // ------------连涨连跌信号
     ifThreeDown () {
@@ -606,6 +610,7 @@ export default {
     },
     // 是否发出禁买
     isJinMai () {
+      // 在线下，那肯定不会是解定状态
       if (this.ifUnderYear && this.ifDownTrend && (this.indexStage !== '定投' && this.indexStage !== '探底')) {
         return true
       }
@@ -613,7 +618,7 @@ export default {
     },
     // 是否处于定投
     isInDingtouStatus () {
-      return this.indexStage === '定投' && this.averageHalfYear < 0
+      return this.indexStage === '定投' && !this.ifRelieveFixLine
     },
     // 是不是顶部条件
     ifInDingbuStatus () {

@@ -96,20 +96,20 @@ function getBuyRateH (rate, a, b, c) {
   a = a - c
   if (rate >= 0) {
     if (rate <= a) {
-      return 2 - ((rate / a) * 1.6)
+      return 1.5 - ((rate / a) * 1.14)
     } else {
-      return 0.4
+      return 0.36
     }
   }
   // 年线下
   if (rate < 0) {
     if (rate >= b) {
-      return 2 + 2 * (rate / b)
+      return 1.5 + 1.5 * (rate / b)
     } else {
-      return 4
+      return 3
     }
   }
-  return 2
+  return 1.5
 }
 
 // 为以后做准备，偏离度60以上的时候

@@ -25,7 +25,8 @@ if (month < 11) {
     'dichan',
     'youse',
     'huanbao',
-    'jungong'
+    'jungong',
+    'chuanmei'
   ]
 }
 

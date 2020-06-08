@@ -826,6 +826,10 @@ export default {
       if (this.isInDingtouStatus()) {
         classListF = this.removeSell(classListF)
       }
+      // 季线危险阶段，没有买入信号，因为很可能是无止境得跌
+      if (this.isInQuarterHotToday()) {
+        classListF = this.removeBuy(classListF)
+      }
       let ifNoSellF = false
       // 锁仓的逻辑
       if (this.ifInNoSellStatus()) {

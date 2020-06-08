@@ -28,7 +28,8 @@
         <span v-if="ifJieNoSellToCan()" class="fm-tag s-blue">解转交</span>
         <span v-if="ifJieDingbu()" class="fm-tag s-blue">解顶</span>
         <span v-if="ifJieQuarterHot" class="fm-tag s-blue">解危</span>
-        <span v-if="ifClearAll()" class="fm-tag s-black">清空</span>
+        <span v-if="ifClearHalf()" class="fm-tag s-black">清半</span>
+        <span v-if="isInQuarterHotToday && ifNoSellToCanNew()" class="fm-tag s-black">清2/3</span>
         <span v-if="ifStopKeep()" class="fm-tag s-black">止盈</span>
         <span v-if="ifCutHalf()" class="fm-tag s-blue">减半</span>
         <span v-if="sellLowDownSmall()" class="fm-tag s-blue">危险1/3</span>
@@ -478,7 +479,7 @@ export default {
       return false
     },
     // 是否清仓
-    ifClearAll () {
+    ifClearHalf () {
       const question10 = storageUtil.getData('stockMarketQuestion', 'question_10')
       // 处于顶部，并且该指数锁转交或者大部分指数同时锁转交
       return this.ifInDingbuStatus() && (question10 === '是' || this.ifNoSellToCanNew())
@@ -519,7 +520,7 @@ export default {
       }
       return false
     },
-    // 今天刚锁转交，并且又刚3跌就不算
+    // 锁转交，并且又刚3跌就不算
     ifNoSellToCanNew () {
       if (this.ifNoSellToCan() && !this.ifThreeDown) {
         return true
@@ -771,7 +772,7 @@ export default {
       }
       // 风险等级不一样所以因子乘数也不一样
       // 清仓信号
-      if (this.ifClearAll() && this.rate > (-1.5 * this.indexInfo.rate)) {
+      if (this.ifClearHalf() && this.rate > (-1 * this.indexInfo.rate)) {
         // 普通买入信号在小于rate的时候是不会出现的
         // 如果是大小反，那么清仓的信号就会解除
         // 所以这个逻辑没有问题
@@ -827,7 +828,7 @@ export default {
         classListF = this.removeSell(classListF)
       }
       // 季线危险阶段，没有买入信号，因为很可能是无止境得跌
-      if (this.isInQuarterHotToday()) {
+      if (this.isInQuarterHotToday) {
         classListF = this.removeBuy(classListF)
       }
       let ifNoSellF = false

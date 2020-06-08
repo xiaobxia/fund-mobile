@@ -7,6 +7,7 @@
       <h3>
         <span class="index-name">{{indexInfo.name}}</span>
         <span v-if="lock" class="fm-icon lock"></span>
+        <span v-if="isInQuarterHotToday" class="fm-tag s-black">危险</span>
         <span v-if="indexStage === '顶部'" class="fm-tag s-yellow">阶顶</span>
         <span v-if="isInDingtouStatus()" class="fm-tag s-red">定投</span>
         <span v-if="ifUnderYear" class="fm-tag s-green">年下</span>
@@ -26,6 +27,7 @@
         <span v-if="ifJieFantanToday()" class="fm-tag s-blue">解反</span>
         <span v-if="ifJieNoSellToCan()" class="fm-tag s-blue">解转交</span>
         <span v-if="ifJieDingbu()" class="fm-tag s-blue">解顶</span>
+        <span v-if="ifJieQuarterHot" class="fm-tag s-blue">解危</span>
         <span v-if="ifClearAll()" class="fm-tag s-black">清空</span>
         <span v-if="ifStopKeep()" class="fm-tag s-black">止盈</span>
         <span v-if="ifCutHalf()" class="fm-tag s-blue">减半</span>
@@ -198,6 +200,9 @@ export default {
     averageHalfYear () {
       return storageUtil.getData('averageHalfYearIndex', this.indexInfo.key) || 0
     },
+    averageQuarter () {
+      return storageUtil.getData('averageQuarterIndex', this.indexInfo.key) || 0
+    },
     // 指数月线偏离过大
     ifMonthHot () {
       const averageMonth = storageUtil.getData('averageMonth', this.indexInfo.key) || 0
@@ -261,6 +266,16 @@ export default {
     // 指数是否开启止盈
     ifOpenCutDown () {
       return storageUtil.getData('stockIndexCutDown', this.indexInfo.key) === '开启'
+    },
+    // 指数是否危险
+    ifOpenQuarterHot () {
+      return storageUtil.getData('stockIndexQuarterHot', this.indexInfo.key) === '开启'
+    },
+    isInQuarterHotToday () {
+      return this.ifOpenQuarterHot && this.averageQuarter >= 0
+    },
+    ifJieQuarterHot () {
+      return this.ifOpenQuarterHot && this.averageQuarter < 0
     },
     // 是否解除定投
     ifRelieveFixLine () {
@@ -756,7 +771,7 @@ export default {
       }
       // 风险等级不一样所以因子乘数也不一样
       // 清仓信号
-      if (this.ifClearAll() && this.rate > (-2 * this.indexInfo.rate)) {
+      if (this.ifClearAll() && this.rate > (-1.5 * this.indexInfo.rate)) {
         // 普通买入信号在小于rate的时候是不会出现的
         // 如果是大小反，那么清仓的信号就会解除
         // 所以这个逻辑没有问题

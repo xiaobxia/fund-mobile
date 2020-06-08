@@ -89,6 +89,14 @@
           <div class="bottom">年线策略</div>
         </div>
       </div>
+      <div class="img-card" @click="toPath('/page/averageQuarterIndex')">
+        <div class="container">
+          <div class="content">
+            <img src="../../assets/季度线.png" alt="">
+          </div>
+          <div class="bottom">季度线</div>
+        </div>
+      </div>
       <div class="img-card" @click="toPath('/page/daysIncome')">
         <div class="container">
           <div class="content">

@@ -6,6 +6,11 @@
       </mt-button>
     </mt-header>
     <div class="main-body">
+      <div class="grey fm-warn">指数是否z45</div>
+      <div class="filter-select-wrap">
+        <span class="name">{{z45}}</span>
+        <mt-button type="primary" @click="z45ChangeHandler">改变</mt-button>
+      </div>
       <div class="grey fm-warn">指数是否开启止盈策略</div>
       <div class="filter-select-wrap">
         <span class="name">{{cutDown}}</span>
@@ -95,6 +100,13 @@
         <li class="filter-select-item" v-for="(item) in filterQList" :key="item" @click="onQuarterHotChangeHandler(item)">{{item || '关闭'}}</li>
       </ul>
     </mt-popup>
+    <mt-popup
+      v-model="popupZVisible"
+      position="bottom">
+      <ul class="filter-select-list">
+        <li class="filter-select-item" v-for="(item) in filterZList" :key="item" @click="onZ45ChangeHandler(item)">{{item || '关闭'}}</li>
+      </ul>
+    </mt-popup>
   </div>
 </template>
 
@@ -122,16 +134,19 @@ export default {
       popupNVisible: false,
       popupCVisible: false,
       popupQVisible: false,
+      popupZVisible: false,
       filterList: ['正常', '小反', '大反', '禁买'],
       filterSList: ['正常', '定投', '顶部', '探底'],
       filterNList: ['正常', '锁仓', '锁转交'],
       filterCList: ['关闭', '开启'],
       filterQList: ['关闭', '开启'],
+      filterZList: ['关闭', '开启'],
       niuXiong: '',
       status: '',
       noSellStatus: '',
       cutDown: '',
       quarterHot: '',
+      z45: '',
       grid: {
         top: '10%',
         left: '0%',
@@ -288,6 +303,9 @@ export default {
     cutDownChangeHandler () {
       this.popupCVisible = true
     },
+    z45ChangeHandler () {
+      this.popupZVisible = true
+    },
     quarterHotChangeHandler () {
       this.popupQVisible = true
     },
@@ -367,6 +385,20 @@ export default {
       })
       this.popupQVisible = false
     },
+    onZ45ChangeHandler (text) {
+      const query = this.$router.history.current.query
+      this.$http.post('stock/updateStockIndex', {
+        key: query.key,
+        z45: text
+      }).then((data) => {
+        if (data.success) {
+          Toast.success('操作成功')
+        } else {
+          Toast.error('操作失败')
+        }
+      })
+      this.popupZVisible = false
+    },
     initPage () {
       const query = this.$router.history.current.query
       this.queryData = Object.assign({}, query)
@@ -374,6 +406,7 @@ export default {
       this.status = storageUtil.getData('stockIndexStatus', query.key) || '正常'
       this.cutDown = storageUtil.getData('stockIndexCutDown', query.key) || '关闭'
       this.quarterHot = storageUtil.getData('stockIndexQuarterHot', query.key) || '关闭'
+      this.z45 = storageUtil.getData('stockIndexZ45', query.key) || '关闭'
       this.noSellStatus = storageUtil.getData('stockIndexNoSellStatus', query.key) || '正常'
       this.$http.get(`stock/${stockApiUtil.getAllUrl()}`, {
         code: query.code,

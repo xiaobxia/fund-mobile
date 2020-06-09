@@ -29,6 +29,8 @@
 <script>
 import indexList from '@/common/indexList.js'
 import stockApiUtil from '@/util/stockApiUtil.js'
+import storageUtil from '@/util/storageUtil.js'
+import stockAnalysisUtil from '@/util/stockAnalysisUtil.js'
 
 function ifAllDown (list, start, day) {
   let flag = true
@@ -165,11 +167,32 @@ export default {
           this.klineMap[item.key] = kline
           this.allInfo[item.key] = infoList
           item.netChangeRatio = this.keepTwoDecimals(recentNetValue[0].netChangeRatio)
+          const ifLowWake = stockAnalysisUtil.lowWake(recentNetValue, item.rate * 2).flag
+          if (item.relieveZ45Line) {
+            storageUtil.setData('z45Now', item.key, ifLowWake)
+            if (ifLowWake) {
+              this.updateStockIndex(item.key, '开启')
+            }
+          } else {
+            storageUtil.setData('z45Now', item.key, false)
+          }
         }
       })
     },
     backHandler () {
       this.$router.history.go(-1)
+    },
+    updateStockIndex (key, value) {
+      const d = this.getDate()
+      const hour = d.getHours()
+      // const minute = d.getMinutes()
+      if (hour >= 15) {
+        this.$http.post('stock/updateStockIndex', {
+          key: key,
+          z45: value
+        }).then((data) => {
+        })
+      }
     }
   }
 }

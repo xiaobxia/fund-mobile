@@ -182,12 +182,14 @@ export default {
           const cutDown = {}
           const quarterHot = {}
           const topClose = {}
+          const z45 = {}
           res.data.forEach((item) => {
             data[item.key] = item.flag || '正常'
             status[item.key] = item.status || '正常'
             noSellStatus[item.key] = item.no_sell_status || '正常'
             cutDown[item.key] = item.cut_down || '关闭'
             quarterHot[item.key] = item.danger || '关闭'
+            z45[item.key] = item.z45 || '关闭'
             yearAverage[item.key] = item.year_average
             topClose[item.key] = item.top_close || 0
           })
@@ -196,6 +198,7 @@ export default {
           storageUtil.setData('stockIndexNoSellStatus', noSellStatus)
           storageUtil.setData('stockIndexCutDown', cutDown)
           storageUtil.setData('stockIndexQuarterHot', quarterHot)
+          storageUtil.setData('stockIndexZ45', z45)
           storageUtil.setData('yearAverageIndex', yearAverage)
           storageUtil.setData('stockIndexTopClose', topClose)
         }),

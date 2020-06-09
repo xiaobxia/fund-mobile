@@ -7,6 +7,7 @@
       <h3>
         <span class="index-name">{{indexInfo.name}}</span>
         <span v-if="lock" class="fm-icon lock"></span>
+        <span v-if="ifInZ45StatusNow" class="fm-tag s-black">z45</span>
         <span v-if="isInQuarterHotToday" class="fm-tag s-black">危险</span>
         <span v-if="indexStage === '顶部'" class="fm-tag s-yellow">阶顶</span>
         <span v-if="isInDingtouStatus()" class="fm-tag s-red">定投</span>
@@ -28,9 +29,11 @@
         <span v-if="ifJieNoSellToCan()" class="fm-tag s-blue">解转交</span>
         <span v-if="ifJieDingbu()" class="fm-tag s-blue">解顶</span>
         <span v-if="ifJieQuarterHot" class="fm-tag s-blue">解危</span>
+        <span v-if="ifJieZ45" class="fm-tag s-blue">解z45</span>
         <span v-if="ifClearHalf()" class="fm-tag s-black">清半</span>
         <span v-if="isInQuarterHotToday && ifNoSellToCanNew()" class="fm-tag s-black">清2/3</span>
         <span v-if="ifStopKeep()" class="fm-tag s-black">止盈</span>
+        <span v-if="ifClearZ45Today" class="fm-tag s-blue">清z45</span>
         <span v-if="ifCutHalf()" class="fm-tag s-blue">减半</span>
         <span v-if="sellLowDownSmall()" class="fm-tag s-blue">危险1/3</span>
         <span v-if="sellLowDownBig()" class="fm-tag s-blue">危险2/3</span>
@@ -277,6 +280,31 @@ export default {
     },
     ifJieQuarterHot () {
       return this.ifOpenQuarterHot && this.averageQuarter < 0
+    },
+    // 今天触发z45
+    ifOpenZ45Today () {
+      return storageUtil.getData('z45Now', this.indexInfo.key) === '开启'
+    },
+    // 触发z45并且年下立马卖出
+    ifClearZ45Today () {
+      return this.ifOpenZ45Today && this.ifUnderYear
+    },
+    // 之前处于z45
+    ifZ45Status () {
+      return storageUtil.getData('stockIndexZ45', this.indexInfo.key) === '开启'
+    },
+    // 解z45
+    ifJieZ45 () {
+      return this.ifZ45Status && this.averageMonthIndex <= this.indexInfo.relieveZ45Line
+    },
+    ifInZ45StatusNow () {
+      if (this.ifOpenZ45Today) {
+        return true
+      }
+      if (this.ifZ45Status) {
+        return !this.ifJieZ45
+      }
+      return false
     },
     // 是否解除定投
     ifRelieveFixLine () {
@@ -831,6 +859,10 @@ export default {
       if (this.isInQuarterHotToday) {
         classListF = this.removeBuy(classListF)
       }
+      // 处于z45不能买
+      if (this.ifInZ45StatusNow) {
+        classListF = this.removeBuy(classListF)
+      }
       let ifNoSellF = false
       // 锁仓的逻辑
       if (this.ifInNoSellStatus()) {
@@ -855,6 +887,13 @@ export default {
       }
       // 两个小幅0.2
       if (this.sellLowDownSmall() || this.sellLowDownBig()) {
+        // 没有任何买入
+        classListF = this.removeBuy(classListF)
+        // 加入卖出
+        classListF.push(sellClass)
+      }
+      // 年下当天触发z45那就立马卖出
+      if (this.ifClearZ45Today) {
         // 没有任何买入
         classListF = this.removeBuy(classListF)
         // 加入卖出

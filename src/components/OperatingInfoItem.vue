@@ -7,6 +7,7 @@
       <h3>
         <span class="index-name">{{indexInfo.name}}</span>
         <span v-if="lock" class="fm-icon lock"></span>
+        <span v-if="ifTargetUpCloseLock" class="fm-tag s-red">目标锁</span>
         <span v-if="ifInZ45StatusNow" class="fm-tag s-black">z45</span>
         <span v-if="isInQuarterHotToday" class="fm-tag s-black">危险</span>
         <span v-if="indexStage === '顶部'" class="fm-tag s-yellow">阶顶</span>
@@ -27,6 +28,7 @@
         <span v-if="ifRelieveFixLine" class="fm-tag s-blue">解定</span>
         <span v-if="ifJieFantanToday()" class="fm-tag s-blue">解反</span>
         <span v-if="ifJieNoSellToCan()" class="fm-tag s-blue">解转交</span>
+        <span v-if="ifJieTargetUpCloseLock" class="fm-tag s-blue">解目标</span>
         <span v-if="ifJieDingbu()" class="fm-tag s-blue">解顶</span>
         <span v-if="ifJieQuarterHot" class="fm-tag s-blue">解危</span>
         <span v-if="ifJieZ45" class="fm-tag s-blue">解z45</span>
@@ -309,6 +311,28 @@ export default {
     // 是否解除定投
     ifRelieveFixLine () {
       return this.indexStage === '定投' && this.averageHalfYear >= this.indexInfo.relieveFixLine
+    },
+    // 是否到达目标点位
+    ifTargetUpCloseLock () {
+      const targetUpClose = storageUtil.getData('stockIndexTargetUpClose', this.indexInfo.key) || 0
+      if (targetUpClose) {
+        const indexNowClose = storageUtil.getData('indexNowClose', this.indexInfo.key) || 0
+        if (indexNowClose < targetUpClose) {
+          return true
+        }
+      }
+      return false
+    },
+    // 是否到达目标点位
+    ifJieTargetUpCloseLock () {
+      const targetUpClose = storageUtil.getData('stockIndexTargetUpClose', this.indexInfo.key) || 0
+      if (targetUpClose) {
+        const indexNowClose = storageUtil.getData('indexNowClose', this.indexInfo.key) || 0
+        if (indexNowClose >= targetUpClose) {
+          return true
+        }
+      }
+      return false
     },
     // ------------连涨连跌信号
     ifThreeDown () {
@@ -855,6 +879,10 @@ export default {
       if (this.isInDingtouStatus()) {
         classListF = this.removeSell(classListF)
       }
+      // 没到目标位不卖
+      if (this.ifTargetUpCloseLock) {
+        classListF = this.removeSell(classListF)
+      }
       // 季线危险阶段，没有买入信号，因为很可能是无止境得跌
       if (this.isInQuarterHotToday) {
         classListF = this.removeBuy(classListF)
@@ -885,14 +913,14 @@ export default {
           classListF.push('should-cut')
         }
       }
-      // 两个小幅0.2
+      // 两个小幅0.2，即使锁仓也没有用，锁仓只卖1/3
       if (this.sellLowDownSmall() || this.sellLowDownBig()) {
         // 没有任何买入
         classListF = this.removeBuy(classListF)
         // 加入卖出
         classListF.push(sellClass)
       }
-      // 年下当天触发z45那就立马卖出
+      // 年下当天触发z45那就立马卖出，权重最大不管任何情况
       if (this.ifClearZ45Today) {
         // 没有任何买入
         classListF = this.removeBuy(classListF)

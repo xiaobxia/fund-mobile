@@ -513,10 +513,10 @@ export default {
       return false
     },
     // ----------提示信号
-    // 减半高月锁仓
+    // 减半高月外加季度线
     ifCutHalf () {
       // 月线危险区，外加阶段顶部，需要提示减仓一半
-      return this.ifMonthHot && this.ifIndexTopToday && this.rate > 0
+      return this.ifMonthHot && this.isInQuarterHotToday && this.rate > 0
     },
     // 满足止盈条件
     ifStopKeep () {
@@ -534,7 +534,7 @@ export default {
     ifClearHalf () {
       const question10 = storageUtil.getData('stockMarketQuestion', 'question_10')
       // 处于顶部，并且该指数锁转交或者大部分指数同时锁转交
-      return this.ifInDingbuStatus() && (question10 === '是' || this.ifNoSellToCanNew())
+      return this.isInQuarterHotToday && (question10 === '是' || this.ifNoSellToCanNew())
     },
     // 是否处于反弹
     ifInFantanOld () {

@@ -8,8 +8,9 @@ const kuanji = indexType.kuanji
 
 // 定投占比
 // 得真实得定，因为这也会影响波段指数的标准仓
-const fixedInvestmentRatio = 0.5
+const fixedInvestmentRatio = 0.4
 // 指数数量
+// 机构垃圾指数会根据分类提升占比
 const indexNumber = 24
 
 // 获取当天账户资产
@@ -115,7 +116,7 @@ function buyNumberRedistribution (indexItem, hasCount, buyNumber) {
   const asset = getUserAsset()
   let mix = indexItem.mix ? 1.25 : 1
   const indexAssetStandard = mix * asset / indexNumber
-  const indexRedistributionStandard = indexAssetStandard / 2
+  const indexRedistributionStandard = indexAssetStandard * (1 - fixedInvestmentRatio)
   // 年排行在前面的，给更高仓位配比
   let indexYearDiffFactor = factorUtil.getIndexYearDiffFactor(indexItem.key, 'buy')
   // 指数处于的阶段

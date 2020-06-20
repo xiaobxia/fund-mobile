@@ -863,8 +863,10 @@ export default {
       }
       // 指数处于阶段顶部区间
       if (this.ifInDingbuStatus()) {
-        // 纯买信号没有了
-        classListF = this.removeNormalBuy(classListF)
+        // 不是机构指数的话，纯买信号没有了
+        if (!this.ifJigou) {
+          classListF = this.removeNormalBuy(classListF)
+        }
       }
       // 止盈
       if (this.ifStopKeep()) {

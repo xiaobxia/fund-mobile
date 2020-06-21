@@ -8,7 +8,7 @@ const kuanji = indexType.kuanji
 
 // 定投占比
 // 得真实得定，因为这也会影响波段指数的标准仓
-const fixedInvestmentRatio = 0.4
+const fixedInvestmentRatio = 0.45
 // 指数数量
 // 机构垃圾指数会根据分类提升占比
 const indexNumber = 24
@@ -24,6 +24,14 @@ function operateStandard () {
   const asset = getUserAsset()
   // 波段仓占比
   return asset * (1 - fixedInvestmentRatio) / (indexNumber * 5)
+}
+
+// 单个指数的仓位标准
+function positionStandard (indexItem) {
+  const asset = getUserAsset()
+  const positionAsset = asset * (1 - fixedInvestmentRatio)
+  let mix = indexItem.mix ? 1.25 : 1
+  return mix * positionAsset / indexNumber
 }
 
 // 基于市场的购买基准
@@ -113,10 +121,7 @@ function getBuyNumber (hasCount, rowBuy, indexRedistributionStandard) {
 
 // 买入金额再分配
 function buyNumberRedistribution (indexItem, hasCount, buyNumber) {
-  const asset = getUserAsset()
-  let mix = indexItem.mix ? 1.25 : 1
-  const indexAssetStandard = mix * asset / indexNumber
-  const indexRedistributionStandard = indexAssetStandard * (1 - fixedInvestmentRatio)
+  const indexRedistributionStandard = positionStandard(indexItem)
   // 年排行在前面的，给更高仓位配比
   let indexYearDiffFactor = factorUtil.getIndexYearDiffFactor(indexItem.key, 'buy')
   // 指数处于的阶段
@@ -144,10 +149,7 @@ function getSellNumber (hasCount, rowSell, indexRedistributionStandard) {
 }
 // 卖出金额再分配
 function sellNumberRedistribution (indexItem, hasCount, sellNumber) {
-  const asset = getUserAsset()
-  let mix = indexItem.mix ? 1.25 : 1
-  const indexAssetStandard = mix * asset / indexNumber
-  const indexRedistributionStandard = indexAssetStandard / 2
+  const indexRedistributionStandard = positionStandard(indexItem)
   // 年排行在前面的，给更高仓位配比，卖出也用buy的
   let indexYearDiffFactor = factorUtil.getIndexYearDiffFactor(indexItem.key, 'buy')
   return getSellNumber(hasCount, sellNumber, indexRedistributionStandard * indexYearDiffFactor)

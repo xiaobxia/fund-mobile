@@ -51,6 +51,19 @@ export default {
         this.queryData(list[i])
       }
     },
+    // 季度线影响
+    ifMonthUpOk (key) {
+      const ifQuarterHot = storageUtil.getData('stockIndexQuarterHot', key) === '开启'
+      const averageQuarter = storageUtil.getData('averageQuarterIndex', key) || 0
+      if (averageQuarter > 0) {
+        if (ifQuarterHot) {
+          return false
+        }
+        return true
+      } else {
+        return false
+      }
+    },
     queryData (item) {
       this.$http.get(`stock/${stockApiUtil.getAllUrl()}`, {
         code: item.code,
@@ -86,6 +99,12 @@ export default {
           const diff = this.countDifferenceRate(now / 7, last / 7)
           if (diff < 0.2) {
             lock = false
+          }
+          // 季度线以上，月线超过0就可以锁仓
+          if (this.ifMonthUpOk(item.key)) {
+            if (averageDiff > 0) {
+              lock = true
+            }
           }
           item.lock = lock
           // 保存锁仓信息

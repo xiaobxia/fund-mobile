@@ -716,6 +716,19 @@ export default {
     sellLowDownBig () {
       return this.ifTwoLowDown && !this.sellLowDownSmall()
     },
+    // 季度线影响
+    ifMonthUpOk (key) {
+      const ifQuarterHot = storageUtil.getData('stockIndexQuarterHot', key) === '开启'
+      const averageQuarter = storageUtil.getData('averageQuarterIndex', key) || 0
+      if (averageQuarter > 0) {
+        if (ifQuarterHot) {
+          return false
+        }
+        return true
+      } else {
+        return false
+      }
+    },
     getItemClass () {
       // 指数锁仓转不锁
       const question10 = storageUtil.getData('stockMarketQuestion', 'question_10')
@@ -907,6 +920,15 @@ export default {
         }
         // 在趋势中，什么卖出信号都不用管
         classListF = this.removeSell(classListF)
+      }
+      // 季度线以上，月线超过0就可以不杀跌
+      if (this.ifMonthUpOk(item.key)) {
+        if (averageDiff > 0) {
+          // 小于0不卖出
+          if (this.rate <= 0) {
+            classListF = this.removeSell(classListF)
+          }
+        }
       }
       // 过热需要减半仓位止盈一次
       // 首先当天rate>0

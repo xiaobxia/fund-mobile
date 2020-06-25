@@ -549,7 +549,7 @@ export default {
       if (this.indexNoSellStatusOld === '锁仓') {
         return true
       }
-      if (this.indexNoSellStatusToday || this.noSellCount >= 18) {
+      if (this.indexNoSellStatusToday) {
         return true
       }
       return false

@@ -922,8 +922,8 @@ export default {
         classListF = this.removeSell(classListF)
       }
       // 季度线以上，月线超过0就可以不杀跌
-      if (this.ifMonthUpOk(item.key)) {
-        if (averageDiff > 0) {
+      if (this.ifMonthUpOk(this.indexInfo.key)) {
+        if (this.averageMonthIndex > 0) {
           // 小于0不卖出
           if (this.rate <= 0) {
             classListF = this.removeSell(classListF)

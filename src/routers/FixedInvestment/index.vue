@@ -294,6 +294,11 @@ export default {
         return 'sell'
       }
     },
+    isInQuarterHotToday (key) {
+      const quarterIndex = storageUtil.getData('averageQuarterIndex', key) || 0
+      const quarterHot = storageUtil.getData('stockIndexQuarterHot', key) === '开启'
+      return quarterHot && quarterIndex > 0
+    },
     initPage () {
       this.stockIndexAll.forEach((item) => {
         this.averageMap[item.code] = item.year_average
@@ -343,15 +348,20 @@ export default {
             const oneDayRecord = recentNetValue[i + 1]
             const twoDayRecord = recentNetValue[i + 2]
             let buyFlag = infoUtil[fnMap[item.key + 'Buy']](nowRecord, oneDayRecord, twoDayRecord)
-            let sellFlag = infoUtil[fnMap[item.key + 'Sell']](nowRecord, oneDayRecord, twoDayRecord)
+            // let sellFlag = infoUtil[fnMap[item.key + 'Sell']](nowRecord, oneDayRecord, twoDayRecord)
             // 根据信号判断
             kline.push(recentNetValue[i])
+            // if (buyFlag.flag === true) {
+            //   infoList[i] = '买'
+            // } else if (sellFlag.flag === true && sellFlag.text !== 'xiong') {
+            //   infoList[i] = '卖'
+            // } else if (sellFlag.flag === true && sellFlag.text === 'xiong') {
+            //   infoList[i] = '卖少'
+            // } else {
+            //   infoList[i] = ''
+            // }
             if (buyFlag.flag === true) {
               infoList[i] = '买'
-            } else if (sellFlag.flag === true && sellFlag.text !== 'xiong') {
-              infoList[i] = '卖'
-            } else if (sellFlag.flag === true && sellFlag.text === 'xiong') {
-              infoList[i] = '卖少'
             } else {
               infoList[i] = ''
             }
@@ -392,6 +402,14 @@ export default {
               if (stockAnalysisUtil.countDown(netChangeRatioList, 9, 7).flag) {
                 infoList[i] = '跌多'
               }
+            }
+          }
+          if (this.isInQuarterHotToday(item.key)) {
+            infoList[0] = ''
+            const netChangeRatioList = getNetChangeRatioList(recentNetValue, 0)
+            let threeDay = stockAnalysisUtil.countUp(netChangeRatioList, 3, 3)
+            if (threeDay.flag) {
+              infoList[i] = '卖1/12'
             }
           }
           const diff = this.countDifferenceRate(nowClose, this.averageMap[item.code])

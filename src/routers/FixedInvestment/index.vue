@@ -425,7 +425,7 @@ export default {
             buyNumber = parseInt(getBuyRate(diff, params.a, params.b, params.c) * buyS / 10) * 10
           }
           this.canBuy[item.key] = buyNumber
-          this.canSell[item.key] = parseInt(getSellRate(diff) * buyS / 10) * 10
+          this.canSell[item.key] = parseInt((buyS * buyS / buyNumber) / 10) * 10
           this.allInfo[item.key] = infoList
           let buyBaseInfo = 0
           if (['买', '跌少', '跌多'].indexOf(infoList[0]) !== -1) {

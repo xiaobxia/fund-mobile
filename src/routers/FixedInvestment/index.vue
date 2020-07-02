@@ -409,7 +409,7 @@ export default {
             const netChangeRatioList = getNetChangeRatioList(recentNetValue, 0)
             let threeDay = stockAnalysisUtil.countUp(netChangeRatioList, 3, 3)
             if (threeDay.flag) {
-              infoList[i] = '卖1/12'
+              infoList[0] = '卖1/12'
             }
           }
           const diff = this.countDifferenceRate(nowClose, this.averageMap[item.code])

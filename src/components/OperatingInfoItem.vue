@@ -35,11 +35,11 @@
         <span v-if="ifClearHalf()" class="fm-tag s-black">清半</span>
         <span v-if="isInQuarterHotToday && ifNoSellToCanNew()" class="fm-tag s-black">清2/3</span>
         <span v-if="ifStopKeep()" class="fm-tag s-black">止盈</span>
-        <span v-if="ifClearZ45Today" class="fm-tag s-blue">清z45</span>
+        <span v-if="ifClearZ45Today" class="fm-tag s-black">清z45</span>
         <span v-if="ifCutHalf()" class="fm-tag s-blue">减半</span>
-        <span v-if="sellLowDownSmall()" class="fm-tag s-blue">危险1/3</span>
-        <span v-if="sellLowDownBig()" class="fm-tag s-blue">危险2/3</span>
-        <span v-if="ifCutHalf() && ifTwoUp" class="fm-tag s-yellow">减半减</span>
+        <span v-if="sellLowDownSmall()" class="fm-tag s-black">危险1/3</span>
+        <span v-if="sellLowDownBig()" class="fm-tag s-black">危险2/3</span>
+        <span v-if="ifCutHalf() && ifTwoUp" class="fm-tag s-black">减半减</span>
         <span v-if="ifCutHalf() && ifFourUp" class="fm-tag s-black">必减</span>
         <span v-if="ifUnderYear && ifDownTrend && (indexStage !== '定投' && indexStage !== '探底')" class="fm-tag black">禁买</span>
         <span v-if="indexDaXiaoStatusOld === '禁买' && (!ifUnderYear || !ifDownTrend)" class="fm-tag s-blue">解禁</span>

@@ -120,7 +120,7 @@ function getBuyNumber (hasCount, rowBuy, indexRedistributionStandard) {
 }
 
 // 买入金额再分配
-function buyNumberRedistribution (indexItem, hasCount, buyNumber) {
+function buyNumberRedistribution (indexItem, hasCount, buyNumber, marketInfo) {
   const indexRedistributionStandard = positionStandard(indexItem)
   // 年排行在前面的，给更高仓位配比
   let indexYearDiffFactor = factorUtil.getIndexYearDiffFactor(indexItem.key, 'buy')
@@ -132,7 +132,23 @@ function buyNumberRedistribution (indexItem, hasCount, buyNumber) {
       indexYearDiffFactor = 1
     }
   }
-  return getBuyNumber(hasCount, buyNumber, indexRedistributionStandard * indexYearDiffFactor)
+  let finalFactor = 1
+  // 买卖信号因子
+  finalFactor = finalFactor * factorUtil.buySellFactor(
+    marketInfo.buyFlagCount,
+    marketInfo.sellFlagCount,
+    indexNumber,
+    'buy'
+  )
+  // 锁仓因子
+  finalFactor = finalFactor * factorUtil.noSellCountFactor(marketInfo.noSellCount, indexNumber, 'buy')
+  // 市场状况
+  finalFactor = finalFactor * factorUtil.stockMarketQuestionFactor('buy')
+  // 市场择时
+  finalFactor = finalFactor * factorUtil.assetMarketTimeFactor('buy')
+  // 仓位修正
+  finalFactor = finalFactor * factorUtil.positionFactor('buy')
+  return getBuyNumber(hasCount, buyNumber, indexRedistributionStandard * indexYearDiffFactor * finalFactor)
 }
 
 function getSellNumber (hasCount, rowSell, indexRedistributionStandard) {
@@ -148,11 +164,27 @@ function getSellNumber (hasCount, rowSell, indexRedistributionStandard) {
   return d * c
 }
 // 卖出金额再分配
-function sellNumberRedistribution (indexItem, hasCount, sellNumber) {
+function sellNumberRedistribution (indexItem, hasCount, sellNumber, marketInfo) {
   const indexRedistributionStandard = positionStandard(indexItem)
   // 年排行在前面的，给更高仓位配比，卖出也用buy的
   let indexYearDiffFactor = factorUtil.getIndexYearDiffFactor(indexItem.key, 'buy')
-  return getSellNumber(hasCount, sellNumber, indexRedistributionStandard * indexYearDiffFactor)
+  let finalFactor = type === 1
+  // 买卖信号因子
+  finalFactor = finalFactor * factorUtil.buySellFactor(
+    marketInfo.buyFlagCount,
+    marketInfo.sellFlagCount,
+    indexNumber,
+    'sell'
+  )
+  // 锁仓因子
+  finalFactor = finalFactor * factorUtil.noSellCountFactor(marketInfo.noSellCount, indexNumber, 'sell')
+  // 市场状况
+  finalFactor = finalFactor * factorUtil.stockMarketQuestionFactor('sell')
+  // 市场择时
+  finalFactor = finalFactor * factorUtil.assetMarketTimeFactor('sell')
+  // 仓位修正
+  finalFactor = finalFactor * factorUtil.positionFactor('sell')
+  return getSellNumber(hasCount, sellNumber, indexRedistributionStandard * indexYearDiffFactor * finalFactor)
 }
 
 const operatingTooltip = {
@@ -199,7 +231,7 @@ const operatingTooltip = {
       indexManyDownFactor *
       monthAverageFactor *
       indexDaVFactor
-    let finalBuyNumber = buyNumberRedistribution(indexItem, hasCount, buyNumber)
+    let finalBuyNumber = buyNumberRedistribution(indexItem, hasCount, buyNumber, marketInfo)
     return Math.round(finalBuyNumber / 100) * 100
   },
   getIndexSellNumber (type, indexItem, marketInfo, hasCount) {
@@ -229,7 +261,7 @@ const operatingTooltip = {
       indexNetChangeRatioRateFactor *
       indexLajiFactor *
       indexDaVFactor
-    let finalSellNumber = sellNumberRedistribution(indexItem, hasCount, sellNumber)
+    let finalSellNumber = sellNumberRedistribution(indexItem, hasCount, sellNumber, marketInfo)
     return Math.round(finalSellNumber / 100) * 100
   },
   // 仓位提示的警戒线

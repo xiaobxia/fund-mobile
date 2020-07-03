@@ -316,7 +316,7 @@ export default {
     let factor = 1
     // 月线过热的话得要减少买入
     if (indexAverage > 0) {
-      factor = 1 - (0.5 * (indexAverage / reduceLine))
+      factor = 1 - (0.5 * (indexAverage / (reduceLine * 2)))
     }
     if (factor < 0.5) {
       factor = 0.5

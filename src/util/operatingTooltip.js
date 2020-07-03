@@ -168,7 +168,7 @@ function sellNumberRedistribution (indexItem, hasCount, sellNumber, marketInfo) 
   const indexRedistributionStandard = positionStandard(indexItem)
   // 年排行在前面的，给更高仓位配比，卖出也用buy的
   let indexYearDiffFactor = factorUtil.getIndexYearDiffFactor(indexItem.key, 'buy')
-  let finalFactor = type === 1
+  let finalFactor = 1
   // 买卖信号因子
   finalFactor = finalFactor * factorUtil.buySellFactor(
     marketInfo.buyFlagCount,

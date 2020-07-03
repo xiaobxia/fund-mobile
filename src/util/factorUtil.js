@@ -115,7 +115,7 @@ export default {
     }
   },
   // 仓位因子
-  positionFactor: function (buySell) {
+  positionFactor: function (buySell, small) {
     let factor = 1
     // 仓位修正
     // 配置
@@ -131,6 +131,14 @@ export default {
     }
     if (positionFactor < 0) {
       positionFactor = 0
+    }
+    if (small === true) {
+      if (positionFactor < 0.7) {
+        positionFactor = 0.7
+      }
+      if (positionFactor > 1.3) {
+        positionFactor = 1.3
+      }
     }
     return factor * positionFactor
   },

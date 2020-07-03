@@ -147,7 +147,7 @@ function buyNumberRedistribution (indexItem, hasCount, buyNumber, marketInfo) {
   // 市场择时
   finalFactor = finalFactor * factorUtil.assetMarketTimeFactor('buy')
   // 仓位修正
-  finalFactor = finalFactor * factorUtil.positionFactor('buy')
+  finalFactor = finalFactor * factorUtil.positionFactor('buy', true)
   return getBuyNumber(hasCount, buyNumber, indexRedistributionStandard * indexYearDiffFactor * finalFactor)
 }
 
@@ -183,7 +183,7 @@ function sellNumberRedistribution (indexItem, hasCount, sellNumber, marketInfo) 
   // 市场择时
   finalFactor = finalFactor * factorUtil.assetMarketTimeFactor('sell')
   // 仓位修正
-  finalFactor = finalFactor * factorUtil.positionFactor('sell')
+  finalFactor = finalFactor * factorUtil.positionFactor('sell', true)
   return getSellNumber(hasCount, sellNumber, indexRedistributionStandard * indexYearDiffFactor * finalFactor)
 }
 

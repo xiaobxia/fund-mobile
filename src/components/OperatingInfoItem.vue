@@ -32,6 +32,7 @@
         <span v-if="ifJieDingbu()" class="fm-tag s-blue">解顶</span>
         <span v-if="ifJieQuarterHot" class="fm-tag s-blue">解危</span>
         <span v-if="ifJieZ45" class="fm-tag s-blue">解z45</span>
+        <!--执行部分-->
         <span v-if="ifClearHalf()" class="fm-tag s-black">清半</span>
         <span v-if="isInQuarterHotToday && ifNoSellToCanNew()" class="fm-tag s-black">清2/3</span>
         <span v-if="ifStopKeep()" class="fm-tag s-black">止盈</span>
@@ -935,7 +936,12 @@ export default {
       if (this.ifCutHalf()) {
         // 没有买背景，也没有卖背景，也不处于大小反
         if (!this.ifHasBuy(classListF) && !this.ifHasSell(classListF) && !this.ifInFantanOld()) {
-          classListF.push('should-cut')
+          if (this.ifTwoUp) {
+            classListF.push('should-sell')
+            classListF.push('zhiyinbufen')
+          } else {
+            classListF.push('should-cut')
+          }
         }
       }
       // 两个小幅0.2，即使锁仓也没有用，锁仓只卖1/3

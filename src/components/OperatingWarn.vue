@@ -1,5 +1,15 @@
 <template>
   <div>
+    <div class="warn-wrap">
+      <div class="fm-warn blue">波段仓砍仓要狠，定投才是大头</div>
+      <div class="fm-warn red">波段仓一定要遵守交易纪律</div>
+      <div class="fm-warn grey">冒着绿光的才卖，不要被迷惑</div>
+      <!--<div class="fm-warn green" v-if="keepLow">仓位配置100以内</div>-->
+      <!--<div class="fm-warn green" v-if="ifCut">仓位配置为{{ifCut}}</div>-->
+      <!--<div class="fm-warn red" v-if="ifFull">仓位配置为{{ifFull}}</div>-->
+      <div class="fm-warn green" v-if="ifNiandi">年底机构结账，保护收益</div>
+      <!--<div class="fm-warn green" v-if="nowMonthRate>=1.8">建议开始锁定收益，有一个降到60仓的过程，然后再重新按照信号做</div>-->
+    </div>
     <div class="detail-info-wrap">
       <div class="item">
         <span class="label">信号比：</span>
@@ -63,16 +73,6 @@
         <span class="label">顶部：</span>
         <span class="value">{{niuxiong[5]}}</span>
       </div>
-    </div>
-    <div class="warn-wrap">
-      <div class="fm-warn blue">波段仓砍仓要狠，定投才是大头</div>
-      <div class="fm-warn red">波段仓一定要遵守交易纪律</div>
-      <div class="fm-warn red">冒着绿光的才卖，不要被迷惑</div>
-      <!--<div class="fm-warn green" v-if="keepLow">仓位配置100以内</div>-->
-      <!--<div class="fm-warn green" v-if="ifCut">仓位配置为{{ifCut}}</div>-->
-      <!--<div class="fm-warn red" v-if="ifFull">仓位配置为{{ifFull}}</div>-->
-      <div class="fm-warn green" v-if="ifNiandi">年底机构结账，保护收益</div>
-      <!--<div class="fm-warn green" v-if="nowMonthRate>=1.8">建议开始锁定收益，有一个降到60仓的过程，然后再重新按照信号做</div>-->
     </div>
   </div>
 </template>

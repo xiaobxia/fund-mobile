@@ -81,8 +81,10 @@ function getSellBase (type, marketInfo) {
 
 function getBuyNumber (hasCount, rowBuy, indexRedistributionStandard) {
   const full = 2 * indexRedistributionStandard
-  const splitLine = 0.66 * full
-  const restLine = 0.34 * full
+  // 到0.5的位置最高
+  const splitLine = 0.5 * full
+  const restLine = 0.5 * full
+  // 获取曲线
   function getY (x) {
     if (x <= splitLine) {
       return 0.5 + 0.5 * (x / splitLine)
@@ -116,6 +118,7 @@ function getBuyNumber (hasCount, rowBuy, indexRedistributionStandard) {
   // if (fBuy + hasCount > 2 * indexRedistributionStandard) {
   //   fBuy = 2 * indexRedistributionStandard - hasCount
   // }
+  // 是超过仓位的部分(0.33 * rest)
   return fBuy + (0.33 * rest)
 }
 

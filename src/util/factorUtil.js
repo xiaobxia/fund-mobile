@@ -132,6 +132,7 @@ export default {
     if (positionFactor < 0) {
       positionFactor = 0
     }
+    // 仓位偏差理论上不能很大
     if (small === true) {
       if (positionFactor < 0.7) {
         positionFactor = 0.7

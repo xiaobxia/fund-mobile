@@ -331,6 +331,15 @@ export default {
         }
       })
     },
+    ifFengNiu () {
+      // 是不是全面疯牛
+      const question10 = storageUtil.getData('stockMarketQuestion', 'question_10')
+      return question10 === '是'
+    },
+    // 月线
+    averageMonthIndex (key) {
+      return storageUtil.getData('averageMonth', key) || 0
+    },
     queryData (item) {
       this.$http.get(`stock/${stockApiUtil.getAllUrl()}`, {
         code: item.code,
@@ -414,6 +423,11 @@ export default {
           }
           if (!canFix) {
             infoList[0] = '禁'
+          }
+          if (this.ifFengNiu()) {
+            if (this.averageMonthIndex(item.key) < -4) {
+              infoList[0] = '强卖止盈'
+            }
           }
           // if (this.isInQuarterHotToday(item.key)) {
           //   infoList[0] = ''

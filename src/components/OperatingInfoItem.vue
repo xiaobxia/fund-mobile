@@ -870,6 +870,11 @@ export default {
           classListF.push(sellClass)
         }
       }
+      // 季度线过热，然后转交，那就提示卖出
+      // 不管有没有大反什么的
+      if (this.ifQuarterHotCut()) {
+        classListF.push(sellClass)
+      }
       // 指数处于阶段顶部区间
       // if (this.ifInDingbuStatus()) {
       //   // 不是机构指数的话，纯买信号没有了

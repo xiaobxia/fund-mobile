@@ -59,8 +59,12 @@ export default {
           item.netChangeRatio = diff
           storageUtil.setData('averageHalfYearIndex', item.key, diff)
           storageUtil.setData('averageHalfYearIndexClose', item.key, close)
+          const indexYearDiff = storageUtil.getData('yearAverageIndexDiff', item.key) || 0
+          // 年线也必须是线下
           if (diff <= item.fixLine) {
-            this.updateStockIndex(item.key, '定投')
+            if (indexYearDiff < 0) {
+              this.updateStockIndex(item.key, '定投')
+            }
           }
         }
       })

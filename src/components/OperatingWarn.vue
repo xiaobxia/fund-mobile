@@ -4,13 +4,9 @@
       <div class="fm-warn blue">波段仓砍仓要狠，定投才是大头</div>
       <div class="fm-warn red">波段仓一定要遵守交易纪律</div>
       <div class="fm-warn grey">冒着绿光的才卖，不要被迷惑</div>
-      <!--<div class="fm-warn green" v-if="keepLow">仓位配置100以内</div>-->
-      <!--<div class="fm-warn green" v-if="ifCut">仓位配置为{{ifCut}}</div>-->
-      <!--<div class="fm-warn red" v-if="ifFull">仓位配置为{{ifFull}}</div>-->
       <div class="fm-warn green" v-if="ifNiandi">年底机构结账，保护收益</div>
-      <!--<div class="fm-warn green" v-if="nowMonthRate>=1.8">建议开始锁定收益，有一个降到60仓的过程，然后再重新按照信号做</div>-->
     </div>
-    <div class="detail-info-wrap">
+    <div class="detail-info-wrap" :class="{feng: ifFengNiu}">
       <div class="item">
         <span class="label">信号比：</span>
         <span class="value">
@@ -130,38 +126,15 @@ export default {
     }
   },
   computed: {
-    keepLow () {
-      const position = storageUtil.getData('userAccountInfo', 'positionConfig') || 100
-      return this.noSellCount <= 12 && position > 100
-    },
     ifNiandi () {
       const d = this.getDate()
       const month = d.getMonth() + 1
       return month === 12 || month === 11
     },
-    ifFull () {
-      const position = storageUtil.getData('userAccountInfo', 'positionConfig') || 100
-      // 根据定投判断
-      if (this.niuxiong[3] >= 18 && position < 150) {
-        return 150
-      }
-      if (this.niuxiong[3] >= 12 && position < 100) {
-        return 100
-      }
-      if (this.niuxiong[3] >= 6 && position < 50) {
-        return 50
-      }
-      return 0
-    },
-    ifCut () {
-      // 锁仓转不锁
+    ifFengNiu () {
+      // 是不是全面疯牛
       const question10 = storageUtil.getData('stockMarketQuestion', 'question_10')
-      const question9 = storageUtil.getData('stockMarketQuestion', 'question_9')
-      const position = storageUtil.getData('userAccountInfo', 'positionConfig') || 100
-      if ((question9 === '是' || question10 === '是') && position > 50) {
-        return 50
-      }
-      return 0
+      return question10 === '是'
     }
   },
   created () {

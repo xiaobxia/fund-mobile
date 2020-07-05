@@ -14,7 +14,7 @@ export default [
     days: 1200,
     topLine: 15,
     cutDownLine: 30,
-    quarterHotLine: 15,
+    quarterHotLine: 20,
     relieveZ45Line: -6
   },
   {

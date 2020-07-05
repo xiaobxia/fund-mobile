@@ -1,12 +1,44 @@
 <template>
   <div>
     <div class="has-bar">
-      <div class="img-card" @click="toPath('/page/fixedInvestment')">
+      <div class="img-card" @click="toPath('/page/averageYearIndex')">
         <div class="container">
           <div class="content">
-            <img src="../../assets/投币.png" alt="">
+            <img src="../../assets/阴.png" alt="">
           </div>
-          <div class="bottom">定投策略</div>
+          <div class="bottom">年线策略</div>
+        </div>
+      </div>
+      <div class="img-card" @click="toPath('/page/averageHalfYearIndex')">
+        <div class="container">
+          <div class="content">
+            <img src="../../assets/相对标准偏差.png" alt="">
+          </div>
+          <div class="bottom">半年线策略</div>
+        </div>
+      </div>
+      <div class="img-card" @click="toPath('/page/averageQuarterIndex')">
+        <div class="container">
+          <div class="content">
+            <img src="../../assets/季度线.png" alt="">
+          </div>
+          <div class="bottom">季度线</div>
+        </div>
+      </div>
+      <div class="img-card" @click="toPath('/page/averageMonthIndex')">
+        <div class="container">
+          <div class="content">
+            <img src="../../assets/均值.png" alt="">
+          </div>
+          <div class="bottom">月线策略</div>
+        </div>
+      </div>
+      <div class="img-card" @click="toPath('/page/averageIndex')">
+        <div class="container">
+          <div class="content">
+            <img src="../../assets/均线买卖.png" alt="">
+          </div>
+          <div class="bottom">均线策略</div>
         </div>
       </div>
       <div class="img-card" @click="toPath('/page/manyDown')">
@@ -15,6 +47,38 @@
             <img src="../../assets/阴.png" alt="">
           </div>
           <div class="bottom">多阴策略</div>
+        </div>
+      </div>
+      <div class="img-card" @click="toPath('/page/yearIncome')">
+        <div class="container">
+          <div class="content">
+            <img src="../../assets/全年无休.png" alt="">
+          </div>
+          <div class="bottom">指数年收益</div>
+        </div>
+      </div>
+      <div class="img-card" @click="toPath('/page/monthIncome')">
+        <div class="container">
+          <div class="content">
+            <img src="../../assets/收益期.png" alt="">
+          </div>
+          <div class="bottom">指数月收益</div>
+        </div>
+      </div>
+      <div class="img-card" @click="toPath('/page/fixedInvestment')">
+        <div class="container">
+          <div class="content">
+            <img src="../../assets/投币.png" alt="">
+          </div>
+          <div class="bottom">定投策略</div>
+        </div>
+      </div>
+      <div class="img-card" @click="toPath('/page/todayIndex')">
+        <div class="container">
+          <div class="content">
+            <img src="../../assets/今日.png" alt="">
+          </div>
+          <div class="bottom">今日指数</div>
         </div>
       </div>
       <div class="img-card" @click="toPath('/page/operatingInfo?type=jian')">
@@ -31,70 +95,6 @@
             <img src="../../assets/熊市.png" alt="">
           </div>
           <div class="bottom">操作分析-熊</div>
-        </div>
-      </div>
-      <div class="img-card" @click="toPath('/page/averageHalfYearIndex')">
-        <div class="container">
-          <div class="content">
-            <img src="../../assets/相对标准偏差.png" alt="">
-          </div>
-          <div class="bottom">半年线策略</div>
-        </div>
-      </div>
-      <div class="img-card" @click="toPath('/page/todayIndex')">
-        <div class="container">
-          <div class="content">
-            <img src="../../assets/今日.png" alt="">
-          </div>
-          <div class="bottom">今日指数</div>
-        </div>
-      </div>
-      <div class="img-card" @click="toPath('/page/averageIndex')">
-        <div class="container">
-          <div class="content">
-            <img src="../../assets/均线买卖.png" alt="">
-          </div>
-          <div class="bottom">均线策略</div>
-        </div>
-      </div>
-      <div class="img-card" @click="toPath('/page/averageMonthIndex')">
-        <div class="container">
-          <div class="content">
-            <img src="../../assets/均值.png" alt="">
-          </div>
-          <div class="bottom">月线策略</div>
-        </div>
-      </div>
-      <div class="img-card" @click="toPath('/page/monthIncome')">
-        <div class="container">
-          <div class="content">
-            <img src="../../assets/收益期.png" alt="">
-          </div>
-          <div class="bottom">指数月收益</div>
-        </div>
-      </div>
-      <div class="img-card" @click="toPath('/page/yearIncome')">
-        <div class="container">
-          <div class="content">
-            <img src="../../assets/全年无休.png" alt="">
-          </div>
-          <div class="bottom">指数年收益</div>
-        </div>
-      </div>
-      <div class="img-card" @click="toPath('/page/averageYearIndex')">
-        <div class="container">
-          <div class="content">
-            <img src="../../assets/阴.png" alt="">
-          </div>
-          <div class="bottom">年线策略</div>
-        </div>
-      </div>
-      <div class="img-card" @click="toPath('/page/averageQuarterIndex')">
-        <div class="container">
-          <div class="content">
-            <img src="../../assets/季度线.png" alt="">
-          </div>
-          <div class="bottom">季度线</div>
         </div>
       </div>
       <div class="img-card" @click="toPath('/page/daysIncome')">

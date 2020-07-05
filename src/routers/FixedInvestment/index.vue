@@ -6,7 +6,7 @@
       </mt-button>
     </mt-header>
     <div class="main-body">
-      <div class="fm-warn blue">不要自作聪明，这里提示卖了才卖</div>
+      <!--<div class="fm-warn blue">不要自作聪明，这里提示卖了才卖</div>-->
       <mt-cell-swipe v-for="(item) in list" :key="item.code" :class="[hasInfo[item.name] ? 'has':'no-has', 'line-type']">
         <div slot="title">
           <h3>
@@ -294,6 +294,9 @@ export default {
       if (subItem.indexOf('卖') !== -1) {
         return 'sell'
       }
+      if (subItem.indexOf('禁') !== -1) {
+        return 'active-2 has-text'
+      }
     },
     isInQuarterHotToday (key) {
       const quarterIndex = storageUtil.getData('averageQuarterIndex', key) || 0
@@ -405,19 +408,26 @@ export default {
               }
             }
           }
-          if (this.isInQuarterHotToday(item.key)) {
-            infoList[0] = ''
-            const netChangeRatioList = getNetChangeRatioList(recentNetValue, 0)
-            let threeDay = stockAnalysisUtil.countUp(netChangeRatioList, 3, 3)
-            if (threeDay.flag) {
-              infoList[0] = '卖1/12'
-            }
+          let canFix = storageUtil.getData('stockIndexCanFix', item.key)
+          if (canFix !== false && canFix !== true) {
+            canFix = true
           }
+          if (!canFix) {
+            infoList[0] = '禁'
+          }
+          // if (this.isInQuarterHotToday(item.key)) {
+          //   infoList[0] = ''
+          //   const netChangeRatioList = getNetChangeRatioList(recentNetValue, 0)
+          //   let threeDay = stockAnalysisUtil.countUp(netChangeRatioList, 3, 3)
+          //   if (threeDay.flag) {
+          //     infoList[0] = '卖1/16'
+          //   }
+          // }
           const diff = this.countDifferenceRate(nowClose, this.averageMap[item.code])
           this.klineMap[item.key] = kline
           this.averageDiff[item.key] = diff
-          // 一月一万
-          const buyS = (12 * 10000) / 162.5
+          // 和总资金有关
+          const buyS = (300000 * 0.4) / 160
           const params = this.indexParams[item.code]
           let buyNumber = 0
           if (['baijiu', 'yiliao', 'shengwu', 'shipin'].indexOf(item.key) !== -1) {

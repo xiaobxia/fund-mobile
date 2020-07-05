@@ -89,7 +89,7 @@ export default [
     days: 1200,
     topLine: 14,
     cutDownLine: 17,
-    quarterHotLine: 0,
+    quarterHotLine: 20,
     relieveZ45Line: 0
   },
   {
@@ -440,7 +440,7 @@ export default [
     days: 1200,
     topLine: 11,
     cutDownLine: 15,
-    quarterHotLine: 0,
+    quarterHotLine: 15,
     relieveZ45Line: 0
   }
 ]

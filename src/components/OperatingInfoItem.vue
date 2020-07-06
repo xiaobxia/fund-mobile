@@ -726,12 +726,12 @@ export default {
     },
     // 季度线影响
     ifMonthUpOk (key) {
-      const ifQuarterHot = storageUtil.getData('stockIndexQuarterHot', key) === '开启'
+      // const ifQuarterHot = storageUtil.getData('stockIndexQuarterHot', key) === '开启'
       const averageQuarter = storageUtil.getData('averageQuarterIndex', key) || 0
       if (averageQuarter > 0) {
-        if (ifQuarterHot) {
-          return false
-        }
+        // if (ifQuarterHot) {
+        //   return false
+        // }
         return true
       } else {
         return false
@@ -925,6 +925,11 @@ export default {
         // 在趋势中，什么卖出信号都不用管
         classListF = this.removeSell(classListF)
       }
+      // if (this.indexInfo.key === 'yiyao') {
+      //   console.log(this.ifMonthUpOk(this.indexInfo.key))
+      //   console.log(this.averageMonthIndex)
+      //   console.log(this.rate)
+      // }
       // 季度线以上，月线超过0就可以不杀跌
       if (this.ifMonthUpOk(this.indexInfo.key)) {
         if (this.averageMonthIndex > 0) {

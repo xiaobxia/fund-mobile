@@ -46,7 +46,8 @@
         <span v-if="ifClearZ45Today" class="fm-tag s-black">清z45</span>
         <span v-if="sellLowDownSmall()" class="fm-tag s-black">危险1/3</span>
         <span v-if="sellLowDownBig()" class="fm-tag s-black">危险2/3</span>
-        <span v-if="ifDoubleHot() && ifFourUp" class="fm-tag s-black">热减</span>
+        <!--大牛市暂时注释-->
+        <!--<span v-if="ifDoubleHot() && ifFourUp" class="fm-tag s-black">热减</span>-->
         <span v-if="ifUnderYear && ifDownTrend && (indexStage !== '定投' && indexStage !== '探底')" class="fm-tag black">禁买</span>
         <span v-if="indexDaXiaoStatusOld === '禁买' && (!ifUnderYear || !ifDownTrend)" class="fm-tag s-blue">解禁</span>
         <span style="float: right" :class="stockNumberClass(rate)">{{rate}}%</span>
@@ -940,9 +941,10 @@ export default {
         }
       }
       // 双过热并且连涨4天需要提示减仓
-      if (this.ifDoubleHot() && this.ifFourUp) {
-        classListF.push('should-sell')
-      }
+      // TODO 大牛市暂时注释掉
+      // if (this.ifDoubleHot() && this.ifFourUp) {
+      //   classListF.push('should-sell')
+      // }
       // 两个小幅0.2，即使锁仓也没有用，锁仓只卖1/3
       if (this.sellLowDownSmall() || this.sellLowDownBig()) {
         // 没有任何买入

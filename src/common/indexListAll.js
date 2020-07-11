@@ -24,5 +24,6 @@ export default [
   { code: 'sz399432', name: '汽车', mix: false, key: 'qiche' },
   { code: 'sh000852', name: '1000', mix: true, key: 'yiqian' },
   { code: 'sz399393', name: '地产', mix: false, key: 'dichan' },
-  { code: 'sz399995', name: '基建', mix: false, key: 'jijian' }
+  { code: 'sz399995', name: '基建', mix: false, key: 'jijian' },
+  { code: 'sh518880', name: '黄金', mix: false, key: 'huangjin' }
 ]

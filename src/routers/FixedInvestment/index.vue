@@ -176,9 +176,12 @@ export default {
         'sz399997': 5400,
         'sz399989': 7464,
         'sz399441': 2537,
-        'sz399396': 17800
+        'sz399396': 17800,
+        // 黄金
+        'sh518880': 2
       },
       // 配比根据估值，还有行业中和判断
+      // a最高线，b最低线，c中轴线
       indexParams: {
         // 中证1000
         // 这东西很危险压根就不能定投，但是现在属于出清了一次，所以又拿出来投
@@ -257,6 +260,14 @@ export default {
           a: 20,
           b: -18,
           c: -9
+        },
+        // 黄金
+        'sh518880': {
+          buy: 1.3,
+          sell: 0.7,
+          a: 15,
+          b: -10,
+          c: 0
         }
       },
       klineMap
@@ -339,6 +350,11 @@ export default {
     // 月线
     averageMonthIndex (key) {
       return storageUtil.getData('averageMonth', key) || 0
+    },
+    localConsole (item, value) {
+      if (item.key === 'huangjin') {
+        console.log(value)
+      }
     },
     queryData (item) {
       this.$http.get(`stock/${stockApiUtil.getAllUrl()}`, {

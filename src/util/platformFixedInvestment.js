@@ -686,6 +686,68 @@ Util.prototype = {
       }
     }
     return false
+  },
+  ifBuyHuangjin: function (record, oneDayRecord) {
+    const today = this.getFlag(record, 1.9)
+    // 无抵抗下跌的都要
+    if (ifMatch(today,
+      {'ifHighPreCloseDown': true}
+    )) {
+      return {
+        flag: true,
+        text: 'buy-100-0'
+      }
+    }
+    // 跌幅两倍波动的就要
+    if (ifMatch(today,
+      {'ifUpClose': false, 'ifCloseHigh2': true}
+    )) {
+      return {
+        flag: true,
+        text: 'buy-101-0'
+      }
+    }
+    // 下跌
+    if (ifMatch(today,
+      {'ifCloseHigh': true, 'ifSessionDownHigh': true, 'ifSessionUpClose': false, 'ifSessionUp': false, 'ifSessionDownCloseHigh': true}
+    )) {
+      return {
+        flag: true,
+        text: 'buy-101-0'
+      }
+    }
+    return false
+  },
+  ifSellHuangjin: function (record, oneDayRecord) {
+    const today = this.getFlag(record, 1.9)
+    // 大涨
+    if (ifMatch(today,
+      {'ifHighPreCloseUpHigh': true}
+    )) {
+      return {
+        flag: true,
+        text: 'sell-100-0'
+      }
+    }
+    // 涨幅两倍波动的就要
+    if (ifMatch(today,
+      {'ifUpClose': true, 'ifCloseHigh2': true}
+    )) {
+      return {
+        flag: true,
+        text: 'sell-101-0'
+      }
+    }
+    // 下跌
+    if (ifMatch(today,
+      {'ifCloseHigh': true, 'ifSessionDownHigh': false, 'ifSessionUpClose': true, 'ifSessionUp': true, 'ifSessionDownCloseHigh': false}
+    )) {
+      return {
+        flag: true,
+        text: 'xiong'
+      }
+    }
+    return false
   }
 }
 
@@ -756,6 +818,13 @@ const codeMap = {
     threshold: 0.89,
     rate: 0.8235460992907802,
     wave: 0.9630645161290321
+  },
+  'huangjin': {
+    code: 'sh518880',
+    name: '黄金',
+    threshold: 0.37,
+    rate: 0.4959514675767919,
+    wave: 0.24661200135226474
   }
 }
 const fnMap = {
@@ -776,7 +845,9 @@ const fnMap = {
   yiliaoBuy: 'ifBuyYiliao',
   yiliaoSell: 'ifSellYiliao',
   shengwuBuy: 'ifBuyShengwu',
-  shengwuSell: 'ifSellShengwu'
+  shengwuSell: 'ifSellShengwu',
+  huangjinBuy: 'ifBuyHuangjin',
+  huangjinSell: 'ifSellHuangjin'
 }
 
 const FixedInvestment = {

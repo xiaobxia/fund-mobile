@@ -403,6 +403,11 @@ export default {
               if (fourDay.flag) {
                 infoList[i] = '跌少'
               }
+              if (item.key === 'huangjin') {
+                if (threeDay.flag) {
+                  infoList[i] = '跌少'
+                }
+              }
               if (threeDay.flag && threeDay.rate < -(3 * item.rate)) {
                 infoList[i] = '跌少'
               }

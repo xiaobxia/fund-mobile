@@ -959,6 +959,15 @@ export default {
         // 加入卖出
         classListF.push(sellClass)
       }
+      // 控制
+      const noBuy = storageUtil.getData('noBuySellConfig', 'noBuy') || false
+      const noSell = storageUtil.getData('noBuySellConfig', 'noSell') || false
+      if (noBuy) {
+        classListF = this.removeBuy(classListF)
+      }
+      if (noSell) {
+        classListF = this.removeSell(classListF)
+      }
       // 发送到服务端
       this.sendFlagToServer(classListF)
       // ---------关于个人的限制

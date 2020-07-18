@@ -11,6 +11,27 @@
         v-model="stockApiWay"
         :options="['东方', '腾讯', '雪球']">
       </mt-radio>
+      <div class="warn-wrap">
+        <div class="fm-warn blue">没预兆直接闷的时候，可以在反弹时选择不卖</div>
+      </div>
+      <div>
+        <mt-cell-swipe>
+          <div slot="title">
+            <h3>没买</h3>
+          </div>
+          <div class="right-wrap">
+            <mt-switch v-model="noBuy" @change="stateChangeHandler"></mt-switch>
+          </div>
+        </mt-cell-swipe>
+        <mt-cell-swipe>
+          <div slot="title">
+            <h3>没卖</h3>
+          </div>
+          <div class="right-wrap">
+            <mt-switch v-model="noSell" @change="stateChangeHandler"></mt-switch>
+          </div>
+        </mt-cell-swipe>
+      </div>
       <div class="bottom-bar">
         <div class="to">
           <mt-button type="primary" @click="clearHandler" class="main-btn">清除本地存储数据</mt-button>
@@ -31,7 +52,9 @@ export default {
   data () {
     const stockApiWay = storageUtil.getData('appConfig', 'stockApiWay') || '腾讯'
     return {
-      stockApiWay
+      stockApiWay,
+      noBuy: storageUtil.getData('noBuySellConfig', 'noBuy') || false,
+      noSell: storageUtil.getData('noBuySellConfig', 'noSell') || false
     }
   },
   watch: {
@@ -51,6 +74,10 @@ export default {
       setTimeout(() => {
         location.reload()
       }, 1000)
+    },
+    stateChangeHandler () {
+      storageUtil.setData('noBuySellConfig', 'noBuy', this.noBuy)
+      storageUtil.setData('noBuySellConfig', 'noSell', this.noSell)
     },
     copyData () {
       Indicator.open({

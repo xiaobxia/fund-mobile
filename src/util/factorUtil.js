@@ -41,6 +41,50 @@ export default {
       return 1 / noSellCountFactor
     }
   },
+  // 年线数量因子
+  indexYearCountFactor: function (buySell) {
+    const indexYear = storageUtil.getData('yearAverageIndexDiff')
+    let all = 0
+    let has = 0
+    for (let key in indexYear) {
+      all++
+      if (indexYear[key] > 0) {
+        has++
+      }
+    }
+    if (all > 0) {
+      let factor = 0.66 + ((has / all) * 0.34)
+      if (buySell === 'buy') {
+        return factor
+      } else {
+        return 1 / factor
+      }
+    } else {
+      return 1
+    }
+  },
+  // 年线数量因子
+  indexHalfYearCountFactor: function (buySell) {
+    const indexHalfYear = storageUtil.getData('averageHalfYearIndex')
+    let all = 0
+    let has = 0
+    for (let key in indexHalfYear) {
+      all++
+      if (indexHalfYear[key] > 0) {
+        has++
+      }
+    }
+    if (all > 0) {
+      let factor = 0.66 + ((has / all) * 0.34)
+      if (buySell === 'buy') {
+        return factor
+      } else {
+        return 1 / factor
+      }
+    } else {
+      return 1
+    }
+  },
   // 市场情况因子
   stockMarketQuestionFactor: function (buySell) {
     let factor = 1

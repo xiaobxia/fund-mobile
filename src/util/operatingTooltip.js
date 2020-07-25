@@ -52,6 +52,10 @@ function getBuyBase (type, marketInfo) {
   finalFactor = finalFactor * factorUtil.assetMarketTimeFactor('buy')
   // 仓位修正
   finalFactor = finalFactor * factorUtil.positionFactor('buy')
+  // 年线数量
+  finalFactor = finalFactor * factorUtil.indexYearCountFactor('buy')
+  // 半年线数量
+  finalFactor = finalFactor * factorUtil.indexHalfYearCountFactor('buy')
   // 结果
   return finalFactor * operateStandard()
 }
@@ -74,6 +78,10 @@ function getSellBase (type, marketInfo) {
   finalFactor = finalFactor * factorUtil.assetMarketTimeFactor('sell')
   // 仓位修正
   finalFactor = finalFactor * factorUtil.positionFactor('sell')
+  // 年线数量
+  finalFactor = finalFactor * factorUtil.indexYearCountFactor('buy')
+  // 半年线数量
+  finalFactor = finalFactor * factorUtil.indexHalfYearCountFactor('buy')
   // 结果
   // 卖的标准大一点
   return finalFactor * operateStandard() * 3 / 2
@@ -145,6 +153,10 @@ function buyNumberRedistribution (indexItem, hasCount, buyNumber, marketInfo) {
   )
   // 锁仓因子
   finalFactor = finalFactor * factorUtil.noSellCountFactor(marketInfo.noSellCount, indexNumber, 'buy')
+  // 年线数量
+  finalFactor = finalFactor * factorUtil.indexYearCountFactor('buy')
+  // 半年线数量
+  finalFactor = finalFactor * factorUtil.indexHalfYearCountFactor('buy')
   // 市场状况
   finalFactor = finalFactor * factorUtil.stockMarketQuestionFactor('buy')
   // 市场择时
@@ -181,6 +193,10 @@ function sellNumberRedistribution (indexItem, hasCount, sellNumber, marketInfo) 
   )
   // 锁仓因子
   finalFactor = finalFactor * factorUtil.noSellCountFactor(marketInfo.noSellCount, indexNumber, 'sell')
+  // 年线数量
+  finalFactor = finalFactor * factorUtil.indexYearCountFactor('buy')
+  // 半年线数量
+  finalFactor = finalFactor * factorUtil.indexHalfYearCountFactor('buy')
   // 市场状况
   finalFactor = finalFactor * factorUtil.stockMarketQuestionFactor('sell')
   // 市场择时

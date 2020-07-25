@@ -31,6 +31,14 @@
             <mt-switch v-model="noSell" @change="stateChangeHandler"></mt-switch>
           </div>
         </mt-cell-swipe>
+        <mt-cell-swipe>
+          <div slot="title">
+            <h3>是不是直接闷的状态</h3>
+          </div>
+          <div class="right-wrap">
+            <mt-switch v-model="isMeng" @change="stateChangeHandler"></mt-switch>
+          </div>
+        </mt-cell-swipe>
       </div>
       <div class="bottom-bar">
         <div class="to">
@@ -54,7 +62,8 @@ export default {
     return {
       stockApiWay,
       noBuy: storageUtil.getData('noBuySellConfig', 'noBuy') || false,
-      noSell: storageUtil.getData('noBuySellConfig', 'noSell') || false
+      noSell: storageUtil.getData('noBuySellConfig', 'noSell') || false,
+      isMeng: storageUtil.getData('noBuySellConfig', 'isMeng') || false
     }
   },
   watch: {
@@ -78,6 +87,7 @@ export default {
     stateChangeHandler () {
       storageUtil.setData('noBuySellConfig', 'noBuy', this.noBuy)
       storageUtil.setData('noBuySellConfig', 'noSell', this.noSell)
+      storageUtil.setData('noBuySellConfig', 'isMeng', this.isMeng)
     },
     copyData () {
       Indicator.open({

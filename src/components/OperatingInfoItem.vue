@@ -962,11 +962,19 @@ export default {
       // 控制
       const noBuy = storageUtil.getData('noBuySellConfig', 'noBuy') || false
       const noSell = storageUtil.getData('noBuySellConfig', 'noSell') || false
+      const isMeng = storageUtil.getData('noBuySellConfig', 'isMeng') || false
       if (noBuy) {
         classListF = this.removeBuy(classListF)
       }
       if (noSell) {
         classListF = this.removeSell(classListF)
+      }
+      // 直接闷的涨3天就跑
+      if (isMeng) {
+        // 直接闷的，抗住不卖以后，解反了该卖还是得卖
+        if (this.ifThreeUp) {
+          classListF = this.removeSell(classListF)
+        }
       }
       // 发送到服务端
       this.sendFlagToServer(classListF)

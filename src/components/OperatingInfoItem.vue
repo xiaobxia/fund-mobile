@@ -972,7 +972,7 @@ export default {
       // 直接闷的涨3天就跑
       if (isMeng) {
         // 直接闷的，抗住不卖以后，解反了该卖还是得卖
-        if (this.ifThreeUp) {
+        if (!this.ifThreeUp) {
           classListF = this.removeSell(classListF)
         }
       }

@@ -53,6 +53,7 @@ import indexInfoUtilJian from '@/util/indexInfoUtilJian.js'
 import qs from 'qs'
 import storageUtil from '@/util/storageUtil.js'
 import stockApiUtil from '@/util/stockApiUtil.js'
+import indexList from '@/common/indexList.js'
 import OperatingInfoItem from '@/components/OperatingInfoItem.vue'
 import OperatingWarn from '@/components/OperatingWarn.vue'
 
@@ -61,6 +62,15 @@ const formatData = indexInfoUtilXiong.formatData
 
 let InfoUtil = indexInfoUtilXiong.Util
 let fnMap = indexInfoUtilXiong.fnMap
+
+function getIndexInfo (key) {
+  for (let i = 0; i < indexList.length; i++) {
+    if (indexList[i].key === key) {
+      return indexList[i]
+    }
+  }
+  return {}
+}
 
 export default {
   name: 'OperatingInfo',
@@ -78,6 +88,7 @@ export default {
     let costCount = {}
     for (let key in codeMap) {
       list.push({
+        ...getIndexInfo(key),
         ...codeMap[key],
         key: key
       })

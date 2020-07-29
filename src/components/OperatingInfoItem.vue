@@ -37,8 +37,9 @@
           v-if="ifQuarterHotCut()"
           class="fm-tag s-black"
         >清1/4</span>
+        <span v-if="ifQuarterHotNow" class="fm-tag s-black">季</span>
         <span
-          v-if="ifFixIndex && ifQuarterHotCut()"
+          v-if="ifFixIndex && ifQuarterHotCutNow()"
           class="fm-tag s-black"
         >卖定1/16</span>
         <!--<span v-if="ifStopKeep()" class="fm-tag s-black">止盈</span>-->
@@ -290,6 +291,11 @@ export default {
     },
     isInQuarterHotToday () {
       return this.ifOpenQuarterHot && this.averageQuarter >= 0
+    },
+    // 当前差值还是很大
+    ifQuarterHotNow () {
+      const quDiff = storageUtil.getData('averageQuarterIndex', this.indexInfo.key) || 0
+      return quDiff >= this.indexInfo.quarterHotLine
     },
     ifJieQuarterHot () {
       return this.ifOpenQuarterHot && this.averageQuarter < 0
@@ -741,6 +747,9 @@ export default {
     // 季度线火热，然后又很危险
     ifQuarterHotCut () {
       return this.isInQuarterHotToday && this.averageMonthIndex > 0 && this.rate > 0 && !this.ifInNoSellStatus()
+    },
+    ifQuarterHotCutNow () {
+      return this.ifQuarterHotCut && this.ifQuarterHotNow
     },
     setIndexCanFix () {
       let fag = true

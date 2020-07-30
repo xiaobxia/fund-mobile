@@ -749,7 +749,7 @@ export default {
       return this.isInQuarterHotToday && this.averageMonthIndex > 0 && this.rate > 0 && !this.ifInNoSellStatus()
     },
     ifQuarterHotCutNow () {
-      return this.ifQuarterHotCut && this.ifQuarterHotNow
+      return this.ifQuarterHotCut() && this.ifQuarterHotNow
     },
     setIndexCanFix () {
       let fag = true

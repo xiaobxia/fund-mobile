@@ -42,6 +42,7 @@
           v-if="ifFixIndex && ifQuarterHotCutNow()"
           class="fm-tag s-black"
         >卖定1/16</span>
+        <span v-if="ifJieTargetUpCloseLock" class="fm-tag s-black">目标半</span>
         <!--<span v-if="ifStopKeep()" class="fm-tag s-black">止盈</span>-->
         <!--年下z45是必跌的-->
         <span v-if="ifClearZ45Today" class="fm-tag s-black">清z45</span>
@@ -900,6 +901,14 @@ export default {
       //   // 无视大小反
       //   classListF.push(sellClass)
       // }
+      const isMeng = storageUtil.getData('noBuySellConfig', 'isMeng') || false
+      // 直接闷的涨3天就跑
+      if (isMeng) {
+        // 直接闷的，抗住不卖以后，解反了该卖还是得卖
+        if (!this.ifThreeUp) {
+          classListF = this.removeSell(classListF)
+        }
+      }
       // 权重最大的-------------
       // 定投阶段没有卖出高亮
       if (this.isInDingtouStatus()) {
@@ -968,22 +977,21 @@ export default {
         // 加入卖出
         classListF.push(sellClass)
       }
-      // 控制
+      // 到达目标减半一次
+      if (this.ifJieTargetUpCloseLock) {
+        // 没有任何买入
+        classListF = this.removeBuy(classListF)
+        // 加入卖出
+        classListF.push(sellClass)
+      }
+      // ----最大最大权限--控制
       const noBuy = storageUtil.getData('noBuySellConfig', 'noBuy') || false
       const noSell = storageUtil.getData('noBuySellConfig', 'noSell') || false
-      const isMeng = storageUtil.getData('noBuySellConfig', 'isMeng') || false
       if (noBuy) {
         classListF = this.removeBuy(classListF)
       }
       if (noSell) {
         classListF = this.removeSell(classListF)
-      }
-      // 直接闷的涨3天就跑
-      if (isMeng) {
-        // 直接闷的，抗住不卖以后，解反了该卖还是得卖
-        if (!this.ifThreeUp) {
-          classListF = this.removeSell(classListF)
-        }
       }
       // 发送到服务端
       this.sendFlagToServer(classListF)

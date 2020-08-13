@@ -883,8 +883,11 @@ export default {
       }
       // 季度线过热，然后转交，那就提示卖出
       // 不管有没有大反什么的
+      const isNoQuarter = storageUtil.getData('noBuySellConfig', 'isNoQuarter') || false
       if (this.ifQuarterHotCut()) {
-        classListF.push(sellClass)
+        if (!isNoQuarter) {
+          classListF.push(sellClass)
+        }
       }
       // 指数处于阶段顶部区间
       // if (this.ifInDingbuStatus()) {

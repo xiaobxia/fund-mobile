@@ -39,6 +39,14 @@
             <mt-switch v-model="isMeng" @change="stateChangeHandler"></mt-switch>
           </div>
         </mt-cell-swipe>
+        <mt-cell-swipe>
+          <div slot="title">
+            <h3>是否忽略季度危险的卖出</h3>
+          </div>
+          <div class="right-wrap">
+            <mt-switch v-model="isNoQuarter" @change="stateChangeHandler"></mt-switch>
+          </div>
+        </mt-cell-swipe>
       </div>
       <div class="bottom-bar">
         <div class="to">
@@ -63,7 +71,8 @@ export default {
       stockApiWay,
       noBuy: storageUtil.getData('noBuySellConfig', 'noBuy') || false,
       noSell: storageUtil.getData('noBuySellConfig', 'noSell') || false,
-      isMeng: storageUtil.getData('noBuySellConfig', 'isMeng') || false
+      isMeng: storageUtil.getData('noBuySellConfig', 'isMeng') || false,
+      isNoQuarter: storageUtil.getData('noBuySellConfig', 'isNoQuarter') || false
     }
   },
   watch: {
@@ -88,6 +97,7 @@ export default {
       storageUtil.setData('noBuySellConfig', 'noBuy', this.noBuy)
       storageUtil.setData('noBuySellConfig', 'noSell', this.noSell)
       storageUtil.setData('noBuySellConfig', 'isMeng', this.isMeng)
+      storageUtil.setData('noBuySellConfig', 'isNoQuarter', this.isNoQuarter)
     },
     copyData () {
       Indicator.open({

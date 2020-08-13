@@ -932,7 +932,8 @@ export default {
       }
       let ifNoSellF = false
       // 锁仓的逻辑
-      if (this.ifInNoSellStatus()) {
+      // 锁仓的指数太少也危险，很有可能是假的稳定
+      if (this.ifInNoSellStatus() && this.noSellCount > 6) {
         ifNoSellF = true
         if (this.rate < 0) {
           // 锁仓阶段可以跌了就买

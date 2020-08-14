@@ -36,7 +36,7 @@
         <span
           v-if="ifQuarterHotCut()"
           class="fm-tag s-black"
-        >清1/4</span>
+        >清0.3</span>
         <span v-if="ifQuarterHotNow" class="fm-tag s-black">季</span>
         <span
           v-if="ifFixIndex && ifQuarterHotCutNow()"

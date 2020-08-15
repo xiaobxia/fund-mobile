@@ -11,6 +11,7 @@
         <div slot="title">
           <h3>
             <span class="index-name">{{item.name}}</span>
+            <span v-if="item.key === 'baijiu'">{{baijiuwarn}}</span>
             <span style="float: right" :class="stockNumberClass(rateInfo[item.key])">{{rateInfo[item.key]}}%</span>
           </h3>
           <p class="netChange wn">
@@ -270,7 +271,8 @@ export default {
           c: 0
         }
       },
-      klineMap
+      klineMap,
+      baijiuwarn: ''
     }
   },
   computed: {
@@ -459,6 +461,11 @@ export default {
           //   }
           // }
           const diff = this.countDifferenceRate(nowClose, this.averageMap[item.code])
+          if (item.key === 'baijiu') {
+            if (diff >= 40) {
+              this.baijiuwarn = '白酒热'
+            }
+          }
           this.klineMap[item.key] = kline
           this.averageDiff[item.key] = diff
           // 和总资金有关

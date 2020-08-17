@@ -42,7 +42,7 @@
           v-if="ifFixIndex && ifQuarterHotCutNow()"
           class="fm-tag s-black"
         >卖定1/16</span>
-        <span v-if="ifJieTargetUpCloseLock" class="fm-tag s-black">目标半</span>
+        <span v-if="ifJieTargetUpCloseLock" class="fm-tag s-black">目标0.3</span>
         <!--<span v-if="ifStopKeep()" class="fm-tag s-black">止盈</span>-->
         <!--年下z45是必跌的-->
         <span v-if="ifClearZ45Today" class="fm-tag s-black">清z45</span>

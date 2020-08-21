@@ -11,7 +11,7 @@
         <div slot="title">
           <h3>
             <span class="index-name">{{item.name}}</span>
-            <span v-if="item.key === 'baijiu'">{{baijiuwarn}}</span>
+            <span v-if="item.key === 'baijiu' && baijiuwarn" class="fm-tag s-green">{{baijiuwarn}}</span>
             <span style="float: right" :class="stockNumberClass(rateInfo[item.key])">{{rateInfo[item.key]}}%</span>
           </h3>
           <p class="netChange wn">

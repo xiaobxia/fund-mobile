@@ -1,5 +1,7 @@
 import indexList from '@/common/indexList.js'
 import dateUtil from '@/util/dateUtil'
+import storageUtil from '@/util/storageUtil.js'
+
 // 机构指数
 let jigou = []
 
@@ -18,16 +20,19 @@ if (month < 11) {
     'shipin'
   ]
   // 垃圾不要嫌少，本来其实就没有太大的买的必要
-  laji = [
-    'gangtie',
-    'meitan',
-    'jijian',
-    'dichan',
-    'youse',
-    'huanbao',
-    'jungong',
-    'chuanmei'
-  ]
+  const noLaji = storageUtil.getData('noBuySellConfig', 'noLaji') || false
+  if (!noLaji) {
+    laji = [
+      'gangtie',
+      'meitan',
+      'jijian',
+      'dichan',
+      'youse',
+      'huanbao',
+      'jungong',
+      'chuanmei'
+    ]
+  }
 }
 
 // 高费率指数

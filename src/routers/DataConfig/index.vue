@@ -47,6 +47,14 @@
             <mt-switch v-model="isNoQuarter" @change="stateChangeHandler"></mt-switch>
           </div>
         </mt-cell-swipe>
+        <mt-cell-swipe>
+          <div slot="title">
+            <h3>是否忽略垃圾指数</h3>
+          </div>
+          <div class="right-wrap">
+            <mt-switch v-model="noLaji" @change="stateChangeHandler"></mt-switch>
+          </div>
+        </mt-cell-swipe>
       </div>
       <div class="bottom-bar">
         <div class="to">
@@ -72,7 +80,8 @@ export default {
       noBuy: storageUtil.getData('noBuySellConfig', 'noBuy') || false,
       noSell: storageUtil.getData('noBuySellConfig', 'noSell') || false,
       isMeng: storageUtil.getData('noBuySellConfig', 'isMeng') || false,
-      isNoQuarter: storageUtil.getData('noBuySellConfig', 'isNoQuarter') || false
+      isNoQuarter: storageUtil.getData('noBuySellConfig', 'isNoQuarter') || false,
+      noLaji: storageUtil.getData('noBuySellConfig', 'noLaji') || false
     }
   },
   watch: {
@@ -98,6 +107,7 @@ export default {
       storageUtil.setData('noBuySellConfig', 'noSell', this.noSell)
       storageUtil.setData('noBuySellConfig', 'isMeng', this.isMeng)
       storageUtil.setData('noBuySellConfig', 'isNoQuarter', this.isNoQuarter)
+      storageUtil.setData('noBuySellConfig', 'noLaji', this.noLaji)
     },
     copyData () {
       Indicator.open({

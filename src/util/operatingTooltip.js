@@ -8,7 +8,7 @@ const kuanji = indexType.kuanji
 
 // 定投占比
 // 得真实得定，因为这也会影响波段指数的标准仓
-const fixedInvestmentRatio = 0.42
+const fixedInvestmentRatio = 0.38
 // 指数数量
 // 机构垃圾指数会根据分类提升占比
 const indexNumber = 24

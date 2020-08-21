@@ -3,6 +3,7 @@
     <div class="warn-wrap">
       <div class="fm-warn blue">波段仓砍仓要狠，定投才是大头</div>
       <div class="fm-warn red">波段仓一定要遵守交易纪律</div>
+      <div class="fm-warn blue">处在高位危险，信号一会儿让卖一会儿又不让卖的，那就卖掉</div>
       <div class="fm-warn grey">冒着绿光的才卖，不要被迷惑</div>
       <div class="fm-warn blue">处在高位危险区，又走坏了，保住利润是第一位，向上空间很小，向下空间很大</div>
       <div class="fm-warn green" v-if="ifNiandi">年底机构结账，保护收益</div>

@@ -89,6 +89,10 @@ function getSellBase (type, marketInfo) {
 
 function getBuyNumber (hasCount, rowBuy, indexRedistributionStandard) {
   const full = 2 * indexRedistributionStandard
+  // 有的部分已经比满仓还多
+  if (hasCount >= full) {
+    return rowBuy * 0.33
+  }
   // 到0.5的位置最高
   const splitLine = 0.5 * full
   const restLine = 0.5 * full
@@ -163,6 +167,11 @@ function buyNumberRedistribution (indexItem, hasCount, buyNumber, marketInfo) {
   finalFactor = finalFactor * factorUtil.assetMarketTimeFactor('buy')
   // 仓位修正
   finalFactor = finalFactor * factorUtil.positionFactor('buy', true)
+  if (indexItem.key === 'yinhang') {
+    console.log(hasCount)
+    console.log(buyNumber)
+    console.log(indexRedistributionStandard * indexYearDiffFactor * finalFactor)
+  }
   return getBuyNumber(hasCount, buyNumber, indexRedistributionStandard * indexYearDiffFactor * finalFactor)
 }
 
@@ -250,6 +259,10 @@ const operatingTooltip = {
       indexManyDownFactor *
       monthAverageFactor *
       indexDaVFactor
+    // if (indexItem.key === 'yinhang') {
+    //   console.log(buyNumber)
+    //   console.log(hasCount)
+    // }
     let finalBuyNumber = buyNumberRedistribution(indexItem, hasCount, buyNumber, marketInfo)
     return Math.round(finalBuyNumber / 100) * 100
   },

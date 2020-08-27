@@ -42,6 +42,7 @@
         <mt-cell-swipe>
           <div slot="title">
             <h3>是否忽略季度危险的卖出</h3>
+            <div>不是慢慢见顶，慢慢跌跌，而是直接往死里跌</div>
           </div>
           <div class="right-wrap">
             <mt-switch v-model="isNoQuarter" @change="stateChangeHandler"></mt-switch>

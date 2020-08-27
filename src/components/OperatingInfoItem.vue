@@ -827,16 +827,20 @@ export default {
           }
         }
       }
+      let isBig = false
       // 连跌4天或者5天，都能买
       if (this.ifFourDown || this.ifFiveDown) {
         shouldClass = shouldBuyClass
+        isBig = true
       }
       // 跌很多天
       if (this.ifSixFive || this.ifSevenSix || this.ifEightSeven) {
         shouldClass = shouldBuyClass
+        isBig = true
       }
       if (this.ifEightSix || this.ifNineSeven) {
         shouldClass = shouldBuyClass
+        isBig = true
       }
       // ----------------------应该卖的部分
       // 涨4天了发出应该卖
@@ -923,7 +927,10 @@ export default {
       }
       // 季线危险阶段，没有买入信号，因为很可能是无止境得跌
       if (this.isInQuarterHotToday) {
-        classListF = this.removeBuy(classListF)
+        // 没有季度影响并且是大反才可以例外
+        if (!(isNoQuarter && isBig)) {
+          classListF = this.removeBuy(classListF)
+        }
       }
       // 处于z45不能买
       if (this.ifInZ45StatusNow) {

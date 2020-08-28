@@ -7,7 +7,16 @@
     </mt-header>
     <div class="main-body">
       <!--<div class="fm-warn blue">不要自作聪明，这里提示卖了才卖</div>-->
-      <mt-cell-swipe v-for="(item) in list" :key="item.code" :class="[hasInfo[item.name] ? 'has':'no-has', 'line-type']">
+      <mt-cell-swipe
+        v-for="(item) in list"
+        :key="item.code"
+        :class="{
+          'has': hasInfo[item.name],
+          'no-has': !hasInfo[item.name],
+          'line-type': true,
+          'sell': (item.key === 'baijiu' && baijiuwarn) && rateInfo[item.key] > 0
+        }"
+      >
         <div slot="title">
           <h3>
             <span class="index-name">{{item.name}}</span>

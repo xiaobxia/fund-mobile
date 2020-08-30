@@ -176,6 +176,11 @@ const routers = [
     component: lazyLoading('DaV')
   },
   {
+    name: 'CountIncome',
+    path: '/page/countIncome',
+    component: lazyLoading('CountIncome')
+  },
+  {
     name: '404',
     path: '*',
     component: lazyLoading('NotMatch')

@@ -26,6 +26,11 @@
           <h3><i class="fas fa-hand-holding-usd"></i>总收益</h3>
         </div>
       </mt-cell-swipe>
+      <mt-cell-swipe :to="'/page/countIncome'" is-link>
+        <div slot="title">
+          <h3><i class="fas fa-hand-holding-usd"></i>预期收益</h3>
+        </div>
+      </mt-cell-swipe>
     </div>
     <div class="btn-wrap">
       <mt-button type="primary" @click="okHandler" class="main-btn">退出登录</mt-button>

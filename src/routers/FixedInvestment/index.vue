@@ -6,6 +6,13 @@
       </mt-button>
     </mt-header>
     <div class="main-body">
+      <div v-if="kuanBuy >= 3">
+        <span>买入：{{otherBuyCount(canBuy)}}</span>
+        <div>001508 富国新动力</div>
+        <div>260108 景顺长城新兴成长混合</div>
+        <div>110011 易方达中小盘混合</div>
+        <div>213001 宝盈鸿利收益</div>
+      </div>
       <!--<div class="fm-warn blue">不要自作聪明，这里提示卖了才卖</div>-->
       <mt-cell-swipe
         v-for="(item) in list"
@@ -136,6 +143,8 @@ function getNetChangeRatioList (list, index) {
   }
   return newList
 }
+
+const kuanji = ['chuangye', 'wulin', 'sanbai', 'wubai', 'yiqian']
 
 export default {
   name: 'FixedInvestment',
@@ -281,7 +290,8 @@ export default {
         }
       },
       klineMap,
-      baijiuwarn: ''
+      baijiuwarn: '',
+      kuanBuy: 0
     }
   },
   computed: {
@@ -492,6 +502,9 @@ export default {
           let buyBaseInfo = 0
           if (['买', '跌少', '跌多'].indexOf(infoList[0]) !== -1) {
             buyBaseInfo = parseInt(buyNumber / 10)
+            if (kuanji.indexOf(item.key) !== -1) {
+              this.kuanBuy++
+            }
           }
           storageUtil.setData('fixBuyData', item.key, buyBaseInfo)
           this.rateInfo[item.key] = this.keepTwoDecimals(recentNetValue[0].netChangeRatio)
@@ -518,6 +531,16 @@ export default {
           fix_record: JSON.stringify(list)
         })
       }
+    },
+    otherBuyCount (map) {
+      let sum = 0
+      for (let key in map) {
+        if (kuanji.indexOf(key) !== -1) {
+          sum += parseFloat(map[key]) || 0
+        }
+      }
+      // 有4个基金，但是只能让它占2个位置
+      return parseInt((sum / 5) / 2)
     }
   }
 }

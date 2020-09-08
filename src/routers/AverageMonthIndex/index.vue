@@ -54,7 +54,8 @@ export default {
     queryData (item) {
       this.$http.get(`stock/${stockApiUtil.getAllUrl()}`, {
         code: item.code,
-        days: 20
+        // 是代码里面有取了20天
+        days: 30
       }, {interval: 20}).then((data) => {
         if (data.success) {
           const list = data.data.list

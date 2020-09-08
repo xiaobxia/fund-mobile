@@ -54,7 +54,7 @@ export default {
     queryData (item) {
       this.$http.get(`stock/${stockApiUtil.getAllUrl()}`, {
         code: item.code,
-        days: 30
+        days: 20
       }, {interval: 20}).then((data) => {
         if (data.success) {
           const list = data.data.list

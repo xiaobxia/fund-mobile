@@ -30,11 +30,11 @@ export default {
   data () {
     return {
       form: {
-        benjin: 0,
-        nianshouyilv: 0,
-        shouru: 0,
-        dingtoushouyilv: 0,
-        zengliang: 0
+        benjin: '',
+        nianshouyilv: '',
+        shouru: '',
+        dingtoushouyilv: '',
+        zengliang: ''
       },
       list: []
     }

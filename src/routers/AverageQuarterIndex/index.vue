@@ -51,7 +51,7 @@ export default {
     queryData (item) {
       this.$http.getWithCache(`stock/getStockPriceAverageByDay`, {
         code: item.code,
-        days: 90
+        days: 60
       }, {interval: 20}).then((data) => {
         if (data.success) {
           const diff = data.data.rate

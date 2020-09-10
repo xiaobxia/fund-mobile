@@ -14,49 +14,6 @@
       <div class="warn-wrap">
         <div class="fm-warn blue">没预兆直接闷的时候，可以在反弹时选择不卖</div>
       </div>
-      <div>
-        <mt-cell-swipe>
-          <div slot="title">
-            <h3>没买</h3>
-          </div>
-          <div class="right-wrap">
-            <mt-switch v-model="noBuy" @change="stateChangeHandler"></mt-switch>
-          </div>
-        </mt-cell-swipe>
-        <mt-cell-swipe>
-          <div slot="title">
-            <h3>没卖</h3>
-          </div>
-          <div class="right-wrap">
-            <mt-switch v-model="noSell" @change="stateChangeHandler"></mt-switch>
-          </div>
-        </mt-cell-swipe>
-        <mt-cell-swipe>
-          <div slot="title">
-            <h3>是不是直接闷的状态</h3>
-          </div>
-          <div class="right-wrap">
-            <mt-switch v-model="isMeng" @change="stateChangeHandler"></mt-switch>
-          </div>
-        </mt-cell-swipe>
-        <mt-cell-swipe>
-          <div slot="title">
-            <h3>是否忽略季度危险的卖出</h3>
-            <div>不是慢慢见顶，慢慢跌跌，而是直接往死里跌</div>
-          </div>
-          <div class="right-wrap">
-            <mt-switch v-model="isNoQuarter" @change="stateChangeHandler"></mt-switch>
-          </div>
-        </mt-cell-swipe>
-        <mt-cell-swipe>
-          <div slot="title">
-            <h3>是否忽略垃圾指数</h3>
-          </div>
-          <div class="right-wrap">
-            <mt-switch v-model="noLaji" @change="stateChangeHandler"></mt-switch>
-          </div>
-        </mt-cell-swipe>
-      </div>
       <div class="bottom-bar">
         <div class="to">
           <mt-button type="primary" @click="clearHandler" class="main-btn">清除本地存储数据</mt-button>
@@ -77,12 +34,7 @@ export default {
   data () {
     const stockApiWay = storageUtil.getData('appConfig', 'stockApiWay') || '腾讯'
     return {
-      stockApiWay,
-      noBuy: storageUtil.getData('noBuySellConfig', 'noBuy') || false,
-      noSell: storageUtil.getData('noBuySellConfig', 'noSell') || false,
-      isMeng: storageUtil.getData('noBuySellConfig', 'isMeng') || false,
-      isNoQuarter: storageUtil.getData('noBuySellConfig', 'isNoQuarter') || false,
-      noLaji: storageUtil.getData('noBuySellConfig', 'noLaji') || false
+      stockApiWay
     }
   },
   watch: {
@@ -102,13 +54,6 @@ export default {
       setTimeout(() => {
         location.reload()
       }, 1000)
-    },
-    stateChangeHandler () {
-      storageUtil.setData('noBuySellConfig', 'noBuy', this.noBuy)
-      storageUtil.setData('noBuySellConfig', 'noSell', this.noSell)
-      storageUtil.setData('noBuySellConfig', 'isMeng', this.isMeng)
-      storageUtil.setData('noBuySellConfig', 'isNoQuarter', this.isNoQuarter)
-      storageUtil.setData('noBuySellConfig', 'noLaji', this.noLaji)
     },
     copyData () {
       Indicator.open({

@@ -6,7 +6,57 @@
       </mt-button>
     </mt-header>
     <div class="main-body">
-      <div class="yellow fm-warn">多校验大V因子</div>
+      <div>
+        <mt-cell-swipe>
+          <div slot="title">
+            <h3>没买</h3>
+          </div>
+          <div class="right-wrap">
+            <mt-switch v-model="noBuy" @change="stateChangeHandler"></mt-switch>
+          </div>
+        </mt-cell-swipe>
+        <mt-cell-swipe>
+          <div slot="title">
+            <h3>没卖</h3>
+          </div>
+          <div class="right-wrap">
+            <mt-switch v-model="noSell" @change="stateChangeHandler"></mt-switch>
+          </div>
+        </mt-cell-swipe>
+        <mt-cell-swipe>
+          <div slot="title">
+            <h3>是不是直接闷的状态</h3>
+          </div>
+          <div class="right-wrap">
+            <mt-switch v-model="isMeng" @change="stateChangeHandler"></mt-switch>
+          </div>
+        </mt-cell-swipe>
+        <mt-cell-swipe>
+          <div slot="title">
+            <h3>是否忽略季度危险的卖出</h3>
+            <div>不是慢慢见顶，慢慢跌跌，而是直接往死里跌</div>
+          </div>
+          <div class="right-wrap">
+            <mt-switch v-model="isNoQuarter" @change="stateChangeHandler"></mt-switch>
+          </div>
+        </mt-cell-swipe>
+        <mt-cell-swipe>
+          <div slot="title">
+            <h3>是否忽略垃圾指数</h3>
+          </div>
+          <div class="right-wrap">
+            <mt-switch v-model="noLaji" @change="stateChangeHandler"></mt-switch>
+          </div>
+        </mt-cell-swipe>
+        <mt-cell-swipe>
+          <div slot="title">
+            <h3>锁仓由极乐观（18以上）转少（12一下）</h3>
+          </div>
+          <div class="right-wrap">
+            <mt-switch v-model="manyToLess" @change="stateChangeHandler"></mt-switch>
+          </div>
+        </mt-cell-swipe>
+      </div>
       <div class="question">
         是不是全面大疯牛市，到了年线下面才可以解除
       </div>
@@ -125,7 +175,13 @@ export default {
       question_7: storageUtil.getData('stockMarketQuestion', 'question_7'),
       question_8: storageUtil.getData('stockMarketQuestion', 'question_8'),
       question_9: storageUtil.getData('stockMarketQuestion', 'question_9'),
-      question_10: storageUtil.getData('stockMarketQuestion', 'question_10')
+      question_10: storageUtil.getData('stockMarketQuestion', 'question_10'),
+      noBuy: storageUtil.getData('noBuySellConfig', 'noBuy') || false,
+      noSell: storageUtil.getData('noBuySellConfig', 'noSell') || false,
+      isMeng: storageUtil.getData('noBuySellConfig', 'isMeng') || false,
+      isNoQuarter: storageUtil.getData('noBuySellConfig', 'isNoQuarter') || false,
+      noLaji: storageUtil.getData('noBuySellConfig', 'noLaji') || false,
+      manyToLess: storageUtil.getData('noBuySellConfig', 'manyToLess') || false
     }
   },
   watch: {
@@ -196,6 +252,14 @@ export default {
   methods: {
     backHandler () {
       this.$router.history.go(-1)
+    },
+    stateChangeHandler () {
+      storageUtil.setData('noBuySellConfig', 'noBuy', this.noBuy)
+      storageUtil.setData('noBuySellConfig', 'noSell', this.noSell)
+      storageUtil.setData('noBuySellConfig', 'isMeng', this.isMeng)
+      storageUtil.setData('noBuySellConfig', 'isNoQuarter', this.isNoQuarter)
+      storageUtil.setData('noBuySellConfig', 'noLaji', this.noLaji)
+      storageUtil.setData('noBuySellConfig', 'manyToLess', this.manyToLess)
     }
   }
 }

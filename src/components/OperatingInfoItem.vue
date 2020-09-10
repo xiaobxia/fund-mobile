@@ -944,17 +944,24 @@ export default {
       let ifNoSellF = false
       // 锁仓的逻辑
       // 锁仓的指数太少也危险，很有可能是假的稳定
+      const manyToLess = storageUtil.getData('noBuySellConfig', 'manyToLess') || false
       if (this.ifInNoSellStatus() && this.noSellCount > 6) {
-        ifNoSellF = true
-        if (this.rate < 0) {
-          // 锁仓阶段可以跌了就买
-          classListF.push('should-buy')
-          if (this.ifHasBuy(classListF)) {
-            classListF.push('only-up-buy')
+        // 6个一下不考虑
+        if (
+          this.noSellCount > 12 ||
+          (!manyToLess && this.noSellCount > 6)
+        ) {
+          ifNoSellF = true
+          if (this.rate < 0) {
+            // 锁仓阶段可以跌了就买
+            classListF.push('should-buy')
+            if (this.ifHasBuy(classListF)) {
+              classListF.push('only-up-buy')
+            }
           }
+          // 在趋势中，什么卖出信号都不用管
+          classListF = this.removeSell(classListF)
         }
-        // 在趋势中，什么卖出信号都不用管
-        classListF = this.removeSell(classListF)
       }
       // if (this.indexInfo.key === 'yiyao') {
       //   console.log(this.ifMonthUpOk(this.indexInfo.key))

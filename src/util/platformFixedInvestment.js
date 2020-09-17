@@ -748,6 +748,192 @@ Util.prototype = {
       }
     }
     return false
+  },
+  ifBuyJisuanji: function (record, oneDayRecord) {
+    const today = this.getFlag(record, 2.1)
+    // 无抵抗下跌的都要
+    if (ifMatch(today,
+      {'ifHighPreCloseDown': true}
+    )) {
+      return {
+        flag: true,
+        text: 'buy-100-0'
+      }
+    }
+    // 跌幅两倍波动的就要
+    if (ifMatch(today,
+      {'ifUpClose': false, 'ifCloseHigh2': true}
+    )) {
+      return {
+        flag: true,
+        text: 'buy-101-0'
+      }
+    }
+    // 下跌
+    if (ifMatch(today,
+      {'ifCloseHigh': true, 'ifSessionDownHigh': true, 'ifSessionUpClose': false, 'ifSessionUp': false, 'ifSessionDownCloseHigh': true}
+    )) {
+      return {
+        flag: true,
+        text: 'buy-101-0'
+      }
+    }
+    return false
+  },
+  ifSellJisuanji: function (record, oneDayRecord) {
+    const today = this.getFlag(record, 2.1)
+    // 大涨
+    if (ifMatch(today,
+      {'ifHighPreCloseUpHigh': true}
+    )) {
+      return {
+        flag: true,
+        text: 'sell-100-0'
+      }
+    }
+    // 涨幅两倍波动的就要
+    if (ifMatch(today,
+      {'ifUpClose': true, 'ifCloseHigh2': true}
+    )) {
+      return {
+        flag: true,
+        text: 'sell-101-0'
+      }
+    }
+    // 下跌
+    if (ifMatch(today,
+      {'ifCloseHigh': true, 'ifSessionDownHigh': false, 'ifSessionUpClose': true, 'ifSessionUp': true, 'ifSessionDownCloseHigh': false}
+    )) {
+      return {
+        flag: true,
+        text: 'xiong'
+      }
+    }
+    return false
+  },
+  ifBuyDianzi: function (record, oneDayRecord) {
+    const today = this.getFlag(record, 2.1)
+    // 无抵抗下跌的都要
+    if (ifMatch(today,
+      {'ifHighPreCloseDown': true}
+    )) {
+      return {
+        flag: true,
+        text: 'buy-100-0'
+      }
+    }
+    // 跌幅两倍波动的就要
+    if (ifMatch(today,
+      {'ifUpClose': false, 'ifCloseHigh2': true}
+    )) {
+      return {
+        flag: true,
+        text: 'buy-101-0'
+      }
+    }
+    // 下跌
+    if (ifMatch(today,
+      {'ifCloseHigh': true, 'ifSessionDownHigh': true, 'ifSessionUpClose': false, 'ifSessionUp': false, 'ifSessionDownCloseHigh': true}
+    )) {
+      return {
+        flag: true,
+        text: 'buy-101-0'
+      }
+    }
+    return false
+  },
+  ifSellDianzi: function (record, oneDayRecord) {
+    const today = this.getFlag(record, 2.1)
+    // 大涨
+    if (ifMatch(today,
+      {'ifHighPreCloseUpHigh': true}
+    )) {
+      return {
+        flag: true,
+        text: 'sell-100-0'
+      }
+    }
+    // 涨幅两倍波动的就要
+    if (ifMatch(today,
+      {'ifUpClose': true, 'ifCloseHigh2': true}
+    )) {
+      return {
+        flag: true,
+        text: 'sell-101-0'
+      }
+    }
+    // 下跌
+    if (ifMatch(today,
+      {'ifCloseHigh': true, 'ifSessionDownHigh': false, 'ifSessionUpClose': true, 'ifSessionUp': true, 'ifSessionDownCloseHigh': false}
+    )) {
+      return {
+        flag: true,
+        text: 'xiong'
+      }
+    }
+    return false
+  },
+  ifBuyXinxi: function (record, oneDayRecord) {
+    const today = this.getFlag(record, 2.1)
+    // 无抵抗下跌的都要
+    if (ifMatch(today,
+      {'ifHighPreCloseDown': true}
+    )) {
+      return {
+        flag: true,
+        text: 'buy-100-0'
+      }
+    }
+    // 跌幅两倍波动的就要
+    if (ifMatch(today,
+      {'ifUpClose': false, 'ifCloseHigh2': true}
+    )) {
+      return {
+        flag: true,
+        text: 'buy-101-0'
+      }
+    }
+    // 下跌
+    if (ifMatch(today,
+      {'ifCloseHigh': true, 'ifSessionDownHigh': true, 'ifSessionUpClose': false, 'ifSessionUp': false, 'ifSessionDownCloseHigh': true}
+    )) {
+      return {
+        flag: true,
+        text: 'buy-101-0'
+      }
+    }
+    return false
+  },
+  ifSellXinxi: function (record, oneDayRecord) {
+    const today = this.getFlag(record, 2.1)
+    // 大涨
+    if (ifMatch(today,
+      {'ifHighPreCloseUpHigh': true}
+    )) {
+      return {
+        flag: true,
+        text: 'sell-100-0'
+      }
+    }
+    // 涨幅两倍波动的就要
+    if (ifMatch(today,
+      {'ifUpClose': true, 'ifCloseHigh2': true}
+    )) {
+      return {
+        flag: true,
+        text: 'sell-101-0'
+      }
+    }
+    // 下跌
+    if (ifMatch(today,
+      {'ifCloseHigh': true, 'ifSessionDownHigh': false, 'ifSessionUpClose': true, 'ifSessionUp': true, 'ifSessionDownCloseHigh': false}
+    )) {
+      return {
+        flag: true,
+        text: 'xiong'
+      }
+    }
+    return false
   }
 }
 
@@ -825,6 +1011,27 @@ const codeMap = {
     threshold: 0.37,
     rate: 0.4959514675767919,
     wave: 0.24661200135226474
+  },
+  'jisuanji': {
+    code: 'sz399363',
+    name: '计算机',
+    threshold: 1.04,
+    rate: 1.0100719424460431,
+    wave: 1.06308
+  },
+  'dianzi': {
+    code: 'sz399811',
+    name: '电子',
+    threshold: 0.9,
+    rate: 0.8832450331125826,
+    wave: 0.9248263888888891
+  },
+  'xinxi': {
+    code: 'sh000993',
+    name: '信息',
+    threshold: 1.03,
+    rate: 1.0703999999999998,
+    wave: 0.9838741721854306
   }
 }
 const fnMap = {
@@ -847,7 +1054,13 @@ const fnMap = {
   shengwuBuy: 'ifBuyShengwu',
   shengwuSell: 'ifSellShengwu',
   huangjinBuy: 'ifBuyHuangjin',
-  huangjinSell: 'ifSellHuangjin'
+  huangjinSell: 'ifSellHuangjin',
+  jisuanjiBuy: 'ifBuyJisuanji',
+  jisuanjiSell: 'ifSellJisuanji',
+  dianziBuy: 'ifBuyDianzi',
+  dianziSell: 'ifSellDianzi',
+  xinxiBuy: 'ifBuyXinxi',
+  xinxiSell: 'ifSellXinxi'
 }
 
 const FixedInvestment = {

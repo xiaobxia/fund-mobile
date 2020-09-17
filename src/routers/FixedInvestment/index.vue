@@ -197,7 +197,10 @@ export default {
         'sz399441': 2537,
         'sz399396': 17800,
         // 黄金
-        'sh518880': 2
+        'sh518880': 2,
+        'sz399363': 5000,
+        'sh000993': 5000,
+        'sz399811': 5000
       },
       // 配比根据估值，还有行业中和判断
       // a最高线，b最低线，c中轴线
@@ -287,6 +290,29 @@ export default {
           a: 15,
           b: -10,
           c: 0
+        },
+        // 这东西很危险压根就不能定投，但是现在属于出清了一次，所以又拿出来投
+        // 出清线是年线-20
+        'sz399363': {
+          buy: 0.85,
+          sell: 1.15,
+          a: 25,
+          b: -20,
+          c: -8.5
+        },
+        'sh000993': {
+          buy: 0.85,
+          sell: 1.15,
+          a: 25,
+          b: -20,
+          c: -8.5
+        },
+        'sz399811': {
+          buy: 0.85,
+          sell: 1.15,
+          a: 25,
+          b: -20,
+          c: -8.5
         }
       },
       klineMap,
@@ -489,7 +515,7 @@ export default {
           this.averageDiff[item.key] = diff
           // 和总资金有关，还有数量
           const rC = 0.4 * 0.1 * 0.5
-          const buyS = (360000 * rC) / 10
+          const buyS = (360000 * rC) / 13
           const params = this.indexParams[item.code]
           let buyNumber = 0
           if (['baijiu', 'yiliao', 'shengwu', 'shipin'].indexOf(item.key) !== -1) {

@@ -487,8 +487,9 @@ export default {
           }
           this.klineMap[item.key] = kline
           this.averageDiff[item.key] = diff
-          // 和总资金有关
-          const buyS = (300000 * 0.4) / 160
+          // 和总资金有关，还有数量
+          const rC = 0.4 * 0.1 * 0.5
+          const buyS = (360000 * rC) / 10
           const params = this.indexParams[item.code]
           let buyNumber = 0
           if (['baijiu', 'yiliao', 'shengwu', 'shipin'].indexOf(item.key) !== -1) {

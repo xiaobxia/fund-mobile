@@ -219,8 +219,8 @@ export default {
         // 这东西很危险压根就不能定投，但是现在属于出清了一次，所以又拿出来投
         // 出清线是年线-20
         'sh000905': {
-          buy: 1.3,
-          sell: 0.7,
+          buy: 1.15,
+          sell: 0.85,
           a: 20,
           b: -20,
           c: -10
@@ -294,22 +294,22 @@ export default {
         // 这东西很危险压根就不能定投，但是现在属于出清了一次，所以又拿出来投
         // 出清线是年线-20
         'sz399363': {
-          buy: 0.85,
-          sell: 1.15,
+          buy: 0.7,
+          sell: 1.3,
           a: 25,
           b: -20,
           c: -8.5
         },
         'sh000993': {
-          buy: 0.85,
-          sell: 1.15,
+          buy: 0.7,
+          sell: 1.3,
           a: 25,
           b: -20,
           c: -8.5
         },
         'sz399811': {
-          buy: 0.85,
-          sell: 1.15,
+          buy: 0.7,
+          sell: 1.3,
           a: 25,
           b: -20,
           c: -8.5
@@ -514,7 +514,7 @@ export default {
           this.klineMap[item.key] = kline
           this.averageDiff[item.key] = diff
           // 和总资金有关，还有数量
-          const rC = 0.4 * 0.1 * 0.5
+          const rC = 1 / (60)
           const buyS = (360000 * rC) / 13
           const params = this.indexParams[item.code]
           let buyNumber = 0

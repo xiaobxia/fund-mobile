@@ -519,9 +519,9 @@ export default {
           const params = this.indexParams[item.code]
           let buyNumber = 0
           if (['baijiu', 'yiliao', 'shengwu', 'shipin'].indexOf(item.key) !== -1) {
-            buyNumber = parseInt(getBuyRateH(diff, params.a, params.b, params.c) * buyS / 10) * 10
+            buyNumber = parseInt(getBuyRateH(diff, params.a, params.b, params.c) * buyS * params.buy / 10) * 10
           } else {
-            buyNumber = parseInt(getBuyRate(diff, params.a, params.b, params.c) * buyS / 10) * 10
+            buyNumber = parseInt(getBuyRate(diff, params.a, params.b, params.c) * buyS * params.buy / 10) * 10
           }
           this.canBuy[item.key] = buyNumber
           this.canSell[item.key] = parseInt((buyS * (1 - buyS / buyNumber)) / 10) * 10

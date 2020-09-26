@@ -167,11 +167,6 @@ function buyNumberRedistribution (indexItem, hasCount, buyNumber, marketInfo) {
   finalFactor = finalFactor * factorUtil.assetMarketTimeFactor('buy')
   // 仓位修正
   finalFactor = finalFactor * factorUtil.positionFactor('buy', true)
-  if (indexItem.key === 'yinhang') {
-    console.log(hasCount)
-    console.log(buyNumber)
-    console.log(indexRedistributionStandard * indexYearDiffFactor * finalFactor)
-  }
   return getBuyNumber(hasCount, buyNumber, indexRedistributionStandard * indexYearDiffFactor * finalFactor)
 }
 

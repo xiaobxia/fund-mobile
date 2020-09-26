@@ -76,6 +76,9 @@
           </span>
         </span>
       </div>
+      <div class="warn-wrap">
+        <div class="fm-warn blue">黄金再怎么乐观也不要超过5%</div>
+      </div>
       <div class="content">
         <p>定投资金占比<span class="rate" style="float: right">{{countRate(fixTotal,asset)}}%</span></p>
         <div class="proportion-item">

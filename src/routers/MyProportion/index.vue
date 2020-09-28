@@ -83,7 +83,7 @@
         <p>定投资金占比<span class="rate" style="float: right">{{countRate(fixTotal,asset)}}%</span></p>
         <div class="proportion-item">
           <div v-for="(item, index) in fixList" :key="index" class="proportion-item">
-            <div class="title">{{item.name}}<span class="rate">{{item.proportion}}%</span></div>
+            <div class="title">{{item.name}}<span class="rate">{{item.proportion}}%<span :class="stockNumberClass(item.rate)">({{item.rate}}%)</span></span></div>
             <mt-progress :value="item.proportion" :bar-height="barHeight"></mt-progress>
           </div>
         </div>
@@ -91,7 +91,7 @@
       <div class="content">
         <p>波段主题分布<span class="rate" style="float: right">{{countRate(bandTotal,asset)}}%</span></p>
         <div v-for="(item, index) in list" :key="index" class="proportion-item">
-          <div class="title">{{item.name}}<span v-if="ifLaji(item.name)" class="fm-tag green">垃圾</span><span v-if="ifJigou(item.name)" class="fm-tag red">机构</span><span class="rate">{{item.proportion}}%</span></div>
+          <div class="title">{{item.name}}<span v-if="ifLaji(item.name)" class="fm-tag green">垃圾</span><span v-if="ifJigou(item.name)" class="fm-tag red">机构</span><span class="rate">{{item.proportion}}%<span :class="stockNumberClass(item.rate)">({{item.rate}}%)</span></span></div>
           <mt-progress :value="item.proportion" :bar-height="barHeight"></mt-progress>
         </div>
       </div>
@@ -112,17 +112,23 @@ export default{
   name: 'MyProportion',
   data () {
     let distribution = {}
+    let distributionSum = {}
     indexList.forEach((item) => {
       distribution[item.name] = 0
+      distributionSum[item.name] = 0
     })
     const fixList = ['创业', '50', '300', '500', '1000', '白酒', '医疗', '生物', '混合']
     let fixDistribution = {}
+    let fixDistributionSum = {}
     fixList.forEach((item) => {
       fixDistribution[item] = 0
+      fixDistributionSum[item] = 0
     })
     return {
       distribution,
+      distributionSum,
       fixDistribution,
+      fixDistributionSum,
       totalSum: 0,
       barHeight: 12 * zoom,
       fixTotalCost: 0,
@@ -163,7 +169,6 @@ export default{
           let monthFixCost = 0
           let yearFix = 0
           let yearFixCost = 0
-          let hunheSum = 0
           for (let i = 0; i < list.length; i++) {
             const item = list[i]
             totalSum += item.valuationSum
@@ -175,6 +180,11 @@ export default{
                 } else {
                   this.distribution[item.theme] = parseInt(item.valuationSum)
                 }
+                if (this.distributionSum[item.theme]) {
+                  this.distributionSum[item.theme] += parseInt(item.sum)
+                } else {
+                  this.distributionSum[item.theme] = parseInt(item.sum)
+                }
                 bandTotal += parseInt(item.valuationSum)
               } else {
                 // 定投部分
@@ -184,6 +194,11 @@ export default{
                   this.fixDistribution[item.theme] += parseInt(item.valuationSum)
                 } else {
                   this.fixDistribution[item.theme] = parseInt(item.valuationSum)
+                }
+                if (this.fixDistributionSum[item.theme]) {
+                  this.fixDistributionSum[item.theme] += parseInt(item.sum)
+                } else {
+                  this.fixDistributionSum[item.theme] = parseInt(item.sum)
                 }
                 item.position_record.forEach((record) => {
                   if (moment().isSame(record.confirm_date, 'month')) {
@@ -206,6 +221,11 @@ export default{
               } else {
                 this.fixDistribution['混合'] = parseInt(item.valuationSum)
               }
+              if (this.fixDistributionSum['混合']) {
+                this.fixDistributionSum['混合'] += parseInt(item.sum)
+              } else {
+                this.fixDistributionSum['混合'] = parseInt(item.sum)
+              }
             }
           }
           let proportionList = []
@@ -213,12 +233,14 @@ export default{
             if (this.distribution[name]) {
               proportionList.push({
                 name: name,
-                proportion: this.countRate(this.distribution[name], this.asset)
+                proportion: this.countRate(this.distribution[name], this.asset),
+                rate: this.countRate(this.distribution[name], this.distributionSum[name])
               })
             } else {
               proportionList.push({
                 name: name,
-                proportion: 0
+                proportion: 0,
+                rate: 0
               })
             }
           }
@@ -230,12 +252,14 @@ export default{
             if (this.fixDistribution[name]) {
               fixProportionList.push({
                 name: name,
-                proportion: this.countRate(this.fixDistribution[name], this.asset)
+                proportion: this.countRate(this.fixDistribution[name], this.asset),
+                rate: this.countRate(this.fixDistribution[name], this.fixDistributionSum[name])
               })
             } else {
               fixProportionList.push({
                 name: name,
-                proportion: 0
+                proportion: 0,
+                rate: 0
               })
             }
           }

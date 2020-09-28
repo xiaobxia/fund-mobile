@@ -234,7 +234,7 @@ export default{
               proportionList.push({
                 name: name,
                 proportion: this.countRate(this.distribution[name], this.asset),
-                rate: this.countRate(this.distribution[name], this.distributionSum[name])
+                rate: this.countDifferenceRate(this.distribution[name], this.distributionSum[name])
               })
             } else {
               proportionList.push({
@@ -253,7 +253,7 @@ export default{
               fixProportionList.push({
                 name: name,
                 proportion: this.countRate(this.fixDistribution[name], this.asset),
-                rate: this.countRate(this.fixDistribution[name], this.fixDistributionSum[name])
+                rate: this.countDifferenceRate(this.fixDistribution[name], this.fixDistributionSum[name])
               })
             } else {
               fixProportionList.push({

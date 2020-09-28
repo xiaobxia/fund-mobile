@@ -89,7 +89,7 @@
         </div>
       </div>
       <div class="content">
-        <p>波段主题分布</p>
+        <p>波段主题分布<span class="rate" style="float: right">{{countRate(bandTotal,asset)}}%</span></p>
         <div v-for="(item, index) in list" :key="index" class="proportion-item">
           <div class="title">{{item.name}}<span v-if="ifLaji(item.name)" class="fm-tag green">垃圾</span><span v-if="ifJigou(item.name)" class="fm-tag red">机构</span><span class="rate">{{item.proportion}}%</span></div>
           <mt-progress :value="item.proportion" :bar-height="barHeight"></mt-progress>
@@ -115,7 +115,7 @@ export default{
     indexList.forEach((item) => {
       distribution[item.name] = 0
     })
-    const fixList = ['创业', '50', '300', '500', '1000', '白酒', '医疗', '生物']
+    const fixList = ['创业', '50', '300', '500', '1000', '白酒', '医疗', '生物', '混合']
     let fixDistribution = {}
     fixList.forEach((item) => {
       fixDistribution[item] = 0
@@ -128,7 +128,7 @@ export default{
       fixTotalCost: 0,
       fixTotal: 0,
       monthFixCost: 0,
-      otherTotal: 0,
+      bandTotal: 0,
       monthFix: 0,
       yearFix: 0,
       yearFixCost: 0,
@@ -156,25 +156,28 @@ export default{
         if (data.success) {
           const list = data.data.list
           let totalSum = 0
-          let otherTotal = 0
+          let bandTotal = 0
           let monthFix = 0
           let fixTotal = 0
           let fixTotalCost = 0
           let monthFixCost = 0
           let yearFix = 0
           let yearFixCost = 0
+          let hunheSum = 0
           for (let i = 0; i < list.length; i++) {
             const item = list[i]
             totalSum += item.valuationSum
             if (item.theme) {
               if (item.strategy === '1') {
+                // 波段部分
                 if (this.distribution[item.theme]) {
                   this.distribution[item.theme] += parseInt(item.valuationSum)
                 } else {
                   this.distribution[item.theme] = parseInt(item.valuationSum)
                 }
-                otherTotal += parseInt(item.valuationSum)
+                bandTotal += parseInt(item.valuationSum)
               } else {
+                // 定投部分
                 fixTotal += item.valuationSum
                 fixTotalCost += item.costSum
                 if (this.fixDistribution[item.theme]) {
@@ -192,6 +195,16 @@ export default{
                     yearFix += record.valuationSum
                   }
                 })
+              }
+            } else {
+              // 没有主题就是混合
+              // 混合也是定投部分
+              fixTotal += item.valuationSum
+              fixTotalCost += item.costSum
+              if (this.fixDistribution['混合']) {
+                this.fixDistribution['混合'] += parseInt(item.valuationSum)
+              } else {
+                this.fixDistribution['混合'] = parseInt(item.valuationSum)
               }
             }
           }
@@ -230,7 +243,7 @@ export default{
             return b.proportion - a.proportion
           })
           this.totalSum = totalSum
-          this.otherTotal = otherTotal
+          this.bandTotal = bandTotal
           this.fixTotal = fixTotal
           this.fixTotalCost = fixTotalCost
           this.monthFix = monthFix

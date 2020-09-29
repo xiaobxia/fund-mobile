@@ -178,6 +178,7 @@ export default{
           let bandSum = 0
           let monthFix = 0
           let fixTotal = 0
+          let fixSum = 0
           let fixTotalCost = 0
           let monthFixCost = 0
           let yearFix = 0

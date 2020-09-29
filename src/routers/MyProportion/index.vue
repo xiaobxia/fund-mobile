@@ -80,7 +80,12 @@
         <div class="fm-warn blue">黄金再怎么乐观也不要超过5%</div>
       </div>
       <div class="content">
-        <p>定投资金占比<span class="rate" style="float: right">{{countRate(fixTotal,asset)}}%</span></p>
+        <p>定投资金占比
+          <span class="rate" style="float: right">
+            {{countRate(fixTotal,asset)}}%
+            <span :class="stockNumberClass(fixTotal-fixSum)">({{countDifferenceRate(fixTotal, fixSum)}}%)</span>
+          </span>
+        </p>
         <div class="proportion-item">
           <div v-for="(item, index) in fixList" :key="index" class="proportion-item">
             <div class="title">{{item.name}}<span class="rate">{{item.proportion}}%<span :class="stockNumberClass(item.rate)">({{item.rate}}%)</span></span></div>
@@ -89,7 +94,12 @@
         </div>
       </div>
       <div class="content">
-        <p>波段主题分布<span class="rate" style="float: right">{{countRate(bandTotal,asset)}}%</span></p>
+        <p>波段主题分布
+          <span class="rate" style="float: right">
+            {{countRate(bandTotal,asset)}}%
+            <span :class="stockNumberClass(bandTotal-bandSum)">({{countDifferenceRate(bandTotal, bandSum)}}%)</span>
+          </span>
+        </p>
         <div v-for="(item, index) in list" :key="index" class="proportion-item">
           <div class="title">{{item.name}}<span v-if="ifLaji(item.name)" class="fm-tag green">垃圾</span><span v-if="ifJigou(item.name)" class="fm-tag red">机构</span><span class="rate">{{item.proportion}}%<span :class="stockNumberClass(item.rate)">({{item.rate}}%)</span></span></div>
           <mt-progress :value="item.proportion" :bar-height="barHeight"></mt-progress>
@@ -133,8 +143,10 @@ export default{
       barHeight: 12 * zoom,
       fixTotalCost: 0,
       fixTotal: 0,
+      fixSum: 0,
       monthFixCost: 0,
       bandTotal: 0,
+      bandSum: 0,
       monthFix: 0,
       yearFix: 0,
       yearFixCost: 0,
@@ -163,6 +175,7 @@ export default{
           const list = data.data.list
           let totalSum = 0
           let bandTotal = 0
+          let bandSum = 0
           let monthFix = 0
           let fixTotal = 0
           let fixTotalCost = 0
@@ -186,10 +199,12 @@ export default{
                   this.distributionSum[item.theme] = parseInt(item.sum)
                 }
                 bandTotal += parseInt(item.valuationSum)
+                bandSum += parseInt(item.sum)
               } else {
                 // 定投部分
                 fixTotal += item.valuationSum
                 fixTotalCost += item.costSum
+                fixSum += item.sum
                 if (this.fixDistribution[item.theme]) {
                   this.fixDistribution[item.theme] += parseInt(item.valuationSum)
                 } else {
@@ -216,6 +231,7 @@ export default{
               // 混合也是定投部分
               fixTotal += item.valuationSum
               fixTotalCost += item.costSum
+              fixSum += item.sum
               if (this.fixDistribution['混合']) {
                 this.fixDistribution['混合'] += parseInt(item.valuationSum)
               } else {
@@ -268,7 +284,9 @@ export default{
           })
           this.totalSum = totalSum
           this.bandTotal = bandTotal
+          this.bandSum = bandSum
           this.fixTotal = fixTotal
+          this.fixSum = fixSum
           this.fixTotalCost = fixTotalCost
           this.monthFix = monthFix
           this.monthFixCost = monthFixCost

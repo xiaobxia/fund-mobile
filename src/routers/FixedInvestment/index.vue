@@ -14,6 +14,7 @@
         <div>213001 宝盈鸿利收益</div>
         <div>163402 兴全趋势投资混合</div>
         <div>001714 工银瑞信文体</div>
+        <div>001224 中邮新思路</div>
       </div>
       <!--<div class="fm-warn blue">不要自作聪明，这里提示卖了才卖</div>-->
       <mt-cell-swipe

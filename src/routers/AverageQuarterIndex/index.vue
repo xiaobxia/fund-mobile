@@ -6,6 +6,9 @@
       </mt-button>
     </mt-header>
     <div class="main-body">
+      <div class="warn-wrap">
+        <div class="fm-warn blue">年线在上，季度线跌太多(-7% ~ -10%)就可以不卖了</div>
+      </div>
       <mt-cell-swipe v-for="(item) in list" :key="item.code">
         <div slot="title">
           <h3>

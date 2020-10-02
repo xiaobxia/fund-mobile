@@ -80,28 +80,28 @@
         <div class="fm-warn blue">黄金再怎么乐观也不要超过5%</div>
       </div>
       <div class="content">
-        <p>定投资金占比
+        <p>定投
           <span class="rate" style="float: right">
             {{countRate(fixTotal,asset)}}%
-            <span :class="stockNumberClass(fixTotal-fixSum)">({{countDifferenceRate(fixTotal, fixSum)}}%)</span>
+            <span :class="stockNumberClass(fixTotal-fixSum)">({{countDifferenceRate(fixTotal, fixSum)}}%)[{{parseInt(fixTotal-fixSum)}}]</span>
           </span>
         </p>
         <div class="proportion-item">
           <div v-for="(item, index) in fixList" :key="index" class="proportion-item">
-            <div class="title">{{item.name}}<span class="rate">{{item.proportion}}%<span :class="stockNumberClass(item.rate)">({{item.rate}}%)</span></span></div>
+            <div class="title">{{item.name}}<span class="rate">{{item.proportion}}%<span :class="stockNumberClass(item.rate)">({{item.rate}}%)[{{item.diff}}]</span></span></div>
             <mt-progress :value="item.proportion" :bar-height="barHeight"></mt-progress>
           </div>
         </div>
       </div>
       <div class="content">
-        <p>波段主题分布
+        <p>波段
           <span class="rate" style="float: right">
             {{countRate(bandTotal,asset)}}%
-            <span :class="stockNumberClass(bandTotal-bandSum)">({{countDifferenceRate(bandTotal, bandSum)}}%)</span>
+            <span :class="stockNumberClass(bandTotal-bandSum)">({{countDifferenceRate(bandTotal, bandSum)}}%)[{{parseInt(bandTotal-bandSum)}}]</span>
           </span>
         </p>
         <div v-for="(item, index) in list" :key="index" class="proportion-item">
-          <div class="title">{{item.name}}<span v-if="ifLaji(item.name)" class="fm-tag green">垃圾</span><span v-if="ifJigou(item.name)" class="fm-tag red">机构</span><span class="rate">{{item.proportion}}%<span :class="stockNumberClass(item.rate)">({{item.rate}}%)</span></span></div>
+          <div class="title">{{item.name}}<span v-if="ifLaji(item.name)" class="fm-tag green">垃圾</span><span v-if="ifJigou(item.name)" class="fm-tag red">机构</span><span class="rate">{{item.proportion}}%<span :class="stockNumberClass(item.rate)">({{item.rate}}%)[{{item.diff}}]</span></span></div>
           <mt-progress :value="item.proportion" :bar-height="barHeight"></mt-progress>
         </div>
       </div>
@@ -251,13 +251,15 @@ export default{
               proportionList.push({
                 name: name,
                 proportion: this.countRate(this.distribution[name], this.asset),
-                rate: this.countDifferenceRate(this.distribution[name], this.distributionSum[name])
+                rate: this.countDifferenceRate(this.distribution[name], this.distributionSum[name]),
+                diff: parseInt(this.distribution[name] - this.distributionSum[name])
               })
             } else {
               proportionList.push({
                 name: name,
                 proportion: 0,
-                rate: 0
+                rate: 0,
+                diff: 0
               })
             }
           }
@@ -270,13 +272,15 @@ export default{
               fixProportionList.push({
                 name: name,
                 proportion: this.countRate(this.fixDistribution[name], this.asset),
-                rate: this.countDifferenceRate(this.fixDistribution[name], this.fixDistributionSum[name])
+                rate: this.countDifferenceRate(this.fixDistribution[name], this.fixDistributionSum[name]),
+                diff: parseInt(this.fixDistribution[name] - this.fixDistributionSum[name])
               })
             } else {
               fixProportionList.push({
                 name: name,
                 proportion: 0,
-                rate: 0
+                rate: 0,
+                diff: 0
               })
             }
           }

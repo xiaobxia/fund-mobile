@@ -43,6 +43,7 @@ export default {
     }
   },
   created () {
+    this.$http.get(`stock/updateXueQiuCookie`)
   },
   methods: {
     backHandler () {

@@ -9,24 +9,24 @@
       <div class="detail-info-wrap">
         <span class="item">
           <span class="label">总资金：</span>
-          <span class="value">{{parseInt(asset)}}</span>
+          <span class="value">{{$formatMoney(asset)}}</span>
         </span>
         <span class="item">
           <span class="label">总持仓：</span>
-          <span class="value">{{parseInt(totalSum)}}</span>
+          <span class="value">{{$formatMoney(totalSum)}}</span>
         </span>
         <span class="item">
           <span class="label">定投资金：</span>
-          <span class="value">{{parseInt(fixTotal)}}</span>
+          <span class="value">{{$formatMoney(fixTotal)}}</span>
         </span>
         <span class="item">
           <span class="label">定投成本：</span>
-          <span class="value">{{parseInt(fixTotalCost)}}</span>
+          <span class="value">{{$formatMoney(fixTotalCost)}}</span>
         </span>
         <span class="item">
           <span class="label">定投收益：</span>
           <span class="value">
-            <span :class="stockNumberClass(fixTotal-fixTotalCost)">{{parseInt(fixTotal-fixTotalCost)}}</span>
+            <span :class="stockNumberClass(fixTotal-fixTotalCost)">{{$formatMoney(fixTotal-fixTotalCost)}}</span>
           </span>
         </span>
         <span class="item">
@@ -37,16 +37,16 @@
         </span>
         <span class="item">
           <span class="label">年定投：</span>
-          <span class="value">{{parseInt(yearFix)}}</span>
+          <span class="value">{{$formatMoney(yearFix)}}</span>
         </span>
         <span class="item">
           <span class="label">年成本：</span>
-          <span class="value">{{parseInt(yearFixCost)}}</span>
+          <span class="value">{{$formatMoney(yearFixCost)}}</span>
         </span>
         <span class="item">
           <span class="label">年定投收益：</span>
           <span class="value">
-            <span :class="stockNumberClass(yearFix-yearFixCost)">{{parseInt(yearFix-yearFixCost)}}</span>
+            <span :class="stockNumberClass(yearFix-yearFixCost)">{{$formatMoney(yearFix-yearFixCost)}}</span>
           </span>
         </span>
         <span class="item">
@@ -57,16 +57,16 @@
         </span>
         <span class="item">
           <span class="label">月定投：</span>
-          <span class="value">{{parseInt(monthFix)}}</span>
+          <span class="value">{{$formatMoney(monthFix)}}</span>
         </span>
         <span class="item">
           <span class="label">月成本：</span>
-          <span class="value">{{parseInt(monthFixCost)}}</span>
+          <span class="value">{{$formatMoney(monthFixCost)}}</span>
         </span>
         <span class="item">
           <span class="label">月定投收益：</span>
           <span class="value">
-            <span :class="stockNumberClass(monthFix-monthFixCost)">{{parseInt(monthFix-monthFixCost)}}</span>
+            <span :class="stockNumberClass(monthFix-monthFixCost)">{{$formatMoney(monthFix-monthFixCost)}}</span>
           </span>
         </span>
         <span class="item">
@@ -79,30 +79,62 @@
       <div class="warn-wrap">
         <div class="fm-warn blue">黄金再怎么乐观也不要超过5%</div>
       </div>
-      <div class="content">
-        <p>定投
-          <span class="rate" style="float: right">
-            {{countRate(fixTotal,asset)}}%
-            <span :class="stockNumberClass(fixTotal-fixSum)">({{countDifferenceRate(fixTotal, fixSum)}}%)[{{parseInt(fixTotal-fixSum)}}]</span>
+      <div style="position: absolute;width: 100%">
+        <div class="content">
+          <p>定投
+            <span class="rate" style="float: right;text-align: right">
+            <span class="m-wi">{{$formatMoney(fixSum)}}</span>
+            <span class="r-wi">{{countRate(fixTotal,asset)}}</span>
+            <span :class="stockNumberClass(fixTotal-fixSum)">
+              <span class="r-wi">{{countDifferenceRate(fixTotal, fixSum)}}</span>
+              <span class="r-wi">{{$formatMoney(fixTotal-fixSum)}}</span>
+            </span>
           </span>
-        </p>
-        <div class="proportion-item">
-          <div v-for="(item, index) in fixList" :key="index" class="proportion-item">
-            <div class="title">{{item.name}}<span class="rate">{{item.proportion}}%<span :class="stockNumberClass(item.rate)">({{item.rate}}%)[{{item.diff}}]</span></span></div>
-            <mt-progress :value="item.proportion" :bar-height="barHeight"></mt-progress>
+          </p>
+          <div class="proportion-item">
+            <div v-for="(item, index) in fixList" :key="index" class="proportion-item">
+              <div class="title">
+                {{item.name}}
+                <span class="rate" style="text-align: right">
+                   <span class="m-wi">{{$formatMoney(item.sum)}}</span>
+                  <span  class="r-wi">{{item.proportion}}</span>
+                  <span :class="stockNumberClass(item.rate)">
+                    <span class="r-wi">{{item.rate}}</span>
+                    <span class="r-wi">{{$formatMoney(item.diff)}}</span>
+                  </span>
+                </span>
+              </div>
+              <mt-progress :value="item.proportion" :bar-height="barHeight"></mt-progress>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="content">
-        <p>波段
-          <span class="rate" style="float: right">
-            {{countRate(bandTotal,asset)}}%
-            <span :class="stockNumberClass(bandTotal-bandSum)">({{countDifferenceRate(bandTotal, bandSum)}}%)[{{parseInt(bandTotal-bandSum)}}]</span>
-          </span>
-        </p>
-        <div v-for="(item, index) in list" :key="index" class="proportion-item">
-          <div class="title">{{item.name}}<span v-if="ifLaji(item.name)" class="fm-tag green">垃圾</span><span v-if="ifJigou(item.name)" class="fm-tag red">机构</span><span class="rate">{{item.proportion}}%<span :class="stockNumberClass(item.rate)">({{item.rate}}%)[{{item.diff}}]</span></span></div>
-          <mt-progress :value="item.proportion" :bar-height="barHeight"></mt-progress>
+        <div class="content">
+          <p>波段
+            <span class="rate" style="float: right;text-align: right">
+              <span class="m-wi">{{$formatMoney(bandSum)}}</span>
+              <span class="r-wi">{{countRate(bandTotal,asset)}}</span>
+              <span :class="stockNumberClass(bandTotal-bandSum)">
+                <span class="r-wi">{{countDifferenceRate(bandTotal, bandSum)}}</span>
+                <span class="r-wi">{{$formatMoney(bandTotal-bandSum)}}</span>
+              </span>
+            </span>
+          </p>
+          <div v-for="(item, index) in list" :key="index" class="proportion-item">
+            <div class="title">
+              {{item.name}}
+              <span v-if="ifLaji(item.name)" class="fm-tag green">垃圾</span>
+              <span v-if="ifJigou(item.name)" class="fm-tag red">机构</span>
+              <span class="rate" style="text-align: right">
+                <span class="m-wi">{{$formatMoney(item.sum)}}</span>
+                <span class="r-wi">{{item.proportion}}</span>
+                <span :class="stockNumberClass(item.rate)">
+                  <span class="r-wi">{{item.rate}}</span>
+                  <span class="r-wi">{{$formatMoney(item.diff)}}</span>
+                </span>
+              </span>
+            </div>
+            <mt-progress :value="item.proportion" :bar-height="barHeight"></mt-progress>
+          </div>
         </div>
       </div>
     </div>
@@ -252,14 +284,16 @@ export default{
                 name: name,
                 proportion: this.countRate(this.distribution[name], this.asset),
                 rate: this.countDifferenceRate(this.distribution[name], this.distributionSum[name]),
-                diff: parseInt(this.distribution[name] - this.distributionSum[name])
+                diff: parseInt(this.distribution[name] - this.distributionSum[name]),
+                sum: parseInt(this.distributionSum[name])
               })
             } else {
               proportionList.push({
                 name: name,
                 proportion: 0,
                 rate: 0,
-                diff: 0
+                diff: 0,
+                sum: 0
               })
             }
           }
@@ -273,14 +307,16 @@ export default{
                 name: name,
                 proportion: this.countRate(this.fixDistribution[name], this.asset),
                 rate: this.countDifferenceRate(this.fixDistribution[name], this.fixDistributionSum[name]),
-                diff: parseInt(this.fixDistribution[name] - this.fixDistributionSum[name])
+                diff: parseInt(this.fixDistribution[name] - this.fixDistributionSum[name]),
+                sum: parseInt(this.fixDistributionSum[name])
               })
             } else {
               fixProportionList.push({
                 name: name,
                 proportion: 0,
                 rate: 0,
-                diff: 0
+                diff: 0,
+                sum: 0
               })
             }
           }
@@ -308,5 +344,14 @@ export default{
   }
 }
 </script>
-<style>
+
+<style rel="stylesheet/scss" lang="scss" scoped>
+  .r-wi {
+    display: inline-block;
+    width: 4em;
+  }
+  .m-wi {
+    display: inline-block;
+    width: 5em;
+  }
 </style>

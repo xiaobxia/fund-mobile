@@ -14,8 +14,8 @@
         <div slot="title">
           <h3>
             <span class="name">{{item.name}}</span>
-            <span class="has-count">{{item.hasCount}}</span>
-            <span :class="['income', stockNumberClass(item.netChangeRatio)]">{{parseInt(item.netChangeRatio * item.hasCount / 100)}}</span>
+            <span class="has-count">{{$formatMoney(item.hasCount)}}</span>
+            <span :class="['income', stockNumberClass(item.netChangeRatio)]">{{$formatMoney(item.netChangeRatio * item.hasCount / 100)}}</span>
             <span style="float: right" :class="stockNumberClass(item.netChangeRatio)">{{item.netChangeRatio}}%</span>
           </h3>
           <div class="rate-info-icon">

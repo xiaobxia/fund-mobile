@@ -108,6 +108,9 @@
             </div>
           </div>
         </div>
+        <div class="warn-wrap">
+          <div class="fm-warn blue">波段标准{{parseFloat(60/24)}}%</div>
+        </div>
         <div class="content">
           <p>波段
             <span class="rate" style="float: right;text-align: right">

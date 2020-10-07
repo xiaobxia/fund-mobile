@@ -9,11 +9,11 @@
       <div class="detail-info-wrap">
         <span class="item">
           <span class="label">持仓金额：</span>
-          <span class="value">{{parseInt(info.totalSum)}}</span>
+          <span class="value">{{$formatMoney(parseInt(info.totalSum))}}</span>
         </span>
         <span class="item">
           <span class="label">估算金额：</span>
-          <span class="value">{{parseInt(info.valuationTotalSum)}}</span>
+          <span class="value">{{$formatMoney(parseInt(info.valuationTotalSum))}}</span>
         </span>
         <span class="item">
           <span class="label">仓位信息：</span>
@@ -21,19 +21,19 @@
         </span>
         <span class="item">
           <span class="label">可卖金额：</span>
-          <span class="value">{{parseInt(canSellSum)}}</span>
+          <span class="value">{{$formatMoney(parseInt(canSellSum))}}</span>
         </span>
         <span class="item">
           <span class="label">锁仓金额：</span>
-          <span class="value">{{parseInt(lockCostSum)}}</span>
+          <span class="value">{{$formatMoney(parseInt(lockCostSum))}}</span>
         </span>
         <span class="item">
           <span class="label">锁仓收益：</span>
-          <span :class="['value',stockNumberClass(lockIncome)]">{{parseInt(lockIncome)}}</span>
+          <span :class="['value',stockNumberClass(lockIncome)]">{{$formatMoney(parseInt(lockIncome))}}</span>
         </span>
         <span class="item">
           <span class="label">估算收益：</span>
-          <span :class="['value',stockNumberClass(valuationInfo)]">{{parseInt(valuationInfo)}}</span>
+          <span :class="['value',stockNumberClass(valuationInfo)]">{{$formatMoney(parseInt(valuationInfo))}}</span>
         </span>
         <span class="item">
           <span class="label">估算涨幅：</span>
@@ -41,11 +41,11 @@
         </span>
         <span class="item">
           <span class="label">最新购买：</span>
-          <span class="value">{{parseInt(lastBuy)}}</span>
+          <span class="value">{{$formatMoney(parseInt(lastBuy))}}</span>
         </span>
         <span class="item">
           <span class="label">新买收益：</span>
-          <span :class="['value',stockNumberClass(lastBuyChange)]">{{parseInt(lastBuyChange)}}</span>
+          <span :class="['value',stockNumberClass(lastBuyChange)]">{{$formatMoney(parseInt(lastBuyChange))}}</span>
         </span>
         <span class="item">
           <span class="label">净值波动：</span>

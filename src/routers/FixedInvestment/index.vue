@@ -7,7 +7,7 @@
     </mt-header>
     <div class="main-body">
       <div v-if="kuanBuy >= 3">
-        <span>买入：{{otherBuyCount(canBuy)}}</span>
+        <span>买入：{{$formatMoney(otherBuyCount(canBuy))}}</span>
         <div>001508 富国新动力</div>
         <div>260108 景顺长城新兴成长混合</div>
         <div>110011 易方达中小盘混合</div>
@@ -44,7 +44,7 @@
           <div class="other-text">
              <span class="item">
               <span class="label">持有金额：</span>
-              <span class="value">{{hasCount[item.name]}}</span>
+              <span class="value">{{$formatMoney(hasCount[item.name])}}</span>
             </span>
             <span class="item">
               <span class="label">年线偏离：</span>
@@ -54,11 +54,11 @@
             </span>
             <span class="item">
               <span class="label">买入金额：</span>
-              <span class="value red-text">{{canBuy[item.key]}}</span>
+              <span class="value red-text">{{$formatMoney(canBuy[item.key])}}</span>
             </span>
             <span class="item">
               <span class="label">卖出金额：</span>
-              <span class="value green-text">{{canSell[item.key]}}</span>
+              <span class="value green-text">{{$formatMoney(canSell[item.key])}}</span>
             </span>
           </div>
         </div>

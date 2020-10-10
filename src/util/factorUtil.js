@@ -205,30 +205,20 @@ export default {
       0.8
     ]
     factor = factor * monthFactorList[month]
-    // 季度末资金面紧张
+    // --季度末资金面紧张，不包括国庆前和元旦前
     if (moment().isAfter(`${year}-03-16`) && moment().isBefore(`${year}-03-30`)) {
       factor = factor * 0.9
     }
     if (moment().isAfter(`${year}-06-16`) && moment().isBefore(`${year}-06-30`)) {
       factor = factor * 0.9
     }
-    if (moment().isAfter(`${year}-09-16`) && moment().isBefore(`${year}-09-30`)) {
-      factor = factor * 0.9
-    }
-    if (moment().isAfter(`${year}-12-16`) && moment().isBefore(`${year}-12-30`)) {
-      factor = factor * 0.9
-    }
-    // 机构结账月
+    // --机构结账月
     if (moment().isAfter(`${year}-11-16`) && moment().isBefore(`${year}-11-30`)) {
       factor = factor * 0.9
     }
-    // 每个月的22日以后都是要谨慎的,要排除季末，也要排除春节行情
-    const quarterList = [1, 2, 3, 6, 9, 11, 12]
-    // 不能和季末叠加
-    if (quarterList.indexOf(month + 1) === -1) {
-      if (day >= 22 && day < 30) {
-        factor = factor * 0.9
-      }
+    // 国庆前几天和后几天有3%的涨幅可以弄
+    if (moment().isAfter(`${year}-09-25`) && moment().isBefore(`${year}-10-01`)) {
+      factor = factor * 1.2
     }
     if (buySell === 'buy') {
       return factor

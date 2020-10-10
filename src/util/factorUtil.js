@@ -212,13 +212,23 @@ export default {
     if (moment().isAfter(`${year}-06-16`) && moment().isBefore(`${year}-06-30`)) {
       factor = factor * 0.9
     }
+    if (moment().isAfter(`${year}-09-16`) && moment().isBefore(`${year}-09-25`)) {
+      factor = factor * 0.9
+    }
+    if (moment().isAfter(`${year}-12-16`) && moment().isBefore(`${year}-12-25`)) {
+      factor = factor * 0.9
+    }
     // --机构结账月
     if (moment().isAfter(`${year}-11-16`) && moment().isBefore(`${year}-11-30`)) {
       factor = factor * 0.9
     }
     // 国庆前几天和后几天有3%的涨幅可以弄
     if (moment().isAfter(`${year}-09-25`) && moment().isBefore(`${year}-10-01`)) {
-      factor = factor * 1.2
+      factor = factor * 1.15
+    }
+    // 元旦前几天和后几天有3%的涨幅可以弄
+    if (moment().isAfter(`${year}-12-25`) && moment().isBefore(`${year}-12-31`)) {
+      factor = factor * 1.15
     }
     if (buySell === 'buy') {
       return factor

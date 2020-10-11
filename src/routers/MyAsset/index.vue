@@ -6,7 +6,10 @@
       </mt-button>
     </mt-header>
     <div class="main-body">
-      <div class="yellow fm-warn">申购在每月第一个交易日进行，申购前确保资产校对过</div>
+      <div class="warn-wrap">
+        <div class="yellow fm-warn">申购在每月第一个交易日进行，申购前确保资产校对过</div>
+        <div class="fm-warn blue">基金规模的增长理论上控制在33%</div>
+      </div>
       <div class="filter-select-wrap">
         <span class="name">{{editType}}</span>
         <mt-button type="primary" @click="editTypeChangeHandler">改变</mt-button>

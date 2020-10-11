@@ -578,21 +578,49 @@ export default {
     backHandler () {
       this.$router.history.go(-1)
     },
+    ttBuy (num) {
+      // num * 每月金额
+      return parseInt((num * 10000) / (360000 / 36))
+    },
     okHandler () {
-      const fixBuyData = storageUtil.getData('fixBuyData')
-      const list = []
-      for (let key in fixBuyData) {
-        list.push({
-          key,
-          buy: fixBuyData[key]
+      const hhBuy = this.otherBuyCount(this.canBuy)
+      const record = []
+      if (this.kuanBuy >= 4) {
+        this.hhList.forEach((item) => {
+          record.push({
+            name: item,
+            buyNum: this.ttBuy(hhBuy)
+          })
         })
       }
+      const fundIndexMap = {
+        'chuangye': '001879 长城创业板',
+        'wulin': '110003 易方达上证50',
+        'sanbai': '004190 招商沪深300',
+        'wubai': '004945 长信中证500',
+        'yiqian': '004194 招商中证1000',
+        'baijiu': '161725 招商中证白酒',
+        'shipin': '001631 天弘中证食品饮料',
+        'yiliao': '501005 汇添富中证精准医疗',
+        'shengwu': '501009 汇添富中证生物',
+        'jisuanji': '001629 天弘中证计算机',
+        'dianzi': '001617 天弘中证电子',
+        'xinxi': '000942 广发中证全指信息'
+      }
+      this.list.forEach((item) => {
+        if (item.ifBuy) {
+          record.push({
+            name: fundIndexMap[item.key],
+            buyNum: this.ttBuy(item.buyNum)
+          })
+        }
+      })
       // 开盘的才更新
       if (this.userFundAccountInfo.marketOpen) {
         const date = moment().format('YYYY-MM-DD')
         this.$http.post('http://47.92.210.171:3051/fbsServer/signal/updateSignal', {
           trade_date: date,
-          fix_record: JSON.stringify(list)
+          fix_record: JSON.stringify(record)
         })
       }
     },

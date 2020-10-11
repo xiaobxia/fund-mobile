@@ -6,7 +6,10 @@
       </mt-button>
     </mt-header>
     <div class="main-body">
-      <div v-if="kuanBuy >= 3">
+      <div class="warn-wrap">
+        <div class="fm-warn yellow">在大级别底部，多买混合</div>
+      </div>
+      <div v-if="kuanBuy >= 4">
         <span>买入：{{$formatMoney(otherBuyCount(canBuy))}}</span>
         <div>001508 富国新动力</div>
         <div>260108 景顺长城新兴成长混合</div>
@@ -15,6 +18,7 @@
         <div>163406 兴全合润分级混合</div>
         <div>001714 工银瑞信文体</div>
         <div>001224 中邮新思路</div>
+        <div>570001 诺德价值优势混合</div>
       </div>
       <!--<div class="fm-warn blue">不要自作聪明，这里提示卖了才卖</div>-->
       <mt-cell-swipe
@@ -169,7 +173,8 @@ export default {
         mix: codeMap[key].mix,
         threshold: codeMap[key].threshold,
         wave: codeMap[key].wave,
-        rate: codeMap[key].rate
+        rate: codeMap[key].rate,
+        ifBuy: false
       })
       allInfo[key] = []
       rateInfo[key] = 0
@@ -365,14 +370,32 @@ export default {
       const quarterHot = storageUtil.getData('stockIndexQuarterHot', key) === '开启'
       return quarterHot && quarterIndex > 0
     },
+    // 计算混合
+    countHH () {
+      this.kuanBuy = 0
+      this.list.forEach((item, index) => {
+        if (item.ifBuy) {
+          // 是宽基
+          if (kuanji.indexOf(item.key) !== -1) {
+            this.kuanBuy++
+          } else if (['baijiu', 'shengwu', 'dianzi'].indexOf(item.key) !== -1) {
+            this.kuanBuy++
+          }
+        }
+      })
+    },
     initPage () {
       this.stockIndexAll.forEach((item) => {
         this.averageMap[item.code] = item.year_average
       })
       let list = this.list
+      const opList = []
       for (let i = 0; i < list.length; i++) {
-        this.queryData(list[i])
+        opList.push(this.queryData(list[i]))
       }
+      Promise.all(opList).then(() => {
+        this.countHH()
+      })
       this.$http.get('userFund/getUserFunds').then((data) => {
         if (data.success) {
           const list = data.data.list
@@ -408,7 +431,7 @@ export default {
       }
     },
     queryData (item) {
-      this.$http.get(`stock/${stockApiUtil.getAllUrl()}`, {
+      return this.$http.get(`stock/${stockApiUtil.getAllUrl()}`, {
         code: item.code,
         days: 16
       }, {interval: 30}).then((data) => {
@@ -530,12 +553,11 @@ export default {
           this.canBuy[item.key] = buyNumber
           this.canSell[item.key] = parseInt((buyS * (1 - buyS / buyNumber)) / 10) * 10
           this.allInfo[item.key] = infoList
+          // 其他
           let buyBaseInfo = 0
           if (['买', '跌少', '跌多'].indexOf(infoList[0]) !== -1) {
+            item.ifBuy = true
             buyBaseInfo = parseInt(buyNumber / 10)
-            if (kuanji.indexOf(item.key) !== -1) {
-              this.kuanBuy++
-            }
           }
           storageUtil.setData('fixBuyData', item.key, buyBaseInfo)
           this.rateInfo[item.key] = this.keepTwoDecimals(recentNetValue[0].netChangeRatio)
@@ -565,13 +587,16 @@ export default {
     },
     otherBuyCount (map) {
       let sum = 0
+      // 一共8个
       for (let key in map) {
         if (kuanji.indexOf(key) !== -1) {
           sum += parseFloat(map[key]) || 0
+        } else if (['baijiu', 'shengwu', 'dianzi'].indexOf(key) !== -1) {
+          sum += parseFloat(map[key]) || 0
         }
       }
-      // 有4个基金，但是只能让它占2个位置
-      return parseInt((sum / 5) / 2)
+      // 8个金额的一半/混合的个数
+      return parseInt((sum / 2) / 8)
     }
   }
 }

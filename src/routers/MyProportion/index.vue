@@ -77,7 +77,8 @@
         </span>
       </div>
       <div class="warn-wrap">
-        <div class="fm-warn blue">黄金再怎么乐观也不要超过5%</div>
+        <div class="fm-warn yellow">配比：混合25%，定投25%，波段50%</div>
+        <div class="fm-warn blue">黄金再怎么乐观也不要超过2.5%</div>
       </div>
       <div style="position: absolute;width: 100%">
         <div class="content">

@@ -11,14 +11,12 @@
       </div>
       <div v-if="kuanBuy >= 4">
         <span>买入：{{$formatMoney(otherBuyCount(canBuy))}}</span>
-        <div>001508 富国新动力</div>
-        <div>260108 景顺长城新兴成长混合</div>
-        <div>110011 易方达中小盘混合</div>
-        <div>213001 宝盈鸿利收益</div>
-        <div>163406 兴全合润分级混合</div>
-        <div>001714 工银瑞信文体</div>
-        <div>001224 中邮新思路</div>
-        <div>570001 诺德价值优势混合</div>
+        <div
+          v-for="(item, index) in hhList"
+          :key="index"
+        >
+          {{item}}
+        </div>
       </div>
       <!--<div class="fm-warn blue">不要自作聪明，这里提示卖了才卖</div>-->
       <mt-cell-swipe
@@ -174,7 +172,8 @@ export default {
         threshold: codeMap[key].threshold,
         wave: codeMap[key].wave,
         rate: codeMap[key].rate,
-        ifBuy: false
+        ifBuy: false,
+        buyNum: 0
       })
       allInfo[key] = []
       rateInfo[key] = 0
@@ -186,6 +185,17 @@ export default {
       klineMap[key] = [{}]
     }
     return {
+      // 混合
+      hhList: [
+        '001508 富国新动力',
+        '260108 景顺长城新兴成长混合',
+        '110011 易方达中小盘混合',
+        '213001 宝盈鸿利收益',
+        '163406 兴全合润分级混合',
+        '001714 工银瑞信文体',
+        '001224 中邮新思路',
+        '570001 诺德价值优势混合'
+      ],
       list: list,
       allInfo: allInfo,
       rateInfo: rateInfo,
@@ -558,6 +568,7 @@ export default {
           if (['买', '跌少', '跌多'].indexOf(infoList[0]) !== -1) {
             item.ifBuy = true
             buyBaseInfo = parseInt(buyNumber / 10)
+            item.buyNum = buyBaseInfo
           }
           storageUtil.setData('fixBuyData', item.key, buyBaseInfo)
           this.rateInfo[item.key] = this.keepTwoDecimals(recentNetValue[0].netChangeRatio)

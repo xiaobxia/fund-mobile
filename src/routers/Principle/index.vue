@@ -15,6 +15,9 @@
             <mt-switch v-model="noBuy" @change="stateChangeHandler"></mt-switch>
           </div>
         </mt-cell-swipe>
+        <div class="warn-wrap">
+          <div class="fm-warn blue">进入没卖阶段，建议仓位保持60%以上</div>
+        </div>
         <mt-cell-swipe>
           <div slot="title">
             <h3>没卖</h3>

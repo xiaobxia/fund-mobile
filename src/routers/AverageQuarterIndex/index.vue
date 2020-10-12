@@ -8,6 +8,7 @@
     <div class="main-body">
       <div class="warn-wrap">
         <div class="fm-warn blue">年线在上，季度线跌太多(-7% ~ -10%)就可以不卖了</div>
+        <div class="fm-warn grey">进入没卖阶段，建议仓位保持60%以上</div>
       </div>
       <mt-cell-swipe v-for="(item) in list" :key="item.code" :class="item.netChangeRatio < -7 ? 'duo':''">
         <div slot="title">

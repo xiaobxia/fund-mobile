@@ -209,7 +209,12 @@ export default {
       return kuanji.indexOf(this.indexInfo.key) !== -1
     },
     ifFixIndex () {
-      return ['chuangye', 'wulin', 'sanbai', 'wubai', 'yiqian', 'baijiu', 'shipin', 'yiliao', 'shengwu'].indexOf(this.indexInfo.key) !== -1
+      return [
+        'chuangye', 'wulin', 'sanbai', 'wubai', 'yiqian',
+        'baijiu', 'shipin',
+        'yiliao', 'shengwu',
+        'jisuanji', 'dianzi', 'xinxi'
+      ].indexOf(this.indexInfo.key) !== -1
     },
     // 月线
     averageMonthIndex () {

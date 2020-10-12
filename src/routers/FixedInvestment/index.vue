@@ -634,8 +634,8 @@ export default {
           sum += parseFloat(map[key]) || 0
         }
       }
-      // 8个金额的一半/混合的个数
-      return parseInt((sum / 2) / 8)
+      // 取个平均数
+      return parseInt((sum) / 8)
     }
   }
 }

@@ -38,6 +38,16 @@
             <div>
                 <span class="item">
                   <span class="label">份额：</span>
+                 <span class="value">{{parseInt((shares || 0)/18)}}</span>
+                </span>
+              <span class="item">
+                  <span class="label">比例：</span>
+                  <span class="value">1/18</span>
+                </span>
+            </div>
+            <div>
+                <span class="item">
+                  <span class="label">份额：</span>
                  <span class="value">{{parseInt((shares || 0)/15)}}</span>
                 </span>
               <span class="item">

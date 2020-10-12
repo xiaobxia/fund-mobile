@@ -41,7 +41,7 @@
         <span
           v-if="ifFixIndex && ifQuarterHotCutNow()"
           class="fm-tag s-black"
-        >卖定1/10</span>
+        >卖定{{getFixSellRate()}}</span>
         <span v-if="ifJieTargetUpCloseLock" class="fm-tag s-black">目标0.3</span>
         <!--<span v-if="ifStopKeep()" class="fm-tag s-black">止盈</span>-->
         <!--年下z45是必跌的-->
@@ -231,6 +231,10 @@ export default {
     ifUnderYear () {
       const diff = storageUtil.getData('yearAverageIndexDiff', this.indexInfo.key) || 0
       return diff < 0
+    },
+    // 年偏离
+    yearDiff () {
+      return storageUtil.getData('yearAverageIndexDiff', this.indexInfo.key) || 0
     },
     // 获取另一种模式的技术性信号
     otherBuySellList () {
@@ -462,6 +466,18 @@ export default {
   created () {
   },
   methods: {
+    getFixSellRate () {
+      if (this.yearDiff >= 50) {
+        return '1/8'
+      } else if (this.yearDiff >= 40) {
+        return '1/10'
+      } else if (this.yearDiff >= 30) {
+        return '1/12'
+      } else if (this.yearDiff >= 20) {
+        return '1/15'
+      }
+      return '1/18'
+    },
     // 复制买卖信号
     copyList (list) {
       let newList = []

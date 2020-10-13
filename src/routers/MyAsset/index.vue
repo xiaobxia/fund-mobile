@@ -9,6 +9,8 @@
       <div class="warn-wrap">
         <div class="yellow fm-warn">申购在每月第一个交易日进行，申购前确保资产校对过</div>
         <div class="fm-warn blue">基金规模的增长理论上控制在33%</div>
+        <div class="fm-warn grey">基金占比9/10</div>
+        <div class="fm-warn grey">资产理论上每月加一万</div>
       </div>
       <div class="filter-select-wrap">
         <span class="name">{{editType}}</span>

@@ -10,7 +10,7 @@
     </mt-header>
     <div class="main-body">
       <mt-field label="今日盈亏" placeholder="请输入今日盈亏" v-model="form.today_income"></mt-field>
-      <mt-field label="总盈亏" placeholder="请输入总盈亏" v-model="form.income"></mt-field>
+      <mt-field label="总盈亏" placeholder="请输入总盈亏" v-model="form.income" @change="incomeChange"></mt-field>
       <mt-field label="份额" placeholder="请输入份额" v-model="form.shares"></mt-field>
       <mt-field label="资产" placeholder="请输入资产" v-model="form.asset"></mt-field>
       <mt-field label="资产成本" placeholder="请输入资产成本" v-model="form.asset_cost"></mt-field>
@@ -63,6 +63,12 @@ export default {
     this.initPage()
   },
   methods: {
+    incomeChange () {
+      this.form.asset = parseInt(
+        parseFloat(this.form.income) +
+        parseFloat(this.form.asset_cost)
+      )
+    },
     initPage () {
       this.initQuery()
     },

@@ -634,8 +634,10 @@ export default {
           sum += parseFloat(map[key]) || 0
         }
       }
-      // 取个平均数
-      return parseInt((sum) / 8)
+      // 平均
+      const average = sum / 8
+      // 混合30，定投20
+      return parseInt(average * 1.2)
     }
   }
 }

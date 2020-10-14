@@ -580,7 +580,9 @@ export default {
     },
     ttBuy (num) {
       // num * 每月金额
-      return parseInt((num * 10000) / (360000 / 36))
+      const tt = 2000
+      const my = 360000
+      return parseInt((num * (tt / 10000)) / (my / 36) * 10)
     },
     okHandler () {
       const hhBuy = this.otherBuyCount(this.canBuy)

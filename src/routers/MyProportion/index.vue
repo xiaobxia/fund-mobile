@@ -77,7 +77,7 @@
         </span>
       </div>
       <div class="warn-wrap">
-        <div class="fm-warn yellow">配比：混合30%，定投20%，波段50%，混合的表现很不错</div>
+        <div class="fm-warn yellow">配比：混合30%，定投20%，波段50%，混合会有溢价，经理只买自己重仓</div>
         <div class="fm-warn blue">黄金再怎么乐观也不要超过2.5%</div>
       </div>
       <div style="position: absolute;width: 100%">

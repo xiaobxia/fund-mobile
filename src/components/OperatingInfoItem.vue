@@ -362,6 +362,9 @@ export default {
       return false
     },
     // ------------连涨连跌信号
+    ifTwoDown () {
+      return stockAnalysisUtil.countDown(this.netChangeRatioListLarge, 2, 2).flag
+    },
     ifThreeDown () {
       return stockAnalysisUtil.countDown(this.netChangeRatioListLarge, 3, 3).flag
     },
@@ -976,11 +979,22 @@ export default {
           (!manyToLess && this.noSellCount > 6)
         ) {
           ifNoSellF = true
-          if (this.rate < 0) {
-            // 锁仓阶段可以跌了就买
-            classListF.push('should-buy')
-            if (this.ifHasBuy(classListF)) {
-              classListF.push('only-up-buy')
+          // 锁仓了
+          if (this.averageQuarter >= 0) {
+            // 季度线以上跌了就买
+            if (this.rate < 0) {
+              classListF.push('should-buy')
+              if (this.ifHasBuy(classListF)) {
+                classListF.push('only-up-buy')
+              }
+            }
+          } else {
+            // 季度线以下两跌再买
+            if (this.ifTwoDown) {
+              classListF.push('should-buy')
+              if (this.ifHasBuy(classListF)) {
+                classListF.push('only-up-buy')
+              }
             }
           }
           // 在趋势中，什么卖出信号都不用管

@@ -812,8 +812,8 @@ export default {
       // --------技术性信号部分
       // 技术性买入
       if (buySellList[0] === buyClass) {
-        // 只有月线上能买
-        if (this.averageMonthIndex > 0) {
+        // 只有月线并且季度线上能买
+        if (this.averageMonthIndex > 0 && this.averageQuarter > 0) {
           // 不是垃圾指数
           if (!this.ifLaji) {
             // 不是下降趋势

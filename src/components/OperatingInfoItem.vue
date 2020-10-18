@@ -840,17 +840,20 @@ export default {
       // ----------------------应该买的部分
       // 连续跌三天，并且不是下降趋势
       if (this.ifThreeDown && !this.ifDownTrend) {
-        if (this.ifKuanji) {
-          // 宽基指数可以买
-          shouldClass = shouldBuyClass
-        } else {
-          // 其他指数得要线上才能买
-          if (this.averageMonthIndex > 0) {
+        // 季度线以上
+        if (this.averageQuarter > 0) {
+          if (this.ifKuanji) {
+            // 宽基指数可以买
             shouldClass = shouldBuyClass
-          }
-          // 跌得太快也可以买
-          if (this.ifDownQuick()) {
-            shouldClass = shouldBuyClass
+          } else {
+            // 其他指数得要线上才能买
+            if (this.averageMonthIndex > 0) {
+              shouldClass = shouldBuyClass
+            }
+            // 跌得太快也可以买
+            if (this.ifDownQuick()) {
+              shouldClass = shouldBuyClass
+            }
           }
         }
       }

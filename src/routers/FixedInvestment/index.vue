@@ -15,7 +15,8 @@
           v-for="(item, index) in hhList"
           :key="index"
         >
-          {{item}}
+          {{item.code}} {{item.name}}
+          <span :class="stockNumberClass(getRateByCode(item.code))">{{getRateByCode(item.code)}}</span>
         </div>
       </div>
       <!--<div class="fm-warn blue">不要自作聪明，这里提示卖了才卖</div>-->
@@ -187,15 +188,42 @@ export default {
     return {
       // 混合
       hhList: [
-        '001508 富国新动力',
-        '260108 景顺长城新兴成长混合',
-        '110011 易方达中小盘混合',
-        '213001 宝盈鸿利收益',
-        '163406 兴全合润分级混合',
-        '001714 工银瑞信文体',
-        '001224 中邮新思路',
-        '570001 诺德价值优势混合',
-        '001694 华安沪港深外延'
+        {
+          code: '001508',
+          name: '富国新动力'
+        },
+        {
+          code: '260108',
+          name: '景顺长城新兴成长混合'
+        },
+        {
+          code: '110011',
+          name: '易方达中小盘混合'
+        },
+        {
+          code: '213001',
+          name: '宝盈鸿利收益'
+        },
+        {
+          code: '163406',
+          name: '兴全合润分级混合'
+        },
+        {
+          code: '001714',
+          name: '工银瑞信文体'
+        },
+        {
+          code: '001224',
+          name: '中邮新思路'
+        },
+        {
+          code: '001694',
+          name: '华安沪港深外延'
+        },
+        {
+          code: '570001',
+          name: '诺德价值优势混合'
+        }
       ],
       list: list,
       allInfo: allInfo,
@@ -337,7 +365,8 @@ export default {
       },
       klineMap,
       baijiuwarn: '',
-      kuanBuy: 0
+      kuanBuy: 0,
+      myFundList: []
     }
   },
   computed: {
@@ -395,6 +424,14 @@ export default {
         }
       })
     },
+    getRateByCode (code) {
+      for (let i = 0; i < this.myFundList.length; i++) {
+        if (code === this.myFundList[i].code) {
+          return this.myFundList[i].change_ratio
+        }
+      }
+      return 0
+    },
     initPage () {
       this.stockIndexAll.forEach((item) => {
         this.averageMap[item.code] = item.year_average
@@ -410,6 +447,7 @@ export default {
       this.$http.get('userFund/getUserFunds').then((data) => {
         if (data.success) {
           const list = data.data.list
+          this.myFundList = list
           for (let i = 0; i < list.length; i++) {
             const item = list[i]
             if (item.theme) {
@@ -591,7 +629,7 @@ export default {
       if (this.kuanBuy >= 4) {
         this.hhList.forEach((item) => {
           record.push({
-            name: item,
+            name: `${item.code} ${item.name}`,
             buyNum: this.ttBuy(hhBuy)
           })
         })

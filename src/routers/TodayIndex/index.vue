@@ -62,7 +62,11 @@ export default {
       tradeTime: '',
       fundShares: 0,
       lastNetValue: {},
-      marketOpen: false
+      marketOpen: false,
+      myFundList: [],
+      mySum: 0,
+      indexSum: 0,
+      otherSum: 0
     }
   },
   computed: {
@@ -71,18 +75,15 @@ export default {
       this.list.forEach((item) => {
         income += item.netChangeRatio * (item.hasCount || 0)
       })
-      return parseInt((income / 100) * 0.95)
+      return parseInt(((income / 100) * 0.95) + this.getOtherIncome())
     },
     incomeRate () {
       let income = 0
-      let asset = 0
       this.list.forEach((item) => {
-        let hasCount = (item.hasCount || 0)
         income += item.netChangeRatio * (item.hasCount || 0)
-        asset += hasCount
       })
-      income = parseInt((income / 100) * 0.95)
-      return this.countRate(income, asset)
+      income = parseInt(((income / 100) * 0.95) + this.getOtherIncome())
+      return this.countRate(income, this.mySum)
     },
     incomeRelativeRate () {
       const user = this.userFundAccountInfo.user
@@ -90,7 +91,7 @@ export default {
       this.list.forEach((item) => {
         income += item.netChangeRatio * (item.hasCount || 0)
       })
-      income = parseInt((income / 100) * 0.95)
+      income = parseInt(((income / 100) * 0.95) + this.getOtherIncome())
       return this.countRate(income, user.asset)
     },
     incomeDiff () {
@@ -99,15 +100,12 @@ export default {
         return 0
       }
       let income = 0
-      let asset = 0
       this.list.forEach((item) => {
-        let hasCount = (item.hasCount || 0)
         income += item.netChangeRatio * (item.hasCount || 0)
-        asset += hasCount
       })
-      income = parseInt((income / 100) * 0.95)
-      let rate = this.countRate(income, asset)
-      return parseInt((asset - user.asset) * rate / 100)
+      income = parseInt(((income / 100) * 0.95) + this.getOtherIncome())
+      let rate = this.countRate(income, this.mySum)
+      return parseInt((this.mySum - user.asset) * rate / 100)
     },
     ...mapGetters([
       'userFundAccountInfo'
@@ -121,16 +119,27 @@ export default {
     this.$http.get('userFund/getUserFunds').then((data) => {
       if (data.success) {
         const list = data.data.list
+        this.myFundList = list
+        let mySum = 0
+        let indexSum = 0
+        let otherSum = 0
         for (let i = 0; i < list.length; i++) {
           const item = list[i]
+          mySum += parseInt(item.sum)
           if (item.theme) {
+            indexSum += parseInt(item.sum)
             if (this.hasCountMap[item.theme]) {
               this.hasCountMap[item.theme] += parseInt(item.sum)
             } else {
               this.hasCountMap[item.theme] = parseInt(item.sum)
             }
+          } else {
+            otherSum += parseInt(item.sum)
           }
         }
+        this.mySum = mySum
+        this.otherSum = otherSum
+        this.indexSum = indexSum
         this.list.forEach((item) => {
           item.hasCount = this.hasCountMap[item.name]
         })
@@ -143,6 +152,25 @@ export default {
     }, 1000 * 30)
   },
   methods: {
+    getOtherIncome () {
+      const list = this.myFundList
+      let sum = 0
+      for (let i = 0; i < list.length; i++) {
+        const item = list[i]
+        if (!item.theme) {
+          sum += parseFloat(item.valuationSum) - parseFloat(item.sum)
+        }
+      }
+      if (this.marketOpen) {
+        const d = this.getDate()
+        const hour = d.getHours()
+        // 10点以后
+        if (hour >= 10) {
+          return sum
+        }
+      }
+      return 0
+    },
     initPage () {
       let queryList = []
       let list = this.list
@@ -248,7 +276,8 @@ export default {
             this.list.forEach((item) => {
               income += item.netChangeRatio * (item.hasCount || 0)
             })
-            income = parseInt((income / 100) * 0.95)
+            income = parseInt(((income / 100) * 0.95) + this.getOtherIncome())
+            console.log(this.getOtherIncome())
             let form = {
               shares: user.shares,
               asset: user.asset + income,

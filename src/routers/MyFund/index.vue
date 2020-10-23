@@ -196,11 +196,15 @@ export default {
         for (let i = 0; i < this.cardInfo.length; i++) {
           this.cardInfo[i].list = dataMap[this.cardInfo[i].name]
           this.cardInfo[i].list.sort((a, b) => {
-            if (a.theme > b.theme) {
+            const aT = a.theme || ''
+            const bT = b.theme || ''
+            if (aT < bT) {
               return 1
-            } else {
+            }
+            if (aT > bT) {
               return -1
             }
+            return 0
           })
         }
         this.info = {

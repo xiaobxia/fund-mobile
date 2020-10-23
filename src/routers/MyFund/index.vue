@@ -195,6 +195,13 @@ export default {
         })
         for (let i = 0; i < this.cardInfo.length; i++) {
           this.cardInfo[i].list = dataMap[this.cardInfo[i].name]
+          this.cardInfo[i].list.sort((a, b)=>{
+            if (a.theme > b.theme) {
+              return 1
+            } else {
+              return -1
+            }
+          })
         }
         this.info = {
           valuationTotalSum,

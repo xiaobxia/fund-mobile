@@ -6,7 +6,7 @@
       </mt-button>
     </mt-header>
     <div class="main-body">
-      <div>
+      <div class="d-w">
         <mt-cell-swipe>
           <div slot="title">
             <h3>没买</h3>
@@ -70,8 +70,8 @@
           :options="['是', '否']">
         </mt-radio>
       </div>
-      <div class="question">
-        是否有持续恐慌大事件？（大跌后不翻红，才算出清）
+      <div class="question" style="color: red">
+        是否开启基本面恶化，政策性或者股灾，大V空仓，年线半年线季度线都是负数，只能进行锁仓买，直到定投阶段
       </div>
       <div class="answer">
         <mt-radio
@@ -269,5 +269,13 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style rel="stylesheet/scss" lang="scss" scoped>
+  .d-w {
+    /deep/ {
+      .mint-cell {
+        padding-left: 0;
+        padding-right: 0;
+      }
+    }
+  }
 </style>

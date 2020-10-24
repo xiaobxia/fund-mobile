@@ -971,6 +971,22 @@ export default {
       if (this.ifFengNiu) {
         classListF = this.removeBuy(classListF)
       }
+      // 是否基本面恶化
+      const question9 = storageUtil.getData('stockMarketQuestion', 'question_9') || '否'
+      if (question9 === '是') {
+        // 基本面恶化就只有锁仓买了
+        if (
+          this.averageQuarter < 0 &&
+          this.averageHalfYear < 0 &&
+          this.yearDiff < 0
+        ) {
+          // 同时也不是定投阶段
+          if (!this.isInDingtouStatus()) {
+            classListF = this.removeBuy(classListF)
+          }
+        }
+      }
+      // -----锁仓之后就没有买入逻辑
       let ifNoSellF = false
       // 锁仓的逻辑
       // 锁仓的指数太少也危险，很有可能是假的稳定

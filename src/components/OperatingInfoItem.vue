@@ -975,6 +975,7 @@ export default {
       const question9 = storageUtil.getData('stockMarketQuestion', 'question_9') || '否'
       if (question9 === '是') {
         // 基本面恶化就只有锁仓买了
+        // 年线和半年线都得在下面，年线上和半年线下涨的概率该是很大的，我研究过了
         if (
           this.averageQuarter < 0 &&
           this.averageHalfYear < 0 &&

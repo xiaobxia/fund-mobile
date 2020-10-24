@@ -9,14 +9,21 @@
       <div class="warn-wrap">
         <div class="fm-warn yellow">在大级别底部，多买混合</div>
       </div>
-      <div v-if="kuanBuy >= 4">
-        <span>买入：{{$formatMoney(otherBuyCount(canBuy))}}</span>
-        <div
-          v-for="(item, index) in hhList"
-          :key="index"
-        >
-          {{item.code}} {{item.name}}
-          <span :class="stockNumberClass(getRateByCode(item.code))">{{getRateByCode(item.code)}}</span>
+      <div>
+        <span :class="kuanBuy >= 4 ? 'red-text': ''">买入：{{$formatMoney(otherBuyCount(canBuy))}}</span>
+        <div class="small-10">
+          <mt-cell-swipe v-for="(item) in hhList" :key="item.code">
+            <div slot="title">
+              <h3>
+                <span class="index-name">{{item.code}} {{item.name}}</span>
+                <span style="float: right" :class="stockNumberClass(getRateByCode(item.code))">{{getRateByCode(item.code)}}</span>
+              </h3>
+              <p class="netChange wn">
+            <span v-for="(subItem, index) in item.list" :key="index"
+                  :class="numberBgClass(subItem.valuation_rate)">{{subItem.valuation_rate}}%</span>
+              </p>
+            </div>
+          </mt-cell-swipe>
         </div>
       </div>
       <!--<div class="fm-warn blue">不要自作聪明，这里提示卖了才卖</div>-->
@@ -190,39 +197,48 @@ export default {
       hhList: [
         {
           code: '001508',
-          name: '富国新动力'
+          name: '富国新动力',
+          list: []
         },
         {
           code: '260108',
-          name: '景顺长城新兴成长混合'
+          name: '景顺长城新兴成长混合',
+          list: []
         },
         {
           code: '110011',
-          name: '易方达中小盘混合'
+          name: '易方达中小盘混合',
+          list: []
         },
         {
           code: '213001',
-          name: '宝盈鸿利收益'
+          name: '宝盈鸿利收益',
+          list: []
         },
         {
           code: '163406',
-          name: '兴全合润分级混合'
+          name: '兴全合润分级混合',
+          list: []
         },
         {
           code: '001714',
-          name: '工银瑞信文体'
+          name: '工银瑞信文体',
+          list: []
         },
         {
           code: '001224',
-          name: '中邮新思路'
+          name: '中邮新思路',
+          list: []
         },
         {
           code: '001694',
-          name: '华安沪港深外延'
+          name: '华安沪港深外延',
+          list: []
         },
         {
           code: '570001',
-          name: '诺德价值优势混合'
+          name: '诺德价值优势混合',
+          list: []
         }
       ],
       list: list,
@@ -377,8 +393,19 @@ export default {
   },
   created () {
     this.initPage()
+    this.hhList.forEach((item) => {
+      this.queryFundR(item)
+    })
   },
   methods: {
+    queryFundR (item) {
+      this.$http.get('fund/getFundRecentNetValue', {
+        code: item.code,
+        days: 10
+      }).then((res) => {
+        item.list = res.data || []
+      })
+    },
     getClass (subItem) {
       if (subItem.indexOf('买少') !== -1) {
         return 'active-2 has-text'

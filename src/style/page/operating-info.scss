@@ -168,6 +168,22 @@
       }
     }
   }
+  .small-10 {
+    .explain {
+      span {
+        width: 32px;
+        margin-right: 5px;
+        font-size: 16px;
+      }
+    }
+    .netChange.wn {
+      span {
+        width: 46px;
+        margin-right: 5px;
+        font-size: 16px;
+      }
+    }
+  }
   .mint-cell.has.lock:not(.should-buy) {
     background-color: $grey-color-back;
   }

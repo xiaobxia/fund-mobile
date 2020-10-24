@@ -983,7 +983,10 @@ export default {
         ) {
           // 同时也不是定投阶段
           if (!this.isInDingtouStatus()) {
-            classListF = this.removeBuy(classListF)
+            // 月线在下面
+            if (this.averageMonthIndex < 0) {
+              classListF = this.removeBuy(classListF)
+            }
           }
         }
       }

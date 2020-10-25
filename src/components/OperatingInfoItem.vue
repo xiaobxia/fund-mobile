@@ -14,16 +14,16 @@
         <span v-if="isInDingtouStatus()" class="fm-tag s-red">定投</span>
         <span v-if="ifUnderYear" class="fm-tag s-green">年下</span>
         <span v-if="ifDownTrend" class="fm-tag s-green">下趋</span>
-        <span v-if="isDafanOld()" class="fm-tag s-red">大反</span>
-        <span v-if="isXiaofanOld()" class="fm-tag s-red">小反</span>
+        <span v-if="isInDafanBefore()" class="fm-tag s-red">大反</span>
+        <span v-if="isInXiaofanBefore()" class="fm-tag s-red">小反</span>
         <span v-if="ifInNoSellStatus()" class="fm-tag s-red">锁仓</span>
         <span v-if="ifNoSellToCan()" class="fm-tag s-green">转交</span>
         <!--<span v-if="ifOpenCutDown" class="fm-tag s-yellow">开止盈</span>-->
         <span v-if="indexDaXiaoStatusOld === '禁买'" class="fm-tag s-black">{{indexDaXiaoStatusOld}}</span>
         <span v-if="averageMonthIndex > 0" class="fm-tag b-red">月上</span>
         <span v-if="averageMonthIndex <= 0" class="fm-tag b-green">月下</span>
-        <span v-if="!ifDafanToday() && ifXiaofanToday()" class="fm-tag s-red">小</span>
-        <span v-if="ifDafanToday()" class="fm-tag s-red">大</span>
+        <span v-if="!isToBeDafanToday() && isToBeXiaofanToday()" class="fm-tag s-red">小</span>
+        <span v-if="isToBeDafanToday()" class="fm-tag s-red">大</span>
         <span v-if="toNoSellToCan()" class="fm-tag blue">更转交</span>
         <span v-if="ifRelieveFixLine" class="fm-tag s-blue">解定</span>
         <span v-if="ifJieFantanToday()" class="fm-tag s-blue">解反</span>
@@ -579,7 +579,7 @@ export default {
     // },
     // 是否处于反弹
     ifInFantanOld () {
-      return this.isXiaofanOld() || this.isDafanOld()
+      return this.isInXiaofanBefore() || this.isInDafanBefore()
     },
     // 触发锁仓条件
     ifInNoSellStatus () {
@@ -688,20 +688,20 @@ export default {
       }
       return ''
     },
-    // 达成小反条件
-    ifXiaofanToday () {
+    // 今天达成小反条件
+    isToBeXiaofanToday () {
       return this.ifSixFive || (this.averageMonthIndex > 0 && this.ifThreeDown)
     },
     // 之前是不是小反
-    isXiaofanOld () {
+    isInXiaofanBefore () {
       return this.indexDaXiaoStatusOld === '小反' && !this.ifJieFantanToday()
     },
     // 处于大反的状态
-    ifInXiaofanStatus () {
-      return this.ifXiaofanToday() || this.isXiaofanOld()
+    ifInXiaofanNow () {
+      return this.isToBeXiaofanToday() || this.isInXiaofanBefore()
     },
-    // 达成大反条件
-    ifDafanToday () {
+    // 今天达成大反条件
+    isToBeDafanToday () {
       if (this.ifFourDown || this.ifFiveDown || this.ifSevenSix || this.ifEightSeven || this.ifEightSix || this.ifNineSeven) {
         return true
       } else if (this.indexInfo.key === 'baoxian' && this.ifSixFive) {
@@ -710,12 +710,12 @@ export default {
       return false
     },
     // 之前是否处于大反
-    isDafanOld () {
+    isInDafanBefore () {
       return this.indexDaXiaoStatusOld === '大反' && !this.ifJieFantanToday()
     },
     // 处于大反的状态
-    ifInDafanStatus () {
-      return this.ifDafanToday() || this.isDafanOld()
+    ifInDafanNow () {
+      return this.isToBeDafanToday() || this.isInDafanBefore()
     },
     // 是否发出禁买
     isJinMai () {
@@ -737,7 +737,7 @@ export default {
     // 是否解顶部的影响
     // ifJieDingbu () {
     //   // 变成大小反，那阶段顶就解除
-    //   if (this.indexStage === '顶部' && (this.ifDafanToday() || this.ifXiaofanToday())) {
+    //   if (this.indexStage === '顶部' && (this.isToBeDafanToday() || this.isToBeXiaofanToday())) {
     //     return true
     //   }
     //   // 不是顶部了，然后又变成的锁仓状态
@@ -745,8 +745,9 @@ export default {
     // },
     // 两个小幅0.2下跌很危险
     sellLowDownSmall () {
+      // 达成条件，但是满足其他，所以少卖点
       if (this.ifTwoLowDown) {
-        if (this.ifDafanToday() || this.ifInNoSellStatus() || this.isInDingtouStatus()) {
+        if (this.isToBeDafanToday() || this.ifInNoSellStatus() || this.isInDingtouStatus()) {
           return true
         }
       }
@@ -827,7 +828,7 @@ export default {
       if (buySellList[0] === sellClass) {
         if (this.averageMonthIndex < 0) {
           // 在月线以下，就得卖，除了大反
-          if (!this.ifInDafanStatus()) {
+          if (!this.ifInDafanNow()) {
             classList.push(sellClass)
           }
         } else {
@@ -873,20 +874,20 @@ export default {
         isBig = true
       }
       // ----------------------应该卖的部分
-      // 涨4天了发出应该卖
+      // TODO 涨4天了发出应该卖
       if (this.ifFourUp) {
         shouldClass = shouldSellClass
       }
-      // 垃圾指数涨2天就卖
+      // TODO 垃圾指数涨2天就卖
       if (this.ifLaji) {
         if (this.ifTwoUp) {
           // 不处于大反，小反的可以卖
-          if (!this.ifInDafanStatus()) {
+          if (!this.ifInDafanNow()) {
             shouldClass = shouldSellClass
           }
         }
       }
-      // 没有买入信号，也没有应该买
+      // TODO 没有买入信号，也没有应该买
       if (this.allBuySellList[0] !== 'buy' && shouldClass === '' && this.rate < 0) {
         // 研究过了，线上确实可以不杀跌
         if (this.averageMonthIndex < 0 && !this.ifInFantanOld() && !this.ifThreeDown) {
@@ -895,17 +896,17 @@ export default {
       }
       // 应该的类
       classList.push(shouldClass)
-      // 锁转交，月线是在上面的
+      // TODO 锁转交，月线是在上面的
       if (this.ifNoSellToCanNew() && (this.rate > (-1 * this.indexInfo.rate))) {
         // 普通买入信号在小于rate的时候是不会出现的
         // 如果是大小反，那么锁转交的信号就会解除
         // 所以这个逻辑没有问题
-        if (!this.ifInDafanStatus()) {
+        if (!this.ifInDafanNow()) {
           classList.push(sellClass)
         }
       }
       let classListF = this.copyList(classList)
-      // 禁买成立
+      // TODO 禁买成立
       if (this.isJinMai()) {
         // 没有任何买入
         classListF = this.removeBuy(classListF)
@@ -915,31 +916,16 @@ export default {
           classListF.push(sellClass)
         }
       }
-      // 季度线过热，然后转交，那就提示卖出
-      // 不管有没有大反什么的
+      // TODO 季度线过热，然后转交，那就提示卖出
+      // 不管有没有大反什么的，因为一定会跌倒季度线为负数
       const isNoQuarter = storageUtil.getData('noBuySellConfig', 'isNoQuarter') || false
       if (this.ifQuarterHotCut()) {
         if (!isNoQuarter) {
           classListF.push(sellClass)
         }
       }
-      // 指数处于阶段顶部区间
-      // if (this.ifInDingbuStatus()) {
-      //   // 不是机构指数的话，纯买信号没有了
-      //   if (!this.ifJigou) {
-      //     classListF = this.removeNormalBuy(classListF)
-      //   }
-      // }
-      // 止盈
-      // if (this.ifStopKeep()) {
-      //   // 没有买入信号
-      //   // 加入卖出信号
-      //   classListF = this.removeBuy(classListF)
-      //   // 无视大小反
-      //   classListF.push(sellClass)
-      // }
       const isMeng = storageUtil.getData('noBuySellConfig', 'isMeng') || false
-      // 直接闷的涨3天就跑
+      // TODO 直接闷的涨3天就跑
       if (isMeng) {
         // 直接闷的，抗住不卖以后，解反了该卖还是得卖
         if (!this.ifTwoUp) {
@@ -947,15 +933,15 @@ export default {
         }
       }
       // 权重最大的-------------
-      // 定投阶段没有卖出高亮
+      // TODO 定投阶段没有卖出高亮
       if (this.isInDingtouStatus()) {
         classListF = this.removeSell(classListF)
       }
-      // 没到目标位不卖
+      // TODO 没到目标位不卖
       if (this.ifTargetUpCloseLock) {
         classListF = this.removeSell(classListF)
       }
-      // 季线危险阶段，没有买入信号，因为很可能是无止境得跌
+      // TODO 季线危险阶段，没有买入信号，因为很可能是无止境得跌
       if (this.isInQuarterHotToday) {
         // 没有季度影响并且是大反才可以例外
         // if (!(isNoQuarter && isBig)) {
@@ -963,15 +949,15 @@ export default {
         // }
         classListF = this.removeBuy(classListF)
       }
-      // 处于z45不能买
+      // TODO 处于z45不能买
       if (this.ifInZ45StatusNow) {
         classListF = this.removeBuy(classListF)
       }
-      // 全面大疯牛市，只有锁仓买
+      // TODO 全面大疯牛市，只有锁仓买
       if (this.ifFengNiu) {
         classListF = this.removeBuy(classListF)
       }
-      // 是否基本面恶化
+      // TODO 是否基本面恶化，是的话只有月线在上才能买，不管什么大小反
       const question9 = storageUtil.getData('stockMarketQuestion', 'question_9') || '否'
       if (question9 === '是') {
         // 基本面恶化就只有锁仓买了
@@ -992,7 +978,7 @@ export default {
       }
       // -----锁仓之后就没有买入逻辑
       let ifNoSellF = false
-      // 锁仓的逻辑
+      // TODO 锁仓的逻辑
       // 锁仓的指数太少也危险，很有可能是假的稳定
       const manyToLess = storageUtil.getData('noBuySellConfig', 'manyToLess') || false
       if (this.ifInNoSellStatus() && this.noSellCount > 6) {
@@ -1024,12 +1010,7 @@ export default {
           classListF = this.removeSell(classListF)
         }
       }
-      // if (this.indexInfo.key === 'yiyao') {
-      //   console.log(this.ifMonthUpOk(this.indexInfo.key))
-      //   console.log(this.averageMonthIndex)
-      //   console.log(this.rate)
-      // }
-      // 季度线以上，月线超过0就可以不杀跌
+      // TODO 季度线以上，月线超过0就可以不杀跌
       if (this.ifMonthUpOk(this.indexInfo.key)) {
         if (this.averageMonthIndex > 0) {
           // 小于0不卖出
@@ -1038,26 +1019,26 @@ export default {
           }
         }
       }
-      // 双过热并且连涨4天需要提示减仓
-      // TODO 大牛市暂时注释掉
+      // TODO 双过热并且连涨4天需要提示减仓
+      // 大牛市暂时注释掉
       // if (this.ifDoubleHot() && this.ifFourUp) {
       //   classListF.push('should-sell')
       // }
-      // 两个小幅0.2，即使锁仓也没有用，锁仓只卖1/3
+      // TODO 两个小幅0.2，即使锁仓也没有用，锁仓只卖1/3
       if (this.sellLowDownSmall() || this.sellLowDownBig()) {
         // 没有任何买入
         classListF = this.removeBuy(classListF)
         // 加入卖出
         classListF.push(sellClass)
       }
-      // 年下当天触发z45那就立马卖出，权重最大不管任何情况
+      // TODO 年下当天触发z45那就立马卖出，权重最大不管任何情况
       if (this.ifClearZ45Today) {
         // 没有任何买入
         classListF = this.removeBuy(classListF)
         // 加入卖出
         classListF.push(sellClass)
       }
-      // 到达目标减半一次
+      // TODO 到达目标减半一次
       if (this.ifJieTargetUpCloseLock) {
         // 没有任何买入
         classListF = this.removeBuy(classListF)

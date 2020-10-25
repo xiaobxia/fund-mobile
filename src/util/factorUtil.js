@@ -448,13 +448,13 @@ export default {
   },
   getDaVFactor: function (indexKey, buySell) {
     let factor = 1
-    const d = dateUtil.getDate()
-    const day = d.getDate()
-    const month = d.getMonth() + 1
-    if (month >= 5) {
-      // 今年估计有结构牛
-      factor = 1
-    }
+    // const d = dateUtil.getDate()
+    // const day = d.getDate()
+    // const month = d.getMonth() + 1
+    // if (month >= 5) {
+    //   // 今年估计有结构牛
+    //   factor = 1
+    // }
     if (buySell === 'buy') {
       return factor
     } else {

@@ -32,6 +32,7 @@
         <!--<span v-if="ifJieDingbu()" class="fm-tag s-blue">解顶</span>-->
         <span v-if="ifJieQuarterHot" class="fm-tag s-blue">解危</span>
         <span v-if="ifJieZ45" class="fm-tag s-blue">解z45</span>
+        <span v-if="isBad()" class="fm-tag s-black">恶化</span>
         <!--执行部分-->
         <span
           v-if="ifQuarterHotCut()"
@@ -798,6 +799,34 @@ export default {
       }
       storageUtil.setData('stockIndexCanFix', this.indexInfo.key, fag)
     },
+    // 是否恶化
+    isBad () {
+      // 基本面恶化就只有锁仓买了
+      // 年线和半年线都得在下面，年线上和半年线下涨的概率该是很大的，我研究过了
+      if (
+        this.averageQuarter < 0 &&
+        this.averageHalfYear < 0 &&
+        this.yearDiff < 0
+      ) {
+        // 同时也不是定投阶段
+        if (!this.isInDingtouStatus()) {
+          // 月线在下面
+          if (this.averageMonthIndex < 0) {
+            return true
+          }
+        }
+      }
+      return false
+    },
+    // 是否处于恶化
+    isInBad () {
+      // 是否基本面恶化，是的话只有月线在上才能买，不管什么大小反
+      const question9 = storageUtil.getData('stockMarketQuestion', 'question_9') || '否'
+      if (question9 === '是') {
+        return this.isBad()
+      }
+      return false
+    },
     getItemClass () {
       this.setIndexCanFix()
       const buyClass = 'buy'
@@ -958,23 +987,8 @@ export default {
         classListF = this.removeBuy(classListF)
       }
       // TODO 是否基本面恶化，是的话只有月线在上才能买，不管什么大小反
-      const question9 = storageUtil.getData('stockMarketQuestion', 'question_9') || '否'
-      if (question9 === '是') {
-        // 基本面恶化就只有锁仓买了
-        // 年线和半年线都得在下面，年线上和半年线下涨的概率该是很大的，我研究过了
-        if (
-          this.averageQuarter < 0 &&
-          this.averageHalfYear < 0 &&
-          this.yearDiff < 0
-        ) {
-          // 同时也不是定投阶段
-          if (!this.isInDingtouStatus()) {
-            // 月线在下面
-            if (this.averageMonthIndex < 0) {
-              classListF = this.removeBuy(classListF)
-            }
-          }
-        }
+      if (this.isInBad()) {
+        classListF = this.removeBuy(classListF)
       }
       // -----锁仓之后就没有买入逻辑
       let ifNoSellF = false

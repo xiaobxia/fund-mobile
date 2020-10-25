@@ -70,8 +70,10 @@
           :options="['是', '否']">
         </mt-radio>
       </div>
-      <div class="question" style="color: red">
-        是否开启基本面恶化，政策性或者股灾，大V空仓，年线半年线季度线都是负数，只能进行锁仓买，直到定投阶段
+      <div class="question">
+        <span style="color: red">是否开启基本面恶化，政策性或者股灾，年线半年线季度线都是负数，只能进行锁仓买，直到定投阶段</span>
+        <span style="color: red">(大部分指数都恶化了才行，而且之前就在年线上下徘徊，没有确定性行情，平时关了)</span>
+        <span>确定恶化了可以清掉定投部分仓位（处于恶化的指数）</span>
       </div>
       <div class="answer">
         <mt-radio

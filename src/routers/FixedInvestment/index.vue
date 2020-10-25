@@ -514,6 +514,15 @@ export default {
     yearDiff (key) {
       return storageUtil.getData('yearAverageIndexDiff', key) || 0
     },
+    // 指数所处阶段
+    indexStage (key) {
+      const status = storageUtil.getData('stockIndexStatus', key)
+      return status || ''
+    },
+    // 是否解除定投
+    ifRelieveFixLine (key) {
+      return this.indexStage(key) === '定投' && this.averageHalfYear(key) >= this.indexInfo.relieveFixLine
+    },
     localConsole (item, value) {
       if (item.key === 'huangjin') {
         console.log(value)

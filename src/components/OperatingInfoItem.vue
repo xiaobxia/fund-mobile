@@ -855,15 +855,20 @@ export default {
       }
       // 技术性卖出
       if (buySellList[0] === sellClass) {
-        if (this.averageMonthIndex < 0) {
-          // 在月线以下，就得卖，除了大反
-          if (!this.ifInDafanNow()) {
-            classList.push(sellClass)
-          }
+        if (this.isInBad()) {
+          // 基本面恶化那就卖
+          classList.push(sellClass)
         } else {
-          // 在月线以上，并且不是反弹那就卖出
-          if (!this.ifInFantanOld()) {
-            classList.push(sellClass)
+          if (this.averageMonthIndex < 0) {
+            // 在月线以下，就得卖，除了大反
+            if (!this.ifInDafanNow()) {
+              classList.push(sellClass)
+            }
+          } else {
+            // 在月线以上，并且不是反弹那就卖出
+            if (!this.ifInFantanOld()) {
+              classList.push(sellClass)
+            }
           }
         }
       }
@@ -911,16 +916,26 @@ export default {
       if (this.ifLaji) {
         if (this.ifTwoUp) {
           // 不处于大反，小反的可以卖
-          if (!this.ifInDafanNow()) {
+          if (this.isInBad()) {
+            // 恶化的就得卖
             shouldClass = shouldSellClass
+          } else {
+            if (!this.ifInDafanNow()) {
+              shouldClass = shouldSellClass
+            }
           }
         }
       }
       // TODO 没有买入信号，也没有应该买
       if (this.allBuySellList[0] !== 'buy' && shouldClass === '' && this.rate < 0) {
         // 研究过了，线上确实可以不杀跌
-        if (this.averageMonthIndex < 0 && !this.ifInFantanOld() && !this.ifThreeDown) {
+        if (this.isInBad()) {
+          // 恶化了就卖
           shouldClass = shouldSellClass
+        } else {
+          if (this.averageMonthIndex < 0 && !this.ifInFantanOld() && !this.ifThreeDown) {
+            shouldClass = shouldSellClass
+          }
         }
       }
       // 应该的类
@@ -930,8 +945,13 @@ export default {
         // 普通买入信号在小于rate的时候是不会出现的
         // 如果是大小反，那么锁转交的信号就会解除
         // 所以这个逻辑没有问题
-        if (!this.ifInDafanNow()) {
+        if (this.isInBad()) {
+          // 恶化就得卖
           classList.push(sellClass)
+        } else {
+          if (!this.ifInDafanNow()) {
+            classList.push(sellClass)
+          }
         }
       }
       let classListF = this.copyList(classList)

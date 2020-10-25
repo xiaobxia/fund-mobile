@@ -10,7 +10,9 @@
         <div class="fm-warn yellow">在大级别底部，多买混合</div>
       </div>
       <div>
-        <span :class="kuanBuy >= 4 ? 'red-text': ''">买入：{{$formatMoney(otherBuyCount(canBuy))}}</span>
+        <span :class="kuanBuy >= 4 ? 'red-text': ''">
+          <span v-if="kuanBuy >= 4">可以</span>买入：{{$formatMoney(otherBuyCount(canBuy))}}
+        </span>
         <div class="small-10">
           <mt-cell-swipe v-for="(item) in hhList" :key="item.code">
             <div slot="title">
@@ -501,11 +503,50 @@ export default {
     averageMonthIndex (key) {
       return storageUtil.getData('averageMonth', key) || 0
     },
+    averageQuarter (key) {
+      return storageUtil.getData('averageQuarterIndex', key) || 0
+    },
+    // 半年线
+    averageHalfYear (key) {
+      return storageUtil.getData('averageHalfYearIndex', key) || 0
+    },
+    // 年偏离
+    yearDiff (key) {
+      return storageUtil.getData('yearAverageIndexDiff', key) || 0
+    },
     localConsole (item, value) {
       if (item.key === 'huangjin') {
         console.log(value)
       }
     },
+    // // 是否恶化
+    // isBad (key) {
+    //   // 基本面恶化就只有锁仓买了
+    //   // 年线和半年线都得在下面，年线上和半年线下涨的概率该是很大的，我研究过了
+    //   if (
+    //     this.averageQuarter(key) < 0 &&
+    //     this.averageHalfYear(key) < 0 &&
+    //     this.yearDiff(key) < 0
+    //   ) {
+    //     // 同时也不是定投阶段
+    //     if (!this.isInDingtouStatus(key)) {
+    //       // 月线在下面
+    //       if (this.averageMonthIndex(key) < 0) {
+    //         return true
+    //       }
+    //     }
+    //   }
+    //   return false
+    // },
+    // // 是否处于恶化
+    // isInBad (key) {
+    //   // 是否基本面恶化，是的话只有月线在上才能买，不管什么大小反
+    //   const question9 = storageUtil.getData('stockMarketQuestion', 'question_9') || '否'
+    //   if (question9 === '是') {
+    //     return this.isBad(key)
+    //   }
+    //   return false
+    // },
     queryData (item) {
       return this.$http.get(`stock/${stockApiUtil.getAllUrl()}`, {
         code: item.code,

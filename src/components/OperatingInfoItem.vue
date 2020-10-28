@@ -658,6 +658,13 @@ export default {
     },
     // 是否解反弹
     ifJieFantanToday () {
+      if (this.ifTwoUp) {
+        // 两天涨了4个rate也要解反
+        const info = stockAnalysisUtil.countUp(this.netChangeRatioListLarge, 2, 2)
+        if (info.rate > (this.indexInfo.rate * 4)) {
+          return true
+        }
+      }
       // 如果两个0.2下跌，必须得解反
       if (this.ifTwoLowDown) {
         if (this.indexDaXiaoStatusOld === '大反' || this.indexDaXiaoStatusOld === '小反') {

@@ -915,6 +915,10 @@ export default {
         isBig = true
       }
       // ----------------------应该卖的部分
+      // TODO 月线以下涨3天就发出卖出信号
+      if (this.averageMonthIndex < 0 && this.ifThreeUp) {
+        shouldClass = shouldSellClass
+      }
       // TODO 涨4天了发出应该卖
       if (this.ifFourUp) {
         shouldClass = shouldSellClass

@@ -662,7 +662,9 @@ export default {
         // 两天涨了4个rate也要解反
         const info = stockAnalysisUtil.countUp(this.netChangeRatioListLarge, 2, 2)
         if (info.rate > (this.indexInfo.rate * 4)) {
-          return true
+          if (this.indexDaXiaoStatusOld === '大反' || this.indexDaXiaoStatusOld === '小反') {
+            return true
+          }
         }
       }
       // 如果两个0.2下跌，必须得解反
@@ -919,9 +921,8 @@ export default {
       if (this.averageMonthIndex < 0 && this.ifThreeUp) {
         const info = stockAnalysisUtil.countUp(this.netChangeRatioListLarge, 3, 3)
         if (info.rate > (this.indexInfo.rate * 2)) {
-          return true
+          shouldClass = shouldSellClass
         }
-        shouldClass = shouldSellClass
       }
       // TODO 涨4天了发出应该卖
       if (this.ifFourUp) {

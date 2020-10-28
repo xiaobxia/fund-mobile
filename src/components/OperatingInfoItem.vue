@@ -915,8 +915,12 @@ export default {
         isBig = true
       }
       // ----------------------应该卖的部分
-      // TODO 月线以下涨3天就发出卖出信号
+      // TODO 月线以下涨3天，并且幅度超过2个rate就发出卖出信号
       if (this.averageMonthIndex < 0 && this.ifThreeUp) {
+        const info = stockAnalysisUtil.countUp(this.netChangeRatioListLarge, 3, 3)
+        if (info.rate > (this.indexInfo.rate * 2)) {
+          return true
+        }
         shouldClass = shouldSellClass
       }
       // TODO 涨4天了发出应该卖

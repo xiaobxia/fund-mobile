@@ -24,6 +24,7 @@
         <span v-if="averageMonthIndex <= 0" class="fm-tag b-green">月下</span>
         <span v-if="!isToBeDafanToday() && isToBeXiaofanToday()" class="fm-tag s-red">小</span>
         <span v-if="isToBeDafanToday()" class="fm-tag s-red">大</span>
+        <span v-if="ifBianpan" class="fm-tag s-blue">变盘</span>
         <span v-if="toNoSellToCan()" class="fm-tag blue">更转交</span>
         <span v-if="ifRelieveFixLine" class="fm-tag s-blue">解定</span>
         <span v-if="ifJieFantanToday()" class="fm-tag s-blue">解反</span>
@@ -381,6 +382,14 @@ export default {
     ifThreeUp () {
       return stockAnalysisUtil.countUp(this.netChangeRatioListLarge, 3, 3).flag
     },
+    // 是否变盘
+    ifBianpan () {
+      const info = stockAnalysisUtil.countUp(this.netChangeRatioListLarge, 3, 3)
+      if (info.flag && info.rate < this.indexInfo.rate) {
+        return true
+      }
+      return false
+    },
     ifFourUp () {
       return stockAnalysisUtil.countUp(this.netChangeRatioListLarge, 4, 4).flag
     },
@@ -680,11 +689,17 @@ export default {
           (this.ifTwoUp)
         )
       } else {
-        return (
-          ((this.indexDaXiaoStatusOld === '大反' || this.indexDaXiaoStatusOld === '小反') &&
-          this.ifThreeUp) ||
-          (this.indexDaXiaoStatusOld === '小反' && this.ifTwoUp)
-        )
+        if (
+          (this.indexDaXiaoStatusOld === '大反' || this.indexDaXiaoStatusOld === '小反') &&
+          this.ifThreeUp
+        ) {
+          if (!this.ifBianpan) {
+            return true
+          }
+        }
+        if (this.indexDaXiaoStatusOld === '小反' && this.ifTwoUp) {
+          return true
+        }
       }
     },
     // 获取今天前面的第一个买卖信号
@@ -926,7 +941,9 @@ export default {
       }
       // TODO 涨4天了发出应该卖
       if (this.ifFourUp) {
-        shouldClass = shouldSellClass
+        if (!this.ifInFantanOld()) {
+          shouldClass = shouldSellClass
+        }
       }
       // TODO 垃圾指数涨2天就卖
       if (this.ifLaji) {

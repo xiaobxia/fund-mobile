@@ -6,7 +6,11 @@
       </mt-button>
     </mt-header>
     <div class="main-body">
-      <mt-button type="primary" @click="xiaban" class="main-btn">下班</mt-button>
+      <mt-button :disabled="!(isUp || isDown)" type="primary" @click="xiaban" class="main-btn">
+        <span v-if="isUp">上班打卡</span>
+        <span v-else-if="isDown">下班打卡</span>
+        <span v-else>禁</span>
+      </mt-button>
     </div>
   </div>
 </template>
@@ -20,7 +24,25 @@ export default {
     return {
     }
   },
-  computed: {},
+  computed: {
+    isUp () {
+      const d = this.getDate()
+      const hour = d.getHours()
+      const minute = d.getMinutes()
+      if (hour < 9 || (hour === 9 && minute <= 30)) {
+        return true
+      }
+      return false
+    },
+    isDown () {
+      const d = this.getDate()
+      const hour = d.getHours()
+      if (hour >= 18) {
+        return true
+      }
+      return false
+    }
+  },
   watch: {
   },
   created () {

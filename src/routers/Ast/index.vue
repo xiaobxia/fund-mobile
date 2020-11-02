@@ -11,6 +11,9 @@
         <span v-else-if="isDown">下班打卡</span>
         <span v-else>禁</span>
       </mt-button>
+      <mt-button type="primary" @click="xiabanSch" class="main-btn cc">
+        <span>定时上班打卡</span>
+      </mt-button>
     </div>
   </div>
 </template>
@@ -58,6 +61,14 @@ export default {
       this.$http.get('http://47.98.140.76:3031/daka/xiaban').then(() => {
         Indicator.close()
       })
+    },
+    xiabanSch () {
+      Indicator.open({
+        spinnerType: 'fading-circle'
+      })
+      this.$http.get('http://47.98.140.76:3031/daka/xiabanSchedule').then(() => {
+        Indicator.close()
+      })
     }
   }
 }
@@ -66,5 +77,8 @@ export default {
 <style rel="stylesheet/scss" lang="scss" scoped>
   .main-body {
     padding: 50px 20px 0 20px;
+  }
+  .cc {
+    margin-top: 20px;
   }
 </style>

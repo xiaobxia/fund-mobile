@@ -1048,7 +1048,7 @@ export default {
       // TODO 锁仓的逻辑
       // 锁仓的指数太少也危险，很有可能是假的稳定
       const manyToLess = storageUtil.getData('noBuySellConfig', 'manyToLess') || false
-      if (this.ifInNoSellStatus() && this.noSellCount > 6) {
+      if (this.ifInNoSellStatus()) {
         // 6个一下不考虑
         if (
           this.noSellCount > 12 ||
@@ -1074,6 +1074,10 @@ export default {
             }
           }
           // 在趋势中，什么卖出信号都不用管
+          classListF = this.removeSell(classListF)
+        }
+        // 不确定趋势3涨就不去锁
+        if (!this.ifThreeUp) {
           classListF = this.removeSell(classListF)
         }
       }

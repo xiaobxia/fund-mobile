@@ -265,6 +265,9 @@ export default {
       storageUtil.setData('noBuySellConfig', 'isNoQuarter', this.isNoQuarter)
       storageUtil.setData('noBuySellConfig', 'noLaji', this.noLaji)
       storageUtil.setData('noBuySellConfig', 'manyToLess', this.manyToLess)
+      if (this.noSell) {
+        alert('没卖阶段仓位保持60%以上')
+      }
     }
   }
 }

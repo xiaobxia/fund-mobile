@@ -16,6 +16,7 @@
 
 <script>
 import Toast from '@/common/toast.js'
+import storageUtil from '@/util/storageUtil.js'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -35,6 +36,14 @@ export default {
   created () {
     this.position = this.userFundAccountInfo.positionConfig
     this.initPage()
+  },
+  mounted () {
+    const noSell = storageUtil.getData('noBuySellConfig', 'noSell') || false
+    if (noSell) {
+      setTimeout(() => {
+        alert('没卖阶段仓位保持60%以上')
+      }, 1000)
+    }
   },
   methods: {
     initPage () {

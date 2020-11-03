@@ -12,11 +12,13 @@
       <mt-field label="定投收益率" placeholder="请输入" v-model="form.dingtoushouyilv"></mt-field>
       <mt-field label="其他增量" placeholder="请输入" v-model="form.zengliang"></mt-field>
       <mt-button type="primary" @click="okHandler" class="main-btn">计算</mt-button>
-      <div
-        v-for="(item, index) in list"
-        :key="index"
-      >
-        <span>第{{index+1}}年：{{parseInt(item)}}，增加：{{parseInt(item - (list[index-1]|| form.benjin))}}</span>
+      <div style="position: absolute">
+        <div
+          v-for="(item, index) in list"
+          :key="index"
+        >
+          <span>第{{index+1}}年：{{parseInt(item)}}，增加：{{parseInt(item - (list[index-1]|| form.benjin))}}</span>
+        </div>
       </div>
     </div>
   </div>

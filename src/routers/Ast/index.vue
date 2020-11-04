@@ -71,7 +71,7 @@ export default {
       })
       this.$http.get('http://47.98.140.76:3031/daka/xiabanSchedule').then((res) => {
         Indicator.close()
-        alert(res.data)
+        alert(res.time)
       })
     },
     quxiaoDingshi () {

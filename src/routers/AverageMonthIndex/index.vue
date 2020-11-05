@@ -35,6 +35,15 @@ export default {
         lock: false
       })
     })
+    // 加上白酒
+    list.push({
+      code: 'sz399997',
+      name: '白酒',
+      mix: false,
+      key: 'baijiu',
+      averageDiff: 0,
+      lock: false
+    })
     return {
       list
     }

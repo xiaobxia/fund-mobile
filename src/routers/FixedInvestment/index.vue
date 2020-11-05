@@ -37,12 +37,13 @@
           'has': hasInfo[item.name],
           'no-has': !hasInfo[item.name],
           'line-type': true,
-          'sell': (item.key === 'baijiu' && baijiuwarn) && rateInfo[item.key] > 0
+          'sell': ifSellShow(item.key)
         }"
       >
         <div slot="title">
           <h3>
             <span class="index-name">{{item.name}}</span>
+            <span v-if="getLockInfo(item.key)" class="fm-tag s-red">锁仓</span>
             <span v-if="item.key === 'baijiu' && baijiuwarn" class="fm-tag s-green">{{baijiuwarn}}</span>
             <span style="float: right" :class="stockNumberClass(rateInfo[item.key])">{{rateInfo[item.key]}}%</span>
           </h3>
@@ -405,6 +406,27 @@ export default {
     })
   },
   methods: {
+    ifSellShow (key) {
+      const list = this.klineMap[key]
+      const netChangeRatioListLarge = list.map((subItem) => {
+        return subItem.netChangeRatio
+      })
+      const flag = stockAnalysisUtil.countUp(netChangeRatioListLarge, 4, 4).flag
+      if (key === 'baijiu' && this.baijiuwarn) {
+        if (this.rateInfo[key] > 0) {
+          if (!this.getLockInfo(key)) {
+            return true
+          }
+        }
+        if (flag) {
+          return true
+        }
+      }
+      return false
+    },
+    getLockInfo (key) {
+      return storageUtil.getData('noSell', key) || false
+    },
     queryFundR (item) {
       this.$http.get('fund/getFundRecentNetValue', {
         code: item.code,

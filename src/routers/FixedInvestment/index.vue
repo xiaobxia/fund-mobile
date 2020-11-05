@@ -689,7 +689,9 @@ export default {
           this.averageDiff[item.key] = diff
           // 和总资金有关，还有数量
           const rC = 1 / (60)
-          const buyS = (360000 * rC) / 13
+          const user = this.userFundAccountInfo.user
+          const myAsset = user.asset
+          const buyS = (myAsset * rC) / 13
           const params = this.indexParams[item.code]
           let buyNumber = 0
           if (['baijiu', 'yiliao', 'shengwu', 'shipin'].indexOf(item.key) !== -1) {
@@ -718,9 +720,11 @@ export default {
       this.$router.history.go(-1)
     },
     ttBuy (num) {
+      const user = this.userFundAccountInfo.user
+      const myAsset = user.asset
       // num * 每月金额
       const tt = 2000
-      const my = 360000
+      const my = myAsset
       return parseInt((num * (tt / 10000)) / (my / 36) * 10)
     },
     okHandler () {

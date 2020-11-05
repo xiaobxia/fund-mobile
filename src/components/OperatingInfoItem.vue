@@ -1023,13 +1023,15 @@ export default {
       if (this.ifTargetUpCloseLock) {
         classListF = this.removeSell(classListF)
       }
-      // TODO 季线危险阶段，没有买入信号，因为很可能是无止境得跌
+      // TODO 季线危险阶段，又是月下，没有买入信号，因为很可能是无止境得跌
       if (this.isInQuarterHotToday) {
         // 没有季度影响并且是大反才可以例外
         // if (!(isNoQuarter && isBig)) {
         //   classListF = this.removeBuy(classListF)
         // }
-        classListF = this.removeBuy(classListF)
+        if (this.averageMonthIndex < 0) {
+          classListF = this.removeBuy(classListF)
+        }
       }
       // TODO 处于z45不能买
       if (this.ifInZ45StatusNow) {

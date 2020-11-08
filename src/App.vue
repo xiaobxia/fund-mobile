@@ -181,6 +181,8 @@ export default {
           const noSellStatus = {}
           const quarterHot = {}
           const z45 = {}
+          // 止盈线
+          const cutDownClose = {}
           const targetUpClose = {}
           res.data.forEach((item) => {
             data[item.key] = item.flag || '正常'
@@ -190,6 +192,7 @@ export default {
             z45[item.key] = item.z45 || '关闭'
             yearAverage[item.key] = item.year_average
             targetUpClose[item.key] = item.target_up_close || 0
+            cutDownClose[item.key] = item.top_close || 0
           })
           storageUtil.setData('stockIndexFlag', data)
           storageUtil.setData('stockIndexStatus', status)
@@ -197,6 +200,7 @@ export default {
           storageUtil.setData('stockIndexQuarterHot', quarterHot)
           storageUtil.setData('stockIndexZ45', z45)
           storageUtil.setData('yearAverageIndex', yearAverage)
+          storageUtil.setData('stockIndexCutDownClose', cutDownClose)
           storageUtil.setData('stockIndexTargetUpClose', targetUpClose)
         }),
         this.$http.get('stock/getStockMarketQuestion').then((res) => {

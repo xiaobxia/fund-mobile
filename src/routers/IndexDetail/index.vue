@@ -6,6 +6,11 @@
       </mt-button>
     </mt-header>
     <div class="main-body">
+      <div class="b-tab" @click="dianwei = !dianwei">
+        <span>点位指标</span>
+      </div>
+      <div v-if="dianwei" class="d-b">
+      </div>
       <div class="grey fm-warn">指数是否z45</div>
       <div class="filter-select-wrap">
         <span class="name">{{z45}}</span>
@@ -194,7 +199,8 @@ export default {
       indexChangeRatio: 0,
       pointType: '',
       type: 'xiong',
-      nowClose: 0
+      nowClose: 0,
+      dianwei: false
     }
   },
 
@@ -465,8 +471,15 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style rel="stylesheet/scss" lang="scss" scoped>
   .content-body {
     padding: 30px;
+  }
+  .b-tab {
+    background-color: rgba(244, 148, 110, 0.1);
+    padding: 20px 20px;
+  }
+  .d-b {
+    padding: 20px;
   }
 </style>

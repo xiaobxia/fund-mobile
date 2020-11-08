@@ -66,7 +66,9 @@ export default {
           const updateData = {}
           if (yearDiff > 0 && halfYearDiff > 0) {
             if (diff <= -5) {
-              updateData.recent_status = '见底'
+              if (['jijian', 'dichan', 'meitan'].indexOf(item.key) === -1) {
+                updateData.recent_status = '见底'
+              }
             }
           }
           if (item.quarterHotLine) {

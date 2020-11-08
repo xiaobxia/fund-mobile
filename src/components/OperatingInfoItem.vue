@@ -1130,7 +1130,7 @@ export default {
       if (noSell) {
         classListF = this.removeSell(classListF)
       }
-      // TODO 请止盈
+      // TODO 请止盈，止盈就是为了应对你锁仓了，结果还一直不停地跌的情况
       if (this.ifCutDownCloseOk) {
         classListF = this.removeBuy(classListF)
         // 加入卖出

@@ -289,10 +289,6 @@ export default {
     indexNoSellStatusToday () {
       return storageUtil.getData('noSell', this.indexInfo.key) || false
     },
-    // 指数目前是不是顶部
-    ifIndexTopToday () {
-      return storageUtil.getData('stockIndexIsTop', this.indexInfo.key) || false
-    },
     // 指数是否危险
     ifOpenQuarterHot () {
       return storageUtil.getData('stockIndexQuarterHot', this.indexInfo.key) === '开启'
@@ -757,20 +753,6 @@ export default {
     isInDingtouStatus () {
       return this.indexStage === '定投' && !this.ifRelieveFixLine
     },
-    // 是不是顶部条件
-    // ifInDingbuStatus () {
-    //   // 锁仓的话顶部条件就不触发
-    //   return this.indexStage === '顶部' && !this.ifJieDingbu() && !this.ifInNoSellStatus()
-    // },
-    // 是否解顶部的影响
-    // ifJieDingbu () {
-    //   // 变成大小反，那阶段顶就解除
-    //   if (this.indexStage === '顶部' && (this.isToBeDafanToday() || this.isToBeXiaofanToday())) {
-    //     return true
-    //   }
-    //   // 不是顶部了，然后又变成的锁仓状态
-    //   return this.indexStage === '顶部' && !this.ifIndexTopToday && this.ifInNoSellStatus()
-    // },
     // 两个小幅0.2下跌很危险
     sellLowDownSmall () {
       // 达成条件，但是满足其他，所以少卖点

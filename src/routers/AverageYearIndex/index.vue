@@ -76,12 +76,6 @@ export default {
           }
           const updateData = {}
           storageUtil.setData('yearAverageIndexDiff', item.key, diff)
-          if (diff >= item.topLine) {
-            storageUtil.setData('stockIndexIsTop', item.key, true)
-            updateData.status = '顶部'
-          } else {
-            storageUtil.setData('stockIndexIsTop', item.key, false)
-          }
           const rawStatus = storageUtil.getData('stockIndexStatus', item.key)
           if ((rawStatus === '探底' || rawStatus === '定投') && diff >= 0) {
             updateData.status = '正常'

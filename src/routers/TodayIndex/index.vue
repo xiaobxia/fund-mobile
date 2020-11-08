@@ -191,16 +191,6 @@ export default {
             this.tradeTime = data.data.tradeTime
           }
           storageUtil.setData('indexNowClose', item.key, data.data.close)
-          // const ifCutDown = storageUtil.getData('stockIndexCutDown', item.key) === '开启'
-          // if (ifCutDown) {
-          //   let topClose = storageUtil.getData('stockIndexTopClose', item.key) || 0
-          //   if (data.data.close > topClose) {
-          //     storageUtil.setData('stockIndexTopClose', item.key, data.data.close)
-          //     this.updateStockIndex(item.key, {
-          //       top_close: data.data.close
-          //     })
-          //   }
-          // }
           const netChangeRatio = parseFloat(data.data.netChangeRatio)
           item.netChangeRatio = this.keepTwoDecimals(netChangeRatio)
           // 如果不是交易日那就不执行

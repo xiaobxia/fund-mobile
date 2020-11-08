@@ -18,7 +18,6 @@
         <span v-if="isInXiaofanBefore()" class="fm-tag s-red">小反</span>
         <span v-if="ifInNoSellStatus()" class="fm-tag s-red">锁仓</span>
         <span v-if="ifNoSellToCan()" class="fm-tag s-green">转交</span>
-        <!--<span v-if="ifOpenCutDown" class="fm-tag s-yellow">开止盈</span>-->
         <span v-if="indexDaXiaoStatusOld === '禁买'" class="fm-tag s-black">{{indexDaXiaoStatusOld}}</span>
         <span v-if="averageMonthIndex > 0" class="fm-tag b-red">月上</span>
         <span v-if="averageMonthIndex <= 0" class="fm-tag b-green">月下</span>
@@ -292,10 +291,6 @@ export default {
     // 指数目前是不是顶部
     ifIndexTopToday () {
       return storageUtil.getData('stockIndexIsTop', this.indexInfo.key) || false
-    },
-    // 指数是否开启止盈
-    ifOpenCutDown () {
-      return storageUtil.getData('stockIndexCutDown', this.indexInfo.key) === '开启'
     },
     // 指数是否危险
     ifOpenQuarterHot () {
@@ -575,18 +570,6 @@ export default {
       // 月线危险区，外加季度线危险区，需要提示减仓
       return this.ifMonthHot && this.isInQuarterHotToday && this.rate > 0
     },
-    // 满足止盈条件
-    // ifStopKeep () {
-    //   const nowClose = storageUtil.getData('indexNowClose', this.indexInfo.key) || 0
-    //   const topClose = storageUtil.getData('stockIndexTopClose', this.indexInfo.key) || 0
-    //   if (this.ifOpenCutDown) {
-    //     // 最高处回落6%
-    //     if (this.countDifferenceRate(nowClose, topClose) < -6) {
-    //       return true
-    //     }
-    //   }
-    //   return false
-    // },
     // 是否处于反弹
     ifInFantanOld () {
       return this.isInXiaofanBefore() || this.isInDafanBefore()

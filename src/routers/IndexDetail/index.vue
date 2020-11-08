@@ -11,11 +11,6 @@
         <span class="name">{{z45}}</span>
         <mt-button type="primary" @click="z45ChangeHandler">改变</mt-button>
       </div>
-      <div class="grey fm-warn">指数是否开启止盈策略</div>
-      <div class="filter-select-wrap">
-        <span class="name">{{cutDown}}</span>
-        <mt-button type="primary" @click="cutDownChangeHandler">改变</mt-button>
-      </div>
       <div class="grey fm-warn">指数是季度过热</div>
       <div class="filter-select-wrap">
         <span class="name">{{quarterHot}}</span>
@@ -87,13 +82,6 @@
       </ul>
     </mt-popup>
     <mt-popup
-      v-model="popupCVisible"
-      position="bottom">
-      <ul class="filter-select-list">
-        <li class="filter-select-item" v-for="(item) in filterCList" :key="item" @click="onCutDownChangeHandler(item)">{{item || '关闭'}}</li>
-      </ul>
-    </mt-popup>
-    <mt-popup
       v-model="popupQVisible"
       position="bottom">
       <ul class="filter-select-list">
@@ -144,7 +132,6 @@ export default {
       niuXiong: '',
       status: '',
       noSellStatus: '',
-      cutDown: '',
       quarterHot: '',
       z45: '',
       grid: {
@@ -300,9 +287,6 @@ export default {
     noSellStatusChangeHandler () {
       this.popupNVisible = true
     },
-    cutDownChangeHandler () {
-      this.popupCVisible = true
-    },
     z45ChangeHandler () {
       this.popupZVisible = true
     },
@@ -351,26 +335,6 @@ export default {
       })
       this.popupNVisible = false
     },
-    onCutDownChangeHandler (text) {
-      const query = this.$router.history.current.query
-      const other = {}
-      if (text === '开启') {
-        storageUtil.setData('stockIndexTopClose', query.key, 0)
-        other.top_close = 0
-      }
-      this.$http.post('stock/updateStockIndex', {
-        key: query.key,
-        cut_down: text,
-        ...other
-      }).then((data) => {
-        if (data.success) {
-          Toast.success('操作成功')
-        } else {
-          Toast.error('操作失败')
-        }
-      })
-      this.popupCVisible = false
-    },
     onQuarterHotChangeHandler (text) {
       const query = this.$router.history.current.query
       this.$http.post('stock/updateStockIndex', {
@@ -404,7 +368,6 @@ export default {
       this.queryData = Object.assign({}, query)
       this.niuXiong = storageUtil.getData('stockIndexFlag', query.key)
       this.status = storageUtil.getData('stockIndexStatus', query.key) || '正常'
-      this.cutDown = storageUtil.getData('stockIndexCutDown', query.key) || '关闭'
       this.quarterHot = storageUtil.getData('stockIndexQuarterHot', query.key) || '关闭'
       this.z45 = storageUtil.getData('stockIndexZ45', query.key) || '关闭'
       this.noSellStatus = storageUtil.getData('stockIndexNoSellStatus', query.key) || '正常'

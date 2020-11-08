@@ -86,12 +86,7 @@ export default {
           if ((rawStatus === '探底' || rawStatus === '定投') && diff >= 0) {
             updateData.status = '正常'
           }
-          if (diff >= item.cutDownLine) {
-            storageUtil.setData('stockIndexTopClose', item.key, 0)
-            updateData.cut_down = '开启'
-            updateData.top_close = 0
-          }
-          if (updateData.status || updateData.cut_down) {
+          if (updateData.status) {
             this.updateStockIndex(item.key, updateData)
           }
         }

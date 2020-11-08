@@ -6,7 +6,10 @@
       </mt-button>
     </mt-header>
     <div class="main-body">
-      <mt-cell-swipe v-for="(item) in list" :key="item.code">
+      <div class="warn-wrap">
+        <div class="fm-warn blue">年线半年线本来还不错突然跌下来，那基本是买点，如果一波行情下来年线半年线基本就没超过7%过，而且时间也不长，那就危险了</div>
+      </div>
+      <mt-cell-swipe v-for="(item) in list" :key="item.code" :class="item.netChangeRatio < 0 ? 'kong':''">
         <div slot="title">
           <h3>
             {{item.name}}

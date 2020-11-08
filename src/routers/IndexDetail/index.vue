@@ -16,6 +16,11 @@
         <span class="name">{{z45}}</span>
         <mt-button type="primary" @click="z45ChangeHandler">改变</mt-button>
       </div>
+      <div class="grey fm-warn">指数近期状态</div>
+      <div class="filter-select-wrap">
+        <span class="name">{{recentStatus}}</span>
+        <mt-button type="primary" @click="recentStatusChangeHandler">改变</mt-button>
+      </div>
       <div class="grey fm-warn">指数是季度过热</div>
       <div class="filter-select-wrap">
         <span class="name">{{quarterHot}}</span>
@@ -100,6 +105,13 @@
         <li class="filter-select-item" v-for="(item) in filterZList" :key="item" @click="onZ45ChangeHandler(item)">{{item || '关闭'}}</li>
       </ul>
     </mt-popup>
+    <mt-popup
+      v-model="popupRecentStatusVisible"
+      position="bottom">
+      <ul class="filter-select-list">
+        <li class="filter-select-item" v-for="(item) in filterRecentStatusList" :key="item" @click="onRecentStatusChangeHandler(item)">{{item || '正常'}}</li>
+      </ul>
+    </mt-popup>
   </div>
 </template>
 
@@ -128,17 +140,20 @@ export default {
       popupCVisible: false,
       popupQVisible: false,
       popupZVisible: false,
+      popupRecentStatusVisible: false,
       filterList: ['正常', '小反', '大反', '禁买'],
       filterSList: ['正常', '定投', '顶部', '探底'],
       filterNList: ['正常', '锁仓', '锁转交'],
       filterCList: ['关闭', '开启'],
       filterQList: ['关闭', '开启'],
       filterZList: ['关闭', '开启'],
+      filterRecentStatusList: ['正常', '见底'],
       niuXiong: '',
       status: '',
       noSellStatus: '',
       quarterHot: '',
       z45: '',
+      recentStatus: '',
       grid: {
         top: '10%',
         left: '0%',
@@ -296,6 +311,9 @@ export default {
     z45ChangeHandler () {
       this.popupZVisible = true
     },
+    recentStatusChangeHandler () {
+      this.popupRecentStatusVisible = true
+    },
     quarterHotChangeHandler () {
       this.popupQVisible = true
     },
@@ -369,11 +387,26 @@ export default {
       })
       this.popupZVisible = false
     },
+    onRecentStatusChangeHandler (text) {
+      const query = this.$router.history.current.query
+      this.$http.post('stock/updateStockIndex', {
+        key: query.key,
+        recent_status: text
+      }).then((data) => {
+        if (data.success) {
+          Toast.success('操作成功')
+        } else {
+          Toast.error('操作失败')
+        }
+      })
+      this.popupRecentStatusVisible = false
+    },
     initPage () {
       const query = this.$router.history.current.query
       this.queryData = Object.assign({}, query)
       this.niuXiong = storageUtil.getData('stockIndexFlag', query.key)
       this.status = storageUtil.getData('stockIndexStatus', query.key) || '正常'
+      this.recentStatus = storageUtil.getData('stockIndexRecentStatus', query.key) || '正常'
       this.quarterHot = storageUtil.getData('stockIndexQuarterHot', query.key) || '关闭'
       this.z45 = storageUtil.getData('stockIndexZ45', query.key) || '关闭'
       this.noSellStatus = storageUtil.getData('stockIndexNoSellStatus', query.key) || '正常'

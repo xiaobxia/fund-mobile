@@ -8,6 +8,7 @@
         <span class="index-name">{{indexInfo.name}}</span>
         <span v-if="lock" class="fm-icon lock"></span>
         <span v-if="ifTargetUpCloseLock" class="fm-tag s-red">目标锁</span>
+        <span v-if="isInJiandi" class="fm-tag s-red">见底</span>
         <span v-if="ifInZ45StatusNow" class="fm-tag s-black">z45</span>
         <span v-if="isInQuarterHotToday" class="fm-tag s-black">危险</span>
         <span v-if="ifCutDownClose" class="fm-tag s-yellow">止盈线</span>
@@ -29,6 +30,8 @@
         <span v-if="ifJieFantanToday()" class="fm-tag s-blue">解反</span>
         <span v-if="ifJieNoSellToCan()" class="fm-tag s-blue">解转交</span>
         <span v-if="ifJieTargetUpCloseLock" class="fm-tag s-blue">解目标</span>
+        <span v-if="isJieJiandi" class="fm-tag s-blue">解见底</span>
+        <span v-if="isInJiandiWei" class="fm-tag s-yellow">见底危</span>
         <!--<span v-if="ifJieDingbu()" class="fm-tag s-blue">解顶</span>-->
         <span v-if="ifJieQuarterHot" class="fm-tag s-blue">解危</span>
         <span v-if="ifJieZ45" class="fm-tag s-blue">解z45</span>
@@ -242,6 +245,21 @@ export default {
     // 年偏离
     yearDiff () {
       return storageUtil.getData('yearAverageIndexDiff', this.indexInfo.key) || 0
+    },
+    // 阶段信息
+    indexRecentStatus () {
+      return storageUtil.getData('stockIndexRecentStatus', this.indexInfo.key) || '正常'
+    },
+    // 见底
+    isInJiandi () {
+      return this.indexRecentStatus === '见底' && this.averageQuarter < 0
+    },
+    isJieJiandi () {
+      return this.indexRecentStatus === '见底' && this.averageQuarter >= 0
+    },
+    // 见底危险
+    isInJiandiWei () {
+      return this.indexRecentStatus === '见底' && (this.yearDiff < 0 || this.averageHalfYear < 0)
     },
     // 获取另一种模式的技术性信号
     otherBuySellList () {
@@ -1006,6 +1024,10 @@ export default {
       }
       // TODO 没到目标位不卖
       if (this.ifTargetUpCloseLock) {
+        classListF = this.removeSell(classListF)
+      }
+      // TODO 如果见底了那就不卖
+      if (this.isInJiandi) {
         classListF = this.removeSell(classListF)
       }
       // TODO 季线危险阶段，又是月下，没有买入信号，因为很可能是无止境得跌

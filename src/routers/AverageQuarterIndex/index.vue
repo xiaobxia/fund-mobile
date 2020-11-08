@@ -61,10 +61,21 @@ export default {
           const diff = data.data.rate
           storageUtil.setData('averageQuarterIndex', item.key, diff)
           item.netChangeRatio = diff
+          const halfYearDiff = storageUtil.getData('averageHalfYearIndex', item.key) || 0
+          const yearDiff = storageUtil.getData('yearAverageIndexDiff', item.key) || 0
+          const updateData = {}
+          if (yearDiff > 0 && halfYearDiff > 0) {
+            if (diff <= -5) {
+              updateData.recent_status = '见底'
+            }
+          }
           if (item.quarterHotLine) {
             if (diff >= item.quarterHotLine) {
-              this.updateStockIndex(item.key, '开启')
+              updateData.danger = '开启'
             }
+          }
+          if (updateData.danger || updateData.recent_status) {
+            this.updateStockIndex(item.key, updateData)
           }
         }
       })
@@ -75,7 +86,7 @@ export default {
     updateStockIndex (key, value) {
       this.$http.post('stock/updateStockIndex', {
         key: key,
-        danger: value
+        ...value
       }).then((data) => {
       })
     }

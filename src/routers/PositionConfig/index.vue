@@ -6,7 +6,10 @@
       </mt-button>
     </mt-header>
     <div class="main-body">
-        <mt-field label="仓位" placeholder="请输入" v-model="position"></mt-field>
+      <div class="warn-wrap">
+        <div class="fm-warn blue">最低仓位：{{parseInt(minPosition)}}%</div>
+      </div>
+      <mt-field label="仓位" placeholder="请输入" v-model="position"></mt-field>
     </div>
     <div class="bottom-bar">
       <mt-button type="primary" @click="okHandler" class="main-btn">完成</mt-button>
@@ -23,7 +26,8 @@ export default {
   name: 'PositionConfig',
   data () {
     return {
-      position: 100
+      position: 100,
+      minPosition: localStorage.getItem('minPosition') || 0
     }
   },
   computed: {

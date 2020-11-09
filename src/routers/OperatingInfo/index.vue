@@ -215,16 +215,27 @@ export default {
           }
         })
       ]).then(() => {
+        let opList = []
         let dafan = 0
         let xiaofan = 0
         let dingtou = 0
         let jinmai = 0
         let dingbu = 0
         let tandi = 0
+        let jiandi = 0
+        let yearOk = 0
+        let halfYearOk = 0
+        let quarterOk = 0
+        let monthOk = 0
         for (let i = 0; i < indexList.length; i++) {
-          this.queryData(indexList[i])
+          opList.push(this.queryData(indexList[i]))
           const niuxiong = storageUtil.getData('stockIndexFlag', indexList[i].key)
           const status = storageUtil.getData('stockIndexStatus', indexList[i].key)
+          const recentStatus = storageUtil.getData('stockIndexRecentStatus', indexList[i].key)
+          const yearDiff = storageUtil.getData('yearAverageIndexDiff', indexList[i].key) || 0
+          const halfYearDiff = storageUtil.getData('averageHalfYearIndex', indexList[i].key) || 0
+          const quarterDiff = storageUtil.getData('averageQuarterIndex', indexList[i].key) || 0
+          const monthDiff = storageUtil.getData('averageMonth', indexList[i].key) || 0
           if (niuxiong === '大反') {
             dafan++
           } else if (niuxiong === '小反') {
@@ -239,15 +250,57 @@ export default {
           } else if (status === '探底') {
             tandi++
           }
+          if (recentStatus === '见底') {
+            jiandi++
+          }
+          if (yearDiff > 0) {
+            yearOk++
+          }
+          if (halfYearDiff > 0) {
+            halfYearOk++
+          }
+          if (quarterDiff > 0) {
+            quarterOk++
+          }
+          if (monthDiff > 0) {
+            monthOk++
+          }
         }
-        this.niuxiong = [dafan, xiaofan, tandi, dingtou, jinmai, dingbu]
+        this.niuxiong = [dafan, xiaofan, tandi, dingtou, jiandi, dingbu]
+        Promise.all(opList).then(() => {
+          this.countPosition({
+            yearOk,
+            halfYearOk,
+            quarterOk,
+            dafan,
+            xiaofan,
+            tandi,
+            dingtou,
+            jiandi,
+            dingbu
+          })
+        })
       })
+    },
+    countPosition (data) {
+      const indexNum = 24
+      // 最低仓位30
+      let position = 30
+      // 年线
+      position += (data.yearOk / indexNum) * 15
+      // 半年线
+      position += ((data.halfYearOk + data.dingtou) / indexNum) * 15
+      // 季度线
+      position += ((data.quarterOk + data.jiandi) / indexNum) * 20
+      // 月度线
+      position += ((data.dafan + this.noSellCount) / indexNum) * 20
+      localStorage.setItem('minPosition', position)
     },
     qsStringify (query) {
       return qs.stringify(query)
     },
     queryData (item) {
-      this.$http.getWithCache(`stock/${stockApiUtil.getAllUrl()}`, {
+      return this.$http.getWithCache(`stock/${stockApiUtil.getAllUrl()}`, {
         code: item.code,
         days: 12
       }, {interval: 30}).then((data) => {

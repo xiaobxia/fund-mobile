@@ -64,7 +64,7 @@
         <span class="value">{{niuxiong[2]}}</span>
       </div>
       <div class="item">
-        <span class="label">禁买：</span>
+        <span class="label">见底：</span>
         <span class="value">{{niuxiong[4]}}</span>
       </div>
       <div class="item">

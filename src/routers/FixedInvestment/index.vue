@@ -354,7 +354,7 @@ export default {
         },
         // 黄金
         'sh518880': {
-          buy: 0.5,
+          buy: 0.4,
           sell: 1.3,
           a: 15,
           b: -10,

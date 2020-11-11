@@ -9,18 +9,19 @@ const laji = indexType.laji
 const kuanji = indexType.kuanji
 
 // 11月到12月机构结算
+// TODO 机构结算好像没什么用
 function getJiesuan () {
-  const d = dateUtil.getDate()
-  const day = d.getDate()
-  const month = d.getMonth() + 1
-  if (month === 11) {
-    // 1到-1
-    return (1 - (2 * day / 31))
-  }
-  if (month === 12) {
-    // -1到1
-    return (-1 + (1 * day / 31))
-  }
+  // const d = dateUtil.getDate()
+  // const day = d.getDate()
+  // const month = d.getMonth() + 1
+  // if (month === 11) {
+  //   // 1到-1
+  //   return (1 - (2 * day / 31))
+  // }
+  // if (month === 12) {
+  //   // -1到1
+  //   return (-1 + (1 * day / 31))
+  // }
   return 1
 }
 
@@ -187,51 +188,39 @@ export default {
     const year = d.getFullYear()
     const day = d.getDate()
     const month = d.getMonth()
+    // TODO 这种择时一般不要太多比例，效果并不怎么样
     let factor = 1
     // 按月分配
     const monthFactorList = [
     // 1月，2月，是反弹的窗口期间
+      1,
       1.1,
-      1.2,
-      1,
-      1,
+      // 一般三月也会见顶一次
+      0.8,
+      0.8,
       // 5月，6月，年中资金面紧张
       0.9,
-      0.8,
+      0.9,
       1,
       1.1,
+      // TODO 年底了不打大战
+      // 9月一般就见顶了，整体不怎么好
       0.9,
       // 10月也就头几天会好一点，调仓带来的影响还是多
       0.9,
       // 11月，12月，年底资金面紧张，机构结账
-      0.8,
-      0.8
+      0.9,
+      0.9
     ]
     factor = factor * monthFactorList[month]
-    // --季度末资金面紧张，不包括国庆前和元旦前
-    if (moment().isAfter(`${year}-03-16`) && moment().isBefore(`${year}-03-30`)) {
-      factor = factor * 0.9
-    }
-    if (moment().isAfter(`${year}-06-16`) && moment().isBefore(`${year}-06-30`)) {
-      factor = factor * 0.9
-    }
-    if (moment().isAfter(`${year}-09-16`) && moment().isBefore(`${year}-09-25`)) {
-      factor = factor * 0.9
-    }
-    if (moment().isAfter(`${year}-12-16`) && moment().isBefore(`${year}-12-25`)) {
-      factor = factor * 0.9
-    }
-    // --机构结账月
-    if (moment().isAfter(`${year}-11-16`) && moment().isBefore(`${year}-11-30`)) {
-      factor = factor * 0.9
-    }
+    // TODO 看历史回测国庆和元旦也没有特意加仓的必要
     // 国庆前几天和后几天有3%的涨幅可以弄
     if (moment().isAfter(`${year}-09-25`) && moment().isBefore(`${year}-10-01`)) {
-      factor = factor * 1.15
+      factor = factor * 1.1
     }
     // 元旦前几天和后几天有3%的涨幅可以弄
     if (moment().isAfter(`${year}-12-25`) && moment().isBefore(`${year}-12-31`)) {
-      factor = factor * 1.15
+      factor = factor * 1.1
     }
     if (buySell === 'buy') {
       return factor
@@ -303,35 +292,36 @@ export default {
     const d = dateUtil.getDate()
     const month = d.getMonth() + 1
     const day = d.getDate()
+    // TODO 这种择时一般不要太多比例，效果并不怎么样
     let factor = 1
     // 流感高发季
     if (month >= 1 && month <= 3) {
       if (key === 'shengwu') {
-        factor = factor * 1.2
+        factor = factor * 1.1
       }
     }
     // 4月炒周期
     if (month === 4 || (month === 3 && day > 26)) {
       if (['meitan', 'gangtie', 'youse'].indexOf(key) !== -1) {
-        factor = factor * 1.2
+        factor = factor * 1.1
       }
     }
     // 5月6月有色表现还行
     if (month === 5 || month === 6) {
       if (['youse'].indexOf(key) !== -1) {
-        factor = factor * 1.2
+        factor = factor * 1.1
       }
     }
     // 10月炒小票
     if (month === 9 && day > 26) {
       if (['chuangye', 'chuanmei', 'dianzi', 'jisuanji', 'xinxi'].indexOf(key) !== -1) {
-        factor = factor * 1.2
+        factor = factor * 1.1
       }
     }
     // 年底炒传媒
     if (month === 12 && day > 26) {
       if (key === 'chuanmei') {
-        factor = factor * 1.2
+        factor = factor * 1.1
       }
     }
     if (buySell === 'buy') {

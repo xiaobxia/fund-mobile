@@ -236,11 +236,7 @@ export default {
           const halfYearDiff = storageUtil.getData('averageHalfYearIndex', indexList[i].key) || 0
           const quarterDiff = storageUtil.getData('averageQuarterIndex', indexList[i].key) || 0
           const monthDiff = storageUtil.getData('averageMonth', indexList[i].key) || 0
-          if (niuxiong === '大反') {
-            dafan++
-          } else if (niuxiong === '小反') {
-            xiaofan++
-          } else if (niuxiong === '禁买') {
+          if (niuxiong === '禁买') {
             jinmai++
           }
           if (status === '定投') {
@@ -266,8 +262,21 @@ export default {
             monthOk++
           }
         }
-        this.niuxiong = [dafan, xiaofan, tandi, dingtou, jiandi, dingbu]
         Promise.all(opList).then(() => {
+          const stockIndexDafan = storageUtil.getData('stockIndexDafan') || {}
+          for (let key in stockIndexDafan) {
+            if (stockIndexDafan[key]) {
+              dafan++
+            }
+          }
+          const stockIndexXiaofan = storageUtil.getData('stockIndexXiaofan') || {}
+          for (let key in stockIndexXiaofan) {
+            console.log(stockIndexXiaofan[key])
+            if (stockIndexXiaofan[key]) {
+              xiaofan++
+            }
+          }
+          this.niuxiong = [dafan, xiaofan, tandi, dingtou, jiandi, dingbu]
           this.countPosition({
             yearOk,
             halfYearOk,
@@ -293,7 +302,7 @@ export default {
       // 季度线
       position += ((data.quarterOk + data.jiandi) / indexNum) * 20
       // 月度线
-      position += ((data.dafan + this.noSellCount) / indexNum) * 20
+      position += ((data.dafan + (0.5 * data.xiaofan) * this.noSellCount) / indexNum) * 20
       localStorage.setItem('minPosition', position)
     },
     qsStringify (query) {

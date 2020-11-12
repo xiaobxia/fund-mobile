@@ -29,7 +29,8 @@ if (month < 11) {
       'dichan',
       'youse',
       'huanbao',
-      'jungong',
+      // 军工暂时可以不是垃圾
+      // 'jungong',
       'chuanmei'
     ]
   }

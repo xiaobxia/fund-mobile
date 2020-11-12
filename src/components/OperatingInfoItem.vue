@@ -1147,7 +1147,26 @@ export default {
       if (this.lock) {
         classListF = this.removeSell(classListF)
       }
+      // 设置信息
+      this.setInfo()
       return classListF
+    },
+    setInfo () {
+      // if (this.indexInfo.key === 'wulin') {
+      //   console.log(this.ifInDafanNow())
+      //   console.log(this.ifInXiaofanNow())
+      //   console.log((!this.ifInDafanNow() && this.ifInXiaofanNow()))
+      // }
+      storageUtil.setData(
+        'stockIndexDafan',
+        this.indexInfo.key,
+        this.ifInDafanNow()
+      )
+      storageUtil.setData(
+        'stockIndexXiaofan',
+        this.indexInfo.key,
+        (!this.ifInDafanNow() && this.ifInXiaofanNow())
+      )
     },
     sendFlagToServer (classListF) {
       // 发送信号

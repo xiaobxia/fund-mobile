@@ -744,6 +744,10 @@ export default {
     },
     // 今天达成大反条件
     isToBeDafanToday () {
+      // 一天5rate
+      if (this.rate < -(this.indexInfo.rate * 5)) {
+        return true
+      }
       if (this.ifFourDown || this.ifFiveDown || this.ifSevenSix || this.ifEightSeven || this.ifEightSix || this.ifNineSeven) {
         return true
       } else if (this.indexInfo.key === 'baoxian' && this.ifSixFive) {
@@ -900,6 +904,15 @@ export default {
         }
       }
       // ----------------------应该买的部分
+      // TODO 1天跌了5个rate提示买
+      if (this.rate < -(this.indexInfo.rate * 5)) {
+        shouldClass = shouldBuyClass
+      }
+      // TODO 两天跌了三个rate提示买
+      const twoDownInfo = stockAnalysisUtil.countDown(this.netChangeRatioListLarge, 2, 2)
+      if (twoDownInfo.rate < -(this.indexInfo.rate * 3)) {
+        shouldClass = shouldBuyClass
+      }
       // 连续跌三天，并且不是下降趋势
       if (this.ifThreeDown && !this.ifDownTrend) {
         // 季度线以上

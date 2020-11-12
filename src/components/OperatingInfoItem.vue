@@ -693,6 +693,18 @@ export default {
           }
         }
       }
+      if (this.indexDaXiaoStatusOld === '大反' || this.indexDaXiaoStatusOld === '小反') {
+        const a = stockAnalysisUtil.countRule(this.netChangeRatioListLarge, [true, true, false, true, true])
+        if (a.flag && a.rate > (4 * this.indexInfo.rate)) {
+          return true
+        }
+        const aa = stockAnalysisUtil.countUp(this.netChangeRatioListLarge, 4, 3)
+        if (this.netChangeRatioListLarge[0] > 0 && this.netChangeRatioListLarge[3] > 0) {
+          if (aa.flag && aa.rate > (4 * this.indexInfo.rate)) {
+            return true
+          }
+        }
+      }
       // 如果两个0.2下跌，必须得解反
       if (this.ifTwoLowDown) {
         if (this.indexDaXiaoStatusOld === '大反' || this.indexDaXiaoStatusOld === '小反') {
@@ -948,6 +960,23 @@ export default {
         isBig = true
       }
       // ----------------------应该卖的部分
+      const a = stockAnalysisUtil.countRule(this.netChangeRatioListLarge, [true, true, false, true, true])
+      if (a.flag && a.rate > (4 * this.indexInfo.rate)) {
+        shouldClass = shouldSellClass
+      }
+      const aa = stockAnalysisUtil.countUp(this.netChangeRatioListLarge, 4, 3)
+      if (this.netChangeRatioListLarge[0] > 0 && this.netChangeRatioListLarge[3] > 0) {
+        if (aa.flag && aa.rate > (4 * this.indexInfo.rate)) {
+          shouldClass = shouldSellClass
+        }
+      }
+      const bb = stockAnalysisUtil.countRule(this.netChangeRatioListLarge, [true, false, true])
+      if (bb.flag && bb.rate > (4 * this.indexInfo.rate)) {
+        // 暂时不解反
+        if (!this.ifInDafanNow()) {
+          shouldClass = shouldSellClass
+        }
+      }
       // TODO 月线以下涨3天，并且幅度超过2个rate就发出卖出信号
       if (this.averageMonthIndex < 0 && this.ifThreeUp) {
         const info = stockAnalysisUtil.countUp(this.netChangeRatioListLarge, 3, 3)

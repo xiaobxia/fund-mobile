@@ -760,6 +760,11 @@ export default {
       if (this.rate < -(this.indexInfo.rate * 5)) {
         return true
       }
+      // 两天6rate
+      const twoDownInfo = stockAnalysisUtil.countDown(this.netChangeRatioListLarge, 2, 2)
+      if (twoDownInfo.rate < -(this.indexInfo.rate * 6)) {
+        return true
+      }
       if (this.ifFourDown || this.ifFiveDown || this.ifSevenSix || this.ifEightSeven || this.ifEightSix || this.ifNineSeven) {
         return true
       } else if (this.indexInfo.key === 'baoxian' && this.ifSixFive) {

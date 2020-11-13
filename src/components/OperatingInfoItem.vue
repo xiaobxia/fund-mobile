@@ -821,10 +821,30 @@ export default {
     },
     // 季度线火热，然后又很危险
     ifQuarterHotCut () {
-      return this.isInQuarterHotToday && this.averageMonthIndex > 0 && this.rate > 0 && !this.ifInNoSellStatus()
+      // 回测过可以等两涨，也可以在月上，基本没有在月线下的情况
+      return (
+        this.isInQuarterHotToday &&
+        this.averageMonthIndex > 0 &&
+        this.ifTwoUp > 0 &&
+        !this.ifInNoSellStatus()
+      )
     },
     ifQuarterHotCutNow () {
-      return this.ifQuarterHotCut() && this.ifQuarterHotNow
+      return (this.ifQuarterHotCut() && this.ifQuarterHotNow) || (this.isInQuarterHotToday && this.QHS())
+    },
+    QHS () {
+      if (!this.ifInNoSellStatus()) {
+        if (this.ifThreeUp) {
+          return true
+        }
+        if (this.ifTwoUp) {
+          const info = stockAnalysisUtil.countUp(this.netChangeRatioListLarge, 2, 2)
+          if (info.rate > (this.indexInfo.rate * 3)) {
+            return true
+          }
+        }
+      }
+      return false
     },
     setIndexCanFix () {
       let fag = true

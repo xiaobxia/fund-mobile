@@ -830,7 +830,9 @@ export default {
       )
     },
     ifQuarterHotCutNow () {
-      return (this.ifQuarterHotCut() && this.ifQuarterHotNow) || (this.isInQuarterHotToday && this.QHS())
+      return (this.ifQuarterHotCut() && this.ifQuarterHotNow) ||
+        (this.isInQuarterHotToday && this.QHS()) ||
+        this.YHS()
     },
     QHS () {
       if (!this.ifInNoSellStatus()) {
@@ -841,6 +843,24 @@ export default {
           const info = stockAnalysisUtil.countUp(this.netChangeRatioListLarge, 2, 2)
           if (info.rate > (this.indexInfo.rate * 3)) {
             return true
+          }
+        }
+      }
+      return false
+    },
+    YHS () {
+      if (!this.ifInNoSellStatus() &&
+        this.yearDiff > this.indexInfo.cutDownLine &&
+        this.averageQuarter >= 0
+      ) {
+        if (['yiliao', 'shengwu'].indexOf(this.indexInfo.key) === -1) {
+          if (this.ifTwoUp) {
+            return true
+          }
+          if (['chuangye', 'shiping', 'wubai', 'sanbai'].indexOf(this.indexInfo.key) === -1) {
+            if (this.rate > 0) {
+              return true
+            }
           }
         }
       }

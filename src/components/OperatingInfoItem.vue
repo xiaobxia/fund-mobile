@@ -858,7 +858,7 @@ export default {
             return true
           }
           if (['chuangye', 'shiping', 'wubai', 'sanbai'].indexOf(this.indexInfo.key) === -1) {
-            if (this.rate > 0) {
+            if (this.rate > this.indexInfo.rate) {
               return true
             }
           }

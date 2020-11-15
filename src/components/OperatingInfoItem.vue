@@ -1008,21 +1008,16 @@ export default {
       // ----------------------应该买的部分
       // 月线下面都会有大小反出现，所以其他买入就没什么必要
       // 或者已经成为了大反
-      if (
-        this.averageMonthIndex > 0 ||
-        this.ifInDafanNow()
-      ) {
-        // TODO cs-完成，没啥问题
-        // TODO 两天跌了三个rate提示买
-        const twoDownInfo = stockAnalysisUtil.countDown(this.netChangeRatioListLarge, 2, 2)
-        if (twoDownInfo.rate < -(this.indexInfo.rate * 3)) {
-          shouldClass = shouldBuyClass
-        }
-        // TODO cs-完
-        // TODO 三跌
-        if (this.ifThreeDown) {
-          shouldClass = shouldBuyClass
-        }
+      // TODO cs-完成，没啥问题
+      // TODO 两天跌了三个rate提示买
+      const twoDownInfo = stockAnalysisUtil.countDown(this.netChangeRatioListLarge, 2, 2)
+      if (twoDownInfo.rate < -(this.indexInfo.rate * 3)) {
+        shouldClass = shouldBuyClass
+      }
+      // TODO cs-完
+      // TODO 三跌
+      if (this.ifThreeDown) {
+        shouldClass = shouldBuyClass
       }
       // TODO cs-完
       // TODO 一天4rate，受季度热影响

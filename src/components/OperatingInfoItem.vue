@@ -757,12 +757,20 @@ export default {
     // 今天达成大反条件
     isToBeDafanToday () {
       // 一天5rate
+      /**
+       * 验证过没问题
+       * 而且很有可能是一个中级别底部
+       */
       if (this.rate < -(this.indexInfo.rate * 5)) {
         return true
       }
-      // 两天6rate
+      // 两天5rate
+      /**
+       * 验证过没问题
+       * 而且很有可能是一个中级别底部，甚至4个rate都还行
+       */
       const twoDownInfo = stockAnalysisUtil.countDown(this.netChangeRatioListLarge, 2, 2)
-      if (twoDownInfo.rate < -(this.indexInfo.rate * 6)) {
+      if (twoDownInfo.rate < -(this.indexInfo.rate * 5)) {
         return true
       }
       if (this.ifFourDown || this.ifFiveDown || this.ifSevenSix || this.ifEightSeven || this.ifEightSix || this.ifNineSeven) {
@@ -961,50 +969,36 @@ export default {
         }
       }
       // ----------------------应该买的部分
-      // TODO 1天跌了5个rate提示买
-      if (this.rate < -(this.indexInfo.rate * 5)) {
-        shouldClass = shouldBuyClass
-      }
+      // TODO cs-完成，没啥问题
       // TODO 两天跌了三个rate提示买
       const twoDownInfo = stockAnalysisUtil.countDown(this.netChangeRatioListLarge, 2, 2)
       if (twoDownInfo.rate < -(this.indexInfo.rate * 3)) {
         shouldClass = shouldBuyClass
       }
-      // 连续跌三天，并且不是下降趋势
-      if (this.ifThreeDown && !this.ifDownTrend) {
-        // 季度线以上
-        if (this.averageQuarter > 0) {
-          if (this.ifKuanji) {
-            // 宽基指数可以买
-            shouldClass = shouldBuyClass
-          } else {
-            // 其他指数得要线上才能买
-            if (this.averageMonthIndex > 0) {
-              shouldClass = shouldBuyClass
-            }
-            // 跌得太快也可以买
-            if (this.ifDownQuick()) {
-              shouldClass = shouldBuyClass
-            }
-          }
-        }
-      }
-      let isBig = false
-      // 连跌4天或者5天，都能买
-      if (this.ifFourDown || this.ifFiveDown) {
+      // TODO cs-完
+      // TODO 三跌
+      if (this.ifThreeDown) {
         shouldClass = shouldBuyClass
-        isBig = true
       }
-      // 跌很多天
-      if (this.ifSixFive || this.ifSevenSix || this.ifEightSeven) {
+      // TODO cs-完
+      // TODO 一天4rate，受季度热影响
+      if (this.rate < -(this.indexInfo.rate * 4)) {
         shouldClass = shouldBuyClass
-        isBig = true
       }
-      if (this.ifEightSix || this.ifNineSeven) {
+      // TODO cs-完
+      // TODO 今天是大反那就买入，受季度热影响
+      if (this.isToBeDafanToday()) {
         shouldClass = shouldBuyClass
-        isBig = true
       }
       // ----------------------应该卖的部分
+      // TODO 解反卖，检验过，变现都不错
+      if (this.ifTwoUp) {
+        // 两天涨了4个rate也要解反
+        const info = stockAnalysisUtil.countUp(this.netChangeRatioListLarge, 2, 2)
+        if (info.rate > (this.indexInfo.rate * 4)) {
+          shouldClass = shouldSellClass
+        }
+      }
       const a = stockAnalysisUtil.countRule(this.netChangeRatioListLarge, [true, true, false, true, true])
       if (a.flag && a.rate > (4 * this.indexInfo.rate)) {
         shouldClass = shouldSellClass
@@ -1022,13 +1016,15 @@ export default {
           shouldClass = shouldSellClass
         }
       }
+      // TODO cs-完成，还行吧
       // TODO 月线以下涨3天，并且幅度超过2个rate就发出卖出信号
       if (this.averageMonthIndex < 0 && this.ifThreeUp) {
         const info = stockAnalysisUtil.countUp(this.netChangeRatioListLarge, 3, 3)
-        if (info.rate > (this.indexInfo.rate * 2)) {
+        if (info.rate > (this.indexInfo.rate * 4)) {
           shouldClass = shouldSellClass
         }
       }
+      // TODO cs-完成，没啥问题
       // TODO 涨4天了发出应该卖
       if (this.ifFourUp) {
         if (!this.ifInFantanOld()) {
@@ -1050,44 +1046,34 @@ export default {
         }
       }
       // TODO 没有买入信号，也没有应该买
-      if (this.allBuySellList[0] !== 'buy' && shouldClass === '' && this.rate < 0) {
-        // 研究过了，线上确实可以不杀跌
-        if (this.isInBad()) {
-          // 恶化了就卖
+      // if (this.allBuySellList[0] !== 'buy' && shouldClass === '' && this.rate < 0) {
+      //   // 研究过了，线上确实可以不杀跌
+      //   if (this.isInBad()) {
+      //     // 恶化了就卖
+      //     shouldClass = shouldSellClass
+      //   } else {
+      //     if (this.averageMonthIndex < 0 && !this.ifInFantanOld() && !this.ifThreeDown) {
+      //       shouldClass = shouldSellClass
+      //     }
+      //   }
+      // }
+      // TODO cs-完成，验证过
+      // TODO 锁转交，月线是在上面的，涨两天卖
+      if (this.ifNoSellToCanNew()) {
+        // 锁转交不太可能还处于大反
+        if (this.ifTwoUp) {
           shouldClass = shouldSellClass
-        } else {
-          if (this.averageMonthIndex < 0 && !this.ifInFantanOld() && !this.ifThreeDown) {
-            shouldClass = shouldSellClass
-          }
+        }
+        if (this.rate > this.indexInfo.rate) {
+          shouldClass = shouldSellClass
         }
       }
       // 应该的类
       classList.push(shouldClass)
-      // TODO 锁转交，月线是在上面的
-      if (this.ifNoSellToCanNew() && (this.rate > (-1 * this.indexInfo.rate))) {
-        // 普通买入信号在小于rate的时候是不会出现的
-        // 如果是大小反，那么锁转交的信号就会解除
-        // 所以这个逻辑没有问题
-        if (this.isInBad()) {
-          // 恶化就得卖
-          classList.push(sellClass)
-        } else {
-          if (!this.ifInDafanNow()) {
-            classList.push(sellClass)
-          }
-        }
-      }
+      // 在年下好像还行
+
       let classListF = this.copyList(classList)
-      // TODO 禁买成立
-      if (this.isJinMai()) {
-        // 没有任何买入
-        classListF = this.removeBuy(classListF)
-        // 涨了就卖
-        if (this.rate > 0) {
-          // 无视大小反的
-          classListF.push(sellClass)
-        }
-      }
+      // TODO cs-完成，季度热以后的转交了卖出，没啥问题
       // TODO 季度线过热，然后转交，那就提示卖出
       // 不管有没有大反什么的，因为一定会跌倒季度线为负数
       const isNoQuarter = storageUtil.getData('noBuySellConfig', 'isNoQuarter') || false
@@ -1096,8 +1082,9 @@ export default {
           classListF.push(sellClass)
         }
       }
+      // TODO cs-手动类，不用验证
+      // TODO 直接闷的涨2天再跑
       const isMeng = storageUtil.getData('noBuySellConfig', 'isMeng') || false
-      // TODO 直接闷的涨3天就跑
       if (isMeng) {
         // 直接闷的，抗住不卖以后，解反了该卖还是得卖
         if (!this.ifTwoUp) {
@@ -1117,6 +1104,7 @@ export default {
       if (this.isInJiandi) {
         classListF = this.removeSell(classListF)
       }
+      // TODO cs-回测了表现还行
       // TODO 季线危险阶段，又是月下，没有买入信号，因为很可能是无止境得跌
       if (this.isInQuarterHotToday) {
         // 没有季度影响并且是大反才可以例外
@@ -1135,6 +1123,7 @@ export default {
       if (this.ifFengNiu) {
         classListF = this.removeBuy(classListF)
       }
+      // TODO cs-完成，这里只是手动控制，还是应该靠建议仓位来限制买入，以防万一
       // TODO 是否基本面恶化，是的话只有月线在上才能买，不管什么大小反
       if (this.isInBad()) {
         classListF = this.removeBuy(classListF)
@@ -1152,21 +1141,11 @@ export default {
         ) {
           ifNoSellF = true
           // 锁仓了
-          if (this.averageQuarter >= 0) {
-            // 季度线以上跌了就买
-            if (this.rate < 0) {
-              classListF.push('should-buy')
-              if (this.ifHasBuy(classListF)) {
-                classListF.push('only-up-buy')
-              }
-            }
-          } else {
-            // 季度线以下两跌再买
-            if (this.ifTwoDown) {
-              classListF.push('should-buy')
-              if (this.ifHasBuy(classListF)) {
-                classListF.push('only-up-buy')
-              }
+          // 研究过了，季度线上和季度线下，没什么区别
+          if (this.rate < 0) {
+            classListF.push('should-buy')
+            if (this.ifHasBuy(classListF)) {
+              classListF.push('only-up-buy')
             }
           }
           // 在趋势中，什么卖出信号都不用管
@@ -1177,6 +1156,7 @@ export default {
           classListF = this.removeSell(classListF)
         }
       }
+      // TODO cs-完成
       // TODO 季度线以上，月线超过0就可以不杀跌
       if (this.ifMonthUpOk(this.indexInfo.key)) {
         if (this.averageMonthIndex > 0) {
@@ -1191,6 +1171,7 @@ export default {
       // if (this.ifDoubleHot() && this.ifFourUp) {
       //   classListF.push('should-sell')
       // }
+      // TODO cs-待
       // TODO 两个小幅0.2，即使锁仓也没有用，锁仓只卖1/3
       if (this.sellLowDownSmall() || this.sellLowDownBig()) {
         // 没有任何买入
@@ -1198,6 +1179,7 @@ export default {
         // 加入卖出
         classListF.push(sellClass)
       }
+      // TODO cs-待
       // TODO 年下当天触发z45那就立马卖出，权重最大不管任何情况
       if (this.ifClearZ45Today) {
         // 没有任何买入
@@ -1221,7 +1203,7 @@ export default {
       if (noSell) {
         classListF = this.removeSell(classListF)
       }
-      // TODO 请止盈，止盈就是为了应对你锁仓了，结果还一直不停地跌的情况
+      // TODO 请止盈，止盈就是为了应对你锁仓或者大小反了，结果还一直不停地跌的情况
       if (this.ifCutDownCloseOk) {
         classListF = this.removeBuy(classListF)
         // 加入卖出

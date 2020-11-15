@@ -8,21 +8,30 @@ const kuanji = indexType.kuanji
 
 // 定投占比
 // 得真实得定，因为这也会影响波段指数的标准仓
-const fixedInvestmentRatio = 0.38
+const fixedInvestmentRatio = 0.5
 // 指数数量
 // 机构垃圾指数会根据分类提升占比
 const indexNumber = 24
 
+function position () {
+  // 仓位取大的那个来操作
+  // 配置
+  const position = storageUtil.getData('userAccountInfo', 'positionConfig') || 100
+  // 现在
+  const nowPosition = storageUtil.getData('appConfig', 'nowPosition') || 100
+  return (position > nowPosition ? position : nowPosition) / 100
+}
+
 // 获取当天账户资产
 function getUserAsset () {
   const userFundAccountInfo = storageUtil.getData('userAccountInfo')
-  return userFundAccountInfo.asset || 0
+  return (userFundAccountInfo.asset || 0) * (position())
 }
 
 // 操作的标准
 function operateStandard () {
   const asset = getUserAsset()
-  // 波段仓占比
+  // 波段仓占比，分五次买卖
   return asset * (1 - fixedInvestmentRatio) / (indexNumber * 5)
 }
 
@@ -30,7 +39,7 @@ function operateStandard () {
 function positionStandard (indexItem) {
   const asset = getUserAsset()
   const positionAsset = asset * (1 - fixedInvestmentRatio)
-  let mix = indexItem.mix ? 1.25 : 1
+  let mix = indexItem.mix ? 1.2 : 1
   return mix * positionAsset / indexNumber
 }
 

@@ -294,15 +294,16 @@ export default {
     countPosition (data) {
       const indexNum = 24
       // 最低仓位30
-      let position = 30
+      let position = 0
       // 年线
-      position += (data.yearOk / indexNum) * 15
+      position += ((data.yearOk + data.dingtou) / indexNum) * 20
       // 半年线
-      position += ((data.halfYearOk + data.dingtou) / indexNum) * 15
+      position += ((data.halfYearOk + data.dingtou) / indexNum) * 30
       // 季度线
+      // 季度线没有特别重要
       position += ((data.quarterOk + data.jiandi) / indexNum) * 20
       // 月度线
-      position += ((data.dafan + (0.5 * data.xiaofan) * this.noSellCount) / indexNum) * 20
+      position += ((data.dafan + (0.5 * data.xiaofan) + this.noSellCount) / indexNum) * 30
       localStorage.setItem('minPosition', position)
     },
     qsStringify (query) {

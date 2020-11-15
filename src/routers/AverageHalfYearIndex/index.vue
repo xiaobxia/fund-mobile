@@ -59,6 +59,7 @@ export default {
         if (data.success) {
           const diff = data.data.rate
           const close = data.data.close
+          storageUtil.setData('indexHalfYearClose', item.key, close)
           item.netChangeRatio = diff
           storageUtil.setData('averageHalfYearIndex', item.key, diff)
           storageUtil.setData('averageHalfYearIndexClose', item.key, close)

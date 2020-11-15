@@ -11,6 +11,7 @@
         <span v-if="isInJiandi" class="fm-tag s-red">见底</span>
         <span v-if="isInOneDeep()" class="fm-tag s-red">单底</span>
         <span v-if="ifInZ45StatusNow" class="fm-tag s-black">z45</span>
+        <span v-if="isBadDown()" class="fm-tag s-black">年季危</span>
         <span v-if="isInQuarterHotToday" class="fm-tag s-black">危险</span>
         <span v-if="ifCutDownClose" class="fm-tag s-yellow">止盈线</span>
         <span v-if="isInDingtouStatus()" class="fm-tag s-red">定投</span>
@@ -25,6 +26,8 @@
         <span v-if="averageMonthIndex <= 0" class="fm-tag b-green">月下</span>
         <span v-if="!isToBeDafanToday() && isToBeXiaofanToday()" class="fm-tag s-red">小</span>
         <span v-if="isToBeDafanToday()" class="fm-tag s-red">大</span>
+        <!--月线上的大小不添加信号，因为之后要么是锁仓，要么是见顶-->
+        <span v-if="(isToBeXiaofanToday() || isToBeDafanToday()) && averageMonthIndex > 0" class="fm-tag s-blue">月上大小不锁</span>
         <span v-if="ifBianpan" class="fm-tag s-blue">变盘</span>
         <span v-if="toNoSellToCan()" class="fm-tag blue">更转交</span>
         <span v-if="ifRelieveFixLine" class="fm-tag s-blue">解定</span>
@@ -38,6 +41,7 @@
         <span v-if="ifJieZ45" class="fm-tag s-blue">解z45</span>
         <span v-if="isBad()" class="fm-tag s-black">恶化</span>
         <span v-if="isOneDeep" class="fm-tag s-blue">单底</span>
+        <span v-if="isJieOneDeep()" class="fm-tag s-blue">接单底</span>
         <!--执行部分-->
         <span
           v-if="ifQuarterHotCut()"
@@ -222,6 +226,15 @@ export default {
         'yiliao', 'shengwu',
         'jisuanji', 'dianzi', 'xinxi'
       ].indexOf(this.indexInfo.key) !== -1
+    },
+    yearClose () {
+      return storageUtil.getData('yearAverageIndex', this.indexInfo.key) || 1
+    },
+    halfYearClose () {
+      return storageUtil.getData('indexHalfYearClose', this.indexInfo.key) || 1
+    },
+    quarterClose () {
+      return storageUtil.getData('indexQuarterClose', this.indexInfo.key) || 1
     },
     // 月线
     averageMonthIndex () {
@@ -519,6 +532,10 @@ export default {
   created () {
   },
   methods: {
+    // 走坏了，季度线在年线下面
+    isBadDown () {
+      return this.quarterClose < this.yearClose
+    },
     // 解单日底
     isJieOneDeep () {
       return this.ifFourUp || this.ifInNoSellStatus()
@@ -983,9 +1000,11 @@ export default {
         }
       }
       // ----------------------应该买的部分
-      // 只有大反才可以线下面买
+      // 月线下面都会有大小反出现，所以其他买入就没什么必要
+      // 或者已经成为了大反
       if (
-        this.averageMonthIndex > 0
+        this.averageMonthIndex > 0 ||
+        this.ifInDafanNow()
       ) {
         // TODO cs-完成，没啥问题
         // TODO 两天跌了三个rate提示买
@@ -1079,6 +1098,19 @@ export default {
       // 在年下好像还行
 
       let classListF = this.copyList(classList)
+      // TODO 季度线在年线下面没有买入
+      if (this.isBadDown()) {
+        if (
+          // 不是定投
+          !this.isInDingtouStatus() &&
+          // 不是单日底
+          !this.isInOneDeep() &&
+          // 不是月上
+          this.averageMonthIndex < 0
+        ) {
+          classListF = this.removeBuy(classListF)
+        }
+      }
       // TODO cs-完成，季度热以后的转交了卖出，没啥问题
       // TODO 季度线过热，然后转交，那就提示卖出
       // 不管有没有大反什么的，因为一定会跌倒季度线为负数

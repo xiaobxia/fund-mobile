@@ -59,6 +59,7 @@ export default {
       }, {interval: 20}).then((data) => {
         if (data.success) {
           const diff = data.data.rate
+          storageUtil.setData('indexQuarterClose', item.key, data.data.close)
           storageUtil.setData('averageQuarterIndex', item.key, diff)
           item.netChangeRatio = diff
           const halfYearDiff = storageUtil.getData('averageHalfYearIndex', item.key) || 0

@@ -41,7 +41,7 @@
         <span v-if="ifJieZ45" class="fm-tag s-blue">解z45</span>
         <span v-if="isBad()" class="fm-tag s-black">恶化</span>
         <span v-if="isOneDeep" class="fm-tag s-blue">单底</span>
-        <span v-if="isJieOneDeep()" class="fm-tag s-blue">接单底</span>
+        <span v-if="isJieOneDeep()" class="fm-tag s-blue">解单底</span>
         <!--执行部分-->
         <span
           v-if="ifQuarterHotCut()"
@@ -534,11 +534,17 @@ export default {
   methods: {
     // 走坏了，季度线在年线下面
     isBadDown () {
-      return this.quarterClose < this.yearClose
+      const diff = this.countDifferenceRate(this.quarterClose, this.yearClose)
+      if (this.yearDiff > 0) {
+        return diff < 0
+      } else {
+        return diff < 2
+      }
     },
     // 解单日底
     isJieOneDeep () {
-      return this.ifFourUp || this.ifInNoSellStatus()
+      const oneDeep = storageUtil.getData('stockIndexOneDeep', this.indexInfo.key) || '否'
+      return oneDeep === '是' && (this.ifFourUp || this.ifInNoSellStatus())
     },
     isInOneDeep () {
       const oneDeep = storageUtil.getData('stockIndexOneDeep', this.indexInfo.key) || '否'

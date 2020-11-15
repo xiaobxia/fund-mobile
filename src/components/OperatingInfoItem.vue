@@ -983,16 +983,21 @@ export default {
         }
       }
       // ----------------------应该买的部分
-      // TODO cs-完成，没啥问题
-      // TODO 两天跌了三个rate提示买
-      const twoDownInfo = stockAnalysisUtil.countDown(this.netChangeRatioListLarge, 2, 2)
-      if (twoDownInfo.rate < -(this.indexInfo.rate * 3)) {
-        shouldClass = shouldBuyClass
-      }
-      // TODO cs-完
-      // TODO 三跌
-      if (this.ifThreeDown) {
-        shouldClass = shouldBuyClass
+      // 只有大反才可以线下面买
+      if (
+        this.averageMonthIndex > 0
+      ) {
+        // TODO cs-完成，没啥问题
+        // TODO 两天跌了三个rate提示买
+        const twoDownInfo = stockAnalysisUtil.countDown(this.netChangeRatioListLarge, 2, 2)
+        if (twoDownInfo.rate < -(this.indexInfo.rate * 3)) {
+          shouldClass = shouldBuyClass
+        }
+        // TODO cs-完
+        // TODO 三跌
+        if (this.ifThreeDown) {
+          shouldClass = shouldBuyClass
+        }
       }
       // TODO cs-完
       // TODO 一天4rate，受季度热影响

@@ -21,6 +21,11 @@
         <span class="name">{{recentStatus}}</span>
         <mt-button type="primary" @click="recentStatusChangeHandler">改变</mt-button>
       </div>
+      <div class="grey fm-warn">指数单日底</div>
+      <div class="filter-select-wrap">
+        <span class="name">{{oneDeep}}</span>
+        <mt-button type="primary" @click="oneDeepChangeHandler">改变</mt-button>
+      </div>
       <div class="grey fm-warn">指数是季度过热</div>
       <div class="filter-select-wrap">
         <span class="name">{{quarterHot}}</span>
@@ -112,6 +117,13 @@
         <li class="filter-select-item" v-for="(item) in filterRecentStatusList" :key="item" @click="onRecentStatusChangeHandler(item)">{{item || '正常'}}</li>
       </ul>
     </mt-popup>
+    <mt-popup
+      v-model="popupOneDeepVisible"
+      position="bottom">
+      <ul class="filter-select-list">
+        <li class="filter-select-item" v-for="(item) in filterOneDeepList" :key="item" @click="onOneDeepChangeHandler(item)">{{item || '否'}}</li>
+      </ul>
+    </mt-popup>
   </div>
 </template>
 
@@ -141,6 +153,7 @@ export default {
       popupQVisible: false,
       popupZVisible: false,
       popupRecentStatusVisible: false,
+      popupOneDeepVisible: false,
       filterList: ['正常', '小反', '大反', '禁买'],
       filterSList: ['正常', '定投', '顶部', '探底'],
       filterNList: ['正常', '锁仓', '锁转交'],
@@ -148,12 +161,14 @@ export default {
       filterQList: ['关闭', '开启'],
       filterZList: ['关闭', '开启'],
       filterRecentStatusList: ['正常', '见底'],
+      filterOneDeepList: ['是', '否'],
       niuXiong: '',
       status: '',
       noSellStatus: '',
       quarterHot: '',
       z45: '',
       recentStatus: '',
+      oneDeep: '',
       grid: {
         top: '10%',
         left: '0%',
@@ -314,6 +329,9 @@ export default {
     recentStatusChangeHandler () {
       this.popupRecentStatusVisible = true
     },
+    oneDeepChangeHandler () {
+      this.popupOneDeepVisible = true
+    },
     quarterHotChangeHandler () {
       this.popupQVisible = true
     },
@@ -401,12 +419,27 @@ export default {
       })
       this.popupRecentStatusVisible = false
     },
+    onOneDeepChangeHandler (text) {
+      const query = this.$router.history.current.query
+      this.$http.post('stock/updateStockIndex', {
+        key: query.key,
+        one_deep: text
+      }).then((data) => {
+        if (data.success) {
+          Toast.success('操作成功')
+        } else {
+          Toast.error('操作失败')
+        }
+      })
+      this.popupOneDeepVisible = false
+    },
     initPage () {
       const query = this.$router.history.current.query
       this.queryData = Object.assign({}, query)
       this.niuXiong = storageUtil.getData('stockIndexFlag', query.key)
       this.status = storageUtil.getData('stockIndexStatus', query.key) || '正常'
       this.recentStatus = storageUtil.getData('stockIndexRecentStatus', query.key) || '正常'
+      this.oneDeep = storageUtil.getData('stockIndexOneDeep', query.key) || '否'
       this.quarterHot = storageUtil.getData('stockIndexQuarterHot', query.key) || '关闭'
       this.z45 = storageUtil.getData('stockIndexZ45', query.key) || '关闭'
       this.noSellStatus = storageUtil.getData('stockIndexNoSellStatus', query.key) || '正常'

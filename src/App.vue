@@ -182,6 +182,7 @@ export default {
           const quarterHot = {}
           const z45 = {}
           const recentStatus = {}
+          const oneDeep = {}
           // 止盈线
           const cutDownClose = {}
           const targetUpClose = {}
@@ -195,6 +196,7 @@ export default {
             targetUpClose[item.key] = item.target_up_close || 0
             cutDownClose[item.key] = item.top_close || 0
             recentStatus[item.key] = item.recent_status || '正常'
+            oneDeep[item.key] = item.one_deep || '否'
           })
           storageUtil.setData('stockIndexFlag', data)
           storageUtil.setData('stockIndexStatus', status)
@@ -205,6 +207,7 @@ export default {
           storageUtil.setData('stockIndexCutDownClose', cutDownClose)
           storageUtil.setData('stockIndexTargetUpClose', targetUpClose)
           storageUtil.setData('stockIndexRecentStatus', recentStatus)
+          storageUtil.setData('stockIndexOneDeep', oneDeep)
         }),
         this.$http.get('stock/getStockMarketQuestion').then((res) => {
           const data = {}

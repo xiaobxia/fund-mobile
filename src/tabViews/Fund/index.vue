@@ -105,6 +105,22 @@
           <div class="bottom">近期涨幅</div>
         </div>
       </div>
+      <div class="img-card" @click="toPath('/page/average30Index')">
+        <div class="container">
+          <div class="content">
+            <img src="../../assets/线.png" alt="">
+          </div>
+          <div class="bottom">30日线</div>
+        </div>
+      </div>
+      <div class="img-card" @click="toPath('/page/averageIndexSort')">
+        <div class="container">
+          <div class="content">
+            <img src="../../assets/组合.png" alt="">
+          </div>
+          <div class="bottom">均线排序</div>
+        </div>
+      </div>
     </div>
   </div>
 </template>

@@ -12,6 +12,14 @@
             {{item.name}}
             <span style="float: right" :class="stockNumberClass(item.netChangeRatio)">{{item.netChangeRatio}}%</span>
           </h3>
+          <div>
+            <div
+              v-for="(closeItem) in item.averageList"
+              :key="closeItem.name"
+              class="tt"
+              :class="closeItem.class"
+            >{{closeItem.name}}</div>
+          </div>
         </div>
       </mt-cell-swipe>
     </div>
@@ -55,11 +63,14 @@ export default {
       const quarterClose = storageUtil.getData('indexQuarterClose', item.key) || 1
       const close30 = storageUtil.getData('index30Close', item.key) || 1
       item.averageList = [
-        {name: '年', close:yearClose },
-        {name: '半年', close:halfYearClose },
-        {name: '季度', close:quarterClose },
-        {name: '30', close:close30 }
+        { name: '年', close: yearClose, class: 'y' },
+        { name: '半年', close: halfYearClose, class: 'h' },
+        { name: '季度', close: quarterClose, class: 'q' },
+        { name: '30', close: close30, class: 's' }
       ]
+      item.averageList.sort((a, b) => {
+        return a.close - b.close
+      })
     },
     backHandler () {
       this.$router.history.go(-1)
@@ -69,5 +80,24 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style rel="stylesheet/scss" lang="scss" scoped>
+  .tt {
+    display: inline-block;
+    width: 24%;
+    line-height: 30px;
+    text-align: center;
+    color: #fff;
+    &.y {
+      background-color: #F56C6C;
+    }
+    &.h {
+      background-color: #E6A23C;
+    }
+    &.q {
+      background-color: #67C23A;
+    }
+    &.s {
+      background-color: #909399;
+    }
+  }
 </style>

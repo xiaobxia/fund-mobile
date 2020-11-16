@@ -414,6 +414,7 @@ export default {
       })
       const flag = stockAnalysisUtil.countUp(netChangeRatioListLarge, 4, 4).flag
       if (key === 'baijiu' && this.baijiuwarn) {
+        // 如果不是锁仓，白酒也有锁仓
         if (this.rateInfo[key] > 0) {
           if (!this.getLockInfo(key)) {
             return true

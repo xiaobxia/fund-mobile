@@ -23,15 +23,15 @@ if (month < 11) {
   const noLaji = storageUtil.getData('noBuySellConfig', 'noLaji') || false
   if (!noLaji) {
     laji = [
-      'gangtie',
-      'meitan',
-      'jijian',
-      'dichan',
-      'youse',
-      'huanbao',
-      // 军工暂时可以不是垃圾
-      // 'jungong',
-      'chuanmei'
+      // 'gangtie',
+      // 'meitan',
+      // 'jijian',
+      // 'dichan',
+      // 'youse',
+      // 'huanbao',
+      // // 军工暂时可以不是垃圾
+      // // 'jungong',
+      // 'chuanmei'
     ]
   }
 }

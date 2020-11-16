@@ -63,7 +63,7 @@ export default {
     queryData (item) {
       this.$http.get(`stock/${stockApiUtil.getAllUrl()}`, {
         code: item.code,
-        // 是代码里面有取了20天
+        // 请求了30天，但是代码里又取了20天
         days: 30
       }, {interval: 20}).then((data) => {
         if (data.success) {

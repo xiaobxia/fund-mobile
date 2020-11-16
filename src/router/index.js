@@ -61,11 +61,6 @@ const routers = [
     component: lazyLoading('FixedInvestment')
   },
   {
-    name: 'AverageHalfYearIndex',
-    path: '/page/averageHalfYearIndex',
-    component: lazyLoading('AverageHalfYearIndex')
-  },
-  {
     name: 'Schedule',
     path: '/page/schedule',
     component: lazyLoading('Schedule')
@@ -156,9 +151,19 @@ const routers = [
     component: lazyLoading('AverageMonthIndex')
   },
   {
+    name: 'Average30Index',
+    path: '/page/average30Index',
+    component: lazyLoading('Average30Index')
+  },
+  {
     name: 'AverageQuarterIndex',
     path: '/page/averageQuarterIndex',
     component: lazyLoading('AverageQuarterIndex')
+  },
+  {
+    name: 'AverageHalfYearIndex',
+    path: '/page/averageHalfYearIndex',
+    component: lazyLoading('AverageHalfYearIndex')
   },
   {
     name: 'AverageYearIndex',

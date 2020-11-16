@@ -719,8 +719,7 @@ export default {
       }
       return false
     },
-    // 是否解反弹
-    ifJieFantanToday () {
+    oldJieFanTan () {
       if (this.ifTwoUp) {
         // 两天涨了4个rate也要解反
         const info = stockAnalysisUtil.countUp(this.netChangeRatioListLarge, 2, 2)
@@ -766,6 +765,21 @@ export default {
         if (this.indexDaXiaoStatusOld === '小反' && this.ifTwoUp) {
           return true
         }
+      }
+    },
+    // 是否解反弹
+    ifJieFantanToday () {
+      // 形式不好的时候
+      if (this.indexDaXiaoStatusOld === '大反') {
+        if (this.isBadDown()) {
+          return this.oldJieFanTan()
+        } else {
+          // 重新锁上的才解反弹
+          return this.ifInNoSellStatus() && this.oldJieFanTan()
+        }
+      }
+      if (this.indexDaXiaoStatusOld === '小反') {
+        return this.oldJieFanTan()
       }
     },
     // 获取今天前面的第一个买卖信号
@@ -987,22 +1001,25 @@ export default {
         }
       }
       // 技术性卖出
-      if (buySellList[0] === sellClass) {
-        if (this.isInBad()) {
-          // 基本面恶化那就卖
+      if (!this.ifInDafanNow()) {
+        if (buySellList[0] === sellClass) {
           classList.push(sellClass)
-        } else {
-          if (this.averageMonthIndex < 0) {
-            // 在月线以下，就得卖，除了大反
-            if (!this.ifInDafanNow()) {
-              classList.push(sellClass)
-            }
-          } else {
-            // 在月线以上，并且不是反弹那就卖出
-            if (!this.ifInFantanOld()) {
-              classList.push(sellClass)
-            }
-          }
+          // if (this.isInBad()) {
+          //   // 基本面恶化那就卖
+          //   classList.push(sellClass)
+          // } else {
+          //   if (this.averageMonthIndex < 0) {
+          //     // 在月线以下，就得卖，除了大反
+          //     if (!this.ifInDafanNow()) {
+          //       classList.push(sellClass)
+          //     }
+          //   } else {
+          //     // 在月线以上，并且不是反弹那就卖出
+          //     if (!this.ifInFantanOld()) {
+          //       classList.push(sellClass)
+          //     }
+          //   }
+          // }
         }
       }
       // ----------------------应该买的部分
@@ -1031,55 +1048,57 @@ export default {
       }
       // ----------------------应该卖的部分
       // TODO 不用太担心信号少，因为从结果来看，定投会更优秀
-      // TODO 解反卖，检验过，变现都不错
-      if (this.ifTwoUp) {
-        // 两天涨了4个rate也要解反
-        const info = stockAnalysisUtil.countUp(this.netChangeRatioListLarge, 2, 2)
-        if (info.rate > (this.indexInfo.rate * 4)) {
+      if (!this.ifInDafanNow()) {
+        // 不处于大反才执行的卖出，不用担心，里面的条件会导致解反的
+        if (this.ifTwoUp) {
+          // 两天涨了4个rate也要解反
+          const info = stockAnalysisUtil.countUp(this.netChangeRatioListLarge, 2, 2)
+          if (info.rate > (this.indexInfo.rate * 4)) {
+            shouldClass = shouldSellClass
+          }
+        }
+        const a = stockAnalysisUtil.countRule(this.netChangeRatioListLarge, [true, true, false, true, true])
+        if (a.flag && a.rate > (4 * this.indexInfo.rate)) {
           shouldClass = shouldSellClass
         }
-      }
-      const a = stockAnalysisUtil.countRule(this.netChangeRatioListLarge, [true, true, false, true, true])
-      if (a.flag && a.rate > (4 * this.indexInfo.rate)) {
-        shouldClass = shouldSellClass
-      }
-      const aa = stockAnalysisUtil.countUp(this.netChangeRatioListLarge, 4, 3)
-      if (this.netChangeRatioListLarge[0] > 0 && this.netChangeRatioListLarge[3] > 0) {
-        if (aa.flag && aa.rate > (4 * this.indexInfo.rate)) {
-          shouldClass = shouldSellClass
+        const aa = stockAnalysisUtil.countUp(this.netChangeRatioListLarge, 4, 3)
+        if (this.netChangeRatioListLarge[0] > 0 && this.netChangeRatioListLarge[3] > 0) {
+          if (aa.flag && aa.rate > (4 * this.indexInfo.rate)) {
+            shouldClass = shouldSellClass
+          }
         }
-      }
-      const bb = stockAnalysisUtil.countRule(this.netChangeRatioListLarge, [true, false, true])
-      if (bb.flag && bb.rate > (4 * this.indexInfo.rate)) {
-        // 暂时不解反
-        if (!this.ifInDafanNow()) {
-          shouldClass = shouldSellClass
-        }
-      }
-      // TODO cs-完成，还行吧
-      // TODO 月线以下涨3天，并且幅度超过2个rate就发出卖出信号
-      if (this.averageMonthIndex < 0 && this.ifThreeUp) {
-        const info = stockAnalysisUtil.countUp(this.netChangeRatioListLarge, 3, 3)
-        if (info.rate > (this.indexInfo.rate * 4)) {
-          shouldClass = shouldSellClass
-        }
-      }
-      // TODO cs-完成，没啥问题
-      // TODO 涨4天了发出应该卖
-      if (this.ifFourUp) {
-        if (!this.ifInFantanOld()) {
-          shouldClass = shouldSellClass
-        }
-      }
-      // TODO 垃圾指数涨2天就卖
-      if (this.ifTwoUp) {
-        // 不处于大反，小反的可以卖
-        if (this.isInBad()) {
-          // 恶化的就得卖
-          shouldClass = shouldSellClass
-        } else {
+        const bb = stockAnalysisUtil.countRule(this.netChangeRatioListLarge, [true, false, true])
+        if (bb.flag && bb.rate > (4 * this.indexInfo.rate)) {
+          // 暂时不解反
           if (!this.ifInDafanNow()) {
             shouldClass = shouldSellClass
+          }
+        }
+        // TODO cs-完成，还行吧
+        // TODO 月线以下涨3天，并且幅度超过2个rate就发出卖出信号
+        if (this.averageMonthIndex < 0 && this.ifThreeUp) {
+          const info = stockAnalysisUtil.countUp(this.netChangeRatioListLarge, 3, 3)
+          if (info.rate > (this.indexInfo.rate * 4)) {
+            shouldClass = shouldSellClass
+          }
+        }
+        // TODO cs-完成，没啥问题
+        // TODO 涨4天了发出应该卖
+        if (this.ifFourUp) {
+          if (!this.ifInDafanNow()) {
+            shouldClass = shouldSellClass
+          }
+        }
+        // TODO 垃圾指数涨2天就卖
+        if (this.ifTwoUp) {
+          // 不处于大反，小反的可以卖
+          if (this.isInBad()) {
+            // 恶化的就得卖
+            shouldClass = shouldSellClass
+          } else {
+            if (!this.ifInDafanNow()) {
+              shouldClass = shouldSellClass
+            }
           }
         }
       }

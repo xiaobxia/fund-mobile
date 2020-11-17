@@ -775,7 +775,7 @@ export default {
           return this.oldJieFanTan()
         } else {
           // 重新锁上的才解反弹
-          return this.ifInNoSellStatus() && this.oldJieFanTan()
+          return this.ifInNoSellStatus()
         }
       }
       if (this.indexDaXiaoStatusOld === '小反') {

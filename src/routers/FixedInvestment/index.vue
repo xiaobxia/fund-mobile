@@ -19,7 +19,8 @@
             <div slot="title">
               <h3>
                 <span class="index-name">{{item.code}} {{item.name}}</span>
-                <span v-if="isBad(item.key)" class="fm-tag s-black">恶化</span>
+                <span v-if="isInDingtouStatus(item.key)" class="fm-tag s-red">定投</span>
+                <span v-if="isBadDown(item.key)" class="fm-tag s-black">年季危</span>
                 <span style="float: right" :class="stockNumberClass(getRateByCode(item.code))">{{getRateByCode(item.code)}}</span>
               </h3>
               <p class="netChange wn">
@@ -543,6 +544,15 @@ export default {
     yearDiff (key) {
       return storageUtil.getData('yearAverageIndexDiff', key) || 0
     },
+    yearClose (key) {
+      return storageUtil.getData('yearAverageIndex', key) || 1
+    },
+    halfYearClose (key) {
+      return storageUtil.getData('indexHalfYearClose', key) || 1
+    },
+    quarterClose (key) {
+      return storageUtil.getData('indexQuarterClose', key) || 1
+    },
     // 指数所处阶段
     indexStage (key) {
       const status = storageUtil.getData('stockIndexStatus', key)
@@ -561,6 +571,15 @@ export default {
     isInDingtouStatus (key) {
       return this.indexStage(key) === '定投' && !this.ifRelieveFixLine(key)
     },
+    // 走坏了，季度线在年线下面
+    isBadDown (key) {
+      const diff = this.countDifferenceRate(this.quarterClose(key), this.yearClose(key))
+      if (this.yearDiff(key) > 0) {
+        return diff < 0
+      } else {
+        return diff < 2
+      }
+    },
     getIndex (key) {
       for (let i = 0; i < indexList.length; i++) {
         const item = indexList[i]
@@ -570,37 +589,37 @@ export default {
       }
       return {}
     },
-    // 是否恶化
-    isBad (key) {
-      // 基本面恶化就只有锁仓买了
-      // 年线和半年线都得在下面，年线上和半年线下涨的概率该是很大的，我研究过了
-      if (!this.getIndex(key).relieveFixLine) {
-        return false
-      }
-      if (
-        this.averageQuarter(key) < 0 &&
-        this.averageHalfYear(key) < 0 &&
-        this.yearDiff(key) < 0
-      ) {
-        // 同时也不是定投阶段
-        if (!this.isInDingtouStatus(key)) {
-          // 月线在下面
-          if (this.averageMonthIndex(key) < 0) {
-            return true
-          }
-        }
-      }
-      return false
-    },
+    // // 是否恶化
+    // isBad (key) {
+    //   // 基本面恶化就只有锁仓买了
+    //   // 年线和半年线都得在下面，年线上和半年线下涨的概率该是很大的，我研究过了
+    //   if (!this.getIndex(key).relieveFixLine) {
+    //     return false
+    //   }
+    //   if (
+    //     this.averageQuarter(key) < 0 &&
+    //     this.averageHalfYear(key) < 0 &&
+    //     this.yearDiff(key) < 0
+    //   ) {
+    //     // 同时也不是定投阶段
+    //     if (!this.isInDingtouStatus(key)) {
+    //       // 月线在下面
+    //       if (this.averageMonthIndex(key) < 0) {
+    //         return true
+    //       }
+    //     }
+    //   }
+    //   return false
+    // },
     // 是否处于恶化
-    isInBad (key) {
-      // 是否基本面恶化，是的话只有月线在上才能买，不管什么大小反
-      const question9 = storageUtil.getData('stockMarketQuestion', 'question_9') || '否'
-      if (question9 === '是') {
-        return this.isBad(key)
-      }
-      return false
-    },
+    // isInBad (key) {
+    //   // 是否基本面恶化，是的话只有月线在上才能买，不管什么大小反
+    //   const question9 = storageUtil.getData('stockMarketQuestion', 'question_9') || '否'
+    //   if (question9 === '是') {
+    //     return this.isBad(key)
+    //   }
+    //   return false
+    // },
     queryData (item) {
       return this.$http.get(`stock/${stockApiUtil.getAllUrl()}`, {
         code: item.code,
@@ -729,7 +748,7 @@ export default {
           // 其他
           let buyBaseInfo = 0
           if (['买', '跌少', '跌多'].indexOf(infoList[0]) !== -1) {
-            if (!this.isInBad(item.key)) {
+            if (!this.isBadDown(item.key)) {
               item.ifBuy = true
               buyBaseInfo = parseInt(buyNumber / 10)
               item.buyNum = buyBaseInfo

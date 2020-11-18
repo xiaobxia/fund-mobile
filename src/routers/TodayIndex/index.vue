@@ -66,7 +66,8 @@ export default {
       myFundList: [],
       mySum: 0,
       indexSum: 0,
-      otherSum: 0
+      otherSum: 0,
+      indexAverageRate: 0
     }
   },
   computed: {

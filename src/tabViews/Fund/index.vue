@@ -113,6 +113,14 @@
           <div class="bottom">30日线</div>
         </div>
       </div>
+      <div class="img-card" @click="toPath('/page/quarterYearIndex')">
+        <div class="container">
+          <div class="content">
+            <img src="../../assets/季度报告.png" alt="">
+          </div>
+          <div class="bottom">季度年线</div>
+        </div>
+      </div>
       <div class="img-card" @click="toPath('/page/averageIndexSort')">
         <div class="container">
           <div class="content">

@@ -236,6 +236,9 @@ export default {
     quarterClose () {
       return storageUtil.getData('indexQuarterClose', this.indexInfo.key) || 1
     },
+    index30Close () {
+      return storageUtil.getData('index30Close', this.indexInfo.key) || 1
+    },
     // 月线
     averageMonthIndex () {
       return storageUtil.getData('averageMonth', this.indexInfo.key) || 0
@@ -534,11 +537,21 @@ export default {
   methods: {
     // 走坏了，季度线在年线下面
     isBadDown () {
-      const diff = this.countDifferenceRate(this.quarterClose, this.yearClose)
-      if (this.yearDiff > 0) {
-        return diff < 0
+      const qyChange30h = storageUtil.getData('noBuySellConfig', 'qyChange30h') || false
+      if (qyChange30h) {
+        const diff = this.countDifferenceRate(this.index30Close, this.halfYearClose)
+        if (this.yearDiff > 0) {
+          return diff < 0
+        } else {
+          return diff < 2
+        }
       } else {
-        return diff < 2
+        const diff = this.countDifferenceRate(this.quarterClose, this.yearClose)
+        if (this.yearDiff > 0) {
+          return diff < 0
+        } else {
+          return diff < 2
+        }
       }
     },
     // 解单日底

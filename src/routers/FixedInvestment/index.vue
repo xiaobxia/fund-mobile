@@ -553,6 +553,9 @@ export default {
     quarterClose (key) {
       return storageUtil.getData('indexQuarterClose', key) || 1
     },
+    index30Close (key) {
+      return storageUtil.getData('index30Close', key) || 1
+    },
     // 指数所处阶段
     indexStage (key) {
       const status = storageUtil.getData('stockIndexStatus', key)
@@ -573,11 +576,21 @@ export default {
     },
     // 走坏了，季度线在年线下面
     isBadDown (key) {
-      const diff = this.countDifferenceRate(this.quarterClose(key), this.yearClose(key))
-      if (this.yearDiff(key) > 0) {
-        return diff < 0
+      const qyChange30h = storageUtil.getData('noBuySellConfig', 'qyChange30h') || false
+      if (qyChange30h) {
+        const diff = this.countDifferenceRate(this.index30Close(key), this.halfYearClose(key))
+        if (this.yearDiff(key) > 0) {
+          return diff < 0
+        } else {
+          return diff < 2
+        }
       } else {
-        return diff < 2
+        const diff = this.countDifferenceRate(this.quarterClose(key), this.yearClose(key))
+        if (this.yearDiff(key) > 0) {
+          return diff < 0
+        } else {
+          return diff < 2
+        }
       }
     },
     getIndex (key) {

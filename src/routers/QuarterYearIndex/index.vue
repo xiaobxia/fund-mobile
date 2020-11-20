@@ -6,6 +6,9 @@
       </mt-button>
     </mt-header>
     <div class="main-body">
+      <div class="warn-wrap">
+        <div class="fm-warn blue">很多指数在季度年下，确实危险，可以转30日半年线</div>
+      </div>
       <mt-cell-swipe v-for="(item) in list" :key="item.code" :class="item.kong ? 'kong':''">
         <div slot="title">
           <h3>

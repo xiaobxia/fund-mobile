@@ -9,8 +9,11 @@ const laji = indexType.laji
 const kuanji = indexType.kuanji
 
 // 11月到12月机构结算
-// TODO 机构结算好像没什么用
 function getJiesuan () {
+  const changeStyle = storageUtil.getData('noBuySellConfig', 'changeStyle') || false
+  if (changeStyle) {
+    return -1
+  }
   // const d = dateUtil.getDate()
   // const day = d.getDate()
   // const month = d.getMonth() + 1

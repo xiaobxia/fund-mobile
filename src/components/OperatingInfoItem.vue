@@ -1213,10 +1213,11 @@ export default {
           }
           // 在趋势中，什么卖出信号都不用管
           classListF = this.removeSell(classListF)
-        }
-        // 不确定趋势3涨就不去锁
-        if (!this.ifThreeUp) {
-          classListF = this.removeSell(classListF)
+        } else {
+          // 不确定趋势，3涨以上还是卖出
+          if (!this.ifThreeUp) {
+            classListF = this.removeSell(classListF)
+          }
         }
       }
       // TODO cs-完成

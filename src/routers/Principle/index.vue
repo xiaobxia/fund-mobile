@@ -28,7 +28,7 @@
         </mt-cell-swipe>
         <mt-cell-swipe>
           <div slot="title">
-            <h3>风格反转<span>11月到12月，大家都开始说别买涨幅大的，市场也开始炒年涨幅小的</span></h3>
+            <h3>风格反转<span style="color: red">11月到12月，大家都开始说别买涨幅大的，市场也开始炒年涨幅小的</span></h3>
           </div>
           <div class="right-wrap">
             <mt-switch v-model="changeStyle" @change="stateChangeHandler"></mt-switch>

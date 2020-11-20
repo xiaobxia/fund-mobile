@@ -67,6 +67,7 @@ export default {
           const updateData = {}
           if (yearDiff > 0 && halfYearDiff > 0) {
             if (diff <= -5) {
+              // 季度见底还是维持原来的逻辑，因为用季年线来判断的话，其实大反就会一直锁仓了，效果差不多
               if (['jijian', 'dichan', 'meitan'].indexOf(item.key) === -1) {
                 updateData.recent_status = '见底'
               }

@@ -146,6 +146,7 @@ function getBuyNumber (hasCount, rowBuy, indexRedistributionStandard) {
 // 买入金额再分配
 function buyNumberRedistribution (indexItem, hasCount, buyNumber, marketInfo) {
   const indexRedistributionStandard = positionStandard(indexItem)
+  console.log(indexRedistributionStandard)
   // 年排行在前面的，给更高仓位配比
   let indexYearDiffFactor = factorUtil.getIndexYearDiffFactor(indexItem.key, 'buy')
   // 指数处于的阶段
@@ -330,6 +331,8 @@ const operatingTooltip = {
     //   return 'warn'
     // }
     return ''
-  }
+  },
+  // 仓位标准
+  positionStandard
 }
 export default operatingTooltip

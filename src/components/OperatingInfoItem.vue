@@ -42,6 +42,7 @@
         <span v-if="isBad()" class="fm-tag s-black">恶化</span>
         <span v-if="isOneDeep" class="fm-tag s-blue">单底</span>
         <span v-if="isJieOneDeep()" class="fm-tag s-blue">解单底</span>
+        <span v-if="positionQYHigh" class="fm-tag s-black">危高仓</span>
         <!--执行部分-->
         <span
           v-if="ifQuarterHotCut()"
@@ -112,7 +113,9 @@ const kuanji = indexType.kuanji
 export default {
   name: 'OperatingInfoItem',
   data () {
-    return {}
+    return {
+      positionQYHigh: false
+    }
   },
   props: {
     indexInfo: {
@@ -530,6 +533,9 @@ export default {
       // 是不是全面疯牛
       const question10 = storageUtil.getData('stockMarketQuestion', 'question_10')
       return question10 === '是'
+    },
+    positionStandard () {
+      return operatingTooltip.positionStandard(this.indexInfo)
     }
   },
   created () {
@@ -1148,6 +1154,15 @@ export default {
           this.averageMonthIndex < 0
         ) {
           classListF = this.removeBuy(classListF)
+          // 仓位不能太高
+          if (this.hasCount > (this.positionStandard * 0.5)) {
+            this.positionQYHigh = true
+            // 如果仓位高了，涨了就卖
+            // 没必要考虑大反什么的，因为是仓位太高了，才让卖出的
+            if (this.rate > 0) {
+              classListF.push(sellClass)
+            }
+          }
         }
       }
       // TODO cs-完成，季度热以后的转交了卖出，没啥问题

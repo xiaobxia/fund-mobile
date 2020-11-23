@@ -1055,6 +1055,14 @@ export default {
         if (twoDownInfo.rate < -(this.indexInfo.rate * 3)) {
           shouldClass = shouldBuyClass
         }
+        const aInfo = stockAnalysisUtil.countDown(this.netChangeRatioListLarge, 4, 3)
+        if (aInfo.rate < -(this.indexInfo.rate * 3)) {
+          shouldClass = shouldBuyClass
+        }
+        const bInfo = stockAnalysisUtil.countRule(this.netChangeRatioListLarge, [false, true, false])
+        if (bInfo.rate < -(this.indexInfo.rate * 3)) {
+          shouldClass = shouldBuyClass
+        }
       }
       // TODO cs-完
       // TODO 三跌

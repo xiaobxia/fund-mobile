@@ -584,6 +584,9 @@ export default {
     },
     // 走坏了，季度线在年线下面
     isBadDown (key) {
+      if (key === 'baijiu' || key === 'huangjin') {
+        return false
+      }
       const qyChange30h = storageUtil.getData('noBuySellConfig', 'qyChange30h') || false
       if (qyChange30h) {
         const diff = this.countDifferenceRate(this.index30Close(key), this.halfYearClose(key))

@@ -19,8 +19,6 @@
             <div slot="title">
               <h3>
                 <span class="index-name">{{item.code}} {{item.name}}</span>
-                <span v-if="isInDingtouStatus(item.key)" class="fm-tag s-red">定投</span>
-                <span v-if="isBadDown(item.key)" class="fm-tag s-black">年季危</span>
                 <span style="float: right" :class="stockNumberClass(getRateByCode(item.code))">{{getRateByCode(item.code)}}</span>
               </h3>
               <p class="netChange wn">
@@ -46,6 +44,8 @@
           <h3>
             <span class="index-name">{{item.name}}</span>
             <span v-if="getLockInfo(item.key)" class="fm-tag s-red">锁仓</span>
+            <span v-if="isInDingtouStatus(item.key)" class="fm-tag s-red">定投</span>
+            <span v-if="isBadDown(item.key)" class="fm-tag s-black">年季危</span>
             <span v-if="item.key === 'baijiu' && baijiuwarn" class="fm-tag s-green">{{baijiuwarn}}</span>
             <span style="float: right" :class="stockNumberClass(rateInfo[item.key])">{{rateInfo[item.key]}}%</span>
           </h3>

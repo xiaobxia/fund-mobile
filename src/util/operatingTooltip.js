@@ -236,7 +236,7 @@ const operatingTooltip = {
     let indexDaVFactor = factorUtil.getDaVFactor(indexItem.key, 'buy')
     let indexNetChangeRatioRateFactor = 1
     if (ifChange) {
-      indexNetChangeRatioRateFactor = factorUtil.getIndexNetChangeRatioRateFactor(indexItem.rate, marketInfo.netChangeRatio, 'buy')
+      indexNetChangeRatioRateFactor = factorUtil.getIndexNetChangeRatioRateFactor(indexItem.rate, marketInfo, 'buy')
     }
     let indexManyDownFactor = factorUtil.getIndexManyDownFactor(indexItem.rate, marketInfo.netChangeRatioList, 'buy')
     // 指数处于的阶段
@@ -283,7 +283,7 @@ const operatingTooltip = {
     let indexJigouFactor = factorUtil.getIndexJigouFactor(indexItem.key, 'sell')
     let indexLajiFactor = factorUtil.getIndexLajiFactor(indexItem.key, 'sell')
     let indexHighRateFactor = factorUtil.getIndexHighRateFactor(indexItem.key, 'sell')
-    let indexNetChangeRatioRateFactor = factorUtil.getIndexNetChangeRatioRateFactor(indexItem.rate, marketInfo.netChangeRatio, 'sell')
+    let indexNetChangeRatioRateFactor = factorUtil.getIndexNetChangeRatioRateFactor(indexItem.rate, marketInfo, 'sell')
     let indexDaVFactor = factorUtil.getDaVFactor(indexItem.key, 'sell')
     let sellNumber =
       sellBase *

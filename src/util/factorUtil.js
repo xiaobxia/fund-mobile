@@ -269,18 +269,45 @@ export default {
     return 1
   },
   // 指数涨跌幅度对买入金额的影响
-  getIndexNetChangeRatioRateFactor: function (averageRate, rate, buySell) {
-    let rateAbs = Math.abs(rate)
+  getIndexNetChangeRatioRateFactor: function (averageRate, marketInfo, buySell) {
+    const rate = marketInfo.netChangeRatio || 0
+    const netChangeRatioList = marketInfo.netChangeRatioList
     // 暂时只对买入有影响
     if (buySell === 'buy') {
-    // 买
-      if (rate <= 0) {
-        if (rateAbs < (1.5 * averageRate)) {
-          return 0.1 + (rateAbs * 0.9 / (1.5 * averageRate))
-        } else if (rateAbs > (3 * averageRate)) {
+      // 买
+      // 三跌买
+      if (
+        netChangeRatioList[0] <= 0 &&
+        netChangeRatioList[1] <= 0 &&
+        netChangeRatioList[2] <= 0
+      ) {
+        const sR = netChangeRatioList[0] + netChangeRatioList[1] + netChangeRatioList[2]
+        let flag = Math.abs(sR) / (4 * averageRate)
+        if (flag > 1) {
           return 1
         } else {
-          return 1 + ((rateAbs - (1.5 * averageRate)) * 0.5 / (1.5 * averageRate))
+          return flag
+        }
+      }
+      // 2跌买
+      if (
+        netChangeRatioList[0] <= 0 &&
+        netChangeRatioList[1] <= 0
+      ) {
+        const sR = netChangeRatioList[0] + netChangeRatioList[1]
+        let flag = Math.abs(sR) / (3 * averageRate)
+        if (flag > 1) {
+          return 1
+        } else {
+          return flag
+        }
+      }
+      if (rate <= 0) {
+        let flag = Math.abs(rate) / (2 * averageRate)
+        if (flag > 1) {
+          return 1
+        } else {
+          return flag
         }
       } else {
         return 1

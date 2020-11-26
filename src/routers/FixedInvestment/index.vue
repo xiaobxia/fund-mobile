@@ -727,13 +727,13 @@ export default {
               }
             }
           }
-          let canFix = storageUtil.getData('stockIndexCanFix', item.key)
-          if (canFix !== false && canFix !== true) {
-            canFix = true
-          }
-          if (!canFix) {
-            infoList[0] = '禁'
-          }
+          // let canFix = storageUtil.getData('stockIndexCanFix', item.key)
+          // if (canFix !== false && canFix !== true) {
+          //   canFix = true
+          // }
+          // if (!canFix) {
+          //   infoList[0] = '禁'
+          // }
           if (this.ifFengNiu()) {
             if (this.averageMonthIndex(item.key) < -4) {
               infoList[0] = '强卖止盈'

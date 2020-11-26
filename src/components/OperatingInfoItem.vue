@@ -50,7 +50,7 @@
         >清{{ifThreeUp ? '0.3': '1/6'}}</span>
         <span v-if="ifQuarterHotNow" class="fm-tag s-black">季</span>
         <span
-          v-if="ifFixIndex && ifQuarterHotCutNow()"
+          v-if="ifFixIndex && ifSellFix()"
           class="fm-tag s-black"
         >卖定{{getFixSellRate()}}</span>
         <span v-if="ifJieTargetUpCloseLock" class="fm-tag s-black">目标0.3</span>
@@ -790,14 +790,19 @@ export default {
     ifJieFantanToday () {
       // 形式不好的时候
       if (this.indexDaXiaoStatusOld === '大反') {
+        // 锁仓就解反
+        if (this.ifInNoSellStatus()) {
+          return true
+        }
+        // 情况坏就走老路线
         if (this.isBadDown()) {
           return this.oldJieFanTan()
-        } else {
-          // 重新锁上的才解反弹
-          return this.ifInNoSellStatus()
         }
       }
       if (this.indexDaXiaoStatusOld === '小反') {
+        if (this.ifInNoSellStatus()) {
+          return true
+        }
         return this.oldJieFanTan()
       }
     },
@@ -907,7 +912,7 @@ export default {
         !this.ifInNoSellStatus()
       )
     },
-    ifQuarterHotCutNow () {
+    ifSellFix () {
       return (this.ifQuarterHotCut() && this.ifQuarterHotNow) ||
         (this.isInQuarterHotToday && this.QHS()) ||
         this.YHS()

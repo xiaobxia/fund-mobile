@@ -37,7 +37,8 @@
           'has': hasInfo[item.name],
           'no-has': !hasInfo[item.name],
           'line-type': true,
-          'sell': ifSellShow(item.key)
+          'sell': ifSellShow(item.key),
+          'lock': isBadDown(item.key)
         }"
       >
         <div slot="title">

@@ -43,9 +43,8 @@ function positionStandard (indexItem) {
   return mix * positionAsset / indexNumber
 }
 
-// 基于市场的购买基准
-function getBuyBase (type, marketInfo) {
-  let finalFactor = type === '熊' ? 1 : 0.8
+function factorBuyBase (marketInfo) {
+  let finalFactor = 1
   // 买卖信号因子
   finalFactor = finalFactor * factorUtil.buySellFactor(
     marketInfo.buyFlagCount,
@@ -60,18 +59,25 @@ function getBuyBase (type, marketInfo) {
   // 市场择时
   finalFactor = finalFactor * factorUtil.assetMarketTimeFactor('buy')
   // 仓位修正
-  finalFactor = finalFactor * factorUtil.positionFactor('buy')
+  finalFactor = finalFactor * factorUtil.positionFactor('buy', true)
+  // 年线接半年线0.34
   // 年线数量
   finalFactor = finalFactor * factorUtil.indexYearCountFactor('buy')
   // 半年线数量
   finalFactor = finalFactor * factorUtil.indexHalfYearCountFactor('buy')
   // 结果
+  return finalFactor
+}
+
+// 基于市场的购买基准
+function getBuyBase (type, marketInfo) {
+  // 不区分熊不熊的了
+  let finalFactor = factorBuyBase(marketInfo)
   return finalFactor * operateStandard()
 }
 
-// 基于市场的卖出基准
-function getSellBase (type, marketInfo) {
-  let finalFactor = type === '熊' ? 1 : 0.8
+function factorSellBase (marketInfo) {
+  let finalFactor = 1
   // 买卖信号因子
   finalFactor = finalFactor * factorUtil.buySellFactor(
     marketInfo.buyFlagCount,
@@ -86,12 +92,19 @@ function getSellBase (type, marketInfo) {
   // 市场择时
   finalFactor = finalFactor * factorUtil.assetMarketTimeFactor('sell')
   // 仓位修正
-  finalFactor = finalFactor * factorUtil.positionFactor('sell')
+  finalFactor = finalFactor * factorUtil.positionFactor('sell', true)
   // 年线数量
-  finalFactor = finalFactor * factorUtil.indexYearCountFactor('buy')
+  finalFactor = finalFactor * factorUtil.indexYearCountFactor('sell')
   // 半年线数量
-  finalFactor = finalFactor * factorUtil.indexHalfYearCountFactor('buy')
+  finalFactor = finalFactor * factorUtil.indexHalfYearCountFactor('sell')
   // 结果
+  // 卖的标准大一点
+  return finalFactor
+}
+
+// 基于市场的卖出基准
+function getSellBase (type, marketInfo) {
+  let finalFactor = factorSellBase(marketInfo)
   // 卖的标准大一点
   return finalFactor * operateStandard() * 3 / 2
 }
@@ -146,7 +159,6 @@ function getBuyNumber (hasCount, rowBuy, indexRedistributionStandard) {
 // 买入金额再分配
 function buyNumberRedistribution (indexItem, hasCount, buyNumber, marketInfo) {
   const indexRedistributionStandard = positionStandard(indexItem)
-  console.log(indexRedistributionStandard)
   // 年排行在前面的，给更高仓位配比
   let indexYearDiffFactor = factorUtil.getIndexYearDiffFactor(indexItem.key, 'buy')
   // 指数处于的阶段
@@ -157,26 +169,7 @@ function buyNumberRedistribution (indexItem, hasCount, buyNumber, marketInfo) {
       indexYearDiffFactor = 1
     }
   }
-  let finalFactor = 1
-  // 买卖信号因子
-  finalFactor = finalFactor * factorUtil.buySellFactor(
-    marketInfo.buyFlagCount,
-    marketInfo.sellFlagCount,
-    indexNumber,
-    'buy'
-  )
-  // 锁仓因子
-  finalFactor = finalFactor * factorUtil.noSellCountFactor(marketInfo.noSellCount, indexNumber, 'buy')
-  // 年线数量
-  finalFactor = finalFactor * factorUtil.indexYearCountFactor('buy')
-  // 半年线数量
-  finalFactor = finalFactor * factorUtil.indexHalfYearCountFactor('buy')
-  // 市场状况
-  finalFactor = finalFactor * factorUtil.stockMarketQuestionFactor('buy')
-  // 市场择时
-  finalFactor = finalFactor * factorUtil.assetMarketTimeFactor('buy')
-  // 仓位修正
-  finalFactor = finalFactor * factorUtil.positionFactor('buy', true)
+  let finalFactor = factorBuyBase(marketInfo)
   return getBuyNumber(hasCount, buyNumber, indexRedistributionStandard * indexYearDiffFactor * finalFactor)
 }
 
@@ -197,26 +190,7 @@ function sellNumberRedistribution (indexItem, hasCount, sellNumber, marketInfo) 
   const indexRedistributionStandard = positionStandard(indexItem)
   // 年排行在前面的，给更高仓位配比，卖出也用buy的
   let indexYearDiffFactor = factorUtil.getIndexYearDiffFactor(indexItem.key, 'buy')
-  let finalFactor = 1
-  // 买卖信号因子
-  finalFactor = finalFactor * factorUtil.buySellFactor(
-    marketInfo.buyFlagCount,
-    marketInfo.sellFlagCount,
-    indexNumber,
-    'sell'
-  )
-  // 锁仓因子
-  finalFactor = finalFactor * factorUtil.noSellCountFactor(marketInfo.noSellCount, indexNumber, 'sell')
-  // 年线数量
-  finalFactor = finalFactor * factorUtil.indexYearCountFactor('buy')
-  // 半年线数量
-  finalFactor = finalFactor * factorUtil.indexHalfYearCountFactor('buy')
-  // 市场状况
-  finalFactor = finalFactor * factorUtil.stockMarketQuestionFactor('sell')
-  // 市场择时
-  finalFactor = finalFactor * factorUtil.assetMarketTimeFactor('sell')
-  // 仓位修正
-  finalFactor = finalFactor * factorUtil.positionFactor('sell', true)
+  let finalFactor = factorSellBase(marketInfo)
   return getSellNumber(hasCount, sellNumber, indexRedistributionStandard * indexYearDiffFactor * finalFactor)
 }
 
@@ -224,7 +198,6 @@ const operatingTooltip = {
   getIndexBuyNumber (type, indexItem, marketInfo, hasCount, ifChange) {
     // 标准到百
     let buyBase = getBuyBase(type, marketInfo)
-    let indexAverageHalfYearFactor = factorUtil.getAverageHalfYearFactor(indexItem.key, 'buy')
     let indexAverageFactor = factorUtil.getIndexAverageFactor(indexItem.key, 'buy')
     let monthAverageFactor = factorUtil.getIndexAverageMonthFactor(indexItem.key, indexItem.reduceLine, 'buy') || 1
     let indexMonthDiffFactor = factorUtil.getIndexMonthDiffFactor(indexItem.key, 'buy')
@@ -234,11 +207,14 @@ const operatingTooltip = {
     let indexLajiFactor = factorUtil.getIndexLajiFactor(indexItem.key, 'buy')
     let indexHighRateFactor = factorUtil.getIndexHighRateFactor(indexItem.key, 'buy')
     let indexDaVFactor = factorUtil.getDaVFactor(indexItem.key, 'buy')
-    let indexNetChangeRatioRateFactor = 1
-    if (ifChange) {
-      indexNetChangeRatioRateFactor = factorUtil.getIndexNetChangeRatioRateFactor(indexItem.rate, marketInfo, 'buy')
-    }
+    // 多跌因子
     let indexManyDownFactor = factorUtil.getIndexManyDownFactor(indexItem.rate, marketInfo.netChangeRatioList, 'buy')
+    if (ifChange) {
+      // 没有多跌的情况才用这个
+      if (indexManyDownFactor <= 1) {
+        indexManyDownFactor = factorUtil.getIndexNetChangeRatioRateFactor(indexItem.rate, marketInfo, 'buy')
+      }
+    }
     // 指数处于的阶段
     const indexStatus = storageUtil.getData('stockIndexStatus', indexItem.key)
     // 定投的可以多买点
@@ -252,29 +228,22 @@ const operatingTooltip = {
     }
     let buyNumber =
       buyBase *
-      indexAverageHalfYearFactor *
       indexAverageFactor *
       indexMonthDiffFactor *
       indexYearDiffFactor *
       indexMarketTimeFactor *
       indexJigouFactor *
       indexHighRateFactor *
-      indexNetChangeRatioRateFactor *
       indexLajiFactor *
       indexManyDownFactor *
       monthAverageFactor *
       indexDaVFactor
-    // if (indexItem.key === 'yinhang') {
-    //   console.log(buyNumber)
-    //   console.log(hasCount)
-    // }
     let finalBuyNumber = buyNumberRedistribution(indexItem, hasCount, buyNumber, marketInfo)
     return Math.round(finalBuyNumber / 100) * 100
   },
   getIndexSellNumber (type, indexItem, marketInfo, hasCount) {
     // 标准到百
     let sellBase = getSellBase(type, marketInfo)
-    let indexAverageHalfYearFactor = factorUtil.getAverageHalfYearFactor(indexItem.key, 'sell')
     let indexAverageFactor = factorUtil.getIndexAverageFactor(indexItem.key, 'sell')
     let monthAverageFactor = factorUtil.getIndexAverageMonthFactor(indexItem.key, indexItem.reduceLine, 'sell') || 1
     let indexMonthDiffFactor = factorUtil.getIndexMonthDiffFactor(indexItem.key, 'sell')
@@ -287,7 +256,6 @@ const operatingTooltip = {
     let indexDaVFactor = factorUtil.getDaVFactor(indexItem.key, 'sell')
     let sellNumber =
       sellBase *
-      indexAverageHalfYearFactor *
       indexAverageFactor *
       indexMonthDiffFactor *
       indexYearDiffFactor *

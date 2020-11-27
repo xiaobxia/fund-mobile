@@ -59,7 +59,7 @@ export default {
       }
     }
     if (all > 0) {
-      let factor = 0.66 + ((has / all) * 0.34)
+      let factor = 0.83 + ((has / all) * 0.17)
       if (buySell === 'buy') {
         return factor
       } else {
@@ -81,7 +81,7 @@ export default {
       }
     }
     if (all > 0) {
-      let factor = 0.66 + ((has / all) * 0.34)
+      let factor = 0.83 + ((has / all) * 0.17)
       if (buySell === 'buy') {
         return factor
       } else {
@@ -276,19 +276,20 @@ export default {
     if (buySell === 'buy') {
       // 买
       // 三跌买
-      if (
-        netChangeRatioList[0] <= 0 &&
-        netChangeRatioList[1] <= 0 &&
-        netChangeRatioList[2] <= 0
-      ) {
-        const sR = netChangeRatioList[0] + netChangeRatioList[1] + netChangeRatioList[2]
-        let flag = Math.abs(sR) / (4 * averageRate)
-        if (flag > 1) {
-          return 1
-        } else {
-          return flag
-        }
-      }
+      // 3跌在多跌因子里面处理
+      // if (
+      //   netChangeRatioList[0] <= 0 &&
+      //   netChangeRatioList[1] <= 0 &&
+      //   netChangeRatioList[2] <= 0
+      // ) {
+      //   const sR = netChangeRatioList[0] + netChangeRatioList[1] + netChangeRatioList[2]
+      //   let flag = Math.abs(sR) / (4 * averageRate)
+      //   if (flag > 1) {
+      //     return 1
+      //   } else {
+      //     return flag
+      //   }
+      // }
       // 2跌买
       if (
         netChangeRatioList[0] <= 0 &&
@@ -380,20 +381,21 @@ export default {
   },
   // 指数月线平均因子
   getIndexAverageMonthFactor: function (indexKey, reduceLine, buySell) {
-    let indexAverage = storageUtil.getData('averageMonth', indexKey) || 0
-    let factor = 1
-    // 月线过热的话得要减少买入
-    if (indexAverage > 0) {
-      factor = 1 - (0.5 * (indexAverage / (reduceLine * 2)))
-    }
-    if (factor < 0.5) {
-      factor = 0.5
-    }
-    if (buySell === 'buy') {
-      return factor
-    } else {
-      return 1 / factor
-    }
+    // let indexAverage = storageUtil.getData('averageMonth', indexKey) || 0
+    // let factor = 1
+    // // 月线过热的话得要减少买入
+    // if (indexAverage > 0) {
+    //   factor = 1 - (0.5 * (indexAverage / (reduceLine * 2)))
+    // }
+    // if (factor < 0.5) {
+    //   factor = 0.5
+    // }
+    // if (buySell === 'buy') {
+    //   return factor
+    // } else {
+    //   return 1 / factor
+    // }
+    return 1
   },
   // 废弃
   // 指数半年线因子
@@ -449,7 +451,7 @@ export default {
   // 月收益跟随因子
   getIndexMonthDiffFactor: function (indexKey, buySell) {
     const indexDiff = storageUtil.getData('monthIndexDiff', indexKey) || 0
-    let factor = 1 + (indexDiff / 20)
+    let factor = 1 + (indexDiff / 30)
     if (buySell === 'buy') {
       return factor
     } else {

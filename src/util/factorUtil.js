@@ -9,9 +9,9 @@ const laji = indexType.laji
 const kuanji = indexType.kuanji
 
 // 11月到12月机构结算
-function getJiesuan () {
+function getJiesuan (key) {
   const changeStyle = storageUtil.getData('noBuySellConfig', 'changeStyle') || false
-  if (changeStyle) {
+  if (changeStyle && ['xiaofei'].indexOf(key) === -1) {
     return -1
   }
   // const d = dateUtil.getDate()
@@ -235,9 +235,9 @@ export default {
   getIndexJigouFactor: function (key, buySell) {
     if (jigou.indexOf(key) !== -1) {
       if (buySell === 'buy') {
-        return 1 + (0.1 * getJiesuan())
+        return 1 + (0.1 * getJiesuan(key))
       } else {
-        return 1 - (0.1 * getJiesuan())
+        return 1 - (0.1 * getJiesuan(key))
       }
     }
     return 1
@@ -459,7 +459,7 @@ export default {
   // 年收益跟随因子
   getIndexYearDiffFactor: function (indexKey, buySell) {
     const indexDiff = storageUtil.getData('yearIndexDiff', indexKey) || 0
-    let factor = 1 + ((indexDiff * getJiesuan()) / 100)
+    let factor = 1 + ((indexDiff * getJiesuan(indexKey)) / 100)
     if (buySell === 'buy') {
       return factor
     } else {

@@ -1,12 +1,16 @@
 <template>
   <div>
     <div class="warn-wrap">
-      <div class="fm-warn blue">波段仓砍仓要狠，定投才是大头</div>
-      <div class="fm-warn red">波段仓一定要遵守交易纪律</div>
-      <div class="fm-warn blue">处在高位危险，信号一会儿让卖一会儿又不让卖的，那就卖掉</div>
-      <div class="fm-warn grey">冒着绿光的才卖，不要被迷惑</div>
-      <div class="fm-warn blue">处在高位危险区，又走坏了，保住利润是第一位，向上空间很小，向下空间很大</div>
-      <div class="fm-warn green" v-if="ifNiandi">年底机构结账，保护收益</div>
+      <div class="img-icon-list">
+        <div v-if="changeStyle" class="img-icon-item">
+          <img src="../assets/warn-icon/反转色.png" alt="">
+        </div>
+      </div>
+      <!--<div class="fm-warn blue">波段仓砍仓要狠，定投才是大头</div>-->
+      <!--<div class="fm-warn red">波段仓一定要遵守交易纪律</div>-->
+      <div class="fm-warn green">处在高位危险，信号一会儿让卖一会儿又不让卖的，那就卖掉</div>
+      <!--<div class="fm-warn grey">冒着绿光的才卖，不要被迷惑</div>-->
+      <div class="fm-warn green">处在高位危险区，又走坏了，保住利润是第一位，向上空间很小，向下空间很大</div>
     </div>
     <div class="detail-info-wrap" :class="{feng: ifFengNiu}">
       <div class="item">
@@ -137,6 +141,9 @@ export default {
       // 是不是全面疯牛
       const question10 = storageUtil.getData('stockMarketQuestion', 'question_10')
       return question10 === '是'
+    },
+    changeStyle () {
+      return storageUtil.getData('noBuySellConfig', 'changeStyle') || false
     }
   },
   created () {
@@ -147,5 +154,13 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style rel="stylesheet/scss" lang="scss" scoped>
+  .img-icon-item {
+    width: 100px;
+    height: 100px;
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
 </style>

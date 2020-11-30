@@ -75,13 +75,21 @@
         <span class="label">顶部：</span>
         <span class="value">{{niuxiong[5]}}</span>
       </div>
+      <div class="item">
+        <span class="label">买：</span>
+        <span class="value" style="color: red">{{$formatMoney(getBuySum())}}</span>
+      </div>
+      <div class="item">
+        <span class="label">卖：</span>
+        <span class="value" style="color: green">{{$formatMoney(getSellSum())}}</span>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import storageUtil from '@/util/storageUtil.js'
-
+import { mapGetters } from 'vuex'
 export default {
   name: 'OperatingWarn',
   data () {
@@ -144,11 +152,29 @@ export default {
     },
     changeStyle () {
       return storageUtil.getData('noBuySellConfig', 'changeStyle') || false
-    }
+    },
+    ...mapGetters([
+      'indexBondBuyMap',
+      'indexBondSellMap'
+    ])
   },
   created () {
   },
   methods: {
+    getBuySum () {
+      let sum = 0
+      for (let key in this.indexBondBuyMap) {
+        sum += parseFloat(this.indexBondBuyMap[key] || 0) || 0
+      }
+      return sum
+    },
+    getSellSum () {
+      let sum = 0
+      for (let key in this.indexBondSellMap) {
+        sum += parseFloat(this.indexBondSellMap[key] || 0) || 0
+      }
+      return sum
+    }
   }
 }
 </script>

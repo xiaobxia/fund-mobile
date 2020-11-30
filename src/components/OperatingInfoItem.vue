@@ -1317,10 +1317,10 @@ export default {
         classListF = this.removeSell(classListF)
       }
       // 设置信息
-      this.setInfo()
+      this.setInfo(classListF)
       return classListF
     },
-    setInfo () {
+    setInfo (classListF) {
       // if (this.indexInfo.key === 'wulin') {
       //   console.log(this.ifInDafanNow())
       //   console.log(this.ifInXiaofanNow())
@@ -1336,6 +1336,28 @@ export default {
         this.indexInfo.key,
         (!this.ifInDafanNow() && this.ifInXiaofanNow())
       )
+      if (this.ifHasSell(classListF)) {
+        this.$store.commit('updateIndexBondSellMap', {
+          key: this.indexInfo.key,
+          value: this.indexSellNumber
+        })
+      } else {
+        this.$store.commit('updateIndexBondSellMap', {
+          key: this.indexInfo.key,
+          value: 0
+        })
+      }
+      if (this.ifHasBuy(classListF)) {
+        this.$store.commit('updateIndexBondBuyMap', {
+          key: this.indexInfo.key,
+          value: this.indexBuyNumber
+        })
+      } else {
+        this.$store.commit('updateIndexBondBuyMap', {
+          key: this.indexInfo.key,
+          value: 0
+        })
+      }
     },
     sendFlagToServer (classListF) {
       // 发送信号

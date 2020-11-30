@@ -10,6 +10,7 @@
         <div class="fm-warn yellow">在大级别底部，多买混合</div>
         <div class="fm-warn grey">你现在需要做的很简单，保持耐心，我们一起等未来出现一个三年级别的大顶部，早晚会有降仓的动作，但不是现在。——毕竟A股历史上，没有一次顶部不是以泡沫化收场的。</div>
       </div>
+      <div>总买入金额：{{getAllBuySum()}}</div>
       <div>
         <span :class="kuanBuy >= 4 ? 'red-text': ''">
           <span v-if="kuanBuy >= 4">可以</span>买入：{{$formatMoney(otherBuyCount(canBuy))}}
@@ -189,7 +190,8 @@ export default {
         wave: codeMap[key].wave,
         rate: codeMap[key].rate,
         ifBuy: false,
-        buyNum: 0
+        buyNum: 0,
+        canBuyNumber: 0
       })
       allInfo[key] = []
       rateInfo[key] = 0
@@ -777,6 +779,7 @@ export default {
               item.ifBuy = true
               buyBaseInfo = parseInt(buyNumber / 10)
               item.buyNum = buyBaseInfo
+              item.canBuyNumber = buyNumber
             }
           }
           storageUtil.setData('fixBuyData', item.key, buyBaseInfo)
@@ -851,6 +854,17 @@ export default {
       const average = sum / 8
       // 混合30，定投20
       return parseInt(average * 1.2)
+    },
+    getAllBuySum () {
+      let sum = 0
+      if (this.kuanBuy >= 4) {
+        const hb = this.otherBuyCount(this.canBuy)
+        sum += hb * hhList.length
+      }
+      this.list.forEach((v) => {
+        sum += v.canBuyNumber
+      })
+      return sum
     }
   }
 }

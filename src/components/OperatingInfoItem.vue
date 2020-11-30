@@ -57,8 +57,8 @@
         <!--<span v-if="ifStopKeep()" class="fm-tag s-black">止盈</span>-->
         <!--年下z45是必跌的-->
         <span v-if="ifClearZ45Today" class="fm-tag s-black">清z45</span>
-        <span v-if="sellLowDownSmall()" class="fm-tag s-black">危险1/3</span>
-        <span v-if="sellLowDownBig()" class="fm-tag s-black">危险2/3</span>
+        <!--<span v-if="sellLowDownSmall()" class="fm-tag s-black">危险1/3</span>-->
+        <!--<span v-if="sellLowDownBig()" class="fm-tag s-black">危险2/3</span>-->
         <span v-if="ifCutDownCloseOk" class="fm-tag s-black">请止盈</span>
         <!--大牛市暂时注释-->
         <!--<span v-if="ifDoubleHot() && ifFourUp" class="fm-tag s-black">热减</span>-->
@@ -1273,12 +1273,12 @@ export default {
       }
       // TODO cs-待
       // TODO 两个小幅0.2，即使锁仓也没有用，锁仓只卖1/3
-      if (this.sellLowDownSmall() || this.sellLowDownBig()) {
-        // 没有任何买入
-        classListF = this.removeBuy(classListF)
-        // 加入卖出
-        classListF.push(sellClass)
-      }
+      // if (this.sellLowDownSmall() || this.sellLowDownBig()) {
+      //   // 没有任何买入
+      //   classListF = this.removeBuy(classListF)
+      //   // 加入卖出
+      //   classListF.push(sellClass)
+      // }
       // TODO cs-待
       // TODO 年下当天触发z45那就立马卖出，权重最大不管任何情况
       if (this.ifClearZ45Today) {

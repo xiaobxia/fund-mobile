@@ -8,7 +8,8 @@ const kuanji = indexType.kuanji
 
 // 定投占比
 // 得真实得定，因为这也会影响波段指数的标准仓
-const fixedInvestmentRatio = 0.5
+// 放大波动率
+const fixedInvestmentRatio = (0.5 * 0.66)
 // 指数数量
 // 机构垃圾指数会根据分类提升占比
 const indexNumber = 24
@@ -106,7 +107,7 @@ function factorSellBase (marketInfo) {
 function getSellBase (type, marketInfo) {
   let finalFactor = factorSellBase(marketInfo)
   // 卖的标准大一点
-  return finalFactor * operateStandard() * 3 / 2
+  return finalFactor * operateStandard() * (1.33)
 }
 
 function getBuyNumber (hasCount, rowBuy, indexRedistributionStandard) {

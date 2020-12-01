@@ -15,6 +15,9 @@
         <span :class="kuanBuy >= 4 ? 'red-text': ''">
           <span v-if="kuanBuy >= 4">可以</span>买入：{{$formatMoney(otherBuyCount(canBuy))}}
         </span>
+        <div>
+          <span v-if="kuanBuy >= 4" class="red-text">本金追加5000</span>
+        </div>
         <div class="small-10">
           <mt-cell-swipe v-for="(item) in hhList" :key="item.code">
             <div slot="title">

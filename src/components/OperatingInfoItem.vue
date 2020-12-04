@@ -1314,7 +1314,10 @@ export default {
       // ---------关于个人的限制
       // 锁仓的没有卖出高亮
       if (this.lock) {
-        classListF = this.removeSell(classListF)
+        if (!this.ifFixIndex) {
+          classListF = this.removeSell(classListF)
+        }
+        // classListF = this.removeSell(classListF)
       }
       // 设置信息
       this.setInfo(classListF)

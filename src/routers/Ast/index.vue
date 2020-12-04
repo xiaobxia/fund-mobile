@@ -17,6 +17,9 @@
       <mt-button type="primary" @click="quxiaoDingshi" class="main-btn cc">
         <span>取消定时</span>
       </mt-button>
+      <mt-button type="primary" @click="xxxxSch" class="main-btn cc">
+        <span>定时下班打卡</span>
+      </mt-button>
     </div>
   </div>
 </template>
@@ -70,6 +73,15 @@ export default {
         spinnerType: 'fading-circle'
       })
       this.$http.get('http://47.98.140.76:3031/daka/xiabanSchedule').then((res) => {
+        Indicator.close()
+        alert(res.time)
+      })
+    },
+    xxxxSch () {
+      Indicator.open({
+        spinnerType: 'fading-circle'
+      })
+      this.$http.get('http://47.98.140.76:3031/daka/xxxxSchedule').then((res) => {
         Indicator.close()
         alert(res.time)
       })

@@ -423,15 +423,20 @@ export default {
       if (key === 'baijiu' && this.baijiuwarn) {
         // 如果不是锁仓，白酒也有锁仓
         if (!this.getLockInfo(key)) {
-          if (this.averageMonthIndex(key) > 0) {
-            const flag3 = stockAnalysisUtil.countUp(netChangeRatioListLarge, 3, 3).flag
-            if (flag3) {
-              return true
-            }
-          } else {
-            if (this.rateInfo[key] > 0) {
-              return true
-            }
+          // if (this.averageMonthIndex(key) > 0) {
+          //   const flag3 = stockAnalysisUtil.countUp(netChangeRatioListLarge, 3, 3).flag
+          //   if (flag3) {
+          //     return true
+          //   }
+          // } else {
+          //   if (this.rateInfo[key] > 0) {
+          //     return true
+          //   }
+          // }
+          // 太牛了，不要轻易卖了
+          const flag3 = stockAnalysisUtil.countUp(netChangeRatioListLarge, 3, 3).flag
+          if (flag3) {
+            return true
           }
         }
         // 锁仓的话4卖

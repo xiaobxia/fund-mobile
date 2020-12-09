@@ -867,7 +867,7 @@ export default {
       let sum = 0
       if (this.kuanBuy >= 4) {
         const hb = this.otherBuyCount(this.canBuy)
-        sum += hb * hhList.length
+        sum += hb * this.hhList.length
       }
       this.list.forEach((v) => {
         sum += v.canBuyNumber

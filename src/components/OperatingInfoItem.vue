@@ -26,7 +26,7 @@
         <span v-if="averageMonthIndex <= 0" class="fm-tag b-green">月下</span>
         <span v-if="!isToBeDafanToday() && isToBeXiaofanToday()" class="fm-tag s-red">小</span>
         <span v-if="isToBeDafanToday()" class="fm-tag s-red">大</span>
-        <!--月线上的大小不添加信号，因为之后要么是锁仓，要么是见顶-->
+        <!--月线上的大小不添加信号，因为之后要么是锁仓，要么是见顶，总之效果不好-->
         <span v-if="(isToBeXiaofanToday() || isToBeDafanToday()) && averageMonthIndex > 0" class="fm-tag s-blue">月上大小不锁</span>
         <span v-if="ifBianpan" class="fm-tag s-blue">变盘</span>
         <span v-if="toNoSellToCan()" class="fm-tag blue">更转交</span>

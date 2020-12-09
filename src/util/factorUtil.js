@@ -483,5 +483,22 @@ export default {
     } else {
       return 1 / factor
     }
+  },
+  getWeekDayFactor: function (buySell) {
+    const buyList = {
+      '1': 1.1,
+      '2': 0.9
+    }
+    const sellList = {
+      '1': 0.9,
+      '2': 1.1
+    }
+    const dd = `${(new Date()).getDay()}`
+    // 周一的波动会很大，涨的概率还行，周二涨的概率很高，但是周三下跌的概率是最高的
+    if (buySell === 'buy') {
+      return buyList[dd] || 1
+    } else {
+      return sellList[dd] || 1
+    }
   }
 }

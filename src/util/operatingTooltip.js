@@ -66,6 +66,8 @@ function factorBuyBase (marketInfo) {
   finalFactor = finalFactor * factorUtil.indexYearCountFactor('buy')
   // 半年线数量
   finalFactor = finalFactor * factorUtil.indexHalfYearCountFactor('buy')
+  // 星期因子
+  finalFactor = finalFactor * factorUtil.getWeekDayFactor('buy')
   // 结果
   return finalFactor
 }
@@ -98,6 +100,8 @@ function factorSellBase (marketInfo) {
   finalFactor = finalFactor * factorUtil.indexYearCountFactor('sell')
   // 半年线数量
   finalFactor = finalFactor * factorUtil.indexHalfYearCountFactor('sell')
+  // 星期因子
+  finalFactor = finalFactor * factorUtil.getWeekDayFactor('sell')
   // 结果
   // 卖的标准大一点
   return finalFactor

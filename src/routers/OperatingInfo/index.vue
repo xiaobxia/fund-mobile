@@ -169,6 +169,23 @@ export default {
     }
     this.initPage()
   },
+  mounted () {
+    const d = this.getDate()
+    const hour = d.getHours()
+    const minute = d.getMinutes()
+    const td = moment().format('YYYY-MM-DD')
+    if (hour === 14 && minute > 50) {
+      const str = localStorage.getItem('W-1')
+      if (str && str === td) {
+        console.log('y')
+      } else {
+        setTimeout(() => {
+          localStorage.setItem('W-1', td)
+          alert('处在高位危险，信号一会儿让卖一会儿又不让卖的，那就卖掉')
+        }, 1000)
+      }
+    }
+  },
   methods: {
     initPage () {
       let indexList = this.list

@@ -54,6 +54,7 @@
       <div class="chart-wrap">
         <ve-line
           :mark-point="chartPoint"
+          :mark-line="chartLine"
           :yAxis="chartYAxis"
           :textStyle="chartTextStyle"
           :height="chartHeight"
@@ -242,6 +243,31 @@ export default {
   },
 
   computed: {
+    chartLine () {
+      let dataList = []
+      if (this.targetDownClose) {
+        dataList.push({
+          yAxis: this.targetDownClose,
+          lineStyle: {
+            color: 'green',
+            width: 3 * zoom
+          }
+        })
+      }
+      if (this.targetUpClose) {
+        dataList.push({
+          yAxis: this.targetUpClose,
+          lineStyle: {
+            color: 'red',
+            width: 3 * zoom
+          }
+        })
+      }
+      return {
+        silent: true,
+        data: dataList
+      }
+    },
     chartPoint () {
       let dataList = []
       this.buyList.forEach((item) => {

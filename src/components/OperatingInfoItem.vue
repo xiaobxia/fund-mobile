@@ -533,7 +533,7 @@ export default {
       return operatingTooltip.positionStandard(this.indexInfo)
     },
     positionHigh () {
-      return this.positionStandard * 0.5
+      return this.hasCount > (this.positionStandard * 0.66)
     }
   },
   created () {
@@ -1170,7 +1170,6 @@ export default {
       // 应该的类
       classList.push(shouldClass)
       // 在年下好像还行
-
       let classListF = this.copyList(classList)
       // TODO 季度线在年线下面没有买入
       if (this.isBadDown()) {

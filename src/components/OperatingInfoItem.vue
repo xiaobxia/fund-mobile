@@ -30,7 +30,7 @@
           <span v-if="isToBeDafanToday()" class="fm-tag s-red">大</span>
           <!--月线上的大小不添加信号，因为之后要么是锁仓，要么是见顶，总之效果不好-->
           <span v-if="(isToBeXiaofanToday() || isToBeDafanToday()) && averageMonthIndex > 0" class="fm-tag s-blue">月上大小不锁</span>
-          <span v-if="ifBianpan" class="fm-tag s-blue">变盘</span>
+          <!--<span v-if="ifBianpan" class="fm-tag s-blue">变盘</span>-->
           <span v-if="toNoSellToCan()" class="fm-tag blue">更转交</span>
           <span v-if="ifRelieveFixLine" class="fm-tag s-blue">解定</span>
           <span v-if="ifJieFantanToday()" class="fm-tag s-blue">解反</span>
@@ -49,6 +49,7 @@
           <span v-if="!isInQuarterHotToday && targetDownClose" class="fm-tag s-blue">清空止损</span>
           <span v-if="positionQYHigh" class="fm-tag s-black">危高仓</span>
           <span v-if="positionHighSell" class="fm-tag s-black">高仓卖</span>
+          <span v-if="ifBadLow()" class="fm-tag s-black">清2/3</span>
           <!--执行部分-->
           <span
             v-if="ifQuarterHotCut()"
@@ -63,8 +64,6 @@
           <!--<span v-if="ifStopKeep()" class="fm-tag s-black">止盈</span>-->
           <!--年下z45是必跌的-->
           <span v-if="ifClearZ45Today" class="fm-tag s-black">清z45</span>
-          <!--<span v-if="sellLowDownSmall()" class="fm-tag s-black">危险1/3</span>-->
-          <!--<span v-if="sellLowDownBig()" class="fm-tag s-black">危险2/3</span>-->
           <!--大牛市暂时注释-->
           <!--<span v-if="ifDoubleHot() && ifFourUp" class="fm-tag s-black">热减</span>-->
           <span v-if="ifUnderYear && ifDownTrend && (indexStage !== '定投' && indexStage !== '探底')" class="fm-tag black">禁买</span>
@@ -795,9 +794,7 @@ export default {
           (this.indexDaXiaoStatusOld === '大反' || this.indexDaXiaoStatusOld === '小反') &&
           this.ifThreeUp
         ) {
-          if (!this.ifBianpan) {
-            return true
-          }
+          return true
         }
         if (this.indexDaXiaoStatusOld === '小反' && this.ifTwoUp) {
           return true
@@ -892,20 +889,6 @@ export default {
     // 是否处于定投
     isInDingtouStatus () {
       return this.indexStage === '定投' && !this.ifRelieveFixLine
-    },
-    // 两个小幅0.2下跌很危险
-    sellLowDownSmall () {
-      // 达成条件，但是满足其他，所以少卖点
-      if (this.ifTwoLowDown) {
-        if (this.isToBeDafanToday() || this.ifInNoSellStatus() || this.isInDingtouStatus()) {
-          return true
-        }
-      }
-      return false
-    },
-    // 两个小幅0.2下跌很危险
-    sellLowDownBig () {
-      return this.ifTwoLowDown && !this.sellLowDownSmall()
     },
     // 季度线影响
     ifMonthUpOk (key) {
@@ -1013,6 +996,14 @@ export default {
       const question9 = storageUtil.getData('stockMarketQuestion', 'question_9') || '否'
       if (question9 === '是') {
         return this.isBad()
+      }
+      return false
+    },
+    ifBadLow() {
+      if (this.isBadDown()) {
+        if (this.ifTwoLowDown && this.averageMonthIndex > 0 && !this.ifInNoSellStatus()) {
+          return true
+        }
       }
       return false
     },
@@ -1244,6 +1235,12 @@ export default {
       if (this.isInQuarterHotToday) {
         if (this.averageMonthIndex < 0) {
           classListF = this.removeBuy(classListF)
+          // // 高仓的话还要卖出
+          // if (this.positionHigh) {
+          //   this.positionHighSell = true
+          //   // 加入卖出
+          //   classListF.push(sellClass)
+          // }
         }
       }
       // TODO 处于z45不能买
@@ -1298,15 +1295,13 @@ export default {
           }
         }
       }
-      // TODO cs-待
-      // TODO 两个小幅0.2，即使锁仓也没有用，锁仓只卖1/3
-      // if (this.sellLowDownSmall() || this.sellLowDownBig()) {
-      //   // 没有任何买入
-      //   classListF = this.removeBuy(classListF)
-      //   // 加入卖出
-      //   classListF.push(sellClass)
-      // }
-      // TODO cs-待
+      // 空头蓄能
+      if (this.ifBadLow()) {
+        // 没有任何买入
+        classListF = this.removeBuy(classListF)
+        // 加入卖出
+        classListF.push(sellClass)
+      }
       // TODO 年下当天触发z45那就立马卖出，权重最大不管任何情况
       if (this.ifClearZ45Today) {
         // 没有任何买入

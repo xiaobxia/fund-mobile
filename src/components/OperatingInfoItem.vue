@@ -999,7 +999,7 @@ export default {
       }
       return false
     },
-    ifBadLow() {
+    ifBadLow () {
       if (this.isBadDown()) {
         if (this.ifTwoLowDown && this.averageMonthIndex > 0 && !this.ifInNoSellStatus()) {
           return true
@@ -1008,8 +1008,8 @@ export default {
       return false
     },
     getItemClass () {
-      this.positionQYHigh = false
-      this.positionHighSell = false
+      let positionQYHigh = false
+      let positionHighSell = false
       this.setIndexCanFix()
       const buyClass = 'buy'
       const sellClass = 'sell'
@@ -1154,7 +1154,7 @@ export default {
         if (this.positionHigh) {
           // 高仓，不是大反不是锁仓，涨了就卖
           if (this.rate > 0) {
-            this.positionHighSell = true
+            positionHighSell = true
             shouldClass = shouldSellClass
           }
         }
@@ -1187,7 +1187,7 @@ export default {
           classListF = this.removeBuy(classListF)
           // 仓位不能太高
           if (this.hasCount > (this.positionStandard * 0.5)) {
-            this.positionQYHigh = true
+            positionQYHigh = true
             // 如果仓位高了，涨了就卖
             // 没必要考虑大反什么的，因为是仓位太高了，才让卖出的
             if (this.rate > 0) {
@@ -1237,7 +1237,7 @@ export default {
           classListF = this.removeBuy(classListF)
           // // 高仓的话还要卖出
           // if (this.positionHigh) {
-          //   this.positionHighSell = true
+          //   positionHighSell = true
           //   // 加入卖出
           //   classListF.push(sellClass)
           // }
@@ -1343,6 +1343,8 @@ export default {
         // classListF = this.removeSell(classListF)
       }
       // 设置信息
+      this.positionHighSell = positionHighSell
+      this.positionQYHigh = positionQYHigh
       this.setInfo(classListF)
       return classListF
     },

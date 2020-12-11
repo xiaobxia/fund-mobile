@@ -183,7 +183,6 @@ export default {
           const z45 = {}
           const recentStatus = {}
           const oneDeep = {}
-          const cutDownClose = {}
           const targetUpClose = {}
           const targetDownClose = {}
           res.data.forEach((item) => {
@@ -195,7 +194,6 @@ export default {
             yearAverage[item.key] = item.year_average
             targetUpClose[item.key] = item.target_up_close || 0
             targetDownClose[item.key] = item.target_down_close || 0
-            cutDownClose[item.key] = item.top_close || 0
             recentStatus[item.key] = item.recent_status || '正常'
             oneDeep[item.key] = item.one_deep || '否'
           })
@@ -205,7 +203,6 @@ export default {
           storageUtil.setData('stockIndexQuarterHot', quarterHot)
           storageUtil.setData('stockIndexZ45', z45)
           storageUtil.setData('yearAverageIndex', yearAverage)
-          storageUtil.setData('stockIndexCutDownClose', cutDownClose)
           storageUtil.setData('stockIndexTargetUpClose', targetUpClose)
           storageUtil.setData('stockIndexTargetDownClose', targetDownClose)
           storageUtil.setData('stockIndexRecentStatus', recentStatus)

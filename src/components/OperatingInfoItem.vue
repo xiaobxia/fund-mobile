@@ -16,7 +16,6 @@
           <span v-if="ifInZ45StatusNow" class="fm-tag s-black">z45</span>
           <span v-if="isBadDown()" class="fm-tag s-black">年季危</span>
           <span v-if="isInQuarterHotToday" class="fm-tag s-black">危险</span>
-          <span v-if="ifCutDownClose" class="fm-tag s-yellow">止盈线</span>
           <span v-if="isInDingtouStatus()" class="fm-tag s-red">定投</span>
           <span v-if="ifUnderYear" class="fm-tag s-green">年下</span>
           <span v-if="ifDownTrend" class="fm-tag s-green">下趋</span>
@@ -65,7 +64,6 @@
           <span v-if="ifClearZ45Today" class="fm-tag s-black">清z45</span>
           <!--<span v-if="sellLowDownSmall()" class="fm-tag s-black">危险1/3</span>-->
           <!--<span v-if="sellLowDownBig()" class="fm-tag s-black">危险2/3</span>-->
-          <span v-if="ifCutDownCloseOk" class="fm-tag s-black">请止盈</span>
           <!--大牛市暂时注释-->
           <!--<span v-if="ifDoubleHot() && ifFourUp" class="fm-tag s-black">热减</span>-->
           <span v-if="ifUnderYear && ifDownTrend && (indexStage !== '定投' && indexStage !== '探底')" class="fm-tag black">禁买</span>
@@ -391,25 +389,6 @@ export default {
     // 是否解除定投
     ifRelieveFixLine () {
       return this.indexStage === '定投' && this.averageHalfYear >= this.indexInfo.relieveFixLine
-    },
-    // 是否有止盈线
-    ifCutDownClose () {
-      const cutDownClose = storageUtil.getData('stockIndexCutDownClose', this.indexInfo.key) || 0
-      if (cutDownClose) {
-        return true
-      }
-      return false
-    },
-    // 是否到达止盈线
-    ifCutDownCloseOk () {
-      const cutDownClose = storageUtil.getData('stockIndexCutDownClose', this.indexInfo.key) || 0
-      if (cutDownClose) {
-        const indexNowClose = storageUtil.getData('indexNowClose', this.indexInfo.key) || 0
-        if (indexNowClose <= cutDownClose) {
-          return true
-        }
-      }
-      return false
     },
     // 是否到达目标点位
     ifTargetUpCloseLock () {
@@ -1346,12 +1325,6 @@ export default {
       }
       if (noSell) {
         classListF = this.removeSell(classListF)
-      }
-      // TODO 请止盈，止盈就是为了应对你锁仓或者大小反了，结果还一直不停地跌的情况
-      if (this.ifCutDownCloseOk) {
-        classListF = this.removeBuy(classListF)
-        // 加入卖出
-        classListF.push(sellClass)
       }
       // 发送到服务端
       this.sendFlagToServer(classListF)

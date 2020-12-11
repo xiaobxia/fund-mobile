@@ -48,6 +48,7 @@
           <span v-if="isInQuarterHotToday && !targetDownClose" class="fm-tag s-blue">设置止损</span>
           <span v-if="!isInQuarterHotToday && targetDownClose" class="fm-tag s-blue">清空止损</span>
           <span v-if="positionQYHigh" class="fm-tag s-black">危高仓</span>
+          <span v-if="positionHighSell" class="fm-tag s-black">高仓卖</span>
           <!--执行部分-->
           <span
             v-if="ifQuarterHotCut()"
@@ -119,7 +120,8 @@ export default {
   name: 'OperatingInfoItem',
   data () {
     return {
-      positionQYHigh: false
+      positionQYHigh: false,
+      positionHighSell: false
     }
   },
   props: {
@@ -1015,6 +1017,8 @@ export default {
       return false
     },
     getItemClass () {
+      this.positionQYHigh = false
+      this.positionHighSell = false
       this.setIndexCanFix()
       const buyClass = 'buy'
       const sellClass = 'sell'
@@ -1153,6 +1157,14 @@ export default {
             if (!this.ifInDafanNow()) {
               shouldClass = shouldSellClass
             }
+          }
+        }
+        // 高仓
+        if (this.positionHigh) {
+          // 高仓，不是大反不是锁仓，涨了就卖
+          if (this.rate > 0) {
+            this.positionHighSell = true
+            shouldClass = shouldSellClass
           }
         }
       }

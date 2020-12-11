@@ -10,6 +10,11 @@
         <span>点位指标</span>
       </div>
       <div v-if="dianwei" class="d-b">
+        <mt-field label="目标位" placeholder="请输入" v-model="targetUpClose"></mt-field>
+        <mt-field label="止盈位" placeholder="请输入" v-model="targetDownClose"></mt-field>
+        <div>
+          <mt-button type="primary" @click="updateStockIndexTargetClose" class="main-btn">完成</mt-button>
+        </div>
       </div>
       <div class="grey fm-warn">指数是否z45</div>
       <div class="filter-select-wrap">
@@ -230,7 +235,9 @@ export default {
       pointType: '',
       type: 'xiong',
       nowClose: 0,
-      dianwei: false
+      dianwei: false,
+      targetUpClose: 0,
+      targetDownClose: 0
     }
   },
 
@@ -443,6 +450,8 @@ export default {
       this.quarterHot = storageUtil.getData('stockIndexQuarterHot', query.key) || '关闭'
       this.z45 = storageUtil.getData('stockIndexZ45', query.key) || '关闭'
       this.noSellStatus = storageUtil.getData('stockIndexNoSellStatus', query.key) || '正常'
+      this.targetUpClose = storageUtil.getData('stockIndexTargetUpClose', query.key) || 0
+      this.targetDownClose = storageUtil.getData('stockIndexTargetDownClose', query.key) || 0
       this.$http.get(`stock/${stockApiUtil.getAllUrl()}`, {
         code: query.code,
         days: 40
@@ -531,6 +540,20 @@ export default {
     },
     backHandler () {
       this.$router.history.go(-1)
+    },
+    updateStockIndexTargetClose () {
+      const query = this.$router.history.current.query
+      this.$http.post('stock/updateStockIndex', {
+        key: query.key,
+        target_down_close: this.targetDownClose || 0,
+        target_up_close: this.targetUpClose || 0
+      }).then((data) => {
+        if (data.success) {
+          Toast.success('操作成功')
+        } else {
+          Toast.error('操作失败')
+        }
+      })
     }
   }
 }

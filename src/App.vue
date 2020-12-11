@@ -183,9 +183,9 @@ export default {
           const z45 = {}
           const recentStatus = {}
           const oneDeep = {}
-          // 止盈线
           const cutDownClose = {}
           const targetUpClose = {}
+          const targetDownClose = {}
           res.data.forEach((item) => {
             data[item.key] = item.flag || '正常'
             status[item.key] = item.status || '正常'
@@ -194,6 +194,7 @@ export default {
             z45[item.key] = item.z45 || '关闭'
             yearAverage[item.key] = item.year_average
             targetUpClose[item.key] = item.target_up_close || 0
+            targetDownClose[item.key] = item.target_down_close || 0
             cutDownClose[item.key] = item.top_close || 0
             recentStatus[item.key] = item.recent_status || '正常'
             oneDeep[item.key] = item.one_deep || '否'
@@ -206,6 +207,7 @@ export default {
           storageUtil.setData('yearAverageIndex', yearAverage)
           storageUtil.setData('stockIndexCutDownClose', cutDownClose)
           storageUtil.setData('stockIndexTargetUpClose', targetUpClose)
+          storageUtil.setData('stockIndexTargetDownClose', targetDownClose)
           storageUtil.setData('stockIndexRecentStatus', recentStatus)
           storageUtil.setData('stockIndexOneDeep', oneDeep)
         }),

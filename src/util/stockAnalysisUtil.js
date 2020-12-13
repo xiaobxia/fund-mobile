@@ -176,5 +176,44 @@ export default {
     return {
       flag: false
     }
+  },
+  // -----波动研究
+  highRate (kline) {
+    return numberUtil.countDifferenceRate(kline.high, kline.preClose)
+  },
+  openRate (kline) {
+    return numberUtil.countDifferenceRate(kline.open, kline.preClose)
+  },
+  lowRate (kline) {
+    return numberUtil.countDifferenceRate(kline.low, kline.preClose)
+  },
+  highLowRate (kline) {
+    return numberUtil.countDifferenceRate(kline.high, kline.low)
+  },
+  // 大涨以后收跌
+  hdown (kline, indexRate) {
+    if (this.highRate(kline) > 3 * indexRate) {
+      if (kline.netChangeRatio < 0) {
+        return true
+      }
+    }
+    return false
+  },
+  // 大跌后收涨
+  lowUp (kline, indexRate) {
+    if (this.lowRate(kline) < -(2 * indexRate)) {
+      if (kline.netChangeRatio > 0) {
+        return true
+      }
+    }
+    return false
+  },
+  lowUp2 (kline, indexRate) {
+    if (this.lowRate(kline) < -(3 * indexRate)) {
+      if (kline.netChangeRatio > 0) {
+        return true
+      }
+    }
+    return false
   }
 }

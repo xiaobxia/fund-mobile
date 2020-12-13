@@ -50,6 +50,10 @@
           <span v-if="positionQYHigh" class="fm-tag s-black">危高仓</span>
           <span v-if="positionHighSell" class="fm-tag s-black">高仓卖</span>
           <span v-if="ifBadLow()" class="fm-tag s-black">清2/3</span>
+          <span v-if="ifHighDown()" class="fm-tag s-blue">见顶</span>
+          <span v-if="ifHighDown()" class="fm-tag s-blue">清2/3</span>
+          <span v-if="ifLowUp()" class="fm-tag s-blue">见顶</span>
+          <span v-if="ifLowUp()" class="fm-tag s-blue">清2/3</span>
           <!--执行部分-->
           <span
             v-if="ifQuarterHotCut()"
@@ -164,6 +168,12 @@ export default {
       type: Array,
       default: function () {
         return ['', '', '', '', '']
+      }
+    },
+    kline: {
+      type: Object,
+      default: function () {
+        return {}
       }
     },
     netChangeRatioList: {
@@ -1007,6 +1017,35 @@ export default {
       }
       return false
     },
+    // 大涨以后收跌
+    ifHighDown () {
+      if (Object.keys(this.kline).length) {
+        const info = stockAnalysisUtil.hdown(this.kline, this.indexInfo.rate)
+        if (info && this.averageMonthIndex > 0) {
+          return true
+        }
+      }
+      return false
+    },
+    // 大跌后收涨
+    ifLowUp () {
+      if (Object.keys(this.kline).length) {
+        if (this.ifInNoSellStatus() && this.averageQuarter > 8.5) {
+          if (this.indexInfo.key === 'shengwu') {
+            const info = stockAnalysisUtil.lowUp2(this.kline, this.indexInfo.rate)
+            if (info) {
+              return true
+            }
+          } else {
+            const info = stockAnalysisUtil.lowUp(this.kline, this.indexInfo.rate)
+            if (info) {
+              return true
+            }
+          }
+        }
+      }
+      return false
+    },
     getItemClass () {
       let positionQYHigh = false
       let positionHighSell = false
@@ -1158,6 +1197,13 @@ export default {
             shouldClass = shouldSellClass
           }
         }
+        // 大跌以后收涨给个卖出
+        if (Object.keys(this.kline).length) {
+          const infoo = stockAnalysisUtil.lowUp(this.kline, this.indexInfo.rate)
+          if (infoo && this.averageMonthIndex > 0) {
+            shouldClass = shouldSellClass
+          }
+        }
       }
       // TODO cs-完成，验证过
       // TODO 锁转交，月线是在上面的，涨两天卖
@@ -1295,7 +1341,21 @@ export default {
           }
         }
       }
-      // 空头蓄能
+      // TODO 本来大涨，结果下跌，一般是见顶了，是在锁仓策略定投策略之上的
+      if (this.ifHighDown()) {
+        // 没有任何买入
+        classListF = this.removeBuy(classListF)
+        // 加入卖出
+        classListF.push(sellClass)
+      }
+      // TODO 大跌以后收红
+      if (this.ifLowUp()) {
+        // 没有任何买入
+        classListF = this.removeBuy(classListF)
+        // 加入卖出
+        classListF.push(sellClass)
+      }
+      // TODO 空头蓄能
       if (this.ifBadLow()) {
         // 没有任何买入
         classListF = this.removeBuy(classListF)

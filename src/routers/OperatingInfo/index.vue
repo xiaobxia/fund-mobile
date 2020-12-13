@@ -39,6 +39,7 @@
         :countDownNumber="countDownNumber"
         :type="typeName"
         :noSellCount="noSellCount"
+        :kline="kline[item.key]"
       />
       <mt-button type="primary" @click="okHandler" class="main-btn">发送</mt-button>
     </div>
@@ -86,6 +87,7 @@ export default {
     let lockMap = {}
     let hasCount = {}
     let costCount = {}
+    let kline = {}
     for (let key in codeMap) {
       list.push({
         ...getIndexInfo(key),
@@ -102,6 +104,7 @@ export default {
       lockMap[codeMap[key].name] = true
       hasCount[codeMap[key].name] = 0
       costCount[codeMap[key].name] = 0
+      kline[codeMap[key].name] = 0
     }
     return {
       type: 'jian',
@@ -117,6 +120,7 @@ export default {
       lockMap,
       hasCount,
       costCount,
+      kline,
       // 持有金额，不计入定投
       totalSum: 10000,
       nowMonthRate: 0,
@@ -344,6 +348,10 @@ export default {
           let closeList = []
           let netChangeRatioListLarge = []
           let closeListLarge = []
+          let kline = {}
+          kline = {
+            ...recentNetValue[0]
+          }
           for (let i = 0; i < 10; i++) {
             const nowRecord = recentNetValue[i]
             const oneDayRecord = recentNetValue[i + 1]
@@ -385,6 +393,7 @@ export default {
           this.closeListLargeMap[item.key] = closeListLarge
           this.netChangeRatioLargeMap[item.key] = netChangeRatioListLarge
           this.firstClass[item.key] = buySellList[0]
+          this.kline[item.key] = kline
           this.rateMap[item.key] = this.keepTwoDecimals(recentNetValue[0].netChangeRatio)
           if (this.type === 'jian') {
             storageUtil.setData('jianBuySellList', item.key, buySellList)

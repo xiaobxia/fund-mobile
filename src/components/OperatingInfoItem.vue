@@ -30,7 +30,7 @@
           <span v-if="isToBeDafanToday()" class="fm-tag s-red">大</span>
           <!--月线上的大小不添加信号，因为之后要么是锁仓，要么是见顶，总之效果不好-->
           <span v-if="(isToBeXiaofanToday() || isToBeDafanToday()) && averageMonthIndex > 0" class="fm-tag s-blue">月上大小不锁</span>
-          <!--<span v-if="ifBianpan" class="fm-tag s-blue">变盘</span>-->
+          <span v-if="ifBianpan()" class="fm-tag s-blue">变盘清1/3</span>
           <span v-if="toNoSellToCan()" class="fm-tag blue">更转交</span>
           <span v-if="ifRelieveFixLine" class="fm-tag s-blue">解定</span>
           <span v-if="ifJieFantanToday()" class="fm-tag s-blue">解反</span>
@@ -441,14 +441,6 @@ export default {
     },
     ifThreeUp () {
       return stockAnalysisUtil.countUp(this.netChangeRatioListLarge, 3, 3).flag
-    },
-    // 是否变盘
-    ifBianpan () {
-      const info = stockAnalysisUtil.countUp(this.netChangeRatioListLarge, 3, 3)
-      if (info.flag && info.rate < this.indexInfo.rate) {
-        return true
-      }
-      return false
     },
     ifFourUp () {
       return stockAnalysisUtil.countUp(this.netChangeRatioListLarge, 4, 4).flag
@@ -1025,6 +1017,18 @@ export default {
           return true
         }
       }
+      return this.ifHighDown2()
+    },
+    ifHighDown2 () {
+      if (['wulin', 'yiqian', 'zhengquan', 'wubai', 'gangtie', 'sanbai'].indexOf(this.indexInfo.key) !== -1) {
+        return false
+      }
+      if (Object.keys(this.kline).length) {
+        const info = stockAnalysisUtil.hdown2(this.kline, this.indexInfo.rate)
+        if (info && this.averageMonthIndex > 0) {
+          return true
+        }
+      }
       return false
     },
     // 大跌后收涨
@@ -1042,6 +1046,16 @@ export default {
               return true
             }
           }
+        }
+      }
+      return false
+    },
+    // 是否变盘
+    ifBianpan () {
+      if (this.ifInNoSellStatus()) {
+        const info = stockAnalysisUtil.countUp(this.netChangeRatioListLarge, 3, 3)
+        if (info.flag && info.rate < this.indexInfo.rate) {
+          return true
         }
       }
       return false
@@ -1340,6 +1354,13 @@ export default {
             classListF = this.removeSell(classListF)
           }
         }
+      }
+      // TODO 变盘清1/3
+      if (this.ifBianpan()) {
+        // 没有任何买入
+        classListF = this.removeBuy(classListF)
+        // 加入卖出
+        classListF.push(sellClass)
       }
       // TODO 本来大涨，结果下跌，一般是见顶了，是在锁仓策略定投策略之上的
       if (this.ifHighDown()) {

@@ -199,6 +199,14 @@ export default {
     }
     return false
   },
+  hdown2 (kline, indexRate) {
+    if (this.highRate(kline) > 2 * indexRate) {
+      if (kline.netChangeRatio < 0) {
+        return true
+      }
+    }
+    return false
+  },
   // 大跌后收涨
   lowUp (kline, indexRate) {
     if (this.lowRate(kline) < -(2 * indexRate)) {

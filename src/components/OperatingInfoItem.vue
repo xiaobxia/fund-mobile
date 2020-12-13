@@ -1186,7 +1186,7 @@ export default {
         ) {
           classListF = this.removeBuy(classListF)
           // 仓位不能太高
-          if (this.hasCount > (this.positionStandard * 0.5)) {
+          if (this.hasCount > (this.positionStandard * 0.34)) {
             positionQYHigh = true
             // 如果仓位高了，涨了就卖
             // 没必要考虑大反什么的，因为是仓位太高了，才让卖出的

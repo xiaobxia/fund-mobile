@@ -345,7 +345,7 @@ export default {
         },
         // 医疗
         'sz399989': {
-          buy: 1.15,
+          buy: 0.7,
           sell: 1,
           a: 20,
           b: -18,
@@ -353,7 +353,7 @@ export default {
         },
         // 生物
         'sz399441': {
-          buy: 1.15,
+          buy: 0.7,
           sell: 1,
           a: 20,
           b: -18,

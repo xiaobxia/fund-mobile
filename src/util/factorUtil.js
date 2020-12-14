@@ -468,22 +468,6 @@ export default {
       return 1 / factor
     }
   },
-  getDaVFactor: function (indexKey, buySell) {
-    let factor = 1
-    // const d = dateUtil.getDate()
-    // const day = d.getDate()
-    // const month = d.getMonth() + 1
-    // if (month >= 5) {
-    //   // 今年估计有结构牛
-    //   factor = 1
-    // }
-    // 你现在需要做的很简单，保持耐心，我们一起等未来出现一个三年级别的大顶部，早晚会有降仓的动作，但不是现在。——毕竟A股历史上，没有一次顶部不是以泡沫化收场的。
-    if (buySell === 'buy') {
-      return factor
-    } else {
-      return 1 / factor
-    }
-  },
   getWeekDayFactor: function (buySell) {
     const buyList = {
       '1': 1.1,
@@ -499,6 +483,23 @@ export default {
       return buyList[dd] || 1
     } else {
       return sellList[dd] || 1
+    }
+  },
+  getDaVFactor: function (indexKey, buySell) {
+    let factor = 1
+    const d = dateUtil.getDate()
+    const day = d.getDate()
+    const month = d.getMonth() + 1
+    const year = d.getFullYear()
+    // 2021大概率上影线
+    if (year === 2021 && month >= 3) {
+      factor = 0.8
+    }
+    // 你现在需要做的很简单，保持耐心，我们一起等未来出现一个三年级别的大顶部，早晚会有降仓的动作，但不是现在。——毕竟A股历史上，没有一次顶部不是以泡沫化收场的。
+    if (buySell === 'buy') {
+      return factor
+    } else {
+      return 1 / factor
     }
   }
 }

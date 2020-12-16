@@ -271,6 +271,15 @@ export default {
   },
   computed: {},
   created () {
+    setTimeout(() => {
+      if (this.changeStyle) {
+        const d = this.getDate()
+        const month = d.getMonth() + 1
+        if (month === 12) {
+          alert('一般来说，12月风格转就结束了')
+        }
+      }
+    }, 1500)
   },
   methods: {
     backHandler () {

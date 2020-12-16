@@ -16,7 +16,6 @@ if (month < 11) {
     'shengwu',
     'yiliao',
     'baijiu',
-    'yiyao',
     'shipin'
   ]
   // 垃圾不要嫌少，本来其实就没有太大的买的必要

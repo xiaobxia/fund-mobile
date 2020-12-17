@@ -57,6 +57,7 @@ import stockApiUtil from '@/util/stockApiUtil.js'
 import indexList from '@/common/indexList.js'
 import OperatingInfoItem from '@/components/OperatingInfoItem.vue'
 import OperatingWarn from '@/components/OperatingWarn.vue'
+import setting from '@/setting.js'
 
 const codeMap = indexInfoUtilXiong.codeMap
 const formatData = indexInfoUtilXiong.formatData
@@ -313,7 +314,7 @@ export default {
       })
     },
     countPosition (data) {
-      const indexNum = 24
+      const indexNum = setting.indexNumber
       // 最低仓位30
       let position = 0
       // 年线

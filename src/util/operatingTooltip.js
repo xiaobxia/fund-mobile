@@ -1,6 +1,7 @@
 import storageUtil from '@/util/storageUtil.js'
 import factorUtil from '@/util/factorUtil.js'
 import indexType from '@/common/indexType.js'
+import setting from '@/setting.js'
 
 const highRate = indexType.highRate
 const laji = indexType.laji
@@ -12,7 +13,7 @@ const kuanji = indexType.kuanji
 const fixedInvestmentRatio = (0.5 * 0.66)
 // 指数数量
 // 机构垃圾指数会根据分类提升占比
-const indexNumber = 24
+const indexNumber = setting.indexNumber
 
 function position () {
   // 仓位取大的那个来操作

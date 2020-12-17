@@ -110,7 +110,7 @@
           </div>
         </div>
         <div class="warn-wrap">
-          <div class="fm-warn blue">波段标准{{parseFloat(60/24)}}%</div>
+          <div class="fm-warn blue">波段标准{{parseFloat(50/indexNumber)}}%</div>
         </div>
         <div class="content">
           <p>波段
@@ -149,6 +149,7 @@ import moment from 'moment'
 import indexList from '@/common/indexList.js'
 import indexType from '@/common/indexType.js'
 import storageUtil from '@/util/storageUtil.js'
+import setting from '@/setting.js'
 
 const jigouName = indexType.jigouName
 const lajiName = indexType.lajiName
@@ -188,7 +189,8 @@ export default{
       yearFixCost: 0,
       list: [],
       fixList: [],
-      asset: 0
+      asset: 0,
+      indexNumber: setting.indexNumber
     }
   },
   computed: {

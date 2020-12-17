@@ -1322,11 +1322,8 @@ export default {
       // 锁仓的指数太少也危险，很有可能是假的稳定
       const manyToLess = storageUtil.getData('noBuySellConfig', 'manyToLess') || false
       if (this.ifInNoSellStatus()) {
-        // 6个一下不考虑
-        if (
-          this.noSellCount > 12 ||
-          (!manyToLess && this.noSellCount > 6)
-        ) {
+        // 因为信仰关系
+        if (['shipin', 'baijiu'].indexOf(this.indexInfo.key) !== -1) {
           ifNoSellF = true
           // 锁仓了
           // 研究过了，季度线上和季度线下，没什么区别
@@ -1339,9 +1336,27 @@ export default {
           // 在趋势中，什么卖出信号都不用管
           classListF = this.removeSell(classListF)
         } else {
-          // 不确定趋势，3涨以上还是卖出
-          if (!this.ifThreeUp) {
+          // 6个一下不考虑
+          if (
+            this.noSellCount > 12 ||
+            (!manyToLess && this.noSellCount > 6)
+          ) {
+            ifNoSellF = true
+            // 锁仓了
+            // 研究过了，季度线上和季度线下，没什么区别
+            if (this.rate < 0) {
+              classListF.push('should-buy')
+              if (this.ifHasBuy(classListF)) {
+                classListF.push('only-up-buy')
+              }
+            }
+            // 在趋势中，什么卖出信号都不用管
             classListF = this.removeSell(classListF)
+          } else {
+            // 不确定趋势，3涨以上还是卖出
+            if (!this.ifThreeUp) {
+              classListF = this.removeSell(classListF)
+            }
           }
         }
       }

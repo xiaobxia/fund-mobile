@@ -42,7 +42,8 @@ const highRate = [
   'dichan',
   'baoxian',
   'qiche',
-  'yiliao'
+  'yiliao',
+  'baijiu'
 ]
 
 // 宽指数

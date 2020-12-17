@@ -9403,6 +9403,12 @@ Util.prototype = {
       }
     }
     return false
+  },
+  ifBuyBaijiu: function (record, oneDayRecord) {
+    return false
+  },
+  ifSellBaijiu: function (record, oneDayRecord) {
+    return false
   }
 }
 
@@ -9732,6 +9738,24 @@ const codeMap = {
     days: 1200,
     topLine: 11,
     cutDownLine: 15
+  },
+  'baijiu': {
+    code: 'sz399997',
+    name: '白酒',
+    attach: 'wulin',
+    threshold: 0.85,
+    rate: 1.0072348484848483,
+    wave: 0.9291464646464646,
+    fixLine: -15,
+    relieveFixLine: 5,
+    reduceLine: 8,
+    downTrendLine: -3.3,
+    days: 1200,
+    topLine: 60,
+    cutDownLine: 60,
+    mix: false,
+    quarterHotLine: 30,
+    relieveZ45Line: 0
   }
 }
 const fnMap = {
@@ -9782,7 +9806,9 @@ const fnMap = {
   qicheBuy: 'ifBuyQiche',
   qicheSell: 'ifSellQiche',
   yiqianBuy: 'ifBuyYiqian',
-  yiqianSell: 'ifSellYiqian'
+  yiqianSell: 'ifSellYiqian',
+  baijiuBuy: 'ifBuyBaijiu',
+  baijiuSell: 'ifSellBaijiu'
 }
 
 const IndexInfoUtilXiong = {

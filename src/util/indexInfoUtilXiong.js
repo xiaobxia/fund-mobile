@@ -9744,9 +9744,9 @@ const codeMap = {
     name: '白酒',
     attach: 'wulin',
     threshold: 0.85,
-    rate: 1.0072348484848483,
-    wave: 0.9291464646464646,
-    fixLine: -15,
+    rate: 1.2198358585858582,
+    wave: 1.1786441919191923,
+    fixLine: -20,
     relieveFixLine: 5,
     reduceLine: 8,
     downTrendLine: -3.3,
@@ -9754,7 +9754,7 @@ const codeMap = {
     topLine: 60,
     cutDownLine: 60,
     mix: false,
-    quarterHotLine: 30,
+    quarterHotLine: 20,
     relieveZ45Line: 0
   }
 }

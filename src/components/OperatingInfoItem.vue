@@ -1,109 +1,118 @@
 <template>
   <mt-cell-swipe
-    :to="toUrl"
     :class="['operating-info-item', ...getItemClass()]"
   >
-    <div slot="title">
-      <h3>
-        <span class="index-name">{{indexInfo.name}}</span>
-        <span v-if="lock" class="fm-icon lock"></span>
-        <div class="tag-w" style="display: inline-block;">
-          <span v-if="ifTargetUpCloseLock" class="fm-tag s-red">目标锁</span>
-          <span v-if="targetUpDiff()" class="fm-tag s-black">目标:{{targetUpDiff()}}</span>
-          <span v-if="targetDownDiff()" class="fm-tag s-black">止盈:{{targetDownDiff()}}</span>
-          <span v-if="isInJiandi" class="fm-tag s-red">见底</span>
-          <span v-if="isInOneDeep()" class="fm-tag s-red">单底</span>
-          <span v-if="ifInZ45StatusNow" class="fm-tag s-black">z45</span>
-          <span v-if="isBadDown()" class="fm-tag s-black">年季危</span>
-          <span v-if="isInQuarterHotToday" class="fm-tag s-black">危险</span>
-          <span v-if="isInDingtouStatus()" class="fm-tag s-red">定投</span>
-          <span v-if="ifUnderYear" class="fm-tag s-green">年下</span>
-          <span v-if="ifDownTrend" class="fm-tag s-green">下趋</span>
-          <span v-if="isInDafanBefore()" class="fm-tag s-red">大反</span>
-          <span v-if="isInXiaofanBefore()" class="fm-tag s-red">小反</span>
-          <span v-if="ifInNoSellStatus()" class="fm-tag s-red">锁仓</span>
-          <span v-if="ifNoSellToCan()" class="fm-tag s-green">转交</span>
-          <span v-if="indexDaXiaoStatusOld === '禁买'" class="fm-tag s-black">{{indexDaXiaoStatusOld}}</span>
-          <span v-if="averageMonthIndex > 0" class="fm-tag b-red">月上</span>
-          <span v-if="averageMonthIndex <= 0" class="fm-tag b-green">月下</span>
-          <span v-if="!isToBeDafanToday() && isToBeXiaofanToday()" class="fm-tag s-red">小</span>
-          <span v-if="isToBeDafanToday()" class="fm-tag s-red">大</span>
-          <!--月线上的大小不添加信号，因为之后要么是锁仓，要么是见顶，总之效果不好-->
-          <span v-if="(isToBeXiaofanToday() || isToBeDafanToday()) && averageMonthIndex > 0" class="fm-tag s-blue">月上大小不锁</span>
-          <span v-if="ifBianpan()" class="fm-tag s-blue">变盘清1/3</span>
-          <span v-if="toNoSellToCan()" class="fm-tag blue">更转交</span>
-          <span v-if="ifRelieveFixLine" class="fm-tag s-blue">解定</span>
-          <span v-if="ifJieFantanToday()" class="fm-tag s-blue">解反</span>
-          <span v-if="ifJieNoSellToCan()" class="fm-tag s-blue">解转交</span>
-          <span v-if="ifJieTargetUpCloseLock" class="fm-tag s-blue">解目标</span>
-          <span v-if="isJieJiandi" class="fm-tag s-blue">解见底</span>
-          <span v-if="isInJiandiWei" class="fm-tag s-yellow">见底危</span>
-          <!--<span v-if="ifJieDingbu()" class="fm-tag s-blue">解顶</span>-->
-          <span v-if="ifJieQuarterHot" class="fm-tag s-blue">解危</span>
-          <span v-if="ifJieZ45" class="fm-tag s-blue">解z45</span>
-          <span v-if="isBad()" class="fm-tag s-black">恶化</span>
-          <span v-if="isOneDeep" class="fm-tag s-blue">单底</span>
-          <span v-if="isJieOneDeep()" class="fm-tag s-blue">解单底</span>
-          <span v-if="targetDownDone()" class="fm-tag s-blue">请止损:{{isToBeDafanToday() ? '1/2' : '清仓'}}</span>
-          <span v-if="isInQuarterHotToday && !targetDownClose" class="fm-tag s-blue">设置止损</span>
-          <span v-if="!isInQuarterHotToday && targetDownClose" class="fm-tag s-blue">清空止损</span>
-          <span v-if="positionQYHigh" class="fm-tag s-black">危高仓</span>
-          <span v-if="positionHighSell" class="fm-tag s-black">高仓卖</span>
-          <span v-if="ifBadLow()" class="fm-tag s-black">清2/3</span>
-          <span v-if="ifHighDown()" class="fm-tag s-blue">见顶</span>
-          <span v-if="ifHighDown()" class="fm-tag s-blue">清2/3</span>
-          <span v-if="ifLowUp()" class="fm-tag s-blue">见顶</span>
-          <span v-if="ifLowUp()" class="fm-tag s-blue">清2/3</span>
-          <!--执行部分-->
-          <span
-            v-if="ifQuarterHotCut()"
-            class="fm-tag s-black"
-          >清{{ifThreeUp ? '0.3': '1/6'}}</span>
-          <span v-if="ifQuarterHotNow" class="fm-tag s-black">季</span>
-          <span
-            v-if="ifFixIndex && ifSellFix()"
-            class="fm-tag s-black"
-          >卖定{{getFixSellRate()}}</span>
-          <span v-if="ifJieTargetUpCloseLock" class="fm-tag s-black">目标0.3</span>
-          <!--<span v-if="ifStopKeep()" class="fm-tag s-black">止盈</span>-->
-          <!--年下z45是必跌的-->
-          <span v-if="ifClearZ45Today" class="fm-tag s-black">清z45</span>
-          <!--大牛市暂时注释-->
-          <!--<span v-if="ifDoubleHot() && ifFourUp" class="fm-tag s-black">热减</span>-->
-          <span v-if="ifUnderYear && ifDownTrend && (indexStage !== '定投' && indexStage !== '探底')" class="fm-tag black">禁买</span>
-          <span v-if="indexDaXiaoStatusOld === '禁买' && (!ifUnderYear || !ifDownTrend)" class="fm-tag s-blue">解禁</span>
-        </div>
-        <span style="float: right" class="rate-t" :class="stockNumberClass(rate)">{{rate}}%</span>
-      </h3>
-      <p class="explain">
+    <div slot="title" style="position: relative">
+      <div @click="toPath(toUrl)">
+        <h3>
+          <span class="index-name">{{indexInfo.name}}</span>
+          <span v-if="lock" class="fm-icon lock"></span>
+          <div class="tag-w" style="display: inline-block;">
+            <span v-if="ifTargetUpCloseLock" class="fm-tag s-red">目标锁</span>
+            <span v-if="targetUpDiff()" class="fm-tag s-black">目标:{{targetUpDiff()}}</span>
+            <span v-if="targetDownDiff()" class="fm-tag s-black">止盈:{{targetDownDiff()}}</span>
+            <span v-if="isInJiandi" class="fm-tag s-red">见底</span>
+            <span v-if="isInOneDeep()" class="fm-tag s-red">单底</span>
+            <span v-if="ifInZ45StatusNow" class="fm-tag s-black">z45</span>
+            <span v-if="isBadDown()" class="fm-tag s-black">年季危</span>
+            <span v-if="isInQuarterHotToday" class="fm-tag s-black">危险</span>
+            <span v-if="isInDingtouStatus()" class="fm-tag s-red">定投</span>
+            <span v-if="ifUnderYear" class="fm-tag s-green">年下</span>
+            <span v-if="ifDownTrend" class="fm-tag s-green">下趋</span>
+            <span v-if="isInDafanBefore()" class="fm-tag s-red">大反</span>
+            <span v-if="isInXiaofanBefore()" class="fm-tag s-red">小反</span>
+            <span v-if="ifInNoSellStatus()" class="fm-tag s-red">锁仓</span>
+            <span v-if="ifNoSellToCan()" class="fm-tag s-green">转交</span>
+            <span v-if="indexDaXiaoStatusOld === '禁买'" class="fm-tag s-black">{{indexDaXiaoStatusOld}}</span>
+            <span v-if="averageMonthIndex > 0" class="fm-tag b-red">月上</span>
+            <span v-if="averageMonthIndex <= 0" class="fm-tag b-green">月下</span>
+            <span v-if="!isToBeDafanToday() && isToBeXiaofanToday()" class="fm-tag s-red">小</span>
+            <span v-if="isToBeDafanToday()" class="fm-tag s-red">大</span>
+            <!--月线上的大小不添加信号，因为之后要么是锁仓，要么是见顶，总之效果不好-->
+            <span v-if="(isToBeXiaofanToday() || isToBeDafanToday()) && averageMonthIndex > 0" class="fm-tag s-blue">月上大小不锁</span>
+            <span v-if="ifBianpan()" class="fm-tag s-blue">变盘清1/3</span>
+            <span v-if="toNoSellToCan()" class="fm-tag blue">更转交</span>
+            <span v-if="ifRelieveFixLine" class="fm-tag s-blue">解定</span>
+            <span v-if="ifJieFantanToday()" class="fm-tag s-blue">解反</span>
+            <span v-if="ifJieNoSellToCan()" class="fm-tag s-blue">解转交</span>
+            <span v-if="ifJieTargetUpCloseLock" class="fm-tag s-blue">解目标</span>
+            <span v-if="isJieJiandi" class="fm-tag s-blue">解见底</span>
+            <span v-if="isInJiandiWei" class="fm-tag s-yellow">见底危</span>
+            <!--<span v-if="ifJieDingbu()" class="fm-tag s-blue">解顶</span>-->
+            <span v-if="ifJieQuarterHot" class="fm-tag s-blue">解危</span>
+            <span v-if="ifJieZ45" class="fm-tag s-blue">解z45</span>
+            <span v-if="isBad()" class="fm-tag s-black">恶化</span>
+            <span v-if="isOneDeep" class="fm-tag s-blue">单底</span>
+            <span v-if="isJieOneDeep()" class="fm-tag s-blue">解单底</span>
+            <span v-if="targetDownDone()" class="fm-tag s-blue">请止损:{{isToBeDafanToday() ? '1/2' : '清仓'}}</span>
+            <span v-if="isInQuarterHotToday && !targetDownClose" class="fm-tag s-blue">设置止损</span>
+            <span v-if="!isInQuarterHotToday && targetDownClose" class="fm-tag s-blue">清空止损</span>
+            <span v-if="positionQYHigh" class="fm-tag s-black">危高仓</span>
+            <span v-if="positionHighSell" class="fm-tag s-black">高仓卖</span>
+            <span v-if="ifBadLow()" class="fm-tag s-black">清2/3</span>
+            <span v-if="ifHighDown()" class="fm-tag s-blue">见顶</span>
+            <span v-if="ifHighDown()" class="fm-tag s-blue">清2/3</span>
+            <span v-if="ifLowUp()" class="fm-tag s-blue">见顶</span>
+            <span v-if="ifLowUp()" class="fm-tag s-blue">清2/3</span>
+            <!--执行部分-->
+            <span
+              v-if="ifQuarterHotCut()"
+              class="fm-tag s-black"
+            >清{{ifThreeUp ? '0.3': '1/6'}}</span>
+            <span v-if="ifQuarterHotNow" class="fm-tag s-black">季</span>
+            <span
+              v-if="ifFixIndex && ifSellFix()"
+              class="fm-tag s-black"
+            >卖定{{getFixSellRate()}}</span>
+            <span v-if="ifJieTargetUpCloseLock" class="fm-tag s-black">目标0.3</span>
+            <!--<span v-if="ifStopKeep()" class="fm-tag s-black">止盈</span>-->
+            <!--年下z45是必跌的-->
+            <span v-if="ifClearZ45Today" class="fm-tag s-black">清z45</span>
+            <!--大牛市暂时注释-->
+            <!--<span v-if="ifDoubleHot() && ifFourUp" class="fm-tag s-black">热减</span>-->
+            <span v-if="ifUnderYear && ifDownTrend && (indexStage !== '定投' && indexStage !== '探底')" class="fm-tag black">禁买</span>
+            <span v-if="indexDaXiaoStatusOld === '禁买' && (!ifUnderYear || !ifDownTrend)" class="fm-tag s-blue">解禁</span>
+          </div>
+          <span style="float: right" class="rate-t" :class="stockNumberClass(rate)">{{rate}}%</span>
+        </h3>
+        <p class="explain">
             <span v-for="(subItem, index) in buySellList" :key="index"
                   :class="subItem">{{subItem === 'buy'?'买':subItem === 'sell'?'卖':''}}</span>
-      </p>
-      <p class="netChange wn">
+        </p>
+        <p class="netChange wn">
             <span v-for="(subItem, index) in netChangeRatioList" :key="index"
                   :class="numberBgClass(subItem)">{{subItem}}%</span>
-      </p>
-      <p class="otherBuySellList">
+        </p>
+        <p class="otherBuySellList">
             <span v-for="(subItem, index) in otherBuySellList" :key="index"
                   :class="subItem">{{subItem}}</span>
-      </p>
-      <div class="other-text">
+        </p>
+        <div class="other-text">
           <span class="item">
               <span class="label">持有金额：</span>
               <span class="value">{{$formatMoney(hasCount)}}</span>
             </span>
-        <span class="item">
+          <span class="item">
               <span class="label">卖出金额：</span>
               <span class="value green-text">{{$formatMoney(indexSellNumber)}}</span>
             </span>
-        <span class="item">
+          <span class="item">
               <span class="label">买入金额：</span>
               <span class="value red-text">{{$formatMoney(indexBuyNumber)}}</span>
             </span>
-            <span class="item">
+          <span class="item">
               <span class="label">原买：</span>
               <span class="value">{{$formatMoney(indexRawBuyNumber)}}</span>
             </span>
+        </div>
+      </div>
+      <div class="tip-b" @click="tagdTShow"></div>
+      <div v-if="dTShow" class="dt-b">
+        <div>
+          <div class="bb-t" :class="{active: stockIndexBSF === ''}" @click="setBSF('')">置空</div>
+          <div class="bb-t" :class="{active: stockIndexBSF === '买'}" @click="setBSF('买')">买</div>
+          <div class="bb-t" :class="{active: stockIndexBSF === '卖'}" @click="setBSF('卖')">卖</div>
+        </div>
       </div>
     </div>
   </mt-cell-swipe>
@@ -122,9 +131,12 @@ const kuanji = indexType.kuanji
 export default {
   name: 'OperatingInfoItem',
   data () {
+    const stockIndexBSF = storageUtil.getData('stockIndexBSF', this.indexInfo.key) || ''
     return {
       positionQYHigh: false,
-      positionHighSell: false
+      positionHighSell: false,
+      dTShow: stockIndexBSF !== '',
+      stockIndexBSF: stockIndexBSF
     }
   },
   props: {
@@ -542,6 +554,17 @@ export default {
   created () {
   },
   methods: {
+    toPath (path) {
+      this.$router.push({
+        path: path
+      })
+    },
+    tagdTShow () {
+      this.dTShow = !this.dTShow
+    },
+    setBSF (value) {
+      storageUtil.setData('stockIndexBSF', this.indexInfo.key, value)
+    },
     targetUpDiff () {
       if (this.nowClose && this.targetUpClose) {
         return this.countDifferenceRate(this.nowClose, this.targetUpClose)
@@ -1428,6 +1451,14 @@ export default {
       if (noSell) {
         classListF = this.removeSell(classListF)
       }
+      if (this.stockIndexBSF === '买') {
+        classListF = this.removeSell(classListF)
+        classListF.push('buy')
+      }
+      if (this.stockIndexBSF === '卖') {
+        classListF = this.removeBuy(classListF)
+        classListF.push('sell')
+      }
       // 发送到服务端
       this.sendFlagToServer(classListF)
       // ---------关于个人的限制
@@ -1511,5 +1542,28 @@ export default {
 }
   .index-name, .rate-t {
     vertical-align: top;
+  }
+  .tip-b {
+    position: absolute;
+    width: 100px;
+    height: 100%;
+    right: 0;
+    top: 0;
+    background-color: rgba(255, 255, 255, 0.3);
+    z-index: 100;
+  }
+  .dt-b {
+    padding: 20px;
+    width: 100%;
+  }
+  .bb-t {
+    display: inline-block;
+    width: 32%;
+    text-align: center;
+    background-color: #eee;
+    line-height: 60px;
+    &.active{
+      background-color: #bbb;
+    }
   }
 </style>

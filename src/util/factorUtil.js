@@ -460,6 +460,10 @@ export default {
   },
   // 年收益跟随因子
   getIndexYearDiffFactor: function (indexKey, buySell) {
+    const igYear = storageUtil.getData('noBuySellConfig', 'igYear') || false
+    if (igYear) {
+      return 1
+    }
     const indexDiff = storageUtil.getData('yearIndexDiff', indexKey) || 0
     let factor = 1 + ((indexDiff * getJiesuan(indexKey)) / 100)
     if (buySell === 'buy') {

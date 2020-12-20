@@ -36,6 +36,14 @@
         </mt-cell-swipe>
         <mt-cell-swipe>
           <div slot="title">
+            <h3>忽略年线<span style="color: red">12月涨跌可以忽略年线</span></h3>
+          </div>
+          <div class="right-wrap">
+            <mt-switch v-model="igYear" @change="stateChangeHandler"></mt-switch>
+          </div>
+        </mt-cell-swipe>
+        <mt-cell-swipe>
+          <div slot="title">
             <h3>季年线转30半年线<span style="color: red">很多指数在季度年下，确实危险</span></h3>
           </div>
           <div class="right-wrap">
@@ -200,6 +208,7 @@ export default {
       noBuy: storageUtil.getData('noBuySellConfig', 'noBuy') || false,
       noSell: storageUtil.getData('noBuySellConfig', 'noSell') || false,
       changeStyle: storageUtil.getData('noBuySellConfig', 'changeStyle') || false,
+      igYear: storageUtil.getData('noBuySellConfig', 'igYear') || false,
       qyChange30h: storageUtil.getData('noBuySellConfig', 'qyChange30h') || false,
       isMeng: storageUtil.getData('noBuySellConfig', 'isMeng') || false,
       isNoQuarter: storageUtil.getData('noBuySellConfig', 'isNoQuarter') || false,
@@ -294,6 +303,7 @@ export default {
       storageUtil.setData('noBuySellConfig', 'manyToLess', this.manyToLess)
       storageUtil.setData('noBuySellConfig', 'changeStyle', this.changeStyle)
       storageUtil.setData('noBuySellConfig', 'qyChange30h', this.qyChange30h)
+      storageUtil.setData('noBuySellConfig', 'igYear', this.igYear)
       if (this.noSell) {
         alert('没卖阶段仓位保持60%以上')
       }

@@ -281,11 +281,16 @@ export default {
   computed: {},
   created () {
     setTimeout(() => {
+      const d = this.getDate()
+      const month = d.getMonth() + 1
       if (this.changeStyle) {
-        const d = this.getDate()
-        const month = d.getMonth() + 1
         if (month === 12) {
           alert('一般来说，12月风格转就结束了')
+        }
+      }
+      if (!this.igYear) {
+        if (month === 12) {
+          alert('12月涨跌可以忽略年线')
         }
       }
     }, 1500)

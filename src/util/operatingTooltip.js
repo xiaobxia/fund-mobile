@@ -33,8 +33,8 @@ function getUserAsset () {
 // 操作的标准
 function operateStandard () {
   const asset = getUserAsset()
-  // 波段仓占比，分五次买卖
-  return asset * (1 - fixedInvestmentRatio) / (indexNumber * 5)
+  // 波段仓占比，分4次买卖
+  return asset * (1 - fixedInvestmentRatio) / (indexNumber * 4)
 }
 
 // 单个指数的仓位标准
@@ -77,7 +77,8 @@ function factorBuyBase (marketInfo) {
 function getBuyBase (type, marketInfo) {
   // 不区分熊不熊的了
   let finalFactor = factorBuyBase(marketInfo)
-  return finalFactor * operateStandard()
+  // 放大一点，因为本身买入曲线就会削减金额
+  return finalFactor * operateStandard() * (1.33)
 }
 
 function factorSellBase (marketInfo) {

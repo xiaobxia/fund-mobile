@@ -16,7 +16,7 @@
           <span v-if="kuanBuy >= 4">可以</span>买入：{{$formatMoney(otherBuyCount(canBuy))}}
         </span>
         <div>
-          <span v-if="kuanBuy >= 4" class="red-text">本金追加5000</span>
+          <span v-if="kuanBuy >= 4" class="red-text">本金追加{{getAppMoney()}}</span>
         </div>
         <div class="small-10">
           <mt-cell-swipe v-for="(item) in hhList" :key="item.code">
@@ -881,6 +881,11 @@ export default {
         sum += v.canBuyNumber
       })
       return sum
+    },
+    getAppMoney () {
+      const hb = this.otherBuyCount(this.canBuy)
+      const sum = hb * this.hhList.length
+      return sum * 2
     }
   }
 }

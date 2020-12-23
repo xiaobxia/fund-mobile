@@ -222,6 +222,12 @@ const operatingTooltip = {
         indexManyDownFactor = factorUtil.getIndexNetChangeRatioRateFactor(indexItem.rate, marketInfo, 'buy')
       }
     }
+    if (marketInfo.isBig) {
+      indexManyDownFactor = indexManyDownFactor * 1.5
+      if (indexManyDownFactor > 3) {
+        indexManyDownFactor = 3
+      }
+    }
     // 指数处于的阶段
     const indexStatus = storageUtil.getData('stockIndexStatus', indexItem.key)
     // 定投的可以多买点

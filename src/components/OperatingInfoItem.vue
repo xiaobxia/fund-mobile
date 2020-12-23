@@ -98,11 +98,11 @@
             </span>
           <span class="item">
               <span class="label">买入金额：</span>
-              <span class="value red-text">{{$formatMoney(indexBuyNumber)}}</span>
+              <span class="value red-text">{{$formatMoney(indexBuyNumber())}}</span>
             </span>
           <span class="item">
               <span class="label">原买：</span>
-              <span class="value">{{$formatMoney(indexRawBuyNumber)}}</span>
+              <span class="value">{{$formatMoney(indexRawBuyNumber())}}</span>
             </span>
         </div>
       </div>
@@ -203,13 +203,13 @@ export default {
     netChangeRatioListLarge: {
       type: Array,
       default: function () {
-        return [0, 0, 0, 0, 0, 0, 0, 0]
+        return [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
       }
     },
     closeListLarge: {
       type: Array,
       default: function () {
-        return [0, 0, 0, 0, 0, 0, 0, 0]
+        return [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
       }
     },
     lock: {
@@ -495,37 +495,6 @@ export default {
       return false
     },
     // ----------买卖金额的方法
-    // 指数买入金额
-    indexBuyNumber () {
-      return operatingTooltip.getIndexBuyNumber(
-        this.type,
-        this.indexInfo,
-        {
-          buyFlagCount: this.buyCount,
-          sellFlagCount: this.sellCount,
-          netChangeRatio: this.rate,
-          netChangeRatioList: this.netChangeRatioList,
-          noSellCount: this.noSellCount
-        },
-        this.hasCount,
-        true
-      )
-    },
-    // 没有根据涨跌幅重设的买入金额
-    indexRawBuyNumber () {
-      return operatingTooltip.getIndexBuyNumber(
-        this.type,
-        this.indexInfo,
-        {
-          buyFlagCount: this.buyCount,
-          sellFlagCount: this.sellCount,
-          netChangeRatio: this.rate,
-          netChangeRatioList: this.netChangeRatioList,
-          noSellCount: this.noSellCount
-        },
-        this.hasCount
-      )
-    },
     // 卖出金额
     indexSellNumber () {
       return operatingTooltip.getIndexSellNumber(
@@ -554,6 +523,39 @@ export default {
   created () {
   },
   methods: {
+    // 指数买入金额
+    indexBuyNumber () {
+      return operatingTooltip.getIndexBuyNumber(
+        this.type,
+        this.indexInfo,
+        {
+          buyFlagCount: this.buyCount,
+          sellFlagCount: this.sellCount,
+          netChangeRatio: this.rate,
+          netChangeRatioList: this.netChangeRatioList,
+          noSellCount: this.noSellCount,
+          isBig: this.bigDi()
+        },
+        this.hasCount,
+        true
+      )
+    },
+    // 没有根据涨跌幅重设的买入金额
+    indexRawBuyNumber () {
+      return operatingTooltip.getIndexBuyNumber(
+        this.type,
+        this.indexInfo,
+        {
+          buyFlagCount: this.buyCount,
+          sellFlagCount: this.sellCount,
+          netChangeRatio: this.rate,
+          netChangeRatioList: this.netChangeRatioList,
+          noSellCount: this.noSellCount,
+          isBig: this.bigDi()
+        },
+        this.hasCount
+      )
+    },
     toPath (path) {
       this.$router.push({
         path: path
@@ -869,6 +871,25 @@ export default {
     ifInXiaofanNow () {
       return this.isToBeXiaofanToday() || this.isInXiaofanBefore()
     },
+    // 中级底
+    bigDi () {
+      const a1 = stockAnalysisUtil.countDown(this.netChangeRatioListLarge, 9, 8).flag
+      const a12 = stockAnalysisUtil.countDown(this.netChangeRatioListLarge, 8, 8).flag
+      const a13 = stockAnalysisUtil.countDown(this.netChangeRatioListLarge, 7, 7).flag
+      const a14 = stockAnalysisUtil.countDown(this.netChangeRatioListLarge, 6, 6).flag
+      const a2 = stockAnalysisUtil.countDown(this.netChangeRatioListLarge, 9, 7)
+      const a3 = stockAnalysisUtil.countDown(this.netChangeRatioListLarge, 8, 7)
+      const a4 = stockAnalysisUtil.countDown(this.netChangeRatioListLarge, 5, 5)
+      const a5 = stockAnalysisUtil.countDown(this.netChangeRatioListLarge, 4, 4)
+      return a1 ||
+      a12 ||
+        a13 ||
+        a14 ||
+        (a2.flag && (a2.rate < -(5 * this.indexInfo.rate))) ||
+        (a3.flag && (a3.rate < -(4 * this.indexInfo.rate))) ||
+        (a4.flag && (a4.rate < -(4 * this.indexInfo.rate))) ||
+        (a5.flag && (a5.rate < -(5 * this.indexInfo.rate)))
+    },
     // 今天达成大反条件
     isToBeDafanToday () {
       // 一天5rate
@@ -894,6 +915,9 @@ export default {
        */
       const threeDownInfo = stockAnalysisUtil.countDown(this.netChangeRatioListLarge, 3, 3)
       if (threeDownInfo.rate < -(this.indexInfo.rate * 5)) {
+        return true
+      }
+      if (this.bigDi()) {
         return true
       }
       if (this.ifFourDown || this.ifFiveDown || this.ifSevenSix || this.ifEightSeven || this.ifEightSix || this.ifNineSeven) {
@@ -1513,7 +1537,7 @@ export default {
       if (this.ifHasBuy(classListF)) {
         this.$store.commit('updateIndexBondBuyMap', {
           key: this.indexInfo.key,
-          value: this.indexBuyNumber
+          value: this.indexBuyNumber()
         })
       } else {
         this.$store.commit('updateIndexBondBuyMap', {

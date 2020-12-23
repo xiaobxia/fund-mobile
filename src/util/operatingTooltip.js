@@ -78,7 +78,7 @@ function getBuyBase (type, marketInfo) {
   // 不区分熊不熊的了
   let finalFactor = factorBuyBase(marketInfo)
   // 放大一点，因为本身买入曲线就会削减金额
-  return finalFactor * operateStandard() * (1.33)
+  return finalFactor * operateStandard() * (1 / 0.66)
 }
 
 function factorSellBase (marketInfo) {
@@ -113,7 +113,7 @@ function factorSellBase (marketInfo) {
 function getSellBase (type, marketInfo) {
   let finalFactor = factorSellBase(marketInfo)
   // 卖的标准大一点
-  return finalFactor * operateStandard() * (1.33)
+  return finalFactor * operateStandard() * (1 / 0.75)
 }
 
 function getBuyNumber (hasCount, rowBuy, indexRedistributionStandard) {

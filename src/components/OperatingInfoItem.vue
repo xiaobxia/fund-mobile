@@ -888,6 +888,14 @@ export default {
       if (twoDownInfo.rate < -(this.indexInfo.rate * 5)) {
         return true
       }
+      /**
+       * 验证过没问题
+       * 而且很有可能是一个中级别底部，甚至4个rate都还行
+       */
+      const threeDownInfo = stockAnalysisUtil.countDown(this.netChangeRatioListLarge, 3, 3)
+      if (threeDownInfo.rate < -(this.indexInfo.rate * 5)) {
+        return true
+      }
       if (this.ifFourDown || this.ifFiveDown || this.ifSevenSix || this.ifEightSeven || this.ifEightSix || this.ifNineSeven) {
         return true
       } else if (this.indexInfo.key === 'baoxian' && this.ifSixFive) {

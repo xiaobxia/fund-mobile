@@ -18,8 +18,8 @@
             <span v-if="isBadDown()" class="fm-tag s-black">年季危</span>
             <span v-if="isInQuarterHotToday" class="fm-tag s-black">危险</span>
             <span v-if="isInDingtouStatus()" class="fm-tag s-red">定投</span>
-            <span v-if="mqDiffAv > 0" class="fm-tag s-red">上升</span>
-            <span v-if="mqDiffAv < 0" class="fm-tag s-green">下降</span>
+            <!--<span v-if="mqDiffAv > 0" class="fm-tag s-red">上升</span>-->
+            <!--<span v-if="mqDiffAv < 0" class="fm-tag s-green">下降</span>-->
             <span v-if="ifUnderYear" class="fm-tag s-green">年下</span>
             <span v-if="ifDownTrend" class="fm-tag s-green">下趋</span>
             <span v-if="isInDafanBefore()" class="fm-tag s-red">大反</span>
@@ -1421,12 +1421,12 @@ export default {
             }
           }
         }
-        if (this.mqDiffAv < 0) {
-          if (this.rate < 0) {
-            classListF = this.removeBuy(classListF)
-            classListF.push('should-sell')
-          }
-        }
+        // if (this.mqDiffAv < 0) {
+        //   if (this.rate < 0) {
+        //     classListF = this.removeBuy(classListF)
+        //     classListF.push('should-sell')
+        //   }
+        // }
       }
       // TODO cs-完成
       // TODO 季度线以上，月线超过0就可以不杀跌

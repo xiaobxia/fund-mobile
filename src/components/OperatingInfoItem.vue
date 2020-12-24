@@ -8,6 +8,7 @@
           <span class="index-name">{{indexInfo.name}}</span>
           <span v-if="lock" class="fm-icon lock"></span>
           <div class="tag-w" style="display: inline-block;">
+            <span v-if="bigDi()" class="fm-tag s-yellow">中级底</span>
             <span v-if="ifTargetUpCloseLock" class="fm-tag s-red">目标锁</span>
             <span v-if="targetUpDiff()" class="fm-tag s-black">目标:{{targetUpDiff()}}</span>
             <span v-if="targetDownDiff()" class="fm-tag s-black">止盈:{{targetDownDiff()}}</span>

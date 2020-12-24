@@ -47,6 +47,11 @@ const numberUtil = {
     numerator = numerator || 1
     return Math.round(10000 * ((numerator - denominator) / denominator)) / 100
   },
+  countDifferenceRateHigh: function (numerator, denominator) {
+    denominator = denominator || 1
+    numerator = numerator || 1
+    return Math.round(1000000 * ((numerator - denominator) / denominator)) / 10000
+  },
   keepTwoDecimals: function (number) {
     return Math.round(100 * number) / 100
   },

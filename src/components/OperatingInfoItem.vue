@@ -17,6 +17,8 @@
             <span v-if="isBadDown()" class="fm-tag s-black">年季危</span>
             <span v-if="isInQuarterHotToday" class="fm-tag s-black">危险</span>
             <span v-if="isInDingtouStatus()" class="fm-tag s-red">定投</span>
+            <span v-if="mqDiffAv > 0" class="fm-tag s-red">上升</span>
+            <span v-if="mqDiffAv < 0" class="fm-tag s-green">下降</span>
             <span v-if="ifUnderYear" class="fm-tag s-green">年下</span>
             <span v-if="ifDownTrend" class="fm-tag s-green">下趋</span>
             <span v-if="isInDafanBefore()" class="fm-tag s-red">大反</span>
@@ -408,6 +410,10 @@ export default {
         return !this.ifJieZ45
       }
       return false
+    },
+    // 指数上升下降
+    mqDiffAv () {
+      return storageUtil.getData('mqDiffAvIndex', this.indexInfo.key) || 0
     },
     // 是否解除定投
     ifRelieveFixLine () {
@@ -1412,6 +1418,12 @@ export default {
             if (!this.ifThreeUp) {
               classListF = this.removeSell(classListF)
             }
+          }
+        }
+        if (this.mqDiffAv < 0) {
+          if (this.rate < 0) {
+            classListF = this.removeBuy(classListF)
+            classListF.push('should-sell')
           }
         }
       }

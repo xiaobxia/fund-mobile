@@ -881,26 +881,6 @@ export default {
     },
     // 中级底
     bigDi () {
-      const a1 = stockAnalysisUtil.countDown(this.netChangeRatioListLarge, 9, 8).flag
-      const a12 = stockAnalysisUtil.countDown(this.netChangeRatioListLarge, 8, 8).flag
-      const a13 = stockAnalysisUtil.countDown(this.netChangeRatioListLarge, 7, 7).flag
-      const a14 = stockAnalysisUtil.countDown(this.netChangeRatioListLarge, 6, 6).flag
-      const a2 = stockAnalysisUtil.countDown(this.netChangeRatioListLarge, 9, 7)
-      const a3 = stockAnalysisUtil.countDown(this.netChangeRatioListLarge, 8, 7)
-      const a4 = stockAnalysisUtil.countDown(this.netChangeRatioListLarge, 5, 5)
-      const a5 = stockAnalysisUtil.countDown(this.netChangeRatioListLarge, 4, 4)
-      return a1 ||
-      a12 ||
-        a13 ||
-        a14 ||
-        (a2.flag && (a2.rate < -(5 * this.indexInfo.rate))) ||
-        (a3.flag && (a3.rate < -(4 * this.indexInfo.rate))) ||
-        (a4.flag && (a4.rate < -(4 * this.indexInfo.rate))) ||
-        (a5.flag && (a5.rate < -(5 * this.indexInfo.rate)))
-    },
-    // 今天达成大反条件
-    isToBeDafanToday () {
-      // 一天5rate
       /**
        * 验证过没问题
        * 而且很有可能是一个中级别底部
@@ -925,6 +905,26 @@ export default {
       if (threeDownInfo.rate < -(this.indexInfo.rate * 5)) {
         return true
       }
+      const a1 = stockAnalysisUtil.countDown(this.netChangeRatioListLarge, 9, 8).flag
+      const a12 = stockAnalysisUtil.countDown(this.netChangeRatioListLarge, 8, 8).flag
+      const a13 = stockAnalysisUtil.countDown(this.netChangeRatioListLarge, 7, 7).flag
+      const a14 = stockAnalysisUtil.countDown(this.netChangeRatioListLarge, 6, 6).flag
+      const a2 = stockAnalysisUtil.countDown(this.netChangeRatioListLarge, 9, 7)
+      const a3 = stockAnalysisUtil.countDown(this.netChangeRatioListLarge, 8, 7)
+      const a4 = stockAnalysisUtil.countDown(this.netChangeRatioListLarge, 5, 5)
+      const a5 = stockAnalysisUtil.countDown(this.netChangeRatioListLarge, 4, 4)
+      return a1 ||
+      a12 ||
+        a13 ||
+        a14 ||
+        (a2.flag && (a2.rate < -(5 * this.indexInfo.rate))) ||
+        (a3.flag && (a3.rate < -(4 * this.indexInfo.rate))) ||
+        (a4.flag && (a4.rate < -(4 * this.indexInfo.rate))) ||
+        (a5.flag && (a5.rate < -(5 * this.indexInfo.rate)))
+    },
+    // 今天达成大反条件
+    isToBeDafanToday () {
+      // 一天5rate
       if (this.bigDi()) {
         return true
       }

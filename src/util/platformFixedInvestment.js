@@ -140,15 +140,15 @@ Util.prototype = {
         text: 'buy-100-0'
       }
     }
-    // 跌幅两倍波动的就要
-    if (ifMatch(today,
-      {'ifUpClose': false, 'ifCloseHigh2': true}
-    )) {
-      return {
-        flag: true,
-        text: 'buy-101-0'
-      }
-    }
+    // // 跌幅两倍波动的就要
+    // if (ifMatch(today,
+    //   {'ifUpClose': false, 'ifCloseHigh2': true}
+    // )) {
+    //   return {
+    //     flag: true,
+    //     text: 'buy-101-0'
+    //   }
+    // }
     // 下跌
     if (ifMatch(today,
       {'ifCloseHigh': true, 'ifSessionDownHigh': true, 'ifSessionUpClose': false, 'ifSessionUp': false, 'ifSessionDownCloseHigh': true}
@@ -202,15 +202,15 @@ Util.prototype = {
         text: 'buy-100-0'
       }
     }
-    // 跌幅两倍波动的就要
-    if (ifMatch(today,
-      {'ifUpClose': false, 'ifCloseHigh2': true}
-    )) {
-      return {
-        flag: true,
-        text: 'buy-101-0'
-      }
-    }
+    // // 跌幅两倍波动的就要
+    // if (ifMatch(today,
+    //   {'ifUpClose': false, 'ifCloseHigh2': true}
+    // )) {
+    //   return {
+    //     flag: true,
+    //     text: 'buy-101-0'
+    //   }
+    // }
     // 下跌
     if (ifMatch(today,
       {'ifCloseHigh': true, 'ifSessionDownHigh': true, 'ifSessionUpClose': false, 'ifSessionUp': false, 'ifSessionDownCloseHigh': true}
@@ -264,15 +264,15 @@ Util.prototype = {
         text: 'buy-100-0'
       }
     }
-    // 跌幅两倍波动的就要
-    if (ifMatch(today,
-      {'ifUpClose': false, 'ifCloseHigh2': true}
-    )) {
-      return {
-        flag: true,
-        text: 'buy-101-0'
-      }
-    }
+    // // 跌幅两倍波动的就要
+    // if (ifMatch(today,
+    //   {'ifUpClose': false, 'ifCloseHigh2': true}
+    // )) {
+    //   return {
+    //     flag: true,
+    //     text: 'buy-101-0'
+    //   }
+    // }
     // 下跌
     if (ifMatch(today,
       {'ifCloseHigh': true, 'ifSessionDownHigh': true, 'ifSessionUpClose': false, 'ifSessionUp': false, 'ifSessionDownCloseHigh': true}
@@ -326,15 +326,15 @@ Util.prototype = {
         text: 'buy-100-0'
       }
     }
-    // 跌幅两倍波动的就要
-    if (ifMatch(today,
-      {'ifUpClose': false, 'ifCloseHigh2': true}
-    )) {
-      return {
-        flag: true,
-        text: 'buy-101-0'
-      }
-    }
+    // // 跌幅两倍波动的就要
+    // if (ifMatch(today,
+    //   {'ifUpClose': false, 'ifCloseHigh2': true}
+    // )) {
+    //   return {
+    //     flag: true,
+    //     text: 'buy-101-0'
+    //   }
+    // }
     // 下跌
     if (ifMatch(today,
       {'ifCloseHigh': true, 'ifSessionDownHigh': true, 'ifSessionUpClose': false, 'ifSessionUp': false, 'ifSessionDownCloseHigh': true}
@@ -388,15 +388,15 @@ Util.prototype = {
         text: 'buy-100-0'
       }
     }
-    // 跌幅两倍波动的就要
-    if (ifMatch(today,
-      {'ifUpClose': false, 'ifCloseHigh2': true}
-    )) {
-      return {
-        flag: true,
-        text: 'buy-101-0'
-      }
-    }
+    // // 跌幅两倍波动的就要
+    // if (ifMatch(today,
+    //   {'ifUpClose': false, 'ifCloseHigh2': true}
+    // )) {
+    //   return {
+    //     flag: true,
+    //     text: 'buy-101-0'
+    //   }
+    // }
     // 下跌
     if (ifMatch(today,
       {'ifCloseHigh': true, 'ifSessionDownHigh': true, 'ifSessionUpClose': false, 'ifSessionUp': false, 'ifSessionDownCloseHigh': true}
@@ -450,15 +450,15 @@ Util.prototype = {
         text: 'buy-100-0'
       }
     }
-    // 跌幅两倍波动的就要
-    if (ifMatch(today,
-      {'ifUpClose': false, 'ifCloseHigh2': true}
-    )) {
-      return {
-        flag: true,
-        text: 'buy-101-0'
-      }
-    }
+    // // 跌幅两倍波动的就要
+    // if (ifMatch(today,
+    //   {'ifUpClose': false, 'ifCloseHigh2': true}
+    // )) {
+    //   return {
+    //     flag: true,
+    //     text: 'buy-101-0'
+    //   }
+    // }
     // 下跌
     if (ifMatch(today,
       {'ifCloseHigh': true, 'ifSessionDownHigh': true, 'ifSessionUpClose': false, 'ifSessionUp': false, 'ifSessionDownCloseHigh': true}
@@ -512,15 +512,15 @@ Util.prototype = {
         text: 'buy-100-0'
       }
     }
-    // 跌幅两倍波动的就要
-    if (ifMatch(today,
-      {'ifUpClose': false, 'ifCloseHigh2': true}
-    )) {
-      return {
-        flag: true,
-        text: 'buy-101-0'
-      }
-    }
+    // // 跌幅两倍波动的就要
+    // if (ifMatch(today,
+    //   {'ifUpClose': false, 'ifCloseHigh2': true}
+    // )) {
+    //   return {
+    //     flag: true,
+    //     text: 'buy-101-0'
+    //   }
+    // }
     // 下跌
     if (ifMatch(today,
       {'ifCloseHigh': true, 'ifSessionDownHigh': true, 'ifSessionUpClose': false, 'ifSessionUp': false, 'ifSessionDownCloseHigh': true}
@@ -543,15 +543,15 @@ Util.prototype = {
         text: 'buy-100-0'
       }
     }
-    // 跌幅两倍波动的就要
-    if (ifMatch(today,
-      {'ifUpClose': false, 'ifCloseHigh2': true}
-    )) {
-      return {
-        flag: true,
-        text: 'buy-101-0'
-      }
-    }
+    // // 跌幅两倍波动的就要
+    // if (ifMatch(today,
+    //   {'ifUpClose': false, 'ifCloseHigh2': true}
+    // )) {
+    //   return {
+    //     flag: true,
+    //     text: 'buy-101-0'
+    //   }
+    // }
     // 下跌
     if (ifMatch(today,
       {'ifCloseHigh': true, 'ifSessionDownHigh': true, 'ifSessionUpClose': false, 'ifSessionUp': false, 'ifSessionDownCloseHigh': true}
@@ -636,15 +636,15 @@ Util.prototype = {
         text: 'buy-100-0'
       }
     }
-    // 跌幅两倍波动的就要
-    if (ifMatch(today,
-      {'ifUpClose': false, 'ifCloseHigh2': true}
-    )) {
-      return {
-        flag: true,
-        text: 'buy-101-0'
-      }
-    }
+    // // 跌幅两倍波动的就要
+    // if (ifMatch(today,
+    //   {'ifUpClose': false, 'ifCloseHigh2': true}
+    // )) {
+    //   return {
+    //     flag: true,
+    //     text: 'buy-101-0'
+    //   }
+    // }
     // 下跌
     if (ifMatch(today,
       {'ifCloseHigh': true, 'ifSessionDownHigh': true, 'ifSessionUpClose': false, 'ifSessionUp': false, 'ifSessionDownCloseHigh': true}
@@ -698,15 +698,15 @@ Util.prototype = {
         text: 'buy-100-0'
       }
     }
-    // 跌幅两倍波动的就要
-    if (ifMatch(today,
-      {'ifUpClose': false, 'ifCloseHigh2': true}
-    )) {
-      return {
-        flag: true,
-        text: 'buy-101-0'
-      }
-    }
+    // // 跌幅两倍波动的就要
+    // if (ifMatch(today,
+    //   {'ifUpClose': false, 'ifCloseHigh2': true}
+    // )) {
+    //   return {
+    //     flag: true,
+    //     text: 'buy-101-0'
+    //   }
+    // }
     // 下跌
     if (ifMatch(today,
       {'ifCloseHigh': true, 'ifSessionDownHigh': true, 'ifSessionUpClose': false, 'ifSessionUp': false, 'ifSessionDownCloseHigh': true}
@@ -760,15 +760,15 @@ Util.prototype = {
         text: 'buy-100-0'
       }
     }
-    // 跌幅两倍波动的就要
-    if (ifMatch(today,
-      {'ifUpClose': false, 'ifCloseHigh2': true}
-    )) {
-      return {
-        flag: true,
-        text: 'buy-101-0'
-      }
-    }
+    // // 跌幅两倍波动的就要
+    // if (ifMatch(today,
+    //   {'ifUpClose': false, 'ifCloseHigh2': true}
+    // )) {
+    //   return {
+    //     flag: true,
+    //     text: 'buy-101-0'
+    //   }
+    // }
     // 下跌
     if (ifMatch(today,
       {'ifCloseHigh': true, 'ifSessionDownHigh': true, 'ifSessionUpClose': false, 'ifSessionUp': false, 'ifSessionDownCloseHigh': true}
@@ -822,15 +822,15 @@ Util.prototype = {
         text: 'buy-100-0'
       }
     }
-    // 跌幅两倍波动的就要
-    if (ifMatch(today,
-      {'ifUpClose': false, 'ifCloseHigh2': true}
-    )) {
-      return {
-        flag: true,
-        text: 'buy-101-0'
-      }
-    }
+    // // 跌幅两倍波动的就要
+    // if (ifMatch(today,
+    //   {'ifUpClose': false, 'ifCloseHigh2': true}
+    // )) {
+    //   return {
+    //     flag: true,
+    //     text: 'buy-101-0'
+    //   }
+    // }
     // 下跌
     if (ifMatch(today,
       {'ifCloseHigh': true, 'ifSessionDownHigh': true, 'ifSessionUpClose': false, 'ifSessionUp': false, 'ifSessionDownCloseHigh': true}
@@ -884,15 +884,15 @@ Util.prototype = {
         text: 'buy-100-0'
       }
     }
-    // 跌幅两倍波动的就要
-    if (ifMatch(today,
-      {'ifUpClose': false, 'ifCloseHigh2': true}
-    )) {
-      return {
-        flag: true,
-        text: 'buy-101-0'
-      }
-    }
+    // // 跌幅两倍波动的就要
+    // if (ifMatch(today,
+    //   {'ifUpClose': false, 'ifCloseHigh2': true}
+    // )) {
+    //   return {
+    //     flag: true,
+    //     text: 'buy-101-0'
+    //   }
+    // }
     // 下跌
     if (ifMatch(today,
       {'ifCloseHigh': true, 'ifSessionDownHigh': true, 'ifSessionUpClose': false, 'ifSessionUp': false, 'ifSessionDownCloseHigh': true}

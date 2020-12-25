@@ -665,6 +665,30 @@ export default {
     // },
     // 中级底
     bigDi (netChangeRatioListLarge, rate) {
+      /**
+       * 验证过没问题
+       * 而且很有可能是一个中级别底部
+       */
+      if (netChangeRatioListLarge[0] < -(rate * 5)) {
+        return true
+      }
+      // 两天5rate
+      /**
+       * 验证过没问题
+       * 而且很有可能是一个中级别底部，甚至4个rate都还行
+       */
+      const twoDownInfo = stockAnalysisUtil.countDown(netChangeRatioListLarge, 2, 2)
+      if (twoDownInfo.rate < -(rate * 5)) {
+        return true
+      }
+      /**
+       * 验证过没问题
+       * 而且很有可能是一个中级别底部，甚至4个rate都还行
+       */
+      const threeDownInfo = stockAnalysisUtil.countDown(netChangeRatioListLarge, 3, 3)
+      if (threeDownInfo.rate < -(rate * 5)) {
+        return true
+      }
       const a1 = stockAnalysisUtil.countDown(netChangeRatioListLarge, 9, 8).flag
       const a12 = stockAnalysisUtil.countDown(netChangeRatioListLarge, 8, 8).flag
       const a13 = stockAnalysisUtil.countDown(netChangeRatioListLarge, 7, 7).flag

@@ -572,6 +572,7 @@ export default {
       this.dTShow = !this.dTShow
     },
     setBSF (value) {
+      this.stockIndexBSF = value
       storageUtil.setData('stockIndexBSF', this.indexInfo.key, value)
     },
     targetUpDiff () {

@@ -750,6 +750,10 @@ export default {
             let fourDay = stockAnalysisUtil.countDown(netChangeRatioList, 4, 4)
             let fiveDay = stockAnalysisUtil.countDown(netChangeRatioList, 5, 5)
             // 先判断是不是买少的
+            // 单日
+            if (netChangeRatioList[0] < -(3 * item.rate)) {
+              infoList[i] = '跌少'
+            }
             if (fourDay.flag) {
               infoList[i] = '跌少'
             }

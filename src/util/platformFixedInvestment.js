@@ -941,69 +941,69 @@ const codeMap = {
   'chuangye': {
     code: 'sz399006',
     name: '创业',
-    threshold: 1.01,
-    wave: 1.0815568862275453,
-    rate: 0.9367763157894737,
+    threshold: 0.94,
+    wave: 0.9002606691919192,
+    rate: 0.9642803030303041,
     mix: true
   },
   'wulin': {
     code: 'sh000016',
     name: '50',
-    threshold: 0.76,
-    rate: 0.7031645569620255,
-    wave: 0.8081952662721895,
+    threshold: 0.73,
+    rate: 0.6354166666666669,
+    wave: 0.6254334595959586,
     mix: true
   },
   'sanbai': {
     code: 'sh000300',
     name: '300',
-    threshold: 0.77,
-    rate: 0.7243790849673197,
-    wave: 0.825182926829268,
+    threshold: 0.68,
+    rate: 0.6430303030303028,
+    wave: 0.6139316919191916,
     mix: true
   },
   'wubai': {
     code: 'sh000905',
     name: '500',
-    threshold: 0.86,
-    wave: 0.853157894736842,
-    rate: 0.868132530120482,
+    threshold: 0.75,
+    rate: 0.7851515151515156,
+    wave: 0.7155340909090906,
     mix: true
   },
   'yiqian': {
     code: 'sh000852',
     name: '1000',
-    threshold: 0.83,
-    rate: 0.7927516778523488,
-    wave: 0.8675304878048783
+    threshold: 0.81,
+    rate: 0.8199116161616158,
+    wave: 0.7346313762626256
   },
   'baijiu': {
     code: 'sz399997',
     name: '白酒',
-    threshold: 1.25,
-    rate: 1.1202272727272722,
-    wave: 1.374864864864865
+    threshold: 0.85,
+    rate: 1.2198358585858582,
+    wave: 1.1786441919191923
   },
   'shipin': {
     code: 'sz399396',
     name: '食品',
     threshold: 0.85,
-    rate: 0.7876623376623377,
-    wave: 0.9127884615384618
+    rate: 1.0072348484848483,
+    wave: 0.9291464646464646
   },
   'yiliao': {
     code: 'sz399989',
     name: '医疗',
     threshold: 0.97,
-    wave: 1.0519615384615388,
-    rate: 0.8889999999999998
+    rate: 1.0185303030303037,
+    wave: 0.9420663636363635
   },
   'shengwu': {
     code: 'sz399441',
     name: '生物',
     threshold: 0.89,
-    rate: 0.8235460992907802,
-    wave: 0.9630645161290321
+    rate: 0.9690151515151516,
+    wave: 0.9054881944444442
   },
   'huangjin': {
     code: 'sh518880',
@@ -1016,22 +1016,22 @@ const codeMap = {
     code: 'sz399363',
     name: '计算机',
     threshold: 1.04,
-    rate: 1.0100719424460431,
-    wave: 1.06308
+    rate: 1.055176767676768,
+    wave: 0.9810925505050506
   },
   'dianzi': {
     code: 'sz399811',
     name: '电子',
     threshold: 0.9,
-    rate: 0.8832450331125826,
-    wave: 0.9248263888888891
+    rate: 1.0889393939393934,
+    wave: 1.021961931818182
   },
   'xinxi': {
     code: 'sh000993',
     name: '信息',
     threshold: 1.03,
-    rate: 1.0703999999999998,
-    wave: 0.9838741721854306
+    rate: 1.0425378787878792,
+    wave: 0.9673202020202025
   }
 }
 const fnMap = {

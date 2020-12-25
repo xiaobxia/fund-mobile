@@ -663,6 +663,26 @@ export default {
     //   }
     //   return false
     // },
+    // 中级底
+    bigDi (netChangeRatioListLarge, rate) {
+      const a1 = stockAnalysisUtil.countDown(netChangeRatioListLarge, 9, 8).flag
+      const a12 = stockAnalysisUtil.countDown(netChangeRatioListLarge, 8, 8).flag
+      const a13 = stockAnalysisUtil.countDown(netChangeRatioListLarge, 7, 7).flag
+      const a14 = stockAnalysisUtil.countDown(netChangeRatioListLarge, 6, 6).flag
+      const a2 = stockAnalysisUtil.countDown(netChangeRatioListLarge, 9, 7)
+      const a3 = stockAnalysisUtil.countDown(netChangeRatioListLarge, 8, 7)
+      const a4 = stockAnalysisUtil.countDown(netChangeRatioListLarge, 5, 5)
+      const a5 = stockAnalysisUtil.countDown(netChangeRatioListLarge, 4, 4)
+      // 会比波段严格一点
+      return a1 ||
+        a12 ||
+        a13 ||
+        a14 ||
+        (a2.flag && (a2.rate < -(5 * rate))) ||
+        (a3.flag && (a3.rate < -(5 * rate))) ||
+        (a4.flag && (a4.rate < -(5 * rate))) ||
+        (a5.flag && (a5.rate < -(6 * rate)))
+    },
     queryData (item) {
       return this.$http.get(`stock/${stockApiUtil.getAllUrl()}`, {
         code: item.code,
@@ -677,6 +697,7 @@ export default {
           const nowClose = recentNetValue[0]['close']
           let kline = []
           // 近的在前
+          let isBig = false
           for (let i = 0; i < 5; i++) {
             // 截取10个
             const netChangeRatioList = getNetChangeRatioList(recentNetValue, i)
@@ -701,47 +722,50 @@ export default {
             } else {
               infoList[i] = ''
             }
-            // 不是卖，也没有让买的时候
-            if (infoList[i] === '') {
-              let threeDay = stockAnalysisUtil.countDown(netChangeRatioList, 3, 3)
-              let fourDay = stockAnalysisUtil.countDown(netChangeRatioList, 4, 4)
-              let fiveDay = stockAnalysisUtil.countDown(netChangeRatioList, 5, 5)
-              // 先判断是不是买少的
-              if (fourDay.flag) {
+            let threeDay = stockAnalysisUtil.countDown(netChangeRatioList, 3, 3)
+            let fourDay = stockAnalysisUtil.countDown(netChangeRatioList, 4, 4)
+            let fiveDay = stockAnalysisUtil.countDown(netChangeRatioList, 5, 5)
+            // 先判断是不是买少的
+            if (fourDay.flag) {
+              infoList[i] = '跌少'
+            }
+            if (item.key === 'huangjin') {
+              if (threeDay.flag) {
                 infoList[i] = '跌少'
               }
-              if (item.key === 'huangjin') {
-                if (threeDay.flag) {
-                  infoList[i] = '跌少'
-                }
-              }
-              if (threeDay.flag && threeDay.rate < -(3 * item.rate)) {
-                infoList[i] = '跌少'
-              }
-              if (stockAnalysisUtil.countDown(netChangeRatioList, 6, 5).flag) {
-                infoList[i] = '跌少'
-              }
-              // 判断是不是买大的，如果是那就可以覆盖他
-              if (threeDay.flag && threeDay.rate < -(4 * item.rate)) {
-                infoList[i] = '跌多'
-              }
-              if (fourDay.flag && fourDay.rate < -(5 * item.rate)) {
-                infoList[i] = '跌多'
-              }
-              if (fiveDay.flag) {
-                infoList[i] = '跌多'
-              }
-              if (stockAnalysisUtil.countDown(netChangeRatioList, 7, 6).flag) {
-                infoList[i] = '跌多'
-              }
-              if (stockAnalysisUtil.countDown(netChangeRatioList, 8, 7).flag) {
-                infoList[i] = '跌多'
-              }
-              if (stockAnalysisUtil.countDown(netChangeRatioList, 8, 6).flag) {
-                infoList[i] = '跌多'
-              }
-              if (stockAnalysisUtil.countDown(netChangeRatioList, 9, 7).flag) {
-                infoList[i] = '跌多'
+            }
+            if (threeDay.flag && threeDay.rate < -(3 * item.rate)) {
+              infoList[i] = '跌少'
+            }
+            if (stockAnalysisUtil.countDown(netChangeRatioList, 6, 5).flag) {
+              infoList[i] = '跌少'
+            }
+            // 判断是不是买大的，如果是那就可以覆盖他
+            if (threeDay.flag && threeDay.rate < -(4 * item.rate)) {
+              infoList[i] = '跌多'
+            }
+            if (fourDay.flag && fourDay.rate < -(5 * item.rate)) {
+              infoList[i] = '跌多'
+            }
+            if (fiveDay.flag) {
+              infoList[i] = '跌多'
+            }
+            if (stockAnalysisUtil.countDown(netChangeRatioList, 7, 6).flag) {
+              infoList[i] = '跌多'
+            }
+            if (stockAnalysisUtil.countDown(netChangeRatioList, 8, 7).flag) {
+              infoList[i] = '跌多'
+            }
+            if (stockAnalysisUtil.countDown(netChangeRatioList, 8, 6).flag) {
+              infoList[i] = '跌多'
+            }
+            if (stockAnalysisUtil.countDown(netChangeRatioList, 9, 7).flag) {
+              infoList[i] = '跌多'
+            }
+            if (this.bigDi(netChangeRatioList, item.rate)) {
+              infoList[i] = '跌多'
+              if (i === 0) {
+                isBig = true
               }
             }
           }
@@ -777,7 +801,11 @@ export default {
           const rC = 1 / (60)
           const user = this.userFundAccountInfo.user
           const myAsset = user.asset
-          const buyS = (myAsset * rC) / 13
+          let buyS = (myAsset * rC) / 13
+          // 中级底放大
+          if (isBig) {
+            buyS = buyS * 2
+          }
           const params = this.indexParams[item.code]
           let buyNumber = 0
           if (['baijiu', 'yiliao', 'shengwu', 'shipin'].indexOf(item.key) !== -1) {

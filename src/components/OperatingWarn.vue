@@ -5,6 +5,9 @@
         <div v-if="changeStyle" class="img-icon-item">
           <img src="../assets/warn-icon/反转色.png" alt="">
         </div>
+        <div v-if="question_10 === '是'" class="img-icon-item">
+          <img src="../assets/牛市.png" alt="">
+        </div>
       </div>
       <!--<div class="fm-warn blue">波段仓砍仓要狠，定投才是大头</div>-->
       <!--<div class="fm-warn red">波段仓一定要遵守交易纪律</div>-->
@@ -93,7 +96,9 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'OperatingWarn',
   data () {
-    return {}
+    return {
+      question_10: storageUtil.getData('stockMarketQuestion', 'question_10')
+    }
   },
   props: {
     buyCount: {

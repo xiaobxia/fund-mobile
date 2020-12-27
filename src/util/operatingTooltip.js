@@ -239,8 +239,13 @@ const operatingTooltip = {
         indexYearDiffFactor = 1
       }
     }
+    let indexDownLineFactor = 1
+    if (marketInfo.isDownLine) {
+      indexDownLineFactor = 0.33
+    }
     let buyNumber =
       buyBase *
+      indexDownLineFactor *
       indexAverageFactor *
       indexMonthDiffFactor *
       indexYearDiffFactor *

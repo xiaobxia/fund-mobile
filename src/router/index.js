@@ -181,9 +181,9 @@ const routers = [
     component: lazyLoading('QuarterYearIndex')
   },
   {
-    name: 'MonthQuarterDiffIndex',
-    path: '/page/monthQuarterDiffIndex',
-    component: lazyLoading('MonthQuarterDiffIndex')
+    name: 'QuarterDiffIndex',
+    path: '/page/quarterDiffIndex',
+    component: lazyLoading('QuarterDiffIndex')
   },
   {
     name: 'BuySellConfig',

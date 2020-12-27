@@ -8,6 +8,7 @@
           <span class="index-name">{{indexInfo.name}}</span>
           <span v-if="lock" class="fm-icon lock"></span>
           <div class="tag-w" style="display: inline-block;">
+            <span v-if="ifFengNiu && index30Close < 0" class="fm-tag s-green">疯牛卖</span>
             <span v-if="bigDi()" class="fm-tag s-yellow">中级底</span>
             <span v-if="ifTargetUpCloseLock" class="fm-tag s-red">目标锁</span>
             <span v-if="targetUpDiff()" class="fm-tag s-black">目标:{{targetUpDiff()}}</span>
@@ -18,8 +19,8 @@
             <span v-if="isBadDown()" class="fm-tag s-black">年季危</span>
             <span v-if="isInQuarterHotToday" class="fm-tag s-black">危险</span>
             <span v-if="isInDingtouStatus()" class="fm-tag s-red">定投</span>
-            <!--<span v-if="mqDiffAv > 0" class="fm-tag s-red">上升</span>-->
-            <!--<span v-if="mqDiffAv < 0" class="fm-tag s-green">下降</span>-->
+            <span v-if="qDiffAvRateIndex > 0" class="fm-tag s-red">上升</span>
+            <span v-if="qDiffAvRateIndex < 0" class="fm-tag s-green">下降</span>
             <span v-if="ifUnderYear" class="fm-tag s-green">年下</span>
             <span v-if="ifDownTrend" class="fm-tag s-green">下趋</span>
             <span v-if="isInDafanBefore()" class="fm-tag s-red">大反</span>
@@ -416,6 +417,9 @@ export default {
     mqDiffAv () {
       return storageUtil.getData('mqDiffAvIndex', this.indexInfo.key) || 0
     },
+    qDiffAvRateIndex () {
+      return storageUtil.getData('qDiffAvRateIndex', this.indexInfo.key) || 0
+    },
     // 是否解除定投
     ifRelieveFixLine () {
       return this.indexStage === '定投' && this.averageHalfYear >= this.indexInfo.relieveFixLine
@@ -541,7 +545,8 @@ export default {
           netChangeRatio: this.rate,
           netChangeRatioList: this.netChangeRatioList,
           noSellCount: this.noSellCount,
-          isBig: this.bigDi()
+          isBig: this.bigDi(),
+          isDownLine: this.qDiffAvRateIndex < 0
         },
         this.hasCount,
         true
@@ -558,7 +563,8 @@ export default {
           netChangeRatio: this.rate,
           netChangeRatioList: this.netChangeRatioList,
           noSellCount: this.noSellCount,
-          isBig: this.bigDi()
+          isBig: this.bigDi(),
+          isDownLine: this.qDiffAvRateIndex < 0
         },
         this.hasCount
       )
@@ -1139,7 +1145,7 @@ export default {
       classList.push(this.lock ? 'lock' : 'no-lock')
       // --------技术性信号部分
       // 技术性买入
-      if (!this.ifNoSellToCanNew()) {
+      if (!this.ifNoSellToCanNew() && this.qDiffAvRateIndex > 0) {
         // 转交阶段，一般就直奔大反了
         if (buySellList[0] === buyClass) {
           // 只有月线并且季度线上能买
@@ -1182,7 +1188,7 @@ export default {
       // TODO cs-完成，没啥问题
       // TODO 两天跌了三个rate提示买
       // 转交阶段，一般就直奔大反了
-      if (!this.ifNoSellToCanNew()) {
+      if (!this.ifNoSellToCanNew() && this.qDiffAvRateIndex > 0) {
         const twoDownInfo = stockAnalysisUtil.countDown(this.netChangeRatioListLarge, 2, 2)
         if (twoDownInfo.rate < -(this.indexInfo.rate * 3)) {
           shouldClass = shouldBuyClass
@@ -1380,12 +1386,11 @@ export default {
             }
           }
         }
-        // if (this.mqDiffAv < 0) {
-        //   if (this.rate < 0) {
-        //     classListF = this.removeBuy(classListF)
-        //     classListF.push('should-sell')
-        //   }
-        // }
+        // 让我锁仓就卖出
+        if (this.qDiffAvRateIndex < 0) {
+          classListF = this.removeBuy(classListF)
+          classListF.push('should-sell')
+        }
       }
       // 权重最大的-------------
       // TODO cs-手动类，不用验证
@@ -1418,10 +1423,6 @@ export default {
       }
       // TODO 处于z45不能买
       if (this.ifInZ45StatusNow) {
-        classListF = this.removeBuy(classListF)
-      }
-      // TODO 全面大疯牛市，只有锁仓买
-      if (this.ifFengNiu) {
         classListF = this.removeBuy(classListF)
       }
       // TODO cs-完成，这里只是手动控制，还是应该靠建议仓位来限制买入，以防万一
@@ -1487,6 +1488,14 @@ export default {
         classListF = this.removeBuy(classListF)
         // 加入卖出
         classListF.push(sellClass)
+      }
+      // TODO 全面大疯牛市，只有锁仓买
+      if (this.ifFengNiu) {
+        classListF = this.removeBuy(classListF)
+        if (this.index30Close < 0) {
+          // 加入卖出
+          classListF.push(sellClass)
+        }
       }
       // ----最大最大权限--控制
       const noBuy = storageUtil.getData('noBuySellConfig', 'noBuy') || false

@@ -65,6 +65,22 @@
           <div class="bottom">指数月收益</div>
         </div>
       </div>
+      <div class="img-card" @click="toPath('/page/quarterDiffIndex')">
+        <div class="container">
+          <div class="content">
+            <img src="../../assets/线.png" alt="">
+          </div>
+          <div class="bottom">季度偏均</div>
+        </div>
+      </div>
+      <div class="img-card" @click="toPath('/page/average30Index')">
+        <div class="container">
+          <div class="content">
+            <img src="../../assets/线.png" alt="">
+          </div>
+          <div class="bottom">30日线</div>
+        </div>
+      </div>
       <div class="img-card" @click="toPath('/page/fixedInvestment')">
         <div class="container">
           <div class="content">
@@ -103,14 +119,6 @@
             <img src="../../assets/策略-选中.png" alt="">
           </div>
           <div class="bottom">近期涨幅</div>
-        </div>
-      </div>
-      <div class="img-card" @click="toPath('/page/average30Index')">
-        <div class="container">
-          <div class="content">
-            <img src="../../assets/线.png" alt="">
-          </div>
-          <div class="bottom">30日线</div>
         </div>
       </div>
       <div class="img-card" @click="toPath('/page/quarterYearIndex')">

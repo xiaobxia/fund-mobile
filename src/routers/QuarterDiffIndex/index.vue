@@ -1,6 +1,6 @@
 <template>
   <div class="operating-info">
-    <mt-header title="月季度差值均线" :fixed="true">
+    <mt-header title="季度差值均线" :fixed="true">
       <mt-button slot="left" @click="backHandler">
         <i class="fas fa-chevron-left"></i>
       </mt-button>
@@ -21,19 +21,9 @@
 <script>
 import indexList from '@/common/indexList.js'
 import storageUtil from '@/util/storageUtil.js'
-import numberUtil from '@/util/numberUtil.js'
-
-function getAverageDiff (netValue, day, index) {
-  let end = index + day
-  let count = 0
-  for (let i = index; i < end; i++) {
-    count += netValue[i]
-  }
-  return numberUtil.keepTwoDecimals(count / day)
-}
 
 export default {
-  name: 'MonthQuarterDiffIndex',
+  name: 'QuarterDiffIndex',
   data () {
     let list = []
     indexList.forEach((item) => {
@@ -59,19 +49,12 @@ export default {
       }
     },
     queryData (item) {
-      this.$http.getWithCache(`stock/getStockPriceMQDiffList`, {
-        code: item.code,
-        days: 20
+      this.$http.getWithCache(`stock/getStockPriceQDiffAV`, {
+        code: item.code
       }, {interval: 20}).then((data) => {
         if (data.success) {
-          let list = data.data.diffList
-          let newList = []
-          list.forEach((v) => {
-            newList.push(v + 15)
-          })
-          const aver = getAverageDiff(newList, 10, 0)
-          item.netChangeRatio = this.countDifferenceRateHigh(newList[0], aver)
-          storageUtil.setData('mqDiffAvIndex', item.key, item.netChangeRatio)
+          item.netChangeRatio = data.data.diffAVRate
+          storageUtil.setData('qDiffAvRateIndex', item.key, item.netChangeRatio)
         }
       })
     },

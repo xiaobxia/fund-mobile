@@ -1337,48 +1337,6 @@ export default {
           classListF = this.removeSell(classListF)
         }
       }
-      // 权重最大的-------------
-      // TODO cs-手动类，不用验证
-      // TODO 定投阶段没有卖出高亮
-      if (this.isInDingtouStatus()) {
-        classListF = this.removeSell(classListF)
-      }
-      // TODO cs-手动类，不用验证
-      // TODO 没到目标位不卖
-      if (this.ifTargetUpCloseLock) {
-        classListF = this.removeSell(classListF)
-      }
-      // TODO cs-手动类，不用验证
-      // TODO 如果见底了那就不卖
-      if (this.isInJiandi) {
-        classListF = this.removeSell(classListF)
-      }
-      // TODO cs-回测了表现还行，季度过热以后要解除了才能买
-      // TODO 季线危险阶段，又是月下，没有买入信号，因为很可能是无止境得跌
-      if (this.isInQuarterHotToday) {
-        if (this.averageMonthIndex < 0) {
-          classListF = this.removeBuy(classListF)
-          // // 高仓的话还要卖出
-          // if (this.positionHigh) {
-          //   positionHighSell = true
-          //   // 加入卖出
-          //   classListF.push(sellClass)
-          // }
-        }
-      }
-      // TODO 处于z45不能买
-      if (this.ifInZ45StatusNow) {
-        classListF = this.removeBuy(classListF)
-      }
-      // TODO 全面大疯牛市，只有锁仓买
-      if (this.ifFengNiu) {
-        classListF = this.removeBuy(classListF)
-      }
-      // TODO cs-完成，这里只是手动控制，还是应该靠建议仓位来限制买入，以防万一
-      // TODO 是否基本面恶化，是的话只有月线在上才能买，不管什么大小反
-      if (this.isInBad()) {
-        classListF = this.removeBuy(classListF)
-      }
       // -----锁仓之后就没有买入逻辑
       let ifNoSellF = false
       // TODO 锁仓的逻辑
@@ -1428,6 +1386,48 @@ export default {
         //     classListF.push('should-sell')
         //   }
         // }
+      }
+      // 权重最大的-------------
+      // TODO cs-手动类，不用验证
+      // TODO 定投阶段没有卖出高亮
+      if (this.isInDingtouStatus()) {
+        classListF = this.removeSell(classListF)
+      }
+      // TODO cs-手动类，不用验证
+      // TODO 没到目标位不卖
+      if (this.ifTargetUpCloseLock) {
+        classListF = this.removeSell(classListF)
+      }
+      // TODO cs-手动类，不用验证
+      // TODO 如果见底了那就不卖
+      if (this.isInJiandi) {
+        classListF = this.removeSell(classListF)
+      }
+      // TODO cs-回测了表现还行，季度过热以后要解除了才能买
+      // TODO 季线危险阶段，又是月下，没有买入信号，因为很可能是无止境得跌
+      if (this.isInQuarterHotToday) {
+        if (this.averageMonthIndex < 0) {
+          classListF = this.removeBuy(classListF)
+          // // 高仓的话还要卖出
+          // if (this.positionHigh) {
+          //   positionHighSell = true
+          //   // 加入卖出
+          //   classListF.push(sellClass)
+          // }
+        }
+      }
+      // TODO 处于z45不能买
+      if (this.ifInZ45StatusNow) {
+        classListF = this.removeBuy(classListF)
+      }
+      // TODO 全面大疯牛市，只有锁仓买
+      if (this.ifFengNiu) {
+        classListF = this.removeBuy(classListF)
+      }
+      // TODO cs-完成，这里只是手动控制，还是应该靠建议仓位来限制买入，以防万一
+      // TODO 是否基本面恶化，是的话只有月线在上才能买，不管什么大小反
+      if (this.isInBad()) {
+        classListF = this.removeBuy(classListF)
       }
       // TODO cs-完成
       // TODO 季度线以上，月线超过0就可以不杀跌

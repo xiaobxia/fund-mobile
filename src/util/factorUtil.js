@@ -355,6 +355,12 @@ export default {
         factor = factor * 1.1
       }
     }
+    // 年底炒消费白酒
+    if (month >= 11) {
+      if (['shipin', 'baijiu'].indexOf(key) !== -1) {
+        factor = factor * 1.2
+      }
+    }
     if (buySell === 'buy') {
       return factor
     } else {

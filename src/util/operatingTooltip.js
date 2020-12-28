@@ -272,8 +272,13 @@ const operatingTooltip = {
     let indexHighRateFactor = factorUtil.getIndexHighRateFactor(indexItem.key, 'sell')
     let indexNetChangeRatioRateFactor = factorUtil.getIndexNetChangeRatioRateFactor(indexItem.rate, marketInfo, 'sell')
     let indexDaVFactor = factorUtil.getDaVFactor(indexItem.key, 'sell')
+    let indexDownLineFactor = 1
+    if (marketInfo.isDownLine) {
+      indexDownLineFactor = 1.33
+    }
     let sellNumber =
       sellBase *
+      indexDownLineFactor *
       indexAverageFactor *
       indexMonthDiffFactor *
       indexYearDiffFactor *

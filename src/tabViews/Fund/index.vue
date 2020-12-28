@@ -70,7 +70,7 @@
           <div class="content">
             <img src="../../assets/线.png" alt="">
           </div>
-          <div class="bottom">季度偏均</div>
+          <div class="bottom">趋势线</div>
         </div>
       </div>
       <div class="img-card" @click="toPath('/page/average30Index')">

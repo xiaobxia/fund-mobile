@@ -514,7 +514,8 @@ export default {
         {
           buyFlagCount: this.buyCount,
           sellFlagCount: this.sellCount,
-          noSellCount: this.noSellCount
+          noSellCount: this.noSellCount,
+          isDownLine: this.qDiffAvRateIndex < 0
         },
         this.hasCount
       )

@@ -1,6 +1,6 @@
 <template>
   <div class="operating-info">
-    <mt-header title="季度差值均线" :fixed="true">
+    <mt-header title="趋势线" :fixed="true">
       <mt-button slot="left" @click="backHandler">
         <i class="fas fa-chevron-left"></i>
       </mt-button>

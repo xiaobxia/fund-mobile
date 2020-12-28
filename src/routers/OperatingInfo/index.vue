@@ -87,6 +87,7 @@ export default {
     let rateMap = {}
     let lockMap = {}
     let hasCount = {}
+    let hasIncomeRate = {}
     let costCount = {}
     let kline = {}
     for (let key in codeMap) {
@@ -104,6 +105,7 @@ export default {
       rateMap[key] = 0
       lockMap[codeMap[key].name] = true
       hasCount[codeMap[key].name] = 0
+      hasIncomeRate[codeMap[key].name] = 0
       costCount[codeMap[key].name] = 0
       kline[codeMap[key].name] = 0
     }
@@ -120,6 +122,7 @@ export default {
       rateMap,
       lockMap,
       hasCount,
+      hasIncomeRate,
       costCount,
       kline,
       // 持有金额，不计入定投

@@ -1289,6 +1289,16 @@ export default {
           }
         }
       }
+      // 下跌趋势，高仓卖
+      if (this.qDiffAvRateIndex < 0) {
+        if (this.positionHigh) {
+          // 高仓，不是大反不是锁仓，涨了就卖
+          if (this.rate > 0) {
+            positionHighSell = true
+            shouldClass = shouldSellClass
+          }
+        }
+      }
       // TODO cs-完成，验证过
       // TODO 锁转交，月线是在上面的，涨两天卖
       if (this.ifNoSellToCanNew()) {

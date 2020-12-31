@@ -87,6 +87,37 @@
         <span class="value" style="color: green">{{$formatMoney(getSellSum())}}</span>
       </div>
     </div>
+    <div class="warn-wrap">
+      <div class="fm-warn blue dd" @click="tgConfigShow">趋势控制</div>
+    </div>
+    <div v-if="configShow" class="config-wrap">
+      <div class="d-w">
+      <mt-cell-swipe>
+        <div slot="title">
+          <h3>上升时锁仓都买</h3>
+        </div>
+        <div class="right-wrap">
+          <mt-switch v-model="upNoSell" @change="stateChangeHandler"></mt-switch>
+        </div>
+      </mt-cell-swipe>
+        <mt-cell-swipe>
+          <div slot="title">
+            <h3>上升时不锁仓月上也有买</h3>
+          </div>
+          <div class="right-wrap">
+            <mt-switch v-model="upMUB" @change="stateChangeHandler"></mt-switch>
+          </div>
+        </mt-cell-swipe>
+        <mt-cell-swipe>
+          <div slot="title">
+            <h3>上升时月上不随便卖</h3>
+          </div>
+          <div class="right-wrap">
+            <mt-switch v-model="upMNS" @change="stateChangeHandler"></mt-switch>
+          </div>
+        </mt-cell-swipe>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -97,7 +128,11 @@ export default {
   name: 'OperatingWarn',
   data () {
     return {
-      question_10: storageUtil.getData('stockMarketQuestion', 'question_10')
+      question_10: storageUtil.getData('stockMarketQuestion', 'question_10'),
+      configShow: false,
+      upNoSell: storageUtil.getData('upDownConfig', 'upNoSell') || false,
+      upMUB: storageUtil.getData('upDownConfig', 'upMUB') || false,
+      upMNS: storageUtil.getData('upDownConfig', 'upMNS') || false
     }
   },
   props: {
@@ -179,6 +214,14 @@ export default {
         sum += parseFloat(this.indexBondSellMap[key] || 0) || 0
       }
       return sum
+    },
+    tgConfigShow () {
+      this.configShow = !this.configShow
+    },
+    stateChangeHandler () {
+      storageUtil.setData('upDownConfig', 'upNoSell', this.upNoSell)
+      storageUtil.setData('upDownConfig', 'upMUB', this.upMUB)
+      storageUtil.setData('upDownConfig', 'upMNS', this.upMNS)
     }
   }
 }
@@ -193,5 +236,12 @@ export default {
       width: 100%;
       height: 100%;
     }
+  }
+  .dd {
+    line-height: 60px;
+  }
+  .config-wrap {
+    background-color: #eee;
+    padding: 20px 0;
   }
 </style>

@@ -1152,9 +1152,10 @@ export default {
       // 有没有
       classList.push(this.ifHas ? 'has' : 'no-has')
       classList.push(this.lock ? 'lock' : 'no-lock')
+      const upMUB = storageUtil.getData('upDownConfig', 'upMUB') || false
       // --------技术性信号部分
       // 技术性买入
-      if (!this.ifNoSellToCanNew() && this.qDiffAvRateIndex > 0) {
+      if ((upMUB ? this.averageMonthIndex > 0 : !this.ifNoSellToCanNew()) && this.qDiffAvRateIndex > 0) {
         // 转交阶段，一般就直奔大反了
         if (buySellList[0] === buyClass) {
           // 只有月线并且季度线上能买
@@ -1197,7 +1198,7 @@ export default {
       // TODO cs-完成，没啥问题
       // TODO 两天跌了三个rate提示买
       // 转交阶段，一般就直奔大反了
-      if (!this.ifNoSellToCanNew() && this.qDiffAvRateIndex > 0) {
+      if ((upMUB ? this.averageMonthIndex > 0 : !this.ifNoSellToCanNew()) && this.qDiffAvRateIndex > 0) {
         const twoDownInfo = stockAnalysisUtil.countDown(this.netChangeRatioListLarge, 2, 2)
         if (twoDownInfo.rate < -(this.indexInfo.rate * 3)) {
           shouldClass = shouldBuyClass
@@ -1400,10 +1401,13 @@ export default {
             classListF = this.removeSell(classListF)
           } else {
             // 也买吧
-            if (this.rate < 0) {
-              classListF.push('should-buy')
-              if (this.ifHasBuy(classListF)) {
-                classListF.push('only-up-buy')
+            const upNoSell = storageUtil.getData('upDownConfig', 'upNoSell') || false
+            if (upNoSell) {
+              if (this.rate < 0) {
+                classListF.push('should-buy')
+                if (this.ifHasBuy(classListF)) {
+                  classListF.push('only-up-buy')
+                }
               }
             }
             // 不确定趋势，3涨以上还是卖出

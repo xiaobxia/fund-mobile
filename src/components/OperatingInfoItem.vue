@@ -1391,6 +1391,13 @@ export default {
             // 在趋势中，什么卖出信号都不用管
             classListF = this.removeSell(classListF)
           } else {
+            // 也买吧
+            if (this.rate < 0) {
+              classListF.push('should-buy')
+              if (this.ifHasBuy(classListF)) {
+                classListF.push('only-up-buy')
+              }
+            }
             // 不确定趋势，3涨以上还是卖出
             if (!this.ifThreeUp) {
               classListF = this.removeSell(classListF)

@@ -6,6 +6,16 @@
       </mt-button>
     </mt-header>
     <div class="main-body">
+      <!--<div class="d-w">-->
+        <!--<mt-cell-swipe>-->
+          <!--<div slot="title">-->
+            <!--<h3>上升时锁仓都买</h3>-->
+          <!--</div>-->
+          <!--<div class="right-wrap">-->
+            <!--<mt-switch v-model="upNoSell" @change="stateChangeHandler"></mt-switch>-->
+          <!--</div>-->
+        <!--</mt-cell-swipe>-->
+      <!--</div>-->
       <mt-cell-swipe v-for="(item) in list" :key="item.code">
         <div slot="title">
           <h3>

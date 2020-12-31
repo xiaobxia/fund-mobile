@@ -108,6 +108,14 @@
               <span class="label">原买：</span>
               <span class="value">{{$formatMoney(indexRawBuyNumber())}}</span>
             </span>
+          <span class="item">
+              <span class="label">标准仓：</span>
+              <span class="value">{{$formatMoney(positionStandard)}}</span>
+            </span>
+          <span class="item">
+              <span class="label">高仓线：</span>
+              <span class="value">{{$formatMoney(positionStandard * 0.66)}}</span>
+            </span>
         </div>
       </div>
       <div class="tip-b" @click="tagdTShow"></div>

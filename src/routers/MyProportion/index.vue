@@ -341,6 +341,7 @@ export default{
           this.yearFixCost = yearFixCost
           this.list = proportionList
           this.fixList = fixProportionList
+          localStorage.setItem('fixPc', this.countRate(this.fixTotal, this.asset) / 100)
         }
       })
     },

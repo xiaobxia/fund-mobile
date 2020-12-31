@@ -6,11 +6,17 @@ import setting from '@/setting.js'
 const highRate = indexType.highRate
 const laji = indexType.laji
 const kuanji = indexType.kuanji
-
+let pixPc = localStorage.getItem('fixPc') || 0.5
+if (pixPc > 0.66) {
+  pixPc = 0.66
+}
+if (pixPc < 0.33) {
+  pixPc = 0.33
+}
 // 定投占比
 // 得真实得定，因为这也会影响波段指数的标准仓
 // 放大波动率
-const fixedInvestmentRatio = (0.5 * 0.66)
+const fixedInvestmentRatio = (pixPc * 0.66)
 // 指数数量
 // 机构垃圾指数会根据分类提升占比
 const indexNumber = setting.indexNumber

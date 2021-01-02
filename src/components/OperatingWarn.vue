@@ -88,7 +88,10 @@
       </div>
     </div>
     <div class="warn-wrap">
-      <div class="fm-warn blue dd" @click="tgConfigShow">趋势控制</div>
+      <div class="fm-warn blue dd" @click="tgConfigShow">
+        <span>趋势控制</span>
+        <span style="float: right">{{qdaPC}}</span>
+      </div>
     </div>
     <div v-if="configShow" class="config-wrap">
       <div class="d-w">
@@ -102,7 +105,7 @@
       </mt-cell-swipe>
         <mt-cell-swipe>
           <div slot="title">
-            <h3>上升时不锁仓月上也有买</h3>
+            <h3>上升时不锁仓月上也有买（但也不是随便买）</h3>
           </div>
           <div class="right-wrap">
             <mt-switch v-model="upMUB" @change="stateChangeHandler"></mt-switch>
@@ -110,7 +113,7 @@
         </mt-cell-swipe>
         <mt-cell-swipe>
           <div slot="title">
-            <h3>上升时月上不随便卖</h3>
+            <h3>上升时月上不随便卖（并不是都不卖）</h3>
           </div>
           <div class="right-wrap">
             <mt-switch v-model="upMNS" @change="stateChangeHandler"></mt-switch>
@@ -132,7 +135,8 @@ export default {
       configShow: false,
       upNoSell: storageUtil.getData('upDownConfig', 'upNoSell') || false,
       upMUB: storageUtil.getData('upDownConfig', 'upMUB') || false,
-      upMNS: storageUtil.getData('upDownConfig', 'upMNS') || false
+      upMNS: storageUtil.getData('upDownConfig', 'upMNS') || false,
+      qdaPC: localStorage.getItem('qdaPC') || ''
     }
   },
   props: {

@@ -6,6 +6,9 @@
       </mt-button>
     </mt-header>
     <div class="main-body">
+      <div class="warn-wrap">
+        <div class="fm-warn grey">{{up}}/{{all}}</div>
+      </div>
       <mt-cell-swipe v-for="(item) in list" :key="item.code">
         <div slot="title">
           <h3>
@@ -33,7 +36,9 @@ export default {
       })
     })
     return {
-      list
+      list,
+      all: list.length,
+      up: 0
     }
   },
   computed: {
@@ -44,16 +49,23 @@ export default {
   methods: {
     initPage () {
       let list = this.list
+      let opList = []
       for (let i = 0; i < list.length; i++) {
-        this.queryData(list[i])
+        opList.push(this.queryData(list[i]))
       }
+      Promise.all(opList).then(() => {
+        localStorage.setItem('qdaPC', `${this.up}/${this.all}`)
+      })
     },
     queryData (item) {
-      this.$http.getWithCache(`stock/getStockPriceQDiffAV`, {
+      return this.$http.getWithCache(`stock/getStockPriceQDiffAV`, {
         code: item.code
       }, {interval: 20}).then((data) => {
         if (data.success) {
           item.netChangeRatio = data.data.diffAVRate
+          if (item.netChangeRatio > 0) {
+            this.up = this.up + 1
+          }
           storageUtil.setData('qDiffAvRateIndex', item.key, item.netChangeRatio)
         }
       })

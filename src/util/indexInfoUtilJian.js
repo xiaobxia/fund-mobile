@@ -6980,6 +6980,12 @@ Util.prototype = {
   },
   ifSellBaijiu: function (record, oneDayRecord) {
     return false
+  },
+  ifBuyChuangWL: function (record, oneDayRecord) {
+    return false
+  },
+  ifSellChuangWL: function (record, oneDayRecord) {
+    return false
   }
 }
 
@@ -7330,6 +7336,23 @@ const codeMap = {
     mix: false,
     quarterHotLine: 20,
     relieveZ45Line: 0
+  },
+  'chuangWL': {
+    key: 'chuangWL',
+    code: 'sz399673',
+    name: '创50',
+    threshold: 1.21,
+    rate: 1.0657060606060613,
+    wave: 0.9707331060606048,
+    fixLine: -23,
+    relieveFixLine: 4,
+    downTrendLine: -11,
+    mix: true,
+    days: 1200,
+    topLine: 40,
+    cutDownLine: 40,
+    quarterHotLine: 20,
+    relieveZ45Line: -6
   }
 }
 const fnMap = {
@@ -7382,7 +7405,9 @@ const fnMap = {
   yiqianBuy: 'ifBuyYiqian',
   yiqianSell: 'ifSellYiqian',
   baijiuBuy: 'ifBuyBaijiu',
-  baijiuSell: 'ifSellBaijiu'
+  baijiuSell: 'ifSellBaijiu',
+  chuangWLBuy: 'ifBuyChuangWL',
+  chuangWLSell: 'ifSellChuangWL'
 }
 
 const indexInfoUtilJian = {

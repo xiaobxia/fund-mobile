@@ -1311,12 +1311,20 @@ export default {
       // TODO cs-完成，验证过
       // TODO 锁转交，月线是在上面的，涨两天卖
       if (this.ifNoSellToCanNew()) {
-        // 锁转交不太可能还处于大反
-        if (this.ifTwoUp) {
-          shouldClass = shouldSellClass
-        }
-        if (this.rate > this.indexInfo.rate) {
-          shouldClass = shouldSellClass
+        // 月上不卖的控制
+        const upMNS = storageUtil.getData('upDownConfig', 'upMNS') || false
+        if (!upMNS) {
+          // 锁转交不太可能还处于大反
+          if (this.ifTwoUp) {
+            shouldClass = shouldSellClass
+          }
+          if (this.rate > this.indexInfo.rate) {
+            shouldClass = shouldSellClass
+          }
+        } else {
+          if (!this.ifThreeUp) {
+            shouldClass = shouldSellClass
+          }
         }
       }
       // 应该的类

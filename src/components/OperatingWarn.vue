@@ -88,8 +88,13 @@
       </div>
     </div>
     <div class="warn-wrap">
-      <div class="fm-warn blue dd" @click="tgConfigShow">
+      <div class="fm-warn grey dd" @click="tgConfigShow">
         <span>趋势控制</span>
+        <span class="ci">
+          <span class="red-circle" :class="{active: upNoSell}"></span>
+           <span class="red-circle" :class="{active: upMUB}"></span>
+           <span class="red-circle" :class="{active: upMNS}"></span>
+        </span>
         <span style="float: right">{{qdaPC}}</span>
       </div>
     </div>
@@ -247,5 +252,35 @@ export default {
   .config-wrap {
     background-color: #eee;
     padding: 20px 0;
+  }
+  .red-circle {
+    display: inline-block;
+    height: 32px;
+    width: 32px;
+    border-radius: 100%;
+    margin-right: 10px;
+    border: 2px solid rgb(246, 67, 70);
+    &.active {
+      background-color: rgb(246, 67, 70);
+    }
+  }
+  .green-circle {
+    display: inline-block;
+    height: 32px;
+    width: 32px;
+    border-radius: 100%;
+    margin-right: 10px;
+    border: 2px solid rgb(21, 187, 113);
+    &.active {
+      background-color: rgb(21, 187, 113);
+    }
+  }
+  .red-circle {
+
+  }
+  .ci {
+    position: relative;
+    top: 10px;
+    margin-left: 100px;
   }
 </style>

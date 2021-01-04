@@ -26,5 +26,5 @@ export default [
   { code: 'sz399393', name: '地产', mix: false, key: 'dichan' },
   { code: 'sz399995', name: '基建', mix: false, key: 'jijian' },
   { code: 'sh518880', name: '黄金', mix: false, key: 'huangjin' },
-  { code: 'sz399673', name: '创50', mix: true, key: 'chuangWL'}
+  {code: 'sz399673', name: '创50', mix: true, key: 'chuangWL'}
 ]

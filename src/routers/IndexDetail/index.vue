@@ -77,6 +77,16 @@
               <i class="fm-icon dingtou" v-if="ifFixedInvestment(item)"></i>
               <span style="float: right" :class="stockNumberClass(item.change_ratio)">{{item.change_ratio}}%</span>
             </h3>
+            <div>
+              <div class="d-t-i">
+                <span>持有金额：</span>
+                <span>{{item.sum}}</span>
+              </div>
+              <div class="d-t-i">
+                <span>可卖金额：</span>
+                <span>{{item.canSellSum}}</span>
+              </div>
+            </div>
           </div>
         </mt-cell-swipe>
       </div>
@@ -596,5 +606,10 @@ export default {
   }
   .d-b {
     padding: 20px;
+  }
+  .d-t-i {
+    margin-top: 10px;
+    display: inline-block;
+    width: 48%;
   }
 </style>

@@ -293,6 +293,11 @@ export default {
           alert('12月涨跌可以忽略年线')
         }
       }
+      if (this.igYear) {
+        if (month !== 12) {
+          alert('不是12月不需要忽略年线')
+        }
+      }
     }, 1500)
   },
   methods: {

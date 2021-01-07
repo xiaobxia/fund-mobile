@@ -1322,7 +1322,7 @@ export default {
             shouldClass = shouldSellClass
           }
         } else {
-          if (!this.ifThreeUp) {
+          if (this.ifThreeUp) {
             shouldClass = shouldSellClass
           }
         }

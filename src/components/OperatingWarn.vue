@@ -94,6 +94,7 @@
           <span class="red-circle" :class="{active: upNoSell}"></span>
            <span class="red-circle" :class="{active: upMUB}"></span>
            <span class="red-circle" :class="{active: upMNS}"></span>
+           <span class="green-circle" :class="{active: downMBNB}"></span>
         </span>
         <span style="float: right">{{qdaPC}}</span>
       </div>
@@ -124,6 +125,14 @@
             <mt-switch v-model="upMNS" @change="stateChangeHandler"></mt-switch>
           </div>
         </mt-cell-swipe>
+        <mt-cell-swipe>
+          <div slot="title">
+            <h3>下降并且月下不买入（用于控制风险）</h3>
+          </div>
+          <div class="right-wrap">
+            <mt-switch v-model="downMBNB" @change="stateChangeHandler"></mt-switch>
+          </div>
+        </mt-cell-swipe>
       </div>
     </div>
   </div>
@@ -141,7 +150,8 @@ export default {
       upNoSell: storageUtil.getData('upDownConfig', 'upNoSell') || false,
       upMUB: storageUtil.getData('upDownConfig', 'upMUB') || false,
       upMNS: storageUtil.getData('upDownConfig', 'upMNS') || false,
-      qdaPC: localStorage.getItem('qdaPC') || ''
+      qdaPC: localStorage.getItem('qdaPC') || '',
+      downMBNB: storageUtil.getData('upDownConfig', 'downMBNB') || false
     }
   },
   props: {
@@ -231,6 +241,7 @@ export default {
       storageUtil.setData('upDownConfig', 'upNoSell', this.upNoSell)
       storageUtil.setData('upDownConfig', 'upMUB', this.upMUB)
       storageUtil.setData('upDownConfig', 'upMNS', this.upMNS)
+      storageUtil.setData('upDownConfig', 'downMBNB', this.downMBNB)
     }
   }
 }

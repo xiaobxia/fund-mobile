@@ -7,6 +7,11 @@
     </mt-header>
     <div class="main-body">
       <div class="warn-wrap">
+        <div class="img-icon-list">
+          <div v-if="ifFengNiu" class="img-icon-item">
+            <img src="../../assets/牛市.png" alt="">
+          </div>
+        </div>
         <div class="fm-warn blue">年线半年线本来还不错突然跌下来，那基本是买点，如果一波行情下来年线半年线基本就没超过7%过，而且时间也不长，那就危险了</div>
       </div>
       <mt-cell-swipe v-for="(item) in list" :key="item.code" :class="item.diff < 0 ? 'kong':''">
@@ -43,6 +48,11 @@ export default {
     }
   },
   computed: {
+    ifFengNiu () {
+      // 是不是全面疯牛
+      const question10 = storageUtil.getData('stockMarketQuestion', 'question_10')
+      return question10 === '是'
+    }
   },
   beforeDestroy () {
   },
@@ -101,5 +111,13 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style rel="stylesheet/scss" lang="scss" scoped>
+  .img-icon-item {
+    width: 100px;
+    height: 100px;
+  img {
+    width: 100%;
+    height: 100%;
+  }
+  }
 </style>

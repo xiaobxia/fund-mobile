@@ -502,7 +502,7 @@ export default {
     const month = d.getMonth() + 1
     const year = d.getFullYear()
     // 2021大概率上影线
-    if (year === 2021 && month >= 3) {
+    if (year === 2021 && month >= 2) {
       factor = 0.8
     }
     // 你现在需要做的很简单，保持耐心，我们一起等未来出现一个三年级别的大顶部，早晚会有降仓的动作，但不是现在。——毕竟A股历史上，没有一次顶部不是以泡沫化收场的。

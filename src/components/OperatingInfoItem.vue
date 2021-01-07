@@ -1371,6 +1371,16 @@ export default {
           classListF = this.removeSell(classListF)
         }
       }
+      const downMBNB = storageUtil.getData('upDownConfig', 'downMBNB') || false
+      if (downMBNB) {
+        // 控制下降并且月下，没有买入，用来控制风险
+        if (this.qDiffAvRateIndex < 0 && this.averageMonthIndex < 0) {
+          // 不是单底
+          if (!this.isInOneDeep()) {
+            classListF = this.removeBuy(classListF)
+          }
+        }
+      }
       // -----锁仓之后就没有买入逻辑
       let ifNoSellF = false
       // TODO 锁仓的逻辑
@@ -1529,8 +1539,8 @@ export default {
       }
       // TODO 全面大疯牛市，只有锁仓买
       if (this.ifFengNiu) {
-        classListF = this.removeBuy(classListF)
         if (this.index30Close < 0) {
+          classListF = this.removeBuy(classListF)
           // 加入卖出
           classListF.push(sellClass)
         }

@@ -1546,6 +1546,11 @@ export default {
           classListF = this.removeBuy(classListF)
           // 加入卖出
           classListF.push(sellClass)
+        } else {
+          const f30UpNS = storageUtil.getData('upDownConfig', 'f30UpNS') || false
+          if (f30UpNS) {
+            classListF = this.removeSell(classListF)
+          }
         }
       }
       // ----最大最大权限--控制

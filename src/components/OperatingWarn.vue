@@ -95,6 +95,7 @@
            <span class="red-circle" :class="{active: upMUB}"></span>
            <span class="red-circle" :class="{active: upMNS}"></span>
            <span class="green-circle" :class="{active: downMBNB}"></span>
+                   <span class="red-circle" :class="{active: f30UpNS}"></span>
         </span>
         <span style="float: right">{{qdaPC}}</span>
       </div>
@@ -133,6 +134,14 @@
             <mt-switch v-model="downMBNB" @change="stateChangeHandler"></mt-switch>
           </div>
         </mt-cell-swipe>
+        <mt-cell-swipe>
+          <div slot="title">
+            <h3>疯牛30线上不会有卖出</h3>
+          </div>
+          <div class="right-wrap">
+            <mt-switch v-model="f30UpNS" @change="stateChangeHandler"></mt-switch>
+          </div>
+        </mt-cell-swipe>
       </div>
     </div>
   </div>
@@ -151,7 +160,8 @@ export default {
       upMUB: storageUtil.getData('upDownConfig', 'upMUB') || false,
       upMNS: storageUtil.getData('upDownConfig', 'upMNS') || false,
       qdaPC: localStorage.getItem('qdaPC') || '',
-      downMBNB: storageUtil.getData('upDownConfig', 'downMBNB') || false
+      downMBNB: storageUtil.getData('upDownConfig', 'downMBNB') || false,
+      f30UpNS: storageUtil.getData('upDownConfig', 'f30UpNS') || false
     }
   },
   props: {
@@ -242,6 +252,7 @@ export default {
       storageUtil.setData('upDownConfig', 'upMUB', this.upMUB)
       storageUtil.setData('upDownConfig', 'upMNS', this.upMNS)
       storageUtil.setData('upDownConfig', 'downMBNB', this.downMBNB)
+      storageUtil.setData('upDownConfig', 'f30UpNS', this.f30UpNS)
     }
   }
 }
@@ -266,10 +277,10 @@ export default {
   }
   .red-circle {
     display: inline-block;
-    height: 32px;
-    width: 32px;
+    height: 22px;
+    width: 22px;
     border-radius: 100%;
-    margin-right: 10px;
+    margin-right: 6px;
     border: 2px solid rgb(246, 67, 70);
     &.active {
       background-color: rgb(246, 67, 70);
@@ -277,10 +288,10 @@ export default {
   }
   .green-circle {
     display: inline-block;
-    height: 32px;
-    width: 32px;
+    height: 22px;
+    width: 22px;
     border-radius: 100%;
-    margin-right: 10px;
+    margin-right: 6px;
     border: 2px solid rgb(21, 187, 113);
     &.active {
       background-color: rgb(21, 187, 113);
@@ -291,7 +302,7 @@ export default {
   }
   .ci {
     position: relative;
-    top: 10px;
+    top: 16px;
     margin-left: 100px;
   }
 </style>

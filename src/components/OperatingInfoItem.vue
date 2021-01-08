@@ -8,7 +8,7 @@
           <span class="index-name">{{indexInfo.name}}</span>
           <span v-if="lock" class="fm-icon lock"></span>
           <div class="tag-w" style="display: inline-block;">
-            <span v-if="ifFengNiu && index30Close < 0" class="fm-tag s-green">疯牛卖</span>
+            <span v-if="ifFengNiu && index30Diff < 0" class="fm-tag s-green">疯牛卖</span>
             <span v-if="bigDi()" class="fm-tag s-yellow">中级底</span>
             <span v-if="ifTargetUpCloseLock" class="fm-tag s-red">目标锁</span>
             <span v-if="targetUpDiff()" class="fm-tag s-black">目标:{{targetUpDiff()}}</span>
@@ -290,6 +290,9 @@ export default {
     },
     index30Close () {
       return storageUtil.getData('index30Close', this.indexInfo.key) || 1
+    },
+    index30Diff () {
+      return storageUtil.getData('index30Diff', this.indexInfo.key) || 1
     },
     // 月线
     averageMonthIndex () {
@@ -1539,7 +1542,7 @@ export default {
       }
       // TODO 全面大疯牛市，只有锁仓买
       if (this.ifFengNiu) {
-        if (this.index30Close < 0) {
+        if (this.index30Diff < 0) {
           classListF = this.removeBuy(classListF)
           // 加入卖出
           classListF.push(sellClass)

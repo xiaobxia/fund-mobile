@@ -57,6 +57,7 @@ export default {
           const diff = data.data.rate
           const close = data.data.close
           storageUtil.setData('index30Close', item.key, close)
+          storageUtil.setData('index30Diff', item.key, diff)
           item.netChangeRatio = diff
         }
       })

@@ -1543,10 +1543,13 @@ export default {
       // TODO 全面大疯牛市，只有锁仓买
       if (this.ifFengNiu) {
         if (this.index30Diff < 0) {
-          classListF = this.removeBuy(classListF)
-          // 加入卖出
-          classListF.push(sellClass)
+          if (!this.ifInNoSellStatus()) {
+            classListF = this.removeBuy(classListF)
+            // 加入卖出
+            classListF.push(sellClass)
+          }
         } else {
+          // 是否开启30日线以上不卖出
           const f30UpNS = storageUtil.getData('upDownConfig', 'f30UpNS') || false
           if (f30UpNS) {
             classListF = this.removeSell(classListF)

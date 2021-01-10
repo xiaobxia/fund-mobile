@@ -302,7 +302,7 @@ export default {
   }
   .ci {
     position: relative;
-    top: 16px;
+    top: 8px;
     margin-left: 100px;
   }
 </style>

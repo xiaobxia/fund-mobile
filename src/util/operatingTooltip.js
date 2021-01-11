@@ -42,7 +42,7 @@ function operateStandard () {
   let asset = getUserAsset()
   const d = dateUtil.getDate()
   const month = d.getMonth() + 1
-  // 前两个月因为年线和月线策略，因子会被大幅度放大
+  // 前两个月因为年线和月线策略，因子会被大幅度放大，所以要降波动
   if (month <= 2) {
     asset = asset * 0.8
   }

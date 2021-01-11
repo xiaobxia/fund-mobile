@@ -258,12 +258,22 @@ export default {
       this.configShow = !this.configShow
     },
     stateChangeHandler () {
-      storageUtil.setData('upDownConfig', 'upNoSell', this.upNoSell)
-      storageUtil.setData('upDownConfig', 'upMUB', this.upMUB)
-      storageUtil.setData('upDownConfig', 'upMNS', this.upMNS)
-      storageUtil.setData('upDownConfig', 'downMBNB', this.downMBNB)
-      storageUtil.setData('upDownConfig', 'f30UpNS', this.f30UpNS)
+      let f30UpNS = this.f30UpNS
+      let upMUB = this.upMUB
+      let upMNS = this.upMNS
+      let upNoSell = this.upNoSell
+      if (this.CQXS) {
+        f30UpNS = false
+        upMUB = false
+        upMNS = false
+        upNoSell = false
+      }
       storageUtil.setData('upDownConfig', 'CQXS', this.CQXS)
+      storageUtil.setData('upDownConfig', 'upNoSell', upNoSell)
+      storageUtil.setData('upDownConfig', 'upMUB', upMUB)
+      storageUtil.setData('upDownConfig', 'upMNS', upMNS)
+      storageUtil.setData('upDownConfig', 'downMBNB', this.downMBNB)
+      storageUtil.setData('upDownConfig', 'f30UpNS', f30UpNS)
     }
   }
 }

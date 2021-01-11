@@ -92,10 +92,11 @@
         <span>趋势控制</span>
         <span class="ci">
           <span class="red-circle" :class="{active: upNoSell}"></span>
-           <span class="red-circle" :class="{active: upMUB}"></span>
-           <span class="red-circle" :class="{active: upMNS}"></span>
-           <span class="green-circle" :class="{active: downMBNB}"></span>
-                   <span class="red-circle" :class="{active: f30UpNS}"></span>
+          <span class="red-circle" :class="{active: upMUB}"></span>
+          <span class="red-circle" :class="{active: upMNS}"></span>
+          <span class="green-circle" :class="{active: downMBNB}"></span>
+          <span class="red-circle" :class="{active: f30UpNS}"></span>
+          <span class="green-circle" :class="{active: CQXS}"></span>
         </span>
         <span style="float: right">{{qdaPC}}</span>
       </div>

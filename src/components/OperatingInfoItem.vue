@@ -1399,9 +1399,18 @@ export default {
           // 锁仓了
           // 研究过了，季度线上和季度线下，没什么区别
           if (this.rate < 0) {
-            classListF.push('should-buy')
-            if (this.ifHasBuy(classListF)) {
-              classListF.push('only-up-buy')
+            if (this.CQXS) {
+              if (this.ifTwoDown) {
+                classListF.push('should-buy')
+                if (this.ifHasBuy(classListF)) {
+                  classListF.push('only-up-buy')
+                }
+              }
+            } else {
+              classListF.push('should-buy')
+              if (this.ifHasBuy(classListF)) {
+                classListF.push('only-up-buy')
+              }
             }
           }
           // 在趋势中，什么卖出信号都不用管
@@ -1416,9 +1425,18 @@ export default {
             // 锁仓了
             // 研究过了，季度线上和季度线下，没什么区别
             if (this.rate < 0) {
-              classListF.push('should-buy')
-              if (this.ifHasBuy(classListF)) {
-                classListF.push('only-up-buy')
+              if (this.CQXS) {
+                if (this.ifTwoDown) {
+                  classListF.push('should-buy')
+                  if (this.ifHasBuy(classListF)) {
+                    classListF.push('only-up-buy')
+                  }
+                }
+              } else {
+                classListF.push('should-buy')
+                if (this.ifHasBuy(classListF)) {
+                  classListF.push('only-up-buy')
+                }
               }
             }
             // 在趋势中，什么卖出信号都不用管

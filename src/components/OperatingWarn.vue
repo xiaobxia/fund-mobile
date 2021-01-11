@@ -142,6 +142,14 @@
             <mt-switch v-model="f30UpNS" @change="stateChangeHandler"></mt-switch>
           </div>
         </mt-cell-swipe>
+        <mt-cell-swipe>
+          <div slot="title">
+            <h3>策略取向偏卖出</h3>
+          </div>
+          <div class="right-wrap">
+            <mt-switch v-model="CQXS" @change="stateChangeHandler"></mt-switch>
+          </div>
+        </mt-cell-swipe>
       </div>
     </div>
   </div>
@@ -161,7 +169,8 @@ export default {
       upMNS: storageUtil.getData('upDownConfig', 'upMNS') || false,
       qdaPC: localStorage.getItem('qdaPC') || '',
       downMBNB: storageUtil.getData('upDownConfig', 'downMBNB') || false,
-      f30UpNS: storageUtil.getData('upDownConfig', 'f30UpNS') || false
+      f30UpNS: storageUtil.getData('upDownConfig', 'f30UpNS') || false,
+      CQXS: storageUtil.getData('upDownConfig', 'CQXS') || false
     }
   },
   props: {
@@ -253,6 +262,7 @@ export default {
       storageUtil.setData('upDownConfig', 'upMNS', this.upMNS)
       storageUtil.setData('upDownConfig', 'downMBNB', this.downMBNB)
       storageUtil.setData('upDownConfig', 'f30UpNS', this.f30UpNS)
+      storageUtil.setData('upDownConfig', 'CQXS', this.CQXS)
     }
   }
 }

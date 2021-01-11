@@ -541,6 +541,9 @@ export default {
     },
     positionHigh () {
       return this.hasCount > (this.positionStandard * 0.66)
+    },
+    CQXS () {
+      return storageUtil.getData('upDownConfig', 'CQXS') || false
     }
   },
   created () {

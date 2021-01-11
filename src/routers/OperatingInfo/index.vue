@@ -252,6 +252,7 @@ export default {
         let halfYearOk = 0
         let quarterOk = 0
         let monthOk = 0
+        let quarterUpDiffOk = 0
         for (let i = 0; i < indexList.length; i++) {
           opList.push(this.queryData(indexList[i]))
           const niuxiong = storageUtil.getData('stockIndexFlag', indexList[i].key)
@@ -261,6 +262,7 @@ export default {
           const halfYearDiff = storageUtil.getData('averageHalfYearIndex', indexList[i].key) || 0
           const quarterDiff = storageUtil.getData('averageQuarterIndex', indexList[i].key) || 0
           const monthDiff = storageUtil.getData('averageMonth', indexList[i].key) || 0
+          const quarterUpDiff = storageUtil.getData('qDiffAvRateIndex', indexList[i].key) || 0
           if (niuxiong === '禁买') {
             jinmai++
           }
@@ -286,6 +288,9 @@ export default {
           if (monthDiff > 0) {
             monthOk++
           }
+          if (quarterUpDiff > 0) {
+            quarterUpDiffOk++
+          }
         }
         Promise.all(opList).then(() => {
           const stockIndexDafan = storageUtil.getData('stockIndexDafan') || {}
@@ -306,6 +311,7 @@ export default {
             yearOk,
             halfYearOk,
             quarterOk,
+            quarterUpDiffOk,
             dafan,
             xiaofan,
             tandi,
@@ -326,7 +332,7 @@ export default {
       position += ((data.halfYearOk + data.dingtou) / indexNum) * 30
       // 季度线
       // 季度线没有特别重要
-      position += ((data.quarterOk + data.jiandi) / indexNum) * 20
+      position += ((data.quarterUpDiffOk + data.jiandi) / indexNum) * 20
       // 月度线
       position += ((data.dafan + (0.5 * data.xiaofan) + this.noSellCount) / indexNum) * 30
       localStorage.setItem('minPosition', position)

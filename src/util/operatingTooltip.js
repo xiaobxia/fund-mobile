@@ -2,6 +2,7 @@ import storageUtil from '@/util/storageUtil.js'
 import factorUtil from '@/util/factorUtil.js'
 import indexType from '@/common/indexType.js'
 import setting from '@/setting.js'
+import dateUtil from './dateUtil'
 
 const highRate = indexType.highRate
 const laji = indexType.laji
@@ -38,7 +39,13 @@ function getUserAsset () {
 
 // 操作的标准
 function operateStandard () {
-  const asset = getUserAsset()
+  let asset = getUserAsset()
+  const d = dateUtil.getDate()
+  const month = d.getMonth() + 1
+  // 前两个月因为年线和月线策略，因子会被大幅度放大
+  if (month <= 2) {
+    asset = asset * 0.8
+  }
   // 波段仓占比，分4次买卖
   return asset * (1 - fixedInvestmentRatio) / (indexNumber * 4)
 }

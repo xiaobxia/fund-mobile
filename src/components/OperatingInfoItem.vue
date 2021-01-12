@@ -1303,6 +1303,11 @@ export default {
             shouldClass = shouldSellClass
           }
         }
+        if (this.CQXS) {
+          if (this.rate > 0) {
+            shouldClass = shouldSellClass
+          }
+        }
       }
       // 下跌趋势，高仓卖
       if (this.qDiffAvRateIndex < 0) {

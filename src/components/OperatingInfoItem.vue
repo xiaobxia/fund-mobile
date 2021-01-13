@@ -64,6 +64,12 @@
               class="fm-tag s-black"
             >清{{ifThreeUp ? '0.3': '1/6'}}</span>
             <span v-if="ifQuarterHotNow" class="fm-tag s-black">季</span>
+            <!--想要卖出-->
+            <span
+              v-if="ifWantSellFixIndex"
+              class="fm-tag s-black"
+            >卖定按信号{{getFixSellRate()}}</span>
+            <!--正常逻辑卖出-->
             <span
               v-if="ifFixIndex && ifSellFix()"
               class="fm-tag s-black"
@@ -139,6 +145,13 @@ import indexType from '@/common/indexType.js'
 const jigou = indexType.jigou
 const laji = indexType.laji
 const kuanji = indexType.kuanji
+
+const sellFixList = [
+  'chuangye', 'wulin', 'sanbai', 'wubai', 'yiqian',
+  'baijiu', 'shipin',
+  'yiliao', 'shengwu',
+  'jisuanji', 'dianzi', 'xinxi'
+]
 
 export default {
   name: 'OperatingInfoItem',
@@ -269,6 +282,9 @@ export default {
         'yiliao', 'shengwu',
         'jisuanji', 'dianzi', 'xinxi'
       ].indexOf(this.indexInfo.key) !== -1
+    },
+    ifWantSellFixIndex () {
+      return sellFixList.indexOf(this.indexInfo.key) !== -1
     },
     nowClose () {
       return storageUtil.getData('indexNowClose', this.indexInfo.key) || 0

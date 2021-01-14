@@ -137,6 +137,14 @@
           <div class="bottom">均线排序</div>
         </div>
       </div>
+      <div class="img-card" @click="toPath('/page/recentBuy')">
+        <div class="container">
+          <div class="content">
+            <img src="../../assets/情况.png" alt="">
+          </div>
+          <div class="bottom">近期情况</div>
+        </div>
+      </div>
     </div>
   </div>
 </template>

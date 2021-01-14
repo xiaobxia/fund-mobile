@@ -191,6 +191,11 @@ const routers = [
     component: lazyLoading('BuySellConfig')
   },
   {
+    name: 'RecentBuy',
+    path: '/page/recentBuy',
+    component: lazyLoading('RecentBuy')
+  },
+  {
     name: 'DaV',
     path: '/page/daV',
     component: lazyLoading('DaV')

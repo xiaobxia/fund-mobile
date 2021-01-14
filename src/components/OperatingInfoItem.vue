@@ -115,12 +115,12 @@
               <span class="value">{{$formatMoney(indexRawBuyNumber())}}</span>
             </span>
           <span class="item">
-              <span class="label">指数标准仓：</span>
-              <span class="value">{{$formatMoney(indexPositionStandard())}}</span>
+              <span class="label">标准仓：</span>
+              <span class="value">{{$formatMoney(positionStandard)}}</span>
             </span>
           <span class="item">
               <span class="label">高仓线：</span>
-              <span class="value">{{$formatMoney(indexPositionStandard() * 0.66)}}</span>
+              <span class="value">{{$formatMoney(positionStandard * 0.66)}}</span>
             </span>
         </div>
       </div>
@@ -552,9 +552,12 @@ export default {
       const question10 = storageUtil.getData('stockMarketQuestion', 'question_10')
       return question10 === '是'
     },
-    // positionStandard () {
-    //   return operatingTooltip.positionStandard(this.indexInfo)
-    // },
+    positionStandard () {
+      return operatingTooltip.positionStandard(this.indexInfo)
+    },
+    positionHigh () {
+      return this.hasCount > (this.positionStandard * 0.66)
+    },
     CQXS () {
       return storageUtil.getData('upDownConfig', 'CQXS') || false
     }
@@ -596,20 +599,6 @@ export default {
         },
         this.hasCount
       )
-    },
-    indexPositionStandard () {
-      return operatingTooltip.indexPositionStandard(this.indexInfo, {
-        buyFlagCount: this.buyCount,
-        sellFlagCount: this.sellCount,
-        netChangeRatio: this.rate,
-        netChangeRatioList: this.netChangeRatioList,
-        noSellCount: this.noSellCount,
-        isBig: this.bigDi(),
-        isDownLine: this.qDiffAvRateIndex < 0
-      })
-    },
-    positionHigh () {
-      return this.hasCount > (this.indexPositionStandard() * 0.66)
     },
     toPath (path) {
       this.$router.push({
@@ -870,12 +859,12 @@ export default {
       if (this.ifDownTrend) {
         return (
           (this.indexDaXiaoStatusOld === '大反' || this.indexDaXiaoStatusOld === '小反') &&
-          (this.ifTwoUp)
+            (this.ifTwoUp)
         )
       } else {
         if (
           (this.indexDaXiaoStatusOld === '大反' || this.indexDaXiaoStatusOld === '小反') &&
-          this.ifThreeUp
+            this.ifThreeUp
         ) {
           return true
         }
@@ -930,25 +919,25 @@ export default {
     // 中级底
     bigDi () {
       /**
-       * 验证过没问题
-       * 而且很有可能是一个中级别底部
-       */
+         * 验证过没问题
+         * 而且很有可能是一个中级别底部
+         */
       if (this.rate < -(this.indexInfo.rate * 5)) {
         return true
       }
       // 两天5rate
       /**
-       * 验证过没问题
-       * 而且很有可能是一个中级别底部，甚至4个rate都还行
-       */
+         * 验证过没问题
+         * 而且很有可能是一个中级别底部，甚至4个rate都还行
+         */
       const twoDownInfo = stockAnalysisUtil.countDown(this.netChangeRatioListLarge, 2, 2)
       if (twoDownInfo.rate < -(this.indexInfo.rate * 5)) {
         return true
       }
       /**
-       * 验证过没问题
-       * 而且很有可能是一个中级别底部，甚至4个rate都还行
-       */
+         * 验证过没问题
+         * 而且很有可能是一个中级别底部，甚至4个rate都还行
+         */
       const threeDownInfo = stockAnalysisUtil.countDown(this.netChangeRatioListLarge, 3, 3)
       if (threeDownInfo.rate < -(this.indexInfo.rate * 5)) {
         return true
@@ -962,13 +951,13 @@ export default {
       const a4 = stockAnalysisUtil.countDown(this.netChangeRatioListLarge, 5, 5)
       const a5 = stockAnalysisUtil.countDown(this.netChangeRatioListLarge, 4, 4)
       return a1 ||
-      a12 ||
-        a13 ||
-        a14 ||
-        (a2.flag && (a2.rate < -(5 * this.indexInfo.rate))) ||
-        (a3.flag && (a3.rate < -(4 * this.indexInfo.rate))) ||
-        (a4.flag && (a4.rate < -(4 * this.indexInfo.rate))) ||
-        (a5.flag && (a5.rate < -(5 * this.indexInfo.rate)))
+          a12 ||
+          a13 ||
+          a14 ||
+          (a2.flag && (a2.rate < -(5 * this.indexInfo.rate))) ||
+          (a3.flag && (a3.rate < -(4 * this.indexInfo.rate))) ||
+          (a4.flag && (a4.rate < -(4 * this.indexInfo.rate))) ||
+          (a5.flag && (a5.rate < -(5 * this.indexInfo.rate)))
     },
     // 今天达成大反条件
     isToBeDafanToday () {
@@ -1021,15 +1010,15 @@ export default {
       // 回测过可以等两涨，也可以在月上，基本没有在月线下的情况
       return (
         this.isInQuarterHotToday &&
-        this.averageMonthIndex > 0 &&
-        this.ifTwoUp > 0 &&
-        !this.ifInNoSellStatus()
+          this.averageMonthIndex > 0 &&
+          this.ifTwoUp > 0 &&
+          !this.ifInNoSellStatus()
       )
     },
     ifSellFix () {
       return (this.ifQuarterHotCut() && this.ifQuarterHotNow) ||
-        (this.isInQuarterHotToday && this.QHS()) ||
-        this.YHS()
+          (this.isInQuarterHotToday && this.QHS()) ||
+          this.YHS()
     },
     QHS () {
       if (!this.ifInNoSellStatus()) {
@@ -1047,8 +1036,8 @@ export default {
     },
     YHS () {
       if (!this.ifInNoSellStatus() &&
-        this.yearDiff > this.indexInfo.cutDownLine &&
-        this.averageQuarter >= 0
+          this.yearDiff > this.indexInfo.cutDownLine &&
+          this.averageQuarter >= 0
       ) {
         if (['yiliao', 'shengwu'].indexOf(this.indexInfo.key) === -1) {
           if (this.ifTwoUp) {
@@ -1090,8 +1079,8 @@ export default {
       // 年线和半年线都得在下面，年线上和半年线下涨的概率该是很大的，我研究过了
       if (
         this.averageQuarter < 0 &&
-        this.averageHalfYear < 0 &&
-        this.yearDiff < 0
+          this.averageHalfYear < 0 &&
+          this.yearDiff < 0
       ) {
         // 同时也不是定投阶段
         if (!this.isInDingtouStatus()) {
@@ -1316,7 +1305,7 @@ export default {
           }
         }
         // 高仓
-        if (this.positionHigh()) {
+        if (this.positionHigh) {
           // 高仓，不是大反不是锁仓，涨了就卖
           if (this.rate > 0) {
             positionHighSell = true
@@ -1338,7 +1327,7 @@ export default {
       }
       // 下跌趋势，高仓卖
       if (this.qDiffAvRateIndex < 0) {
-        if (this.positionHigh()) {
+        if (this.positionHigh) {
           // 高仓，不是大反不是锁仓，涨了就卖
           if (this.rate > 0) {
             positionHighSell = true
@@ -1372,16 +1361,16 @@ export default {
       // TODO 季度线在年线下面没有买入
       if (this.isBadDown()) {
         if (
-          // 不是定投
+        // 不是定投
           !this.isInDingtouStatus() &&
-          // 不是单日底
-          !this.isInOneDeep() &&
-          // 不是月上
-          this.averageMonthIndex < 0
+            // 不是单日底
+            !this.isInOneDeep() &&
+            // 不是月上
+            this.averageMonthIndex < 0
         ) {
           classListF = this.removeBuy(classListF)
           // 仓位不能太高
-          if (this.hasCount > (this.indexPositionStandard() * 0.34)) {
+          if (this.hasCount > (this.positionStandard * 0.34)) {
             positionQYHigh = true
             // 如果仓位高了，涨了就卖
             // 没必要考虑大反什么的，因为是仓位太高了，才让卖出的
@@ -1451,7 +1440,7 @@ export default {
           // 6个一下不考虑
           if (
             this.noSellCount > 12 ||
-            (!manyToLess && this.noSellCount > 6)
+              (!manyToLess && this.noSellCount > 6)
           ) {
             ifNoSellF = true
             // 锁仓了
@@ -1518,7 +1507,7 @@ export default {
         if (this.averageMonthIndex < 0) {
           classListF = this.removeBuy(classListF)
           // // 高仓的话还要卖出
-          // if (this.positionHigh()) {
+          // if (this.positionHigh) {
           //   positionHighSell = true
           //   // 加入卖出
           //   classListF.push(sellClass)
@@ -1703,10 +1692,10 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-.tag-w {
-  display: inline-block;
-  width: 500px;
-}
+  .tag-w {
+    display: inline-block;
+    width: 500px;
+  }
   .index-name, .rate-t {
     vertical-align: top;
   }

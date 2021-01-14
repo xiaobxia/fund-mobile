@@ -417,7 +417,7 @@ export default {
   },
   methods: {
     ifRemoveFix (key) {
-      if (['jisuanji', 'xinxi', 'yiqian'].indexOf(key) !== -1) {
+      if (['jisuanji', 'xinxi'].indexOf(key) !== -1) {
         return true
       }
       return false

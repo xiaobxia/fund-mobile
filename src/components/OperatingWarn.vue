@@ -263,10 +263,10 @@ export default {
       let upMNS = this.upMNS
       let upNoSell = this.upNoSell
       if (this.CQXS) {
-        f30UpNS = false
-        upMUB = false
-        upMNS = false
-        upNoSell = false
+        // f30UpNS = false
+        // upMUB = false
+        // upMNS = false
+        // upNoSell = false
       }
       storageUtil.setData('upDownConfig', 'CQXS', this.CQXS)
       storageUtil.setData('upDownConfig', 'upNoSell', upNoSell)

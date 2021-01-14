@@ -115,12 +115,12 @@
               <span class="value">{{$formatMoney(indexRawBuyNumber())}}</span>
             </span>
           <span class="item">
-              <span class="label">标准仓：</span>
-              <span class="value">{{$formatMoney(positionStandard)}}</span>
+              <span class="label">指数标准仓：</span>
+              <span class="value">{{$formatMoney(indexPositionStandard())}}</span>
             </span>
           <span class="item">
               <span class="label">高仓线：</span>
-              <span class="value">{{$formatMoney(positionStandard * 0.66)}}</span>
+              <span class="value">{{$formatMoney(indexPositionStandard() * 0.66)}}</span>
             </span>
         </div>
       </div>
@@ -552,12 +552,9 @@ export default {
       const question10 = storageUtil.getData('stockMarketQuestion', 'question_10')
       return question10 === '是'
     },
-    positionStandard () {
-      return operatingTooltip.positionStandard(this.indexInfo)
-    },
-    positionHigh () {
-      return this.hasCount > (this.positionStandard * 0.66)
-    },
+    // positionStandard () {
+    //   return operatingTooltip.positionStandard(this.indexInfo)
+    // },
     CQXS () {
       return storageUtil.getData('upDownConfig', 'CQXS') || false
     }
@@ -599,6 +596,20 @@ export default {
         },
         this.hasCount
       )
+    },
+    indexPositionStandard () {
+      return operatingTooltip.indexPositionStandard(this.indexInfo, {
+        buyFlagCount: this.buyCount,
+        sellFlagCount: this.sellCount,
+        netChangeRatio: this.rate,
+        netChangeRatioList: this.netChangeRatioList,
+        noSellCount: this.noSellCount,
+        isBig: this.bigDi(),
+        isDownLine: this.qDiffAvRateIndex < 0
+      })
+    },
+    positionHigh () {
+      return this.hasCount > (this.indexPositionStandard() * 0.66)
     },
     toPath (path) {
       this.$router.push({
@@ -1305,7 +1316,7 @@ export default {
           }
         }
         // 高仓
-        if (this.positionHigh) {
+        if (this.positionHigh()) {
           // 高仓，不是大反不是锁仓，涨了就卖
           if (this.rate > 0) {
             positionHighSell = true
@@ -1327,7 +1338,7 @@ export default {
       }
       // 下跌趋势，高仓卖
       if (this.qDiffAvRateIndex < 0) {
-        if (this.positionHigh) {
+        if (this.positionHigh()) {
           // 高仓，不是大反不是锁仓，涨了就卖
           if (this.rate > 0) {
             positionHighSell = true
@@ -1370,7 +1381,7 @@ export default {
         ) {
           classListF = this.removeBuy(classListF)
           // 仓位不能太高
-          if (this.hasCount > (this.positionStandard * 0.34)) {
+          if (this.hasCount > (this.indexPositionStandard() * 0.34)) {
             positionQYHigh = true
             // 如果仓位高了，涨了就卖
             // 没必要考虑大反什么的，因为是仓位太高了，才让卖出的
@@ -1507,7 +1518,7 @@ export default {
         if (this.averageMonthIndex < 0) {
           classListF = this.removeBuy(classListF)
           // // 高仓的话还要卖出
-          // if (this.positionHigh) {
+          // if (this.positionHigh()) {
           //   positionHighSell = true
           //   // 加入卖出
           //   classListF.push(sellClass)

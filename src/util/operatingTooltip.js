@@ -337,6 +337,21 @@ const operatingTooltip = {
     return ''
   },
   // 仓位标准
-  positionStandard
+  positionStandard,
+  indexPositionStandard (indexItem, marketInfo) {
+    const indexRedistributionStandard = positionStandard(indexItem)
+    // 年排行在前面的，给更高仓位配比
+    let indexYearDiffFactor = factorUtil.getIndexYearDiffFactor(indexItem.key, 'buy')
+    // 指数处于的阶段
+    const indexStatus = storageUtil.getData('stockIndexStatus', indexItem.key)
+    // 定投的可以多买点
+    if (indexStatus === '定投') {
+      if (indexYearDiffFactor < 1) {
+        indexYearDiffFactor = 1
+      }
+    }
+    let finalFactor = factorBuyBase(marketInfo)
+    return indexRedistributionStandard * indexYearDiffFactor * finalFactor
+  }
 }
 export default operatingTooltip

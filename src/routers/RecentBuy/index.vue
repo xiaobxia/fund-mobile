@@ -34,6 +34,24 @@
           <span class="value" :class="stockNumberClass(bondValuation - bondCost)">{{$formatMoney(bondValuation - bondCost)}}</span>
         </span>
       </div>
+      <h4>定投</h4>
+      <div>
+        <div v-for="(item) in fixList" :key="item.key">
+          <div class="dt">
+            <span style="text-align: left" >{{item.key}}</span>
+            <span style="text-align: center" >{{$formatMoney(item.cost)}}</span>
+            <span style="text-align: right" :class="stockNumberClass(item.res)">{{$formatMoney(item.res)}}</span>
+          </div>
+        </div>
+      </div>
+      <h4>波段</h4>
+      <div>
+        <div v-for="(item) in bondList" :key="item.key" class="dt">
+          <span style="text-align: left" >{{item.key}}</span>
+          <span style="text-align: center" >{{$formatMoney(item.cost)}}</span>
+          <span style="text-align: right" :class="stockNumberClass(item.res)">{{$formatMoney(item.res)}}</span>
+        </div>
+      </div>
       <mt-datetime-picker
         ref="picker"
         v-model="pickerVisible"
@@ -62,7 +80,9 @@ export default{
       fixCost: 0,
       fixValuation: 0,
       startDate: new Date(start),
-      endDate: new Date()
+      endDate: new Date(),
+      bondList: {},
+      fixList: {}
     }
   },
   computed: {
@@ -92,6 +112,8 @@ export default{
       let bondValuation = 0
       let fixCost = 0
       let fixValuation = 0
+      const bondMap = {}
+      const fixMap = {}
       for (let i = 0; i < this.list.length; i++) {
         const item = this.list[i]
         item.position_record.forEach((record) => {
@@ -99,17 +121,63 @@ export default{
             allCost += record.costSum
             allValuation += record.valuationSum
             if (item.strategy === '1') {
-              // 波
               bondCost += record.costSum
               bondValuation += record.valuationSum
+              if (bondMap[item.theme]) {
+                bondMap[item.theme].cost += record.costSum
+                bondMap[item.theme].valuation += record.valuationSum
+              } else {
+                bondMap[item.theme] = {
+                  cost: record.costSum,
+                  valuation: record.valuationSum
+                }
+              }
             } else {
-              // 定
               fixCost += record.costSum
               fixValuation += record.valuationSum
+              if (fixMap[item.theme]) {
+                fixMap[item.theme].cost += record.costSum
+                fixMap[item.theme].valuation += record.valuationSum
+              } else {
+                fixMap[item.theme] = {
+                  cost: record.costSum,
+                  valuation: record.valuationSum
+                }
+              }
             }
           }
         })
       }
+      const bondList = []
+      const fixList = []
+      for (let key in bondMap) {
+        const v = bondMap[key]
+        bondList.push({
+          key: key,
+          cost: v.cost,
+          valuation: v.valuation,
+          res: v.valuation - v.cost
+        })
+      }
+      for (let key in fixMap) {
+        const v = fixMap[key]
+        fixList.push({
+          key: key,
+          cost: v.cost,
+          valuation: v.valuation,
+          res: v.valuation - v.cost
+        })
+      }
+      fixList.sort((a, b) => {
+        return b.res - a.res
+      })
+      bondList.sort((a, b) => {
+        return b.res - a.res
+      })
+      console.log(fixList)
+      console.log(bondList)
+      this.bondList = bondList
+      this.fixList = fixList
       this.allCost = allCost
       this.allValuation = allValuation
       this.bondCost = bondCost
@@ -132,5 +200,13 @@ export default{
   .m-wi {
     display: inline-block;
     width: 5em;
+  }
+  .dt {
+    border-bottom: 1px solid #ccc;
+    span {
+      vertical-align: top;
+      display: inline-block;
+      width: 32%;
+    }
   }
 </style>

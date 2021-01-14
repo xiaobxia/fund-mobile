@@ -131,6 +131,10 @@
           <div class="bb-t" :class="{active: stockIndexBSF === '买'}" @click="setBSF('买')">买</div>
           <div class="bb-t" :class="{active: stockIndexBSF === '卖'}" @click="setBSF('卖')">卖</div>
         </div>
+        <div>
+          <div class="bb-t" :class="{active: stockIndexPSF === ''}" @click="setPSF('')">置空</div>
+          <div class="bb-t" :class="{active: stockIndexPSF === '限仓'}" @click="setPSF('限仓')">限仓</div>
+        </div>
       </div>
     </div>
   </mt-cell-swipe>
@@ -153,11 +157,13 @@ export default {
   name: 'OperatingInfoItem',
   data () {
     const stockIndexBSF = storageUtil.getData('stockIndexBSF', this.indexInfo.key) || ''
+    const stockIndexPSF = storageUtil.getData('stockIndexPSF', this.indexInfo.key) || ''
     return {
       positionQYHigh: false,
       positionHighSell: false,
-      dTShow: stockIndexBSF !== '',
-      stockIndexBSF: stockIndexBSF
+      dTShow: stockIndexBSF !== '' || stockIndexPSF !== '',
+      stockIndexBSF: stockIndexBSF,
+      stockIndexPSF: stockIndexPSF
     }
   },
   props: {
@@ -552,7 +558,11 @@ export default {
       return operatingTooltip.positionStandard(this.indexInfo)
     },
     positionHigh () {
-      return this.hasCount > (this.positionStandard * 0.66)
+      let ps = this.positionStandard * 0.66
+      if (this.stockIndexPSF) {
+        ps = this.positionStandard * 0.34
+      }
+      return this.hasCount > ps
     },
     CQXS () {
       return storageUtil.getData('upDownConfig', 'CQXS') || false
@@ -573,7 +583,7 @@ export default {
           netChangeRatioList: this.netChangeRatioList,
           noSellCount: this.noSellCount,
           isBig: this.bigDi(),
-          isDownLine: this.qDiffAvRateIndex < 0
+          isDownLine: this.qDiffAvRateIndex < 0 || (!!this.stockIndexPSF)
         },
         this.hasCount,
         true
@@ -591,7 +601,7 @@ export default {
           netChangeRatioList: this.netChangeRatioList,
           noSellCount: this.noSellCount,
           isBig: this.bigDi(),
-          isDownLine: this.qDiffAvRateIndex < 0
+          isDownLine: this.qDiffAvRateIndex < 0 || (!!this.stockIndexPSF)
         },
         this.hasCount
       )
@@ -607,6 +617,10 @@ export default {
     setBSF (value) {
       this.stockIndexBSF = value
       storageUtil.setData('stockIndexBSF', this.indexInfo.key, value)
+    },
+    setPSF (value) {
+      this.stockIndexPSF = value
+      storageUtil.setData('stockIndexPSF', this.indexInfo.key, value)
     },
     targetUpDiff () {
       if (this.nowClose && this.targetUpClose) {

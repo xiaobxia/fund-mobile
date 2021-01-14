@@ -141,17 +141,13 @@ import storageUtil from '@/util/storageUtil.js'
 import operatingTooltip from '@/util/operatingTooltip.js'
 import stockAnalysisUtil from '@/util/stockAnalysisUtil.js'
 import indexType from '@/common/indexType.js'
+import setting from '@/setting.js'
 
 const jigou = indexType.jigou
 const laji = indexType.laji
 const kuanji = indexType.kuanji
 
-const sellFixList = [
-  'chuangye', 'wulin', 'sanbai', 'wubai', 'yiqian',
-  'baijiu', 'shipin',
-  'yiliao', 'shengwu',
-  'jisuanji', 'dianzi', 'xinxi'
-]
+const sellFixList = setting.sellFixList
 
 export default {
   name: 'OperatingInfoItem',

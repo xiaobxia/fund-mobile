@@ -98,6 +98,9 @@ import indexList from '@/common/indexList'
 import stockApiUtil from '@/util/stockApiUtil.js'
 import stockAnalysisUtil from '@/util/stockAnalysisUtil.js'
 import { mapGetters } from 'vuex'
+import setting from '@/setting.js'
+
+const sellFixList = setting.sellFixList
 
 const codeMap = fixedInvestment.codeMap
 const InfoUtil = fixedInvestment.Util
@@ -449,6 +452,12 @@ export default {
         }
         // 锁仓的话4卖
         if (flag) {
+          return true
+        }
+      }
+      if (sellFixList.indexOf(key) !== -1) {
+        let threeDay = stockAnalysisUtil.countUp(netChangeRatioList, 3, 3)
+        if (threeDay.flag) {
           return true
         }
       }

@@ -103,7 +103,7 @@
     </div>
     <div v-if="configShow" class="config-wrap">
       <div class="d-w">
-        <div class="red-text">都说风险了，那就倾向卖出，锁仓第一跌不买</div>
+        <div class="red-text">都说风险了，那就倾向卖出，锁仓第一跌不买，建议仓位在5以下</div>
       <mt-cell-swipe>
         <div slot="title">
           <h3>上升时锁仓都买</h3>

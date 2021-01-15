@@ -1475,7 +1475,9 @@ export default {
             }
           }
           // 在趋势中，什么卖出信号都不用管
-          classListF = this.removeSell(classListF)
+          if (!this.stockIndexPSF) {
+            classListF = this.removeSell(classListF)
+          }
         } else {
           // 6个一下不考虑
           if (
@@ -1501,7 +1503,9 @@ export default {
               }
             }
             // 在趋势中，什么卖出信号都不用管
-            classListF = this.removeSell(classListF)
+            if (!this.stockIndexPSF) {
+              classListF = this.removeSell(classListF)
+            }
           } else {
             // 也买吧
             const upNoSell = storageUtil.getData('upDownConfig', 'upNoSell') || false
@@ -1515,7 +1519,9 @@ export default {
             }
             // 不确定趋势，3涨以上还是卖出
             if (!this.ifThreeUp) {
-              classListF = this.removeSell(classListF)
+              if (!this.stockIndexPSF) {
+                classListF = this.removeSell(classListF)
+              }
             }
           }
         }

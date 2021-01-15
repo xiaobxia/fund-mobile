@@ -120,7 +120,7 @@
             </span>
           <span class="item">
               <span class="label">高仓线：</span>
-              <span class="value">{{$formatMoney(positionStandard * 0.66)}}</span>
+              <span class="value">{{$formatMoney(positionHighLine)}}</span>
             </span>
         </div>
       </div>
@@ -557,6 +557,13 @@ export default {
     positionStandard () {
       return operatingTooltip.positionStandard(this.indexInfo)
     },
+    positionHighLine () {
+      let ps = this.positionStandard * 0.66
+      if (this.stockIndexPSF) {
+        ps = this.positionStandard * 0.34
+      }
+      return ps
+    },
     positionHigh () {
       let ps = this.positionStandard * 0.66
       if (this.stockIndexPSF) {
@@ -573,7 +580,7 @@ export default {
   methods: {
     // 指数买入金额
     indexBuyNumber () {
-      return operatingTooltip.getIndexBuyNumber(
+      const money = operatingTooltip.getIndexBuyNumber(
         this.type,
         this.indexInfo,
         {
@@ -588,10 +595,16 @@ export default {
         this.hasCount,
         true
       )
+      // 限制买入不超过标准仓的0.33
+      const max = this.positionStandard * 0.33
+      if (money > max) {
+        return max
+      }
+      return money
     },
     // 没有根据涨跌幅重设的买入金额
     indexRawBuyNumber () {
-      return operatingTooltip.getIndexBuyNumber(
+      const money = operatingTooltip.getIndexBuyNumber(
         this.type,
         this.indexInfo,
         {
@@ -605,6 +618,12 @@ export default {
         },
         this.hasCount
       )
+      // 限制买入不超过标准仓的0.33
+      const max = this.positionStandard * 0.33
+      if (money > max) {
+        return max
+      }
+      return money
     },
     toPath (path) {
       this.$router.push({

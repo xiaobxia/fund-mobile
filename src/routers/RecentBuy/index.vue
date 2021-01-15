@@ -37,7 +37,7 @@
       </div>
       <h4>定投</h4>
       <div>
-        <div v-for="(item) in fixList" :key="item.key">
+        <div v-for="(item) in fixList" :key="`d${item.key}`">
           <div class="dt">
             <span style="text-align: left" >{{item.key}}</span>
             <span style="text-align: center" >{{$formatMoney(item.cost)}}</span>
@@ -47,7 +47,7 @@
       </div>
       <h4>波段</h4>
       <div>
-        <div v-for="(item) in bondList" :key="item.key" class="dt">
+        <div v-for="(item) in bondList" :key="`b${item.key}`" class="dt">
           <span style="text-align: left" >{{item.key}}</span>
           <span style="text-align: center" >{{$formatMoney(item.cost)}}</span>
           <span style="text-align: right" :class="stockNumberClass(item.res)">{{$formatMoney(item.res)}}</span>
@@ -137,6 +137,9 @@ export default{
             } else {
               fixCost += record.costSum
               fixValuation += record.valuationSum
+              if (!item.theme) {
+                item.theme = '混合'
+              }
               if (fixMap[item.theme]) {
                 fixMap[item.theme].cost += record.costSum
                 fixMap[item.theme].valuation += record.valuationSum

@@ -152,6 +152,14 @@
             <mt-switch v-model="CQXS" @change="stateChangeHandler"></mt-switch>
           </div>
         </mt-cell-swipe>
+        <mt-cell-swipe>
+          <div slot="title">
+            <h3>强制卖出</h3>
+          </div>
+          <div class="right-wrap">
+            <mt-switch v-model="QZMC" @change="stateChangeHandler"></mt-switch>
+          </div>
+        </mt-cell-swipe>
       </div>
     </div>
   </div>
@@ -172,7 +180,8 @@ export default {
       qdaPC: localStorage.getItem('qdaPC') || '',
       downMBNB: storageUtil.getData('upDownConfig', 'downMBNB') || false,
       f30UpNS: storageUtil.getData('upDownConfig', 'f30UpNS') || false,
-      CQXS: storageUtil.getData('upDownConfig', 'CQXS') || false
+      CQXS: storageUtil.getData('upDownConfig', 'CQXS') || false,
+      QZMC: storageUtil.getData('upDownConfig', 'QZMC') || false
     }
   },
   props: {
@@ -275,6 +284,7 @@ export default {
       storageUtil.setData('upDownConfig', 'upMNS', upMNS)
       storageUtil.setData('upDownConfig', 'downMBNB', this.downMBNB)
       storageUtil.setData('upDownConfig', 'f30UpNS', f30UpNS)
+      storageUtil.setData('upDownConfig', 'QZMC', this.QZMC)
     }
   }
 }

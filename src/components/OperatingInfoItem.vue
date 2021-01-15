@@ -58,6 +58,7 @@
             <span v-if="ifHighDown()" class="fm-tag s-blue">清2/3</span>
             <span v-if="ifLowUp()" class="fm-tag s-blue">见顶</span>
             <span v-if="ifLowUp()" class="fm-tag s-blue">清2/3</span>
+            <span v-if="QZMC" class="fm-tag s-blue">强卖1/3</span>
             <!--执行部分-->
             <span
               v-if="ifQuarterHotCut()"
@@ -573,6 +574,9 @@ export default {
     },
     CQXS () {
       return storageUtil.getData('upDownConfig', 'CQXS') || false
+    },
+    QZMC () {
+      return storageUtil.getData('upDownConfig', 'QZMC') || false
     }
   },
   created () {
@@ -1660,6 +1664,13 @@ export default {
       if (this.stockIndexBSF === '卖') {
         classListF = this.removeBuy(classListF)
         classListF.push('sell')
+      }
+      // 强制卖出
+      if (this.QZMC) {
+        if (this.rate > 0) {
+          classListF = this.removeBuy(classListF)
+          classListF.push('sell')
+        }
       }
       // 发送到服务端
       this.sendFlagToServer(classListF)

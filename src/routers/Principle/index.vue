@@ -86,6 +86,7 @@
       </div>
       <div class="question">
         是不是全面大疯牛市，到了年线下面才可以解除
+        <span style="color: red">牛市就是把你撩到沸腾，今天不跳车，明天就跌停；今天不上车，明天就涨停，不断打自己脸，打到信心爆棚为止</span>
       </div>
       <div class="answer">
         <mt-radio

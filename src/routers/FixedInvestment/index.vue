@@ -456,7 +456,7 @@ export default {
         }
       }
       if (sellFixList.indexOf(key) !== -1) {
-        let threeDay = stockAnalysisUtil.countUp(netChangeRatioList, 3, 3)
+        let threeDay = stockAnalysisUtil.countUp(netChangeRatioListLarge, 3, 3)
         if (threeDay.flag) {
           return true
         }

@@ -6,8 +6,9 @@
       </mt-button>
     </mt-header>
     <div class="main-body">
-      <div style="text-align: center">{{bgTime}}</div>
-      <mt-button type="primary" @click="selectDate" class="main-btn">选择时间</mt-button>
+      <mt-field label="买入日期" placeholder="请输入" v-model="bgTime"></mt-field>
+      <!--<div style="text-align: center">{{bgTime}}</div>-->
+      <mt-button type="primary" @click="selectDate" class="main-btn">查询</mt-button>
       <div class="detail-info-wrap">
         <span class="item">
           <span class="label">总买入：</span>
@@ -52,14 +53,14 @@
           <span style="text-align: right" :class="stockNumberClass(item.res)">{{$formatMoney(item.res)}}</span>
         </div>
       </div>
-      <mt-datetime-picker
-        ref="picker"
-        v-model="pickerVisible"
-        type="date"
-        :startDate="startDate"
-        :endDate="endDate"
-        @confirm="handleConfirm">
-      </mt-datetime-picker>
+      <!--<mt-datetime-picker-->
+        <!--ref="picker"-->
+        <!--v-model="pickerVisible"-->
+        <!--type="date"-->
+        <!--:startDate="startDate"-->
+        <!--:endDate="endDate"-->
+        <!--@confirm="handleConfirm">-->
+      <!--</mt-datetime-picker>-->
     </div>
   </div>
 </template>
@@ -103,7 +104,7 @@ export default{
       this.aYData()
     },
     selectDate () {
-      this.$refs.picker.open()
+      this.aYData()
     },
     aYData () {
       let allCost = 0
@@ -117,7 +118,8 @@ export default{
       for (let i = 0; i < this.list.length; i++) {
         const item = this.list[i]
         item.position_record.forEach((record) => {
-          if (record.confirm_date >= this.bgTime) {
+          // 用买入日期，而不是确认日期
+          if (record.confirm_date > this.bgTime) {
             allCost += record.costSum
             allValuation += record.valuationSum
             if (item.strategy === '1') {

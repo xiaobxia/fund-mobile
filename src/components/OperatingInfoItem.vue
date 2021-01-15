@@ -54,7 +54,7 @@
             <span v-if="positionQYHigh" class="fm-tag s-black">危高仓</span>
             <span v-if="positionHighSell" class="fm-tag s-black">高仓卖</span>
             <span v-if="ifBadLow()" class="fm-tag s-black">清2/3</span>
-            <span v-if="ifHighDown()" class="fm-tag s-blue">见顶</span>
+            <span v-if="ifHighDown()" class="fm-tag s-blue">见顶，开限仓，开季危</span>
             <span v-if="ifHighDown()" class="fm-tag s-blue">清2/3</span>
             <span v-if="ifLowUp()" class="fm-tag s-blue">见顶</span>
             <span v-if="ifLowUp()" class="fm-tag s-blue">清2/3</span>
@@ -1418,6 +1418,17 @@ export default {
           }
         }
       }
+      // 开启限仓了，并且仓位超出限仓金额，月下就不买了
+      if (this.stockIndexPSF) {
+        if (this.averageMonthIndex < 0) {
+          if (this.positionHigh) {
+            // 不是单底
+            if (!this.isInOneDeep()) {
+              classListF = this.removeBuy(classListF)
+            }
+          }
+        }
+      }
       // -----锁仓之后就没有买入逻辑
       let ifNoSellF = false
       // TODO 锁仓的逻辑
@@ -1430,7 +1441,7 @@ export default {
           // 锁仓了
           // 研究过了，季度线上和季度线下，没什么区别
           if (this.rate < 0) {
-            if (this.CQXS) {
+            if (this.CQXS || this.stockIndexPSF) {
               if (this.ifTwoDown) {
                 classListF.push('should-buy')
                 if (this.ifHasBuy(classListF)) {
@@ -1456,7 +1467,7 @@ export default {
             // 锁仓了
             // 研究过了，季度线上和季度线下，没什么区别
             if (this.rate < 0) {
-              if (this.CQXS) {
+              if (this.CQXS || this.stockIndexPSF) {
                 if (this.ifTwoDown) {
                   classListF.push('should-buy')
                   if (this.ifHasBuy(classListF)) {

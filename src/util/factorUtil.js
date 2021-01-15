@@ -8,6 +8,21 @@ const highRate = indexType.highRate
 const laji = indexType.laji
 const kuanji = indexType.kuanji
 
+// 控制在0.66-1.33
+function buyReFormat (factor) {
+  if (factor < 0.66) {
+    factor = 0.66
+  }
+  if (factor > 1.33) {
+    factor = 1.33
+  }
+  return factor
+}
+
+function sellReFormat (factor) {
+  return 2 - factor
+}
+
 // 11月到12月机构结算
 function getJiesuan (key) {
   const changeStyle = storageUtil.getData('noBuySellConfig', 'changeStyle') || false
@@ -60,10 +75,11 @@ export default {
     }
     if (all > 0) {
       let factor = 0.83 + ((has / all) * 0.17)
+      factor = buyReFormat(factor)
       if (buySell === 'buy') {
         return factor
       } else {
-        return 1 / factor
+        return sellReFormat(factor)
       }
     } else {
       return 1
@@ -82,10 +98,11 @@ export default {
     }
     if (all > 0) {
       let factor = 0.83 + ((has / all) * 0.17)
+      factor = buyReFormat(factor)
       if (buySell === 'buy') {
         return factor
       } else {
-        return 1 / factor
+        return sellReFormat(factor)
       }
     } else {
       return 1
@@ -150,10 +167,11 @@ export default {
       question8Factor = 0.9
     }
     factor = factor * question8Factor
+    factor = buyReFormat(factor)
     if (buySell === 'buy') {
       return factor
     } else {
-      return 1 / factor
+      return sellReFormat(factor)
     }
   },
   // 仓位因子
@@ -225,10 +243,11 @@ export default {
     if (moment().isAfter(`${year}-12-25`) && moment().isBefore(`${year}-12-31`)) {
       factor = factor * 1.1
     }
+    factor = buyReFormat(factor)
     if (buySell === 'buy') {
       return factor
     } else {
-      return 1 / factor
+      return sellReFormat(factor)
     }
   },
   // 机构对指数的影响
@@ -361,10 +380,11 @@ export default {
         factor = factor * 1.2
       }
     }
+    factor = buyReFormat(factor)
     if (buySell === 'buy') {
       return factor
     } else {
-      return 1 / factor
+      return sellReFormat(factor)
     }
   },
   // 指数平均因子
@@ -379,10 +399,11 @@ export default {
     // 越靠近-1越小
       factor = 0.8 + (0.2 * Math.abs(1 + indexAverage))
     }
+    factor = buyReFormat(factor)
     if (buySell === 'buy') {
       return factor
     } else {
-      return 1 / factor
+      return sellReFormat(factor)
     }
   },
   // 指数月线平均因子
@@ -396,10 +417,11 @@ export default {
     // if (factor < 0.5) {
     //   factor = 0.5
     // }
+    // factor = buyReFormat(factor)
     // if (buySell === 'buy') {
     //   return factor
     // } else {
-    //   return 1 / factor
+    //   return sellReFormat(factor)
     // }
     return 1
   },
@@ -416,10 +438,11 @@ export default {
     // if (indexAverage < -10 && indexAverage >= -20) {
     //   factor = 1 - (0.5 * ((indexAverage + 20) / 10))
     // }
+    // factor = buyReFormat(factor)
     // if (buySell === 'buy') {
     //   return factor
     // } else {
-    //   return 1 / factor
+    //   return sellReFormat(factor)
     // }
   },
   // 多跌因子
@@ -458,10 +481,11 @@ export default {
   getIndexMonthDiffFactor: function (indexKey, buySell) {
     const indexDiff = storageUtil.getData('monthIndexDiff', indexKey) || 0
     let factor = 1 + (indexDiff / 30)
+    factor = buyReFormat(factor)
     if (buySell === 'buy') {
       return factor
     } else {
-      return 1 / factor
+      return sellReFormat(factor)
     }
   },
   // 年收益跟随因子
@@ -478,10 +502,11 @@ export default {
     }
     const indexDiff = storageUtil.getData('yearIndexDiff', indexKey) || 0
     let factor = 1 + ((indexDiff * getJiesuan(indexKey)) / 100)
+    factor = buyReFormat(factor)
     if (buySell === 'buy') {
       return factor
     } else {
-      return 1 / factor
+      return sellReFormat(factor)
     }
   },
   getWeekDayFactor: function (buySell) {
@@ -512,10 +537,11 @@ export default {
       factor = 0.8
     }
     // 你现在需要做的很简单，保持耐心，我们一起等未来出现一个三年级别的大顶部，早晚会有降仓的动作，但不是现在。——毕竟A股历史上，没有一次顶部不是以泡沫化收场的。
+    factor = buyReFormat(factor)
     if (buySell === 'buy') {
       return factor
     } else {
-      return 1 / factor
+      return sellReFormat(factor)
     }
   }
 }

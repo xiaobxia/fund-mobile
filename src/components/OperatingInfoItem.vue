@@ -59,6 +59,9 @@
             <span v-if="ifLowUp()" class="fm-tag s-blue">见顶</span>
             <span v-if="ifLowUp()" class="fm-tag s-blue">清2/3</span>
             <span v-if="QZMC" class="fm-tag s-blue">强卖1/3</span>
+            <span v-if="oneDayHigh" class="fm-tag s-black">单日卖1/2</span>
+            <span v-if="monthHighSell" class="fm-tag s-black">月火卖1/4,开季危</span>
+            <span v-if="!monthHighSell && monthHighSellBig" class="fm-tag s-black">月火卖1/3,开季危</span>
             <!--执行部分-->
             <span
               v-if="ifQuarterHotCut()"
@@ -72,7 +75,11 @@
             >卖定按信号{{getFixSellRate()}}</span>
             <!--正常逻辑卖出-->
             <span
-              v-if="ifFixIndex && ifSellFix()"
+            v-if="ifFixIndex && ifSellFix()"
+            class="fm-tag s-black"
+          >卖定{{getFixSellRate()}}</span>
+            <span
+              v-if="ifFixIndex && monthHighSell"
               class="fm-tag s-black"
             >卖定{{getFixSellRate()}}</span>
             <span v-if="ifJieTargetUpCloseLock" class="fm-tag s-black">目标0.3</span>
@@ -577,6 +584,65 @@ export default {
     },
     QZMC () {
       return storageUtil.getData('upDownConfig', 'QZMC') || false
+    },
+    // 单日涨幅很大
+    oneDayHigh () {
+      if (['baoxian', 'yinhang', 'youse', 'dichan', 'gangtie', 'meitan', 'jijian'].indexOf(this.indexInfo.key) !== -1) {
+        return this.rate > 6
+      }
+      return false
+    },
+    otherMonthHighSell () {
+      const m = {
+        gangtie: 8,
+        meitan: 10,
+        baoxian: 10,
+        shengwu: 13,
+        yiliao: 13,
+        dichan: 10,
+        youse: 10,
+        zhengquan: 10,
+        chuanmei: 10,
+        qiche: 10,
+        huanbao: 10,
+        jijian: 10,
+        xinxi: 12,
+        shipin: 10,
+        yinhang: 5,
+        jisuanji: 12
+      }
+      const r = m[this.indexInfo.key]
+      if (r){
+        if (this.averageMonthIndex > r) {
+          return true
+        }
+      }
+      return false
+    },
+    // 月涨幅很大
+    monthHighSell () {
+      if (this.ifFengNiu) {
+        return false
+      }
+      if (this.rate > 0) {
+        if (this.otherMonthHighSell) {
+          return true
+        }
+        return this.averageMonthIndex > 15
+      }
+      return false
+    },
+    monthHighSellBig () {
+      if (this.ifFengNiu) {
+        return false
+      }
+      if (this.rate > 0) {
+        if (this.otherMonthHighSell) {
+          return true
+        }
+        return this.averageMonthIndex > 16
+      }
+      return false
     }
   },
   created () {
@@ -1629,6 +1695,14 @@ export default {
       if (this.targetDownDone()) {
         // 没有任何买入
         classListF = this.removeBuy(classListF)
+        // 加入卖出
+        classListF.push(sellClass)
+      }
+      if(this.oneDayHigh) {
+        // 加入卖出
+        classListF.push(sellClass)
+      }
+      if (this.monthHighSell) {
         // 加入卖出
         classListF.push(sellClass)
       }

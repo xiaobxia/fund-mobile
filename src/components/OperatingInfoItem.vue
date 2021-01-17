@@ -612,7 +612,7 @@ export default {
         jisuanji: 12
       }
       const r = m[this.indexInfo.key]
-      if (r){
+      if (r) {
         if (this.averageMonthIndex > r) {
           return true
         }
@@ -1698,11 +1698,15 @@ export default {
         // 加入卖出
         classListF.push(sellClass)
       }
-      if(this.oneDayHigh) {
+      if (this.oneDayHigh) {
+        // 没有任何买入
+        classListF = this.removeBuy(classListF)
         // 加入卖出
         classListF.push(sellClass)
       }
       if (this.monthHighSell) {
+        // 没有任何买入
+        classListF = this.removeBuy(classListF)
         // 加入卖出
         classListF.push(sellClass)
       }

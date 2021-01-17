@@ -254,7 +254,10 @@ const operatingTooltip = {
     }
     let indexDownLineFactor = 1
     if (marketInfo.isDownLine) {
-      indexDownLineFactor = 0.33
+      indexDownLineFactor = 0.66 * indexDownLineFactor
+    }
+    if (marketInfo.isKong) {
+      indexDownLineFactor = 0.66 * indexDownLineFactor
     }
     let buyNumber =
       buyBase *

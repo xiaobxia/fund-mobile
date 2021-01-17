@@ -660,7 +660,8 @@ export default {
           netChangeRatioList: this.netChangeRatioList,
           noSellCount: this.noSellCount,
           isBig: this.bigDi(),
-          isDownLine: this.qDiffAvRateIndex < 0 || (!!this.stockIndexPSF)
+          isDownLine: this.qDiffAvRateIndex < 0,
+          isKong: (!!this.stockIndexPSF)
         },
         this.hasCount,
         true
@@ -684,7 +685,8 @@ export default {
           netChangeRatioList: this.netChangeRatioList,
           noSellCount: this.noSellCount,
           isBig: this.bigDi(),
-          isDownLine: this.qDiffAvRateIndex < 0 || (!!this.stockIndexPSF)
+          isDownLine: this.qDiffAvRateIndex < 0,
+          isKong: (!!this.stockIndexPSF)
         },
         this.hasCount
       )

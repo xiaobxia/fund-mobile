@@ -32,6 +32,21 @@
             </div>
           </mt-cell-swipe>
         </div>
+        <div>港股</div>
+        <div class="small-10">
+          <mt-cell-swipe v-for="(item) in ggList" :key="item.code">
+            <div slot="title">
+              <h3>
+                <span class="index-name">{{item.code}} {{item.name}}</span>
+                <span style="float: right" :class="stockNumberClass(getRateByCode(item.code))">{{getRateByCode(item.code)}}</span>
+              </h3>
+              <p class="netChange wn">
+            <span v-for="(subItem, index) in item.list" :key="index"
+                  :class="numberBgClass(subItem.valuation_rate)">{{subItem.valuation_rate}}%</span>
+              </p>
+            </div>
+          </mt-cell-swipe>
+        </div>
       </div>
       <!--<div class="fm-warn blue">不要自作聪明，这里提示卖了才卖</div>-->
       <mt-cell-swipe
@@ -210,6 +225,18 @@ export default {
       klineMap[key] = [{}]
     }
     return {
+      ggList: [
+        {
+          code: '006595',
+          name: '广发港股通优质',
+          list: []
+        },
+        {
+          code: '006614',
+          name: '嘉实恒生新经济',
+          list: []
+        }
+      ],
       // 混合
       hhList: [
         {
@@ -415,6 +442,9 @@ export default {
   created () {
     this.initPage()
     this.hhList.forEach((item) => {
+      this.queryFundR(item)
+    })
+    this.ggList.forEach((item) => {
       this.queryFundR(item)
     })
   },

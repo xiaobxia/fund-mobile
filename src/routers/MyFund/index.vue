@@ -198,6 +198,10 @@ export default {
           this.cardInfo[i].list.sort((a, b) => {
             const aT = a.theme || ''
             const bT = b.theme || ''
+            // 港股排最后
+            if (b.code.startsWith('006')) {
+              return -1
+            }
             if (aT < bT) {
               return 1
             }

@@ -73,7 +73,7 @@
             <span
               v-if="ifWantSellFixIndex"
               class="fm-tag s-black"
-            >卖定按信号{{getFixSellRate()}}</span>
+            >想卖定{{getFixSellRate()}}</span>
             <!--正常逻辑卖出-->
             <span
             v-if="ifFixIndex && ifSellFix()"
@@ -82,7 +82,7 @@
             <span
               v-if="ifFixIndex && monthHighSell"
               class="fm-tag s-black"
-            >卖定{{getFixSellRate()}}</span>
+            >热卖定{{getFixSellRate()}}</span>
             <span v-if="ifJieTargetUpCloseLock" class="fm-tag s-black">目标0.3</span>
             <!--<span v-if="ifStopKeep()" class="fm-tag s-black">止盈</span>-->
             <!--年下z45是必跌的-->

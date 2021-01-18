@@ -62,6 +62,7 @@
             <span v-if="oneDayHigh" class="fm-tag s-black">单日卖1/2</span>
             <span v-if="monthHighSell" class="fm-tag s-black">月火卖1/4,开季危</span>
             <span v-if="!monthHighSell && monthHighSellBig" class="fm-tag s-black">月火卖1/3,开季危</span>
+            <span v-if="stockIndexPSF && averageQuarter < 0" class="fm-tag s-blue">解控</span>
             <!--执行部分-->
             <span
               v-if="ifQuarterHotCut()"

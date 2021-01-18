@@ -9,9 +9,11 @@ const defaultTab = 'fund'
 
 const indexBondBuyMap = {}
 const indexBondSellMap = {}
+const indexHighSellMap = {}
 indexListAll.forEach((i) => {
   indexBondBuyMap[i.key] = 0
   indexBondSellMap[i.key] = 0
+  indexHighSellMap[i.key] = false
 })
 
 const store = new Vuex.Store({
@@ -23,7 +25,8 @@ const store = new Vuex.Store({
     stockIndexAll: [],
     stockMarketQuestion: [],
     indexBondBuyMap: indexBondBuyMap,
-    indexBondSellMap: indexBondSellMap
+    indexBondSellMap: indexBondSellMap,
+    indexHighSellMap: indexHighSellMap
   },
   getters: {
     tabSelect: state => state.tabSelect,
@@ -31,7 +34,8 @@ const store = new Vuex.Store({
     stockIndexAll: state => state.stockIndexAll,
     stockMarketQuestion: state => state.stockMarketQuestion,
     indexBondBuyMap: state => state.indexBondBuyMap,
-    indexBondSellMap: state => state.indexBondSellMap
+    indexBondSellMap: state => state.indexBondSellMap,
+    indexHighSellMap: state => state.indexHighSellMap
   },
   mutations: {
     SET_TAB_SELECT: (state, data) => {
@@ -48,6 +52,9 @@ const store = new Vuex.Store({
     },
     updateIndexBondSellMap: (state, data) => {
       state.indexBondSellMap[data.key] = data.value
+    },
+    updateIndexHighSellMap: (state, data) => {
+      state.indexHighSellMap[data.key] = data.value
     }
   },
   actions: {

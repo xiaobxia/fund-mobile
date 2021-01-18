@@ -1700,17 +1700,26 @@ export default {
         // 加入卖出
         classListF.push(sellClass)
       }
+      let hSell = false
       if (this.oneDayHigh) {
         // 没有任何买入
         classListF = this.removeBuy(classListF)
         // 加入卖出
         classListF.push(sellClass)
+        hSell = true
       }
       if (this.monthHighSell) {
         // 没有任何买入
         classListF = this.removeBuy(classListF)
         // 加入卖出
         classListF.push(sellClass)
+        hSell = true
+      }
+      if (hSell) {
+        this.$store.commit('updateIndexHighSellMap', {
+          key: this.indexInfo.key,
+          value: true
+        })
       }
       // TODO 全面大疯牛市，只有锁仓买
       if (this.ifFengNiu) {

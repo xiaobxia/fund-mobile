@@ -86,6 +86,10 @@
         <span class="label">卖：</span>
         <span class="value" style="color: green">{{$formatMoney(getSellSum())}}</span>
       </div>
+      <div class="item">
+        <span class="label">热卖：</span>
+        <span class="value" style="color: green">{{getHighSellSum()}}</span>
+      </div>
     </div>
     <div class="warn-wrap">
       <div class="fm-warn grey dd" @click="tgConfigShow">
@@ -244,7 +248,8 @@ export default {
     },
     ...mapGetters([
       'indexBondBuyMap',
-      'indexBondSellMap'
+      'indexBondSellMap',
+      'indexHighSellMap'
     ])
   },
   created () {
@@ -261,6 +266,15 @@ export default {
       let sum = 0
       for (let key in this.indexBondSellMap) {
         sum += parseFloat(this.indexBondSellMap[key] || 0) || 0
+      }
+      return sum
+    },
+    getHighSellSum () {
+      let sum = 0
+      for (let key in this.indexHighSellMap) {
+        if (this.indexHighSellMap[key]) {
+          sum++
+        }
       }
       return sum
     },

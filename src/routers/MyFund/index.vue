@@ -199,7 +199,7 @@ export default {
             const aT = a.theme || ''
             const bT = b.theme || ''
             // 港股排最后
-            if (b.code.startsWith('006')) {
+            if (['005583', '006614', '006595'].indexOf(b.code) !== -1) {
               return -1
             }
             if (aT < bT) {

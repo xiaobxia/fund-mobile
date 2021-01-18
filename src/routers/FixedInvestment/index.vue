@@ -235,6 +235,11 @@ export default {
           code: '006614',
           name: '嘉实恒生新经济',
           list: []
+        },
+        {
+          code: '005583',
+          name: '易方达港股通',
+          list: []
         }
       ],
       // 混合

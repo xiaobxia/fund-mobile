@@ -1,9 +1,12 @@
 export default {
   indexNumber: 26,
   sellFixList: [
-    'chuangye', 'wulin', 'sanbai', 'wubai', 'yiqian',
-    'baijiu', 'shipin',
-    'yiliao', 'shengwu',
-    'jisuanji', 'dianzi', 'xinxi'
+    // 控制6000以下
+    'chuangye',
+    // 等置换结束
+    'wulin',
+    'sanbai',
+    // 控制10000一下
+    'shengwu'
   ]
 }

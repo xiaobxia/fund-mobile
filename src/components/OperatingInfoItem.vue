@@ -64,6 +64,7 @@
             <span v-if="!monthHighSell && monthHighSellBig" class="fm-tag s-black">月火卖1/3,开季危</span>
             <span v-if="stockIndexPSF && averageQuarter < 0" class="fm-tag s-blue">解控</span>
             <span v-if="lostHighCut" class="fm-tag s-black">砍仓</span>
+            <span v-if="lowPBuy" class="fm-tag s-red">强买</span>
             <!--执行部分-->
             <span
               v-if="ifQuarterHotCut()"
@@ -174,7 +175,8 @@ export default {
       dTShow: stockIndexBSF !== '' || stockIndexPSF !== '',
       stockIndexBSF: stockIndexBSF,
       stockIndexPSF: stockIndexPSF,
-      lostHighCut: false
+      lostHighCut: false,
+      lowPBuy: false
     }
   },
   props: {
@@ -647,7 +649,7 @@ export default {
       }
       return false
     },
-    fundNowIncome() {
+    fundNowIncome () {
       return this.countDifferenceRate(this.hasCount, this.costCount)
     }
   },
@@ -1271,6 +1273,7 @@ export default {
       let positionQYHigh = false
       let positionHighSell = false
       let lostHighCut = false
+      let lowPBuy = false
       this.setIndexCanFix()
       const buyClass = 'buy'
       const sellClass = 'sell'
@@ -1719,6 +1722,14 @@ export default {
           }
         }
       }
+      // 强买逻辑
+      if (this.qDiffAvRateIndex > 0 && !this.stockIndexPSF) {
+        if (this.hasCount < (this.positionStandard * 0.34 * 0.66)) {
+          classListF = this.removeSell(classListF)
+          classListF.push(buyClass)
+          lowPBuy = true
+        }
+      }
       let hSell = false
       if (this.oneDayHigh) {
         // 没有任何买入
@@ -1794,6 +1805,7 @@ export default {
       this.positionHighSell = positionHighSell
       this.positionQYHigh = positionQYHigh
       this.lostHighCut = lostHighCut
+      this.lowPBuy = lowPBuy
       this.setInfo(classListF)
       return classListF
     },

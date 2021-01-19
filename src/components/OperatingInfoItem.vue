@@ -111,7 +111,7 @@
         <div class="other-text">
           <span class="item">
               <span class="label">持有金额：</span>
-              <span class="value">{{$formatMoney(hasCount)}}({{fundNowIncome}}%)</span>
+              <span class="value">{{$formatMoney(hasCount)}}</span>
             </span>
           <span class="item">
               <span class="label">卖出金额：</span>
@@ -132,6 +132,10 @@
           <span class="item">
               <span class="label">高仓线：</span>
               <span class="value">{{$formatMoney(positionHighLine)}}</span>
+            </span>
+          <span class="item">
+              <span class="label">持仓盈亏：</span>
+              <span class="value" :class="stockNumberClass(fundNowIncome)">{{fundNowIncome}}%</span>
             </span>
         </div>
       </div>

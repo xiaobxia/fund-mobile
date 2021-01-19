@@ -1730,7 +1730,7 @@ export default {
         }
       }
       // 强买逻辑
-      if (this.qDiffAvRateIndex > 0 && !this.stockIndexPSF) {
+      if (this.qDiffAvRateIndex > 0.5 && !this.stockIndexPSF) {
         if (this.hasCount < (this.positionStandard * 0.34 * 0.66)) {
           const PQB = storageUtil.getData('upDownConfig', 'PQB') || false
           if (PQB) {

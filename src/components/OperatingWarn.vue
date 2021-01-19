@@ -164,6 +164,22 @@
             <mt-switch v-model="QZMC" @change="stateChangeHandler"></mt-switch>
           </div>
         </mt-cell-swipe>
+        <mt-cell-swipe>
+          <div slot="title">
+            <h3>开启跟随买入</h3>
+          </div>
+          <div class="right-wrap">
+            <mt-switch v-model="PQB" @change="stateChangeHandler"></mt-switch>
+          </div>
+        </mt-cell-swipe>
+        <mt-cell-swipe>
+          <div slot="title">
+            <h3>开启砍仓卖出</h3>
+          </div>
+          <div class="right-wrap">
+            <mt-switch v-model="PQS" @change="stateChangeHandler"></mt-switch>
+          </div>
+        </mt-cell-swipe>
       </div>
     </div>
   </div>
@@ -185,7 +201,9 @@ export default {
       downMBNB: storageUtil.getData('upDownConfig', 'downMBNB') || false,
       f30UpNS: storageUtil.getData('upDownConfig', 'f30UpNS') || false,
       CQXS: storageUtil.getData('upDownConfig', 'CQXS') || false,
-      QZMC: storageUtil.getData('upDownConfig', 'QZMC') || false
+      QZMC: storageUtil.getData('upDownConfig', 'QZMC') || false,
+      PQB: storageUtil.getData('upDownConfig', 'PQB') || false,
+      PQS: storageUtil.getData('upDownConfig', 'PQS') || false
     }
   },
   props: {
@@ -299,6 +317,8 @@ export default {
       storageUtil.setData('upDownConfig', 'downMBNB', this.downMBNB)
       storageUtil.setData('upDownConfig', 'f30UpNS', f30UpNS)
       storageUtil.setData('upDownConfig', 'QZMC', this.QZMC)
+      storageUtil.setData('upDownConfig', 'PQB', this.PQB)
+      storageUtil.setData('upDownConfig', 'PQS', this.PQS)
     }
   }
 }

@@ -1714,20 +1714,26 @@ export default {
       if (this.stockIndexPSF && this.qDiffAvRateIndex < 0) {
         if (this.positionHigh) {
           if (this.fundNowIncome < -3) {
-            lostHighCut = true
-            // 没有任何买入
-            classListF = this.removeBuy(classListF)
-            // 加入卖出
-            classListF.push(sellClass)
+            const PQS = storageUtil.getData('upDownConfig', 'PQS') || false
+            if (PQS) {
+              lostHighCut = true
+              // 没有任何买入
+              classListF = this.removeBuy(classListF)
+              // 加入卖出
+              classListF.push(sellClass)
+            }
           }
         }
       }
       // 强买逻辑
       if (this.qDiffAvRateIndex > 0 && !this.stockIndexPSF) {
         if (this.hasCount < (this.positionStandard * 0.34 * 0.66)) {
-          classListF = this.removeSell(classListF)
-          classListF.push(buyClass)
-          lowPBuy = true
+          const PQB = storageUtil.getData('upDownConfig', 'PQB') || false
+          if (PQB) {
+            classListF = this.removeSell(classListF)
+            classListF.push(buyClass)
+            lowPBuy = true
+          }
         }
       }
       let hSell = false

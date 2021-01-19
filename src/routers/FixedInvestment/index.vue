@@ -44,6 +44,7 @@
             <span v-for="(subItem, index) in item.list" :key="index"
                   :class="numberBgClass(subItem.valuation_rate)">{{subItem.valuation_rate}}%</span>
               </p>
+              <div>定：20，手：{{getGGBUy(item)}}</div>
             </div>
           </mt-cell-swipe>
         </div>
@@ -365,7 +366,7 @@ export default {
         },
         // 白酒
         'sz399997': {
-          buy: 1.3,
+          buy: 1.15,
           sell: 1,
           a: 40,
           b: -20,
@@ -373,7 +374,7 @@ export default {
         },
         // 食品
         'sz399396': {
-          buy: 1.3,
+          buy: 1.15,
           sell: 1,
           a: 30,
           b: -20,
@@ -986,6 +987,23 @@ export default {
       const hb = this.otherBuyCount(this.canBuy)
       const sum = hb * this.hhList.length
       return sum * 2
+    },
+    getGGBUy (item) {
+      let f = 0
+      const rate = this.getRateByCode(item.code)
+      if (rate < 0) {
+        f++
+        if (item.list[0] < 0) {
+          f++
+        }
+        if (item.list[1] < 0) {
+          f++
+        }
+        if (item.list[2] < 0) {
+          f++
+        }
+      }
+      return 20 * f
     }
   }
 }

@@ -63,6 +63,7 @@
             <span v-if="monthHighSell" class="fm-tag s-black">月火卖1/4,开季危</span>
             <span v-if="!monthHighSell && monthHighSellBig" class="fm-tag s-black">月火卖1/3,开季危</span>
             <span v-if="stockIndexPSF && averageQuarter < 0" class="fm-tag s-blue">解控</span>
+            <span v-if="lostHighCut" class="fm-tag s-black">砍仓</span>
             <!--执行部分-->
             <span
               v-if="ifQuarterHotCut()"
@@ -109,7 +110,7 @@
         <div class="other-text">
           <span class="item">
               <span class="label">持有金额：</span>
-              <span class="value">{{$formatMoney(hasCount)}}</span>
+              <span class="value">{{$formatMoney(hasCount)}}({{fundNowIncome}}%)</span>
             </span>
           <span class="item">
               <span class="label">卖出金额：</span>
@@ -172,7 +173,8 @@ export default {
       positionHighSell: false,
       dTShow: stockIndexBSF !== '' || stockIndexPSF !== '',
       stockIndexBSF: stockIndexBSF,
-      stockIndexPSF: stockIndexPSF
+      stockIndexPSF: stockIndexPSF,
+      lostHighCut: false
     }
   },
   props: {
@@ -644,6 +646,9 @@ export default {
         return this.averageMonthIndex > 16
       }
       return false
+    },
+    fundNowIncome() {
+      return this.countDifferenceRate(this.hasCount, this.costCount)
     }
   },
   created () {
@@ -1265,6 +1270,7 @@ export default {
     getItemClass () {
       let positionQYHigh = false
       let positionHighSell = false
+      let lostHighCut = false
       this.setIndexCanFix()
       const buyClass = 'buy'
       const sellClass = 'sell'
@@ -1701,6 +1707,18 @@ export default {
         // 加入卖出
         classListF.push(sellClass)
       }
+      // TODO 砍仓线
+      if (this.stockIndexPSF && this.qDiffAvRateIndex < 0) {
+        if (this.positionHigh) {
+          if (this.fundNowIncome < -3) {
+            lostHighCut = true
+            // 没有任何买入
+            classListF = this.removeBuy(classListF)
+            // 加入卖出
+            classListF.push(sellClass)
+          }
+        }
+      }
       let hSell = false
       if (this.oneDayHigh) {
         // 没有任何买入
@@ -1775,6 +1793,7 @@ export default {
       // 设置信息
       this.positionHighSell = positionHighSell
       this.positionQYHigh = positionQYHigh
+      this.lostHighCut = lostHighCut
       this.setInfo(classListF)
       return classListF
     },

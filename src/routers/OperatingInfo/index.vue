@@ -210,7 +210,7 @@ export default {
               if (item.theme) {
                 // 定投不计入
                 if (item.strategy === '1') {
-                  totalSum += item.sum
+                  totalSum += item.valuationSum
                   if (item.ifAllLock) {
                     if (this.lockMap[item.theme] !== '') {
                     }
@@ -221,7 +221,7 @@ export default {
                     }
                   }
                   // 拥有应该是现在的价值之和而不是成本
-                  const sum = parseInt(item.sum)
+                  const sum = parseInt(item.valuationSum)
                   if (this.hasCount[item.theme]) {
                     this.hasCount[item.theme] += sum
                   } else {

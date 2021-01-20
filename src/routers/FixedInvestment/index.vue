@@ -44,7 +44,7 @@
             <span v-for="(subItem, index) in item.list" :key="index"
                   :class="numberBgClass(subItem.valuation_rate)">{{subItem.valuation_rate}}%</span>
               </p>
-              <div>定：20，手：{{getGGBUy(item)}}</div>
+              <div>定：20，手：<span class="red-text">{{getGGBUy(item)}}</span></div>
             </div>
           </mt-cell-swipe>
         </div>

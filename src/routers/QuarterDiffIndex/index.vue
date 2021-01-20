@@ -54,6 +54,9 @@ export default {
         opList.push(this.queryData(list[i]))
       }
       Promise.all(opList).then(() => {
+        this.list.sort((a, b) => {
+          return b.netChangeRatio - a.netChangeRatio
+        })
         localStorage.setItem('qdaPC', `${this.up}/${this.all}`)
       })
     },

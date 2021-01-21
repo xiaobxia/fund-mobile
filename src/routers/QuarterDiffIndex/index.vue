@@ -92,10 +92,12 @@ export default {
     okHandler () {
       const list = []
       this.list.forEach((v) => {
+        const stockIndexPSF = storageUtil.getData('stockIndexPSF', v.key) || ''
         list.push({
           key: v.key,
           name: v.name,
-          netChangeRatio: v.netChangeRatio
+          netChangeRatio: v.netChangeRatio,
+          stockIndexPSF
         })
       })
       if (this.userFundAccountInfo.marketOpen) {

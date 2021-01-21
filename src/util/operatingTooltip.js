@@ -275,7 +275,7 @@ const operatingTooltip = {
     let finalBuyNumber = buyNumberRedistribution(indexItem, hasCount, buyNumber, marketInfo)
     return Math.round(finalBuyNumber / 100) * 100
   },
-  getIndexSellNumber (type, indexItem, marketInfo, hasCount) {
+  getIndexSellNumber (type, indexItem, marketInfo, hasCount, otherFactor) {
     // 标准到百
     let sellBase = getSellBase(type, marketInfo)
     let indexAverageFactor = factorUtil.getIndexAverageFactor(indexItem.key, 'sell')
@@ -294,6 +294,7 @@ const operatingTooltip = {
     }
     let sellNumber =
       sellBase *
+      otherFactor *
       indexDownLineFactor *
       indexAverageFactor *
       indexMonthDiffFactor *

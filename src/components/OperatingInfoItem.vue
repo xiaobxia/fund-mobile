@@ -554,6 +554,15 @@ export default {
     // ----------买卖金额的方法
     // 卖出金额
     indexSellNumber () {
+      let factor = 1
+      if (this.qDiffAvRateIndex > 0.5 && !this.stockIndexPSF) {
+        if (this.hasCount < (this.positionStandard * 0.34)) {
+          factor = 0.66
+        }
+        if (this.hasCount < (this.positionStandard * 0.34 * 0.66)) {
+          factor = 0.33
+        }
+      }
       return operatingTooltip.getIndexSellNumber(
         this.type,
         this.indexInfo,
@@ -563,7 +572,8 @@ export default {
           noSellCount: this.noSellCount,
           isDownLine: this.qDiffAvRateIndex < 0
         },
-        this.hasCount
+        this.hasCount,
+        factor
       )
     },
     ifFengNiu () {

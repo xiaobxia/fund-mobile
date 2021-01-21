@@ -25,6 +25,7 @@
 <script>
 import indexList from '@/common/indexList.js'
 import storageUtil from '@/util/storageUtil.js'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'QuarterDiffIndex',
@@ -43,6 +44,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters([
+      'userFundAccountInfo'
+    ])
   },
   created () {
     this.initPage()

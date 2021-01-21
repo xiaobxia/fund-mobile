@@ -26,6 +26,7 @@
 import indexList from '@/common/indexList.js'
 import storageUtil from '@/util/storageUtil.js'
 import { mapGetters } from 'vuex'
+import moment from 'moment'
 
 export default {
   name: 'QuarterDiffIndex',

@@ -6,6 +6,7 @@
       </mt-button>
     </mt-header>
     <div class="main-body">
+      <mt-button type="primary" @click="okHandler" class="main-btn">发送</mt-button>
       <div class="warn-wrap">
         <div class="fm-warn grey">{{up}}/{{all}}</div>
       </div>
@@ -82,6 +83,23 @@ export default {
         ...value
       }).then((data) => {
       })
+    },
+    okHandler () {
+      const list = []
+      this.list.forEach((v) => {
+        list.push({
+          key: v.key,
+          name: v.name,
+          netChangeRatio: v.netChangeRatio
+        })
+      })
+      if (this.userFundAccountInfo.marketOpen) {
+        const date = moment().format('YYYY-MM-DD')
+        this.$http.post('http://47.92.210.171:3051/fbsServer/riskSignal/updateSignal', {
+          trade_date: date,
+          record: JSON.stringify(list)
+        })
+      }
     }
   }
 }

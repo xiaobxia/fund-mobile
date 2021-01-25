@@ -934,6 +934,68 @@ Util.prototype = {
       }
     }
     return false
+  },
+  ifBuyChuangWL: function (record, oneDayRecord) {
+    const today = this.getFlag(record, 2.1)
+    // 无抵抗下跌的都要
+    if (ifMatch(today,
+      {'ifHighPreCloseDown': true}
+    )) {
+      return {
+        flag: true,
+        text: 'buy-100-0'
+      }
+    }
+    // // 跌幅两倍波动的就要
+    // if (ifMatch(today,
+    //   {'ifUpClose': false, 'ifCloseHigh2': true}
+    // )) {
+    //   return {
+    //     flag: true,
+    //     text: 'buy-101-0'
+    //   }
+    // }
+    // 下跌
+    if (ifMatch(today,
+      {'ifCloseHigh': true, 'ifSessionDownHigh': true, 'ifSessionUpClose': false, 'ifSessionUp': false, 'ifSessionDownCloseHigh': true}
+    )) {
+      return {
+        flag: true,
+        text: 'buy-101-0'
+      }
+    }
+    return false
+  },
+  ifSellChuangWL: function (record, oneDayRecord) {
+    const today = this.getFlag(record, 2.1)
+    // 大涨
+    if (ifMatch(today,
+      {'ifHighPreCloseUpHigh': true}
+    )) {
+      return {
+        flag: true,
+        text: 'sell-100-0'
+      }
+    }
+    // 涨幅两倍波动的就要
+    if (ifMatch(today,
+      {'ifUpClose': true, 'ifCloseHigh2': true}
+    )) {
+      return {
+        flag: true,
+        text: 'sell-101-0'
+      }
+    }
+    // 下跌
+    if (ifMatch(today,
+      {'ifCloseHigh': true, 'ifSessionDownHigh': false, 'ifSessionUpClose': true, 'ifSessionUp': true, 'ifSessionDownCloseHigh': false}
+    )) {
+      return {
+        flag: true,
+        text: 'xiong'
+      }
+    }
+    return false
   }
 }
 
@@ -993,6 +1055,14 @@ const codeMap = {
     threshold: 0.94,
     wave: 0.9002606691919192,
     rate: 0.9642803030303041,
+    mix: true
+  },
+  'chuangWL': {
+    code: 'sz399673',
+    name: '创50',
+    threshold: 1.21,
+    rate: 1.0657060606060613,
+    wave: 0.9707331060606048,
     mix: true
   },
   'xinxi': {
@@ -1060,7 +1130,9 @@ const fnMap = {
   dianziBuy: 'ifBuyDianzi',
   dianziSell: 'ifSellDianzi',
   xinxiBuy: 'ifBuyXinxi',
-  xinxiSell: 'ifSellXinxi'
+  xinxiSell: 'ifSellXinxi',
+  chuangWLBuy: 'ifBuyChuangWL',
+  chuangWLSell: 'ifSellChuangWL'
 }
 
 const FixedInvestment = {

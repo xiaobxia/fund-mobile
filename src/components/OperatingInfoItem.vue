@@ -65,6 +65,7 @@
             <span v-if="stockIndexPSF && averageQuarter < 0" class="fm-tag s-blue">解控</span>
             <span v-if="lostHighCut" class="fm-tag s-black">砍仓</span>
             <span v-if="lowPBuy" class="fm-tag s-red">强买</span>
+            <span v-if="downLockSell" class="fm-tag s-black">下锁卖</span>
             <!--执行部分-->
             <span
               v-if="ifQuarterHotCut()"
@@ -180,7 +181,8 @@ export default {
       stockIndexBSF: stockIndexBSF,
       stockIndexPSF: stockIndexPSF,
       lostHighCut: false,
-      lowPBuy: false
+      lowPBuy: false,
+      downLockSell: false
     }
   },
   props: {
@@ -1296,6 +1298,7 @@ export default {
       let positionQYHigh = false
       let positionHighSell = false
       let lostHighCut = false
+      let downLockSell = false
       let lowPBuy = false
       this.setIndexCanFix()
       const buyClass = 'buy'
@@ -1634,6 +1637,7 @@ export default {
         if (this.qDiffAvRateIndex < 0) {
           classListF = this.removeBuy(classListF)
           classListF.push('should-sell')
+          downLockSell = true
         }
       }
       // 权重最大的-------------
@@ -1834,6 +1838,7 @@ export default {
       this.positionHighSell = positionHighSell
       this.positionQYHigh = positionQYHigh
       this.lostHighCut = lostHighCut
+      this.downLockSell = downLockSell
       this.lowPBuy = lowPBuy
       this.setInfo(classListF)
       return classListF

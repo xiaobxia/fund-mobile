@@ -54,9 +54,10 @@
             <span v-if="positionQYHigh" class="fm-tag s-black">危高仓</span>
             <span v-if="positionHighSell" class="fm-tag s-black">高仓卖</span>
             <span v-if="ifBadLow()" class="fm-tag s-black">清2/3</span>
+            <!--见顶并不需要幅度判断，虽然偶尔会有错误，但是大概率只要绿了或者红了就行-->
             <span v-if="ifHighDown()" class="fm-tag s-blue">见顶，开限仓，开季危</span>
             <span v-if="ifHighDown()" class="fm-tag s-blue">清2/3</span>
-            <span v-if="ifLowUp()" class="fm-tag s-blue">见顶</span>
+            <span v-if="ifLowUp()" class="fm-tag s-blue">见顶，开限仓，开季危</span>
             <span v-if="ifLowUp()" class="fm-tag s-blue">清2/3</span>
             <span v-if="QZMC" class="fm-tag s-blue">强卖1/3</span>
             <span v-if="oneDayHigh" class="fm-tag s-black">单日卖1/2</span>

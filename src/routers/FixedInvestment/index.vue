@@ -289,6 +289,11 @@ export default {
           code: '570001',
           name: '诺德价值优势混合',
           list: []
+        },
+        {
+          code: '005827',
+          name: '易方达蓝筹精选',
+          list: []
         }
       ],
       list: list,

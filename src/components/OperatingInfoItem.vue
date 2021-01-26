@@ -1681,14 +1681,14 @@ export default {
       }
       // TODO cs-完成
       // TODO 季度线以上，月线超过0就可以不杀跌
-      if (this.ifMonthUpOk(this.indexInfo.key)) {
-        if (this.averageMonthIndex > 0) {
-          // 小于0不卖出
-          if (this.rate <= 0) {
-            classListF = this.removeSell(classListF)
-          }
-        }
-      }
+      // if (this.ifMonthUpOk(this.indexInfo.key)) {
+      //   if (this.averageMonthIndex > 0) {
+      //     // 小于0不卖出
+      //     if (this.rate <= 0) {
+      //       classListF = this.removeSell(classListF)
+      //     }
+      //   }
+      // }
       // TODO 变盘清1/3
       if (this.ifBianpan()) {
         // 没有任何买入

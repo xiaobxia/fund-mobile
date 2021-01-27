@@ -48,6 +48,22 @@
             </div>
           </mt-cell-swipe>
         </div>
+        <div>债券</div>
+        <div class="small-10">
+          <mt-cell-swipe v-for="(item) in zqList" :key="item.code">
+            <div slot="title">
+              <h3>
+                <span class="index-name">{{item.code}} {{item.name}}</span>
+                <span style="float: right" :class="stockNumberClass(getRateByCode(item.code))">{{getRateByCode(item.code)}}</span>
+              </h3>
+              <p class="netChange wn">
+            <span v-for="(subItem, index) in item.list" :key="index"
+                  :class="numberBgClass(subItem.valuation_rate)">{{subItem.valuation_rate}}%</span>
+              </p>
+              <div>定：20，手：<span class="red-text">{{getGGBUy(item)}}</span></div>
+            </div>
+          </mt-cell-swipe>
+        </div>
       </div>
       <!--<div class="fm-warn blue">不要自作聪明，这里提示卖了才卖</div>-->
       <mt-cell-swipe
@@ -240,6 +256,23 @@ export default {
         {
           code: '005583',
           name: '易方达港股通',
+          list: []
+        }
+      ],
+      zqList: [
+        {
+          code: '002920',
+          name: '中欧短债A',
+          list: []
+        },
+        {
+          code: '519667',
+          name: '银河银信债A',
+          list: []
+        },
+        {
+          code: '161216',
+          name: '国投瑞银债A',
           list: []
         }
       ],
@@ -465,6 +498,9 @@ export default {
       this.queryFundR(item)
     })
     this.ggList.forEach((item) => {
+      this.queryFundR(item)
+    })
+    this.zqList.forEach((item) => {
       this.queryFundR(item)
     })
   },

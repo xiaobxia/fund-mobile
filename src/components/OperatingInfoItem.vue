@@ -49,7 +49,7 @@
             <span v-if="isOneDeep" class="fm-tag s-blue">单底</span>
             <span v-if="isJieOneDeep()" class="fm-tag s-blue">解单底</span>
             <span v-if="targetDownDone()" class="fm-tag s-blue">请止损:{{isToBeDafanToday() ? '1/2' : '清仓'}}</span>
-            <span v-if="isInQuarterHotToday && !targetDownClose" class="fm-tag s-blue">设置止损</span>
+            <!--<span v-if="isInQuarterHotToday && !targetDownClose" class="fm-tag s-blue">设置止损</span>-->
             <span v-if="!isInQuarterHotToday && targetDownClose" class="fm-tag s-blue">清空止损</span>
             <span v-if="positionQYHigh" class="fm-tag s-black">危高仓</span>
             <span v-if="positionHighSell" class="fm-tag s-black">高仓卖</span>

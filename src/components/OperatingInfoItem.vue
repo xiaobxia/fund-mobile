@@ -695,7 +695,8 @@ export default {
           noSellCount: this.noSellCount,
           isBig: this.bigDi(),
           isDownLine: this.qDiffAvRateIndex < 0,
-          isKong: (!!this.stockIndexPSF)
+          isKong: (!!this.stockIndexPSF),
+          isBadDown: this.isBadDown()
         },
         this.hasCount,
         true
@@ -720,7 +721,8 @@ export default {
           noSellCount: this.noSellCount,
           isBig: this.bigDi(),
           isDownLine: this.qDiffAvRateIndex < 0,
-          isKong: (!!this.stockIndexPSF)
+          isKong: (!!this.stockIndexPSF),
+          isBadDown: this.isBadDown()
         },
         this.hasCount
       )

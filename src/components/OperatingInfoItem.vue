@@ -557,7 +557,9 @@ export default {
     // ----------买卖金额的方法
     // 卖出金额
     indexSellNumber () {
+      // 仓位过低，就控制卖出
       let factor = 1
+      // 上升
       if (this.qDiffAvRateIndex > 0.5) {
         if (!this.stockIndexPSF) {
           if (this.hasCount < (this.positionStandard * 0.34)) {
@@ -572,6 +574,25 @@ export default {
           }
           if (this.hasCount < (this.positionStandard * 0.34 * 0.34)) {
             factor = 0.33
+          }
+        }
+      } else {
+        // 下降
+        if (!this.stockIndexPSF) {
+          // 没控制
+          if (this.hasCount > (this.positionStandard)) {
+            factor = 1.66
+          }
+          if (this.hasCount > (this.positionStandard * 0.66)) {
+            factor = 1.33
+          }
+        } else {
+          // 叠加控制
+          if (this.hasCount > (this.positionStandard * 0.66)) {
+            factor = 1.66
+          }
+          if (this.hasCount > (this.positionStandard * 0.34)) {
+            factor = 1.33
           }
         }
       }

@@ -5,6 +5,8 @@ export default {
     'wulin',
     'sanbai',
     // 控制10000一下
-    'shengwu'
+    'shengwu',
+    // 控制2000一下，然后定制定投
+    'yiqian'
   ]
 }

@@ -1824,6 +1824,13 @@ export default {
           }
         }
       }
+      // 转弱时，高仓没买入
+      const HPNS = storageUtil.getData('upDownConfig', 'HPNS') || false
+      if (HPNS) {
+        if (this.positionHigh) {
+          classListF = this.removeBuy(classListF)
+        }
+      }
       // ----最大最大权限--控制
       const noBuy = storageUtil.getData('noBuySellConfig', 'noBuy') || false
       const noSell = storageUtil.getData('noBuySellConfig', 'noSell') || false

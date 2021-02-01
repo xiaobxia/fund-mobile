@@ -180,6 +180,14 @@
             <mt-switch v-model="PQS" @change="stateChangeHandler"></mt-switch>
           </div>
         </mt-cell-swipe>
+        <mt-cell-swipe>
+          <div slot="title">
+            <h3>转弱时，高仓没买入</h3>
+          </div>
+          <div class="right-wrap">
+            <mt-switch v-model="HPNS" @change="stateChangeHandler"></mt-switch>
+          </div>
+        </mt-cell-swipe>
       </div>
     </div>
   </div>
@@ -203,7 +211,8 @@ export default {
       CQXS: storageUtil.getData('upDownConfig', 'CQXS') || false,
       QZMC: storageUtil.getData('upDownConfig', 'QZMC') || false,
       PQB: storageUtil.getData('upDownConfig', 'PQB') || false,
-      PQS: storageUtil.getData('upDownConfig', 'PQS') || false
+      PQS: storageUtil.getData('upDownConfig', 'PQS') || false,
+      HPNS: storageUtil.getData('upDownConfig', 'HPNS') || false
     }
   },
   props: {
@@ -319,6 +328,7 @@ export default {
       storageUtil.setData('upDownConfig', 'QZMC', this.QZMC)
       storageUtil.setData('upDownConfig', 'PQB', this.PQB)
       storageUtil.setData('upDownConfig', 'PQS', this.PQS)
+      storageUtil.setData('upDownConfig', 'HPNS', this.HPNS)
     }
   }
 }

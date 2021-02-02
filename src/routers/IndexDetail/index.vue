@@ -568,6 +568,22 @@ export default {
     queryRecord () {
       const query = this.$router.history.current.query
       this.$http.get('userFund/getFundsByThemeWithUserFund', {theme: query.name}).then((res) => {
+        const list = res.data.list
+        list.sort((a, b) => {
+          if (a.strategy > b.strategy) {
+            return 1
+          }
+          if (a.strategy < b.strategy) {
+            return -1
+          }
+          if (a.strategy === b.strategy) {
+            if (a.change_ratio > b.change_ratio) {
+              return 1
+            } else {
+              return -1
+            }
+          }
+        })
         this.list = res.data.list
       })
     },

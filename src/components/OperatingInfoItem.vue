@@ -595,6 +595,11 @@ export default {
             factor = 1.33
           }
         }
+        if (this.ifInDafanNow()) {
+          if (factor > 1) {
+            factor = factor * (1 / 1.33)
+          }
+        }
       }
       return operatingTooltip.getIndexSellNumber(
         this.type,

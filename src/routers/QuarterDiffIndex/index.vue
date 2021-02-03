@@ -102,7 +102,7 @@ export default {
       })
       if (this.userFundAccountInfo.marketOpen) {
         const date = moment().format('YYYY-MM-DD')
-        this.$http.post('http://47.92.210.171:3051/fbsServer/riskSignal/updateSignal', {
+        this.$http.post(`${this.$fbsUrl}/riskSignal/updateSignal`, {
           trade_date: date,
           record: JSON.stringify(list)
         })

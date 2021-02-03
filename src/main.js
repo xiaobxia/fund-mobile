@@ -61,6 +61,8 @@ for (const key in dateUtil) {
   Vue.prototype[key] = dateUtil[key]
 }
 
+Vue.prototype.$fbsUrl = 'http://47.92.210.171:3051/fbsServer'
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

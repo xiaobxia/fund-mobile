@@ -452,7 +452,7 @@ export default {
       // 开盘的才更新
       if (this.userFundAccountInfo.marketOpen) {
         const date = moment().format('YYYY-MM-DD')
-        this.$http.post('http://47.92.210.171:3051/fbsServer/signal/updateSignal', {
+        this.$http.post(`${this.$fbsUrl}/riskSignal/updateSignal`, {
           trade_date: date,
           band_record: JSON.stringify(list)
         })

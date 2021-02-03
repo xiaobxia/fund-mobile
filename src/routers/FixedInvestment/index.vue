@@ -6,6 +6,7 @@
       </mt-button>
     </mt-header>
     <div class="main-body">
+      <mt-button type="primary" @click="okHandler" class="main-btn">发送</mt-button>
       <div class="warn-wrap">
         <div class="fm-warn yellow">在大级别底部，多买混合</div>
         <div class="fm-warn grey">你现在需要做的很简单，保持耐心，我们一起等未来出现一个三年级别的大顶部，早晚会有降仓的动作，但不是现在。——毕竟A股历史上，没有一次顶部不是以泡沫化收场的。</div>
@@ -117,7 +118,6 @@
           </div>
         </div>
       </mt-cell-swipe>
-      <mt-button type="primary" @click="okHandler" class="main-btn">发送</mt-button>
     </div>
   </div>
 </template>
@@ -1001,7 +1001,7 @@ export default {
       // 开盘的才更新
       if (this.userFundAccountInfo.marketOpen) {
         const date = moment().format('YYYY-MM-DD')
-        this.$http.post('http://47.92.210.171:3051/fbsServer/signal/updateSignal', {
+        this.$http.post(`${this.$fbsUrl}/signal/updateSignal`, {
           trade_date: date,
           fix_record: JSON.stringify(record)
         })

@@ -69,8 +69,6 @@ export default {
   },
   components: {Index, Mine, Fund, ConfigCenter, Square},
   created () {
-    // this.$http.get('http://47.92.210.171:3051/fbsServer/signal/getLastSignal')
-    // this.$http.get('http://47.92.210.171:3051/fbsServer/')
     this.initPage()
   },
   methods: {

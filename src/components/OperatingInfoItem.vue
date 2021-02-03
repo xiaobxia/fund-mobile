@@ -1614,6 +1614,10 @@ export default {
           // 在趋势中，什么卖出信号都不用管
           if (!this.stockIndexPSF) {
             classListF = this.removeSell(classListF)
+          } else {
+            if (this.hasCount < this.positionHighLine) {
+              classListF = this.removeSell(classListF)
+            }
           }
         } else {
           // 6个一下不考虑
@@ -1642,6 +1646,10 @@ export default {
             // 在趋势中，什么卖出信号都不用管
             if (!this.stockIndexPSF) {
               classListF = this.removeSell(classListF)
+            } else {
+              if (this.hasCount < this.positionHighLine) {
+                classListF = this.removeSell(classListF)
+              }
             }
           } else {
             // 也买吧
@@ -1658,6 +1666,10 @@ export default {
             if (!this.ifThreeUp) {
               if (!this.stockIndexPSF) {
                 classListF = this.removeSell(classListF)
+              } else {
+                if (this.hasCount < this.positionHighLine) {
+                  classListF = this.removeSell(classListF)
+                }
               }
             }
           }

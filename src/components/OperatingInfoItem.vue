@@ -1,6 +1,6 @@
 <template>
   <mt-cell-swipe
-    :class="['operating-info-item', ...getItemClass()]"
+    :class="['operating-info-item', ...otherClass() ,...getItemClass()]"
   >
     <div slot="title" style="position: relative">
       <div @click="toPath(toUrl)">
@@ -71,7 +71,7 @@
             <span
               v-if="ifQuarterHotCut()"
               class="fm-tag s-black"
-            >清{{ifThreeUp ? '0.3': '1/6'}}</span>
+            >清{{ifThreeUp ? '1/3': '1/6'}}</span>
             <span v-if="ifQuarterHotNow" class="fm-tag s-black">季</span>
             <!--想要卖出-->
             <span
@@ -87,7 +87,7 @@
               v-if="ifFixIndex && monthHighSell"
               class="fm-tag s-black"
             >热卖定{{getFixSellRate()}}</span>
-            <span v-if="ifJieTargetUpCloseLock" class="fm-tag s-black">目标0.3</span>
+            <span v-if="ifJieTargetUpCloseLock" class="fm-tag s-black">目标1/3</span>
             <!--<span v-if="ifStopKeep()" class="fm-tag s-black">止盈</span>-->
             <!--年下z45是必跌的-->
             <span v-if="ifClearZ45Today" class="fm-tag s-black">清z45</span>
@@ -581,18 +581,18 @@ export default {
         if (!this.stockIndexPSF) {
           // 没控制
           if (this.hasCount > (this.positionStandard)) {
-            factor = 1.66
+            factor = 1.33
           }
           if (this.hasCount > (this.positionStandard * 0.66)) {
-            factor = 1.33
+            factor = 1
           }
         } else {
           // 叠加控制
           if (this.hasCount > (this.positionStandard * 0.66)) {
-            factor = 1.66
+            factor = 1.33
           }
           if (this.hasCount > (this.positionStandard * 0.34)) {
-            factor = 1.33
+            factor = 1
           }
         }
         if (this.ifInDafanNow()) {
@@ -1934,6 +1934,16 @@ export default {
         }
         storageUtil.setData('bandBuySellData', this.indexInfo.key, flag)
       }
+    },
+    otherClass () {
+      let c = []
+      if (this.ifFixIndex && this.monthHighSell) {
+        c.push('sell-fix')
+      }
+      if (this.ifFixIndex && this.ifSellFix()) {
+        c.push('sell-fix')
+      }
+      return c
     }
   }
 }

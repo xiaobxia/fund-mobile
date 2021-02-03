@@ -187,6 +187,14 @@
   .mint-cell.has.lock:not(.should-buy) {
     background-color: $grey-color-back;
   }
+  .mint-cell {
+    &.sell-fix {
+      background-color: $blue-color-back-3;
+    }
+    &.should-buy {
+      background-color: $red-color-back;
+    }
+  }
   // 本该买卖出，而未操作的提示
   .mint-cell.has.no-lock {
     &.should-sell {
@@ -194,11 +202,6 @@
     }
     &.should-cut {
       background-color: $blue-color-back;
-    }
-  }
-  .mint-cell {
-    &.should-buy {
-      background-color: $red-color-back;
     }
   }
   .mint-cell {

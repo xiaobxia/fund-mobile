@@ -68,6 +68,16 @@
       <div class="index-rate">
         <span :class="stockNumberClass(indexChangeRatio)">{{indexChangeRatio}}%</span>
       </div>
+      <div class="detail-info-wrap">
+        <div class="item">
+          <span class="label">定投金额：</span>
+          <span class="value">{{fixSum}}</span>
+        </div>
+        <div class="item">
+          <span class="label">波段金额：</span>
+          <span class="value">{{bondSum}}</span>
+        </div>
+      </div>
       <div class="fund-list simple">
         <mt-cell-swipe v-for="(item) in list" :key="item.code" :to="'/page/fundDetail?code='+item.code" :class="item.has?'has-back':''">
           <div slot="title">
@@ -248,7 +258,9 @@ export default {
       nowClose: 0,
       dianwei: false,
       targetUpClose: 0,
-      targetDownClose: 0
+      targetDownClose: 0,
+      fixSum: 0,
+      bondSum: 0
     }
   },
 
@@ -584,7 +596,18 @@ export default {
             }
           }
         })
-        this.list = res.data.list
+        let fixSum = 0
+        let bondSum = 0
+        list.forEach((v) => {
+          if (v.strategy === '1') {
+            bondSum += v.sum
+          } else {
+            fixSum += v.sum
+          }
+        })
+        this.bondSum = this.keepTwoDecimals(bondSum)
+        this.fixSum = this.keepTwoDecimals(fixSum)
+        this.list = list
       })
     },
     ifFixedInvestment (item) {

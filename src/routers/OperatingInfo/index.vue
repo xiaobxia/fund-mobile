@@ -320,7 +320,7 @@ export default {
             jiandi,
             dingbu
           })
-          setTimeout(()=>{
+          setTimeout(() => {
             this.okHandler()
           }, 1000)
         })
@@ -456,7 +456,7 @@ export default {
       const position = this.userFundAccountInfo.positionConfig
       if (this.userFundAccountInfo.marketOpen) {
         const date = moment().format('YYYY-MM-DD')
-        this.$http.post(`${this.$fbsUrl}/riskSignal/updateSignal`, {
+        this.$http.post(`${this.$fbsUrl}/bsSignal/updateSignal`, {
           trade_date: date,
           position,
           band_record: JSON.stringify(list)

@@ -1945,7 +1945,7 @@ export default {
         if (this.ifHasSell(classListF)) {
           flag = '减仓'
         }
-        storageUtil.setData('bandBuySellData', this.indexInfo.key, flag)
+        // storageUtil.setData('bandBuySellData', this.indexInfo.key, flag)
       }
     },
     otherClass () {

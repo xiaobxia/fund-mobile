@@ -449,11 +449,13 @@ export default {
           flag: bandBuyData[key]
         })
       }
+      const position = this.userFundAccountInfo.positionConfig
       // 开盘的才更新
       if (this.userFundAccountInfo.marketOpen) {
         const date = moment().format('YYYY-MM-DD')
         this.$http.post(`${this.$fbsUrl}/riskSignal/updateSignal`, {
           trade_date: date,
+          position,
           band_record: JSON.stringify(list)
         })
       }

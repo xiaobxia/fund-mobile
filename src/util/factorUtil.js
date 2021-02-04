@@ -282,7 +282,7 @@ export default {
         return 0.66
       } else {
       // 卖
-        return 1.33
+        return 1.5
       }
     }
     return 1

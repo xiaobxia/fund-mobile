@@ -967,9 +967,9 @@ export default {
       const user = this.userFundAccountInfo.user
       const myAsset = user.asset
       // num * 每月金额
-      const tt = 2000
+      const tt = 300000
       const my = myAsset
-      return parseInt((num * (tt / 10000)) / (my / 36) * 10)
+      return parseInt((num * (tt / my)))
     },
     okHandler () {
       // 开盘的才更新

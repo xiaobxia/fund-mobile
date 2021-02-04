@@ -6,6 +6,7 @@
       </mt-button>
     </mt-header>
     <div class="main-body">
+      <mt-button type="primary" @click="okHandler" class="main-btn">发送</mt-button>
       <operating-warn
         :buyCount="buyCount"
         :noSellCount="noSellCount"
@@ -41,7 +42,6 @@
         :noSellCount="noSellCount"
         :kline="kline[item.key]"
       />
-      <mt-button type="primary" @click="okHandler" class="main-btn">发送</mt-button>
     </div>
   </div>
 </template>
@@ -161,7 +161,8 @@ export default {
       return count
     },
     ...mapGetters([
-      'userFundAccountInfo'
+      'userFundAccountInfo',
+      'bondSignalMap'
     ])
   },
   created () {
@@ -319,6 +320,9 @@ export default {
             jiandi,
             dingbu
           })
+          setTimeout(()=>{
+            this.okHandler()
+          }, 500)
         })
       })
     },
@@ -441,16 +445,15 @@ export default {
       return count
     },
     okHandler () {
-      const bandBuyData = storageUtil.getData('bandBuySellData')
       const list = []
-      for (let key in bandBuyData) {
+      for (let key in this.bondSignalMap) {
+        const item = this.bondSignalMap[key]
         list.push({
-          key,
-          flag: bandBuyData[key]
+          key: key,
+          ...item
         })
       }
       const position = this.userFundAccountInfo.positionConfig
-      // 开盘的才更新
       if (this.userFundAccountInfo.marketOpen) {
         const date = moment().format('YYYY-MM-DD')
         this.$http.post(`${this.$fbsUrl}/riskSignal/updateSignal`, {

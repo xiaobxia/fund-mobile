@@ -206,6 +206,7 @@ function getNetChangeRatioList (list, index) {
 }
 
 const kuanji = ['chuangye', 'wulin', 'sanbai', 'wubai', 'yiqian']
+const kuanjiBuy = ['chuangye', 'wulin', 'sanbai', 'wubai']
 
 export default {
   name: 'FixedInvestment',
@@ -219,6 +220,7 @@ export default {
     let canSell = {}
     let averageDiff = {}
     let klineMap = {}
+    let fbsBuyMap = {}
     for (let key in codeMap) {
       list.push({
         key: key,
@@ -240,6 +242,7 @@ export default {
       canSell[key] = 0
       averageDiff[key] = 0
       klineMap[key] = [{}]
+      fbsBuyMap[key] = 0
     }
     return {
       ggList: [
@@ -483,7 +486,8 @@ export default {
       klineMap,
       baijiuwarn: '',
       kuanBuy: 0,
-      myFundList: []
+      myFundList: [],
+      fbsBuyMap: fbsBuyMap
     }
   },
   computed: {
@@ -624,6 +628,7 @@ export default {
       }
       Promise.all(opList).then(() => {
         this.countHH()
+        this.okHandler()
       })
       this.$http.get('userFund/getUserFunds').then((data) => {
         if (data.success) {
@@ -947,6 +952,7 @@ export default {
               buyBaseInfo = parseInt(buyNumber / 10)
               item.buyNum = buyBaseInfo
               item.canBuyNumber = buyNumber
+              // this.fbsBuyMap[item.key] = buyBaseInfo
             }
           }
           storageUtil.setData('fixBuyData', item.key, buyBaseInfo)
@@ -966,42 +972,22 @@ export default {
       return parseInt((num * (tt / 10000)) / (my / 36) * 10)
     },
     okHandler () {
-      const hhBuy = this.otherBuyCount(this.canBuy)
-      const record = []
-      if (this.kuanBuy >= 4) {
-        this.hhList.forEach((item) => {
-          record.push({
-            name: `${item.code} ${item.name}`,
-            buyNum: this.ttBuy(hhBuy)
-          })
-        })
-      }
-      const fundIndexMap = {
-        'chuangye': '001879 长城创业板',
-        'wulin': '110003 易方达上证50',
-        'sanbai': '004190 招商沪深300',
-        'wubai': '004945 长信中证500',
-        'yiqian': '004194 招商中证1000',
-        'baijiu': '161725 招商中证白酒',
-        'shipin': '001631 天弘中证食品饮料',
-        'yiliao': '501005 汇添富中证精准医疗',
-        'shengwu': '501009 汇添富中证生物',
-        'jisuanji': '001629 天弘中证计算机',
-        'dianzi': '001617 天弘中证电子',
-        'xinxi': '000942 广发中证全指信息'
-      }
-      this.list.forEach((item) => {
-        if (item.ifBuy) {
-          record.push({
-            name: fundIndexMap[item.key],
-            buyNum: this.ttBuy(item.buyNum)
-          })
-        }
-      })
       // 开盘的才更新
       if (this.userFundAccountInfo.marketOpen) {
+        const record = []
+        this.list.forEach((item) => {
+          if (kuanjiBuy.indexOf(item.key) !== -1 || ['baijiu', 'shengwu', 'dianzi'].indexOf(item.key) !== -1) {
+            if (item.ifBuy) {
+              record.push({
+                key: item.key,
+                buyNum: this.ttBuy(item.buyNum),
+                rate: this.rateInfo[item.key]
+              })
+            }
+          }
+        })
         const date = moment().format('YYYY-MM-DD')
-        this.$http.post(`${this.$fbsUrl}/signal/updateSignal`, {
+        this.$http.post(`${this.$fbsUrl}/bsSignal/updateSignal`, {
           trade_date: date,
           fix_record: JSON.stringify(record)
         })

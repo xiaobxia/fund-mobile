@@ -64,6 +64,7 @@ export default {
           return b.netChangeRatio - a.netChangeRatio
         })
         localStorage.setItem('qdaPC', `${this.up}/${this.all}`)
+        this.okHandler()
       })
     },
     queryData (item) {

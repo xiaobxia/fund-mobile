@@ -1933,11 +1933,19 @@ export default {
     },
     sendFlagToServer (classListF) {
       // 发送信号
+      let flag = ''
+      if (this.ifHasBuy(classListF)) {
+        flag = '加仓'
+      }
+      if (this.ifHasSell(classListF)) {
+        flag = '减仓'
+      }
       if (this.type === '熊') {
         this.$store.commit('updateBondSignalMap', {
           key: this.indexInfo.key,
           stockIndexPSF: this.stockIndexPSF,
-          rate: this.rate
+          rate: this.rate,
+          flag
         })
       }
     },

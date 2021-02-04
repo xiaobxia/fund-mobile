@@ -6,7 +6,8 @@ import storageUtil from '@/util/storageUtil.js'
 let jigou = []
 
 // 垃圾指数
-let laji = []
+let laji = [
+]
 
 const d = dateUtil.getDate()
 const month = d.getMonth() + 1
@@ -22,6 +23,8 @@ if (month < 11) {
   const noLaji = storageUtil.getData('noBuySellConfig', 'noLaji') || false
   if (!noLaji) {
     laji = [
+      'jijian',
+      'chuanmei'
       // 'gangtie',
       // 'meitan',
       // 'jijian',

@@ -17,6 +17,7 @@
             <span v-if="isInOneDeep()" class="fm-tag s-red">单底</span>
             <span v-if="ifInZ45StatusNow" class="fm-tag s-black">z45</span>
             <span v-if="isBadDown()" class="fm-tag s-black">年季危</span>
+            <span v-if="isBadDown() && !ifLaji" class="fm-tag s-blue">进垃圾</span>
             <span v-if="isInQuarterHotToday" class="fm-tag s-black">危险</span>
             <span v-if="isInDingtouStatus()" class="fm-tag s-red">定投</span>
             <span v-if="qDiffAvRateIndex > 0" class="fm-tag s-red">上升</span>

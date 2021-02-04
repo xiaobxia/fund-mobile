@@ -279,10 +279,10 @@ export default {
     if (laji.indexOf(key) !== -1) {
       if (buySell === 'buy') {
       // 买
-        return 0.8
+        return 0.66
       } else {
       // 卖
-        return 1.2
+        return 1.33
       }
     }
     return 1

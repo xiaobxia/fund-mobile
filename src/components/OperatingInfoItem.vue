@@ -1934,18 +1934,11 @@ export default {
     sendFlagToServer (classListF) {
       // 发送信号
       if (this.type === '熊') {
-        let flag = ''
-        if (this.ifHasBuy(classListF)) {
-          if (classListF.indexOf('only-up-buy') !== -1) {
-            flag = '小幅加仓'
-          } else {
-            flag = '加仓'
-          }
-        }
-        if (this.ifHasSell(classListF)) {
-          flag = '减仓'
-        }
-        // storageUtil.setData('bandBuySellData', this.indexInfo.key, flag)
+        this.$store.commit('updateBondSignalMap', {
+          key: this.indexInfo.key,
+          stockIndexPSF: this.stockIndexPSF,
+          rate: this.rate
+        })
       }
     },
     otherClass () {

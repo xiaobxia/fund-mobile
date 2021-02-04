@@ -322,7 +322,7 @@ export default {
           })
           setTimeout(()=>{
             this.okHandler()
-          }, 500)
+          }, 1000)
         })
       })
     },
@@ -449,8 +449,8 @@ export default {
       for (let key in this.bondSignalMap) {
         const item = this.bondSignalMap[key]
         list.push({
-          key: key,
-          ...item
+          ...item,
+          key: key
         })
       }
       const position = this.userFundAccountInfo.positionConfig

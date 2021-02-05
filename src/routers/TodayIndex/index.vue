@@ -10,6 +10,16 @@
         <span :class="stockNumberClass(income)">{{income}} --- {{incomeRate}}% --- {{incomeRelativeRate}}%</span>
         <span :class="stockNumberClass(incomeDiff)"> --- {{incomeDiff}}</span>
       </div>
+      <div class="detail-info-wrap">
+        <div class="item">
+          <span class="label">涨：</span>
+          <span class="value red-text">{{incomeUp}}</span>
+        </div>
+        <div class="item">
+          <span class="label">跌：</span>
+          <span class="value green-text">{{incomeDown}}</span>
+        </div>
+      </div>
       <mt-cell-swipe v-for="(item) in list" :key="item.code"  :class="item.mix ? 'has-back':''">
         <div slot="title">
           <h3>
@@ -77,6 +87,24 @@ export default {
         income += item.netChangeRatio * (item.hasCount || 0)
       })
       return parseInt(((income / 100) * 0.95) + this.getOtherIncome())
+    },
+    incomeUp () {
+      let income = 0
+      this.list.forEach((item) => {
+        if (item.netChangeRatio > 0) {
+          income += item.netChangeRatio * (item.hasCount || 0)
+        }
+      })
+      return parseInt(((income / 100) * 0.95) + this.getOtherIncome('up'))
+    },
+    incomeDown () {
+      let income = 0
+      this.list.forEach((item) => {
+        if (item.netChangeRatio < 0) {
+          income += item.netChangeRatio * (item.hasCount || 0)
+        }
+      })
+      return parseInt(((income / 100) * 0.95) + this.getOtherIncome('down'))
     },
     incomeRate () {
       let income = 0
@@ -153,13 +181,22 @@ export default {
     }, 1000 * 30)
   },
   methods: {
-    getOtherIncome () {
+    getOtherIncome (fg) {
       const list = this.myFundList
       let sum = 0
+      let sumUp = 0
+      let sumDown = 0
       for (let i = 0; i < list.length; i++) {
         const item = list[i]
         if (!item.theme) {
-          sum += parseFloat(item.valuationSum) - parseFloat(item.sum)
+          const diff = parseFloat(item.valuationSum) - parseFloat(item.sum)
+          sum += diff
+          if (diff > 0) {
+            sumUp += diff
+          }
+          if (diff < 0) {
+            sumDown += diff
+          }
         }
       }
       if (this.marketOpen) {
@@ -167,6 +204,12 @@ export default {
         const hour = d.getHours()
         // 10点以后
         if (hour >= 10) {
+          if (fg === 'up') {
+            return sumUp
+          }
+          if (fg === 'down') {
+            return sumDown
+          }
           return sum
         }
       }

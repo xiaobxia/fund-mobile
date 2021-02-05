@@ -579,6 +579,7 @@ export default {
         }
       } else {
         // 下降
+        // 不要以为跌的多了就不舍得卖，还有可能继续跌10个点
         if (!this.stockIndexPSF) {
           // 没控制
           if (this.hasCount > (this.positionStandard)) {

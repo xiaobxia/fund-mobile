@@ -322,9 +322,13 @@ export default {
             jiandi,
             dingbu
           })
-          setTimeout(() => {
-            this.okHandler()
-          }, 1000)
+          const d = this.getDate()
+          const hour = d.getHours()
+          if (hour < 17) {
+            setTimeout(() => {
+              this.okHandler()
+            }, 1000)
+          }
         })
       })
     },

@@ -628,7 +628,11 @@ export default {
       }
       Promise.all(opList).then(() => {
         this.countHH()
-        this.okHandler()
+        const d = this.getDate()
+        const hour = d.getHours()
+        if (hour < 17) {
+          this.okHandler()
+        }
       })
       this.$http.get('userFund/getUserFunds').then((data) => {
         if (data.success) {

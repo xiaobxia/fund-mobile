@@ -65,7 +65,11 @@ export default {
           return b.netChangeRatio - a.netChangeRatio
         })
         localStorage.setItem('qdaPC', `${this.up}/${this.all}`)
-        this.okHandler()
+        const d = this.getDate()
+        const hour = d.getHours()
+        if (hour < 17) {
+          this.okHandler()
+        }
       })
     },
     queryData (item) {

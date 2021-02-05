@@ -1946,7 +1946,8 @@ export default {
           key: this.indexInfo.key,
           stockIndexPSF: this.stockIndexPSF,
           rate: this.rate,
-          flag
+          flag,
+          qdiff: this.qDiffAvRateIndex
         })
       }
     },

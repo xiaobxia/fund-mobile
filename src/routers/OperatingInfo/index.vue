@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import moment from 'moment'
+import moment from 'moment-timezone'
 import { mapGetters } from 'vuex'
 import indexInfoUtilXiong from '@/util/indexInfoUtilXiong.js'
 import indexInfoUtilJian from '@/util/indexInfoUtilJian.js'
@@ -58,6 +58,8 @@ import indexList from '@/common/indexList.js'
 import OperatingInfoItem from '@/components/OperatingInfoItem.vue'
 import OperatingWarn from '@/components/OperatingWarn.vue'
 import setting from '@/setting.js'
+
+moment.tz.setDefault('Asia/Shanghai')
 
 const codeMap = indexInfoUtilXiong.codeMap
 const formatData = indexInfoUtilXiong.formatData

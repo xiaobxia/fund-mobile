@@ -146,12 +146,12 @@
   </div>
 </template>
 <script>
-import moment from 'moment'
+import moment from 'moment-timezone'
 import indexList from '@/common/indexList.js'
 import indexType from '@/common/indexType.js'
 import storageUtil from '@/util/storageUtil.js'
 import setting from '@/setting.js'
-
+moment.tz.setDefault('Asia/Shanghai')
 const jigouName = indexType.jigouName
 const lajiName = indexType.lajiName
 

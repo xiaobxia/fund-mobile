@@ -123,7 +123,7 @@
 </template>
 
 <script>
-import moment from 'moment'
+import moment from 'moment-timezone'
 import storageUtil from '@/util/storageUtil.js'
 import fixedInvestment from '@/util/platformFixedInvestment.js'
 import indexList from '@/common/indexList'
@@ -131,7 +131,7 @@ import stockApiUtil from '@/util/stockApiUtil.js'
 import stockAnalysisUtil from '@/util/stockAnalysisUtil.js'
 import { mapGetters } from 'vuex'
 import setting from '@/setting.js'
-
+moment.tz.setDefault('Asia/Shanghai')
 const sellFixList = setting.sellFixList
 
 const codeMap = fixedInvestment.codeMap

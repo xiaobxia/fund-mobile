@@ -1,7 +1,8 @@
 import storageUtil from '@/util/storageUtil.js'
 import dateUtil from './dateUtil'
-import moment from 'moment'
+import moment from 'moment-timezone'
 import indexType from '@/common/indexType.js'
+moment.tz.setDefault('Asia/Shanghai')
 
 const jigou = indexType.jigou
 const highRate = indexType.highRate

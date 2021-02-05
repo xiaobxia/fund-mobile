@@ -1,4 +1,5 @@
-import moment from 'moment'
+import moment from 'moment-timezone'
+moment.tz.setDefault('Asia/Shanghai')
 
 const fundAccountUtil = {
   // 是否定投

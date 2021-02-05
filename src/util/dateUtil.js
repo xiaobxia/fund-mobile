@@ -1,7 +1,8 @@
 /**
  * Created by xiaobxia on 2017/8/28.
  */
-import moment from 'moment'
+import moment from 'moment-timezone'
+moment.tz.setDefault('Asia/Shanghai')
 
 export default {
   formatToDay (date) {

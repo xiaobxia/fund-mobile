@@ -26,7 +26,8 @@
 import indexList from '@/common/indexList.js'
 import storageUtil from '@/util/storageUtil.js'
 import { mapGetters } from 'vuex'
-import moment from 'moment'
+import moment from 'moment-timezone'
+moment.tz.setDefault('Asia/Shanghai')
 
 export default {
   name: 'QuarterDiffIndex',

@@ -65,7 +65,8 @@
   </div>
 </template>
 <script>
-import moment from 'moment'
+import moment from 'moment-timezone'
+moment.tz.setDefault('Asia/Shanghai')
 export default{
   name: 'RecentBuy',
   data () {

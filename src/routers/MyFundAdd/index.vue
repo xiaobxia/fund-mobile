@@ -94,7 +94,9 @@
 <script>
 import {MessageBox} from 'mint-ui'
 import Toast from '@/common/toast.js'
-import moment from 'moment'
+import moment from 'moment-timezone'
+
+moment.tz.setDefault('Asia/Shanghai')
 
 export default {
   name: 'MyFundAdd',

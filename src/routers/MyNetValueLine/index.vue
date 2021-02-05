@@ -67,11 +67,12 @@
 </template>
 
 <script>
-import moment from 'moment'
+import moment from 'moment-timezone'
 import indexListAll from '@/common/indexListAll.js'
 import {Indicator} from 'mint-ui'
 import { mapGetters } from 'vuex'
 
+moment.tz.setDefault('Asia/Shanghai')
 const zoom = window.adaptive.zoom
 const baseFontSize = 22
 

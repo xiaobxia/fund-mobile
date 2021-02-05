@@ -70,13 +70,14 @@
 </template>
 
 <script>
-import moment from 'moment'
+import moment from 'moment-timezone'
 import MyFundCard from '@/components/MyFundCard.vue'
 import fundAccountUtil from '@/util/fundAccountUtil.js'
 import indexList from '@/common/indexList.js'
 import stockApiUtil from '@/util/stockApiUtil.js'
 import storageUtil from '@/util/storageUtil.js'
 import { mapGetters } from 'vuex'
+moment.tz.setDefault('Asia/Shanghai')
 
 export default {
   name: 'MyFund',

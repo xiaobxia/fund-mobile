@@ -2,6 +2,7 @@
   <mt-cell-swipe
     :class="['operating-info-item', ...otherClass() ,...getItemClass()]"
   >
+    <div style="display: none" :class="[...getItemClass('fbs')]"></div>
     <div slot="title" style="position: relative">
       <div @click="toPath(toUrl)">
         <h3>
@@ -1325,13 +1326,15 @@ export default {
       }
       return false
     },
-    getItemClass () {
+    getItemClass (fbs) {
       let positionQYHigh = false
       let positionHighSell = false
       let lostHighCut = false
       let downLockSell = false
       let lowPBuy = false
-      this.setIndexCanFix()
+      if (!fbs) {
+        this.setIndexCanFix()
+      }
       const buyClass = 'buy'
       const sellClass = 'sell'
       const shouldBuyClass = 'should-buy'
@@ -1476,8 +1479,10 @@ export default {
         if (this.positionHigh) {
           // 高仓，不是大反不是锁仓，涨了就卖
           if (this.rate > 0) {
-            positionHighSell = true
-            shouldClass = shouldSellClass
+            if (!fbs) {
+              positionHighSell = true
+              shouldClass = shouldSellClass
+            }
           }
         }
         // 大跌以后收涨给个卖出
@@ -1498,8 +1503,10 @@ export default {
         if (this.positionHigh) {
           // 高仓，不是大反不是锁仓，涨了就卖
           if (this.rate > 0) {
-            positionHighSell = true
-            shouldClass = shouldSellClass
+            if (!fbs) {
+              positionHighSell = true
+              shouldClass = shouldSellClass
+            }
           }
         }
       }
@@ -1543,7 +1550,9 @@ export default {
             // 如果仓位高了，涨了就卖
             // 没必要考虑大反什么的，因为是仓位太高了，才让卖出的
             if (this.rate > 0) {
-              classListF.push(sellClass)
+              if (!fbs) {
+                classListF.push(sellClass)
+              }
             }
           }
         }
@@ -1582,7 +1591,9 @@ export default {
           if (this.positionHigh) {
             // 不是单底
             if (!this.isInOneDeep()) {
-              classListF = this.removeBuy(classListF)
+              if (!fbs) {
+                classListF = this.removeBuy(classListF)
+              }
             }
           }
         }
@@ -1618,7 +1629,9 @@ export default {
             classListF = this.removeSell(classListF)
           } else {
             if (this.hasCount < this.positionHighLine) {
-              classListF = this.removeSell(classListF)
+              if (!fbs) {
+                classListF = this.removeSell(classListF)
+              }
             }
           }
         } else {
@@ -1650,7 +1663,9 @@ export default {
               classListF = this.removeSell(classListF)
             } else {
               if (this.hasCount < this.positionHighLine) {
-                classListF = this.removeSell(classListF)
+                if (!fbs) {
+                  classListF = this.removeSell(classListF)
+                }
               }
             }
           } else {
@@ -1670,7 +1685,9 @@ export default {
                 classListF = this.removeSell(classListF)
               } else {
                 if (this.hasCount < this.positionHighLine) {
-                  classListF = this.removeSell(classListF)
+                  if (!fbs) {
+                    classListF = this.removeSell(classListF)
+                  }
                 }
               }
             }
@@ -1786,11 +1803,13 @@ export default {
           if (this.fundNowIncome < -3) {
             const PQS = storageUtil.getData('upDownConfig', 'PQS') || false
             if (PQS) {
-              lostHighCut = true
-              // 没有任何买入
-              classListF = this.removeBuy(classListF)
-              // 加入卖出
-              classListF.push(sellClass)
+              if (!fbs) {
+                lostHighCut = true
+                // 没有任何买入
+                classListF = this.removeBuy(classListF)
+                // 加入卖出
+                classListF.push(sellClass)
+              }
             }
           }
         }
@@ -1800,9 +1819,11 @@ export default {
         if (this.hasCount < (this.positionStandard * 0.34 * 0.66)) {
           const PQB = storageUtil.getData('upDownConfig', 'PQB') || false
           if (PQB) {
-            classListF = this.removeSell(classListF)
-            classListF.push(buyClass)
-            lowPBuy = true
+            if (!fbs) {
+              classListF = this.removeSell(classListF)
+              classListF.push(buyClass)
+              lowPBuy = true
+            }
           }
         }
       }
@@ -1847,7 +1868,9 @@ export default {
       const HPNS = storageUtil.getData('upDownConfig', 'HPNS') || false
       if (HPNS) {
         if (this.positionHigh) {
-          classListF = this.removeBuy(classListF)
+          if (!fbs) {
+            classListF = this.removeBuy(classListF)
+          }
         }
       }
       // ----最大最大权限--控制
@@ -1875,7 +1898,9 @@ export default {
         }
       }
       // 发送到服务端
-      this.sendFlagToServer(classListF)
+      if (fbs) {
+        this.sendFlagToServer(classListF)
+      }
       // ---------关于个人的限制
       // 锁仓的没有卖出高亮
       if (this.lock) {
@@ -1885,12 +1910,14 @@ export default {
         // classListF = this.removeSell(classListF)
       }
       // 设置信息
-      this.positionHighSell = positionHighSell
-      this.positionQYHigh = positionQYHigh
-      this.lostHighCut = lostHighCut
-      this.downLockSell = downLockSell
-      this.lowPBuy = lowPBuy
-      this.setInfo(classListF)
+      if (!fbs) {
+        this.positionHighSell = positionHighSell
+        this.positionQYHigh = positionQYHigh
+        this.lostHighCut = lostHighCut
+        this.downLockSell = downLockSell
+        this.lowPBuy = lowPBuy
+        this.setInfo(classListF)
+      }
       return classListF
     },
     setInfo (classListF) {

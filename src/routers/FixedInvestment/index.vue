@@ -24,7 +24,7 @@
             <div slot="title">
               <h3>
                 <span class="index-name">{{item.code}} {{item.name}}</span>
-                <span style="float: right" :class="stockNumberClass(getRateByCode(item.code))">{{getRateByCode(item.code)}}</span>
+                <span style="float: right" :class="stockNumberClass(item.change_ratio)">{{item.change_ratio}}</span>
               </h3>
               <p class="netChange wn">
             <span v-for="(subItem, index) in item.list" :key="index"
@@ -330,6 +330,16 @@ export default {
           code: '005827',
           name: '易方达蓝筹精选',
           list: []
+        },
+        {
+          code: '001102',
+          name: '前海开源国家',
+          list: []
+        },
+        {
+          code: '004997',
+          name: '广发高端制造',
+          list: []
         }
       ],
       list: list,
@@ -476,7 +486,7 @@ export default {
         },
         // 电子
         'sz399811': {
-          buy: 0.7,
+          buy: 0.55,
           sell: 1.3,
           a: 25,
           b: -20,
@@ -617,6 +627,14 @@ export default {
       }
       return 0
     },
+    initChangeRatio () {
+      this.hhList.forEach((item) => {
+        item.change_ratio = this.getRateByCode(item.code)
+      })
+      this.hhList.sort((a, b) => {
+        return b.change_ratio - a.change_ratio
+      })
+    },
     initPage () {
       this.stockIndexAll.forEach((item) => {
         this.averageMap[item.code] = item.year_average
@@ -626,14 +644,6 @@ export default {
       for (let i = 0; i < list.length; i++) {
         opList.push(this.queryData(list[i]))
       }
-      Promise.all(opList).then(() => {
-        this.countHH()
-        const d = this.getDate()
-        const hour = d.getHours()
-        if (hour < 17) {
-          this.okHandler()
-        }
-      })
       this.$http.get('userFund/getUserFunds').then((data) => {
         if (data.success) {
           const list = data.data.list
@@ -652,6 +662,15 @@ export default {
               }
             }
           }
+          this.initChangeRatio()
+        }
+      })
+      Promise.all(opList).then(() => {
+        this.countHH()
+        const d = this.getDate()
+        const hour = d.getHours()
+        if (hour < 17) {
+          this.okHandler()
         }
       })
     },
@@ -1025,7 +1044,7 @@ export default {
     },
     getAppMoney () {
       const hb = this.otherBuyCount(this.canBuy)
-      const sum = hb * this.hhList.length
+      const sum = hb * 10
       return sum * 2
     },
     getGGBUy (item) {

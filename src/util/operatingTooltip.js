@@ -8,11 +8,11 @@ const highRate = indexType.highRate
 const laji = indexType.laji
 const kuanji = indexType.kuanji
 let pixPc = localStorage.getItem('fixPc') || 0.5
-if (pixPc > 0.66) {
-  pixPc = 0.66
+if (pixPc > 0.8) {
+  pixPc = 0.8
 }
-if (pixPc < 0.33) {
-  pixPc = 0.33
+if (pixPc < 0.4) {
+  pixPc = 0.4
 }
 // 定投占比
 // 得真实得定，因为这也会影响波段指数的标准仓

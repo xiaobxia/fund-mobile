@@ -78,7 +78,7 @@
       </div>
       <div class="warn-wrap">
         <!--未来被动一定是跑赢主动的，美国现在就这样-->
-        <div class="fm-warn yellow">配比：混合25%，定投25%，波段50%</div>
+        <div class="fm-warn yellow">配比：混合30%，定投30%，波段40%</div>
         <div class="fm-warn blue">黄金再怎么乐观也不要超过2.5%</div>
       </div>
       <div style="position: absolute;width: 100%">

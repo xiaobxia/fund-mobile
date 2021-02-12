@@ -96,8 +96,9 @@
     </div>
     <div class="warn-wrap">
       <div class="fm-warn grey dd" @click="tgConfigShow">
-        <span>趋势控制</span>
-        <span class="ci">
+        <div>
+          <span>趋势控制</span>
+          <span class="ci">
           <span class="red-circle" :class="{active: upNoSell}"></span>
           <span class="red-circle" :class="{active: upMUB}"></span>
           <span class="red-circle" :class="{active: upMNS}"></span>
@@ -105,7 +106,24 @@
           <span class="red-circle" :class="{active: f30UpNS}"></span>
           <span class="green-circle" :class="{active: CQXS}"></span>
         </span>
-        <span style="float: right">{{qdaPC}}</span>
+          <span style="float: right">{{qdaPC}}</span>
+        </div>
+        <div class="detail-infoo-wrap" style="padding: 0">
+          <div class="item">
+            <span class="label">最低仓：</span>
+            <span class="value">{{minPosition}}</span>
+          </div>
+          <div class="item">
+            <span class="label">我的仓位：</span>
+            <span class="value">{{nowPosition}}</span>
+          </div>
+        </div>
+        <div v-if="nowPosition - minPosition >= 10" class="green-text">
+          策略倾向卖出
+        </div>
+        <div v-if="nowPosition - minPosition <= -10" class="red-text">
+          策略倾向买入
+        </div>
       </div>
     </div>
     <div v-if="configShow" class="config-wrap">
@@ -203,6 +221,8 @@ export default {
   name: 'OperatingWarn',
   data () {
     return {
+      minPosition: localStorage.getItem('minPosition') || 0,
+      nowPosition: storageUtil.getData('appConfig', 'nowPosition') || 100,
       question_10: storageUtil.getData('stockMarketQuestion', 'question_10'),
       configShow: false,
       upNoSell: storageUtil.getData('upDownConfig', 'upNoSell') || false,
@@ -403,5 +423,14 @@ export default {
   }
   .img-icon-item {
     background-color: #ccc;
+  }
+  .detail-infoo-wrap {
+    .item {
+      display: inline-block;
+      width: 49%;
+    }
+    .value {
+      float: right;
+    }
   }
 </style>

@@ -8,6 +8,9 @@
         <div v-if="question_10 === '是'" class="img-icon-item">
           <img src="../assets/牛市.png" alt="">
         </div>
+        <div v-if="getSellHH()" class="img-icon-item">
+          <div>卖混合{{getSellHH()}}</div>
+        </div>
       </div>
       <!--<div class="fm-warn blue">波段仓砍仓要狠，定投才是大头</div>-->
       <!--<div class="fm-warn red">波段仓一定要遵守交易纪律</div>-->
@@ -276,7 +279,8 @@ export default {
     ...mapGetters([
       'indexBondBuyMap',
       'indexBondSellMap',
-      'indexHighSellMap'
+      'indexHighSellMap',
+      'fixSellMap'
     ])
   },
   created () {
@@ -304,6 +308,22 @@ export default {
         }
       }
       return sum
+    },
+    getSellHH () {
+      let list = []
+      for (let key in this.fixSellMap) {
+        const value = this.fixSellMap[key]
+        if (value) {
+          list.push(value)
+        }
+      }
+      list.sort((a, b) => {
+        return a - b
+      })
+      if (list.length > 0) {
+        return list[Math.ceil(list.length / 2)]
+      }
+      return 0
     },
     tgConfigShow () {
       this.configShow = !this.configShow
@@ -380,5 +400,8 @@ export default {
     position: relative;
     top: 6px;
     margin-left: 100px;
+  }
+  .img-icon-item {
+    background-color: #ccc;
   }
 </style>

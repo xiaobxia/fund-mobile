@@ -11,11 +11,13 @@ const indexBondBuyMap = {}
 const indexBondSellMap = {}
 const indexHighSellMap = {}
 const bondSignalMap = {}
+const fixSellMap = {}
 indexListAll.forEach((i) => {
   indexBondBuyMap[i.key] = 0
   indexBondSellMap[i.key] = 0
   indexHighSellMap[i.key] = false
   bondSignalMap[i.key] = {}
+  fixSellMap[i.key] = 0
 })
 
 const store = new Vuex.Store({
@@ -29,7 +31,8 @@ const store = new Vuex.Store({
     indexBondBuyMap: indexBondBuyMap,
     indexBondSellMap: indexBondSellMap,
     indexHighSellMap: indexHighSellMap,
-    bondSignalMap: bondSignalMap
+    bondSignalMap: bondSignalMap,
+    fixSellMap: fixSellMap
   },
   getters: {
     tabSelect: state => state.tabSelect,
@@ -39,7 +42,8 @@ const store = new Vuex.Store({
     indexBondBuyMap: state => state.indexBondBuyMap,
     indexBondSellMap: state => state.indexBondSellMap,
     indexHighSellMap: state => state.indexHighSellMap,
-    bondSignalMap: state => state.bondSignalMap
+    bondSignalMap: state => state.bondSignalMap,
+    fixSellMap: state => state.fixSellMap
   },
   mutations: {
     SET_TAB_SELECT: (state, data) => {
@@ -62,6 +66,9 @@ const store = new Vuex.Store({
     },
     updateBondSignalMap: (state, data) => {
       state.bondSignalMap[data.key] = data
+    },
+    updateFixSellMap: (state, data) => {
+      state.fixSellMap[data.key] = data.value
     }
   },
   actions: {

@@ -1958,6 +1958,14 @@ export default {
           value: 0
         })
       }
+      if (this.ifKuanji || ['baijiu', 'shengwu', 'dianzi'].indexOf(this.indexInfo.key) !== -1) {
+        if (this.ifSellFix() || this.monthHighSell) {
+          this.$store.commit('updateFixSellMap', {
+            key: this.indexInfo.key,
+            value: this.getFixSellRate()
+          })
+        }
+      }
     },
     sendFlagToServer (classListF) {
       // 发送信号

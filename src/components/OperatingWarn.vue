@@ -102,9 +102,13 @@
           <span class="red-circle" :class="{active: upNoSell}"></span>
           <span class="red-circle" :class="{active: upMUB}"></span>
           <span class="red-circle" :class="{active: upMNS}"></span>
-          <span class="green-circle" :class="{active: downMBNB}"></span>
           <span class="red-circle" :class="{active: f30UpNS}"></span>
+          <span class="red-circle" :class="{active: PQB}"></span>
+          <span class="green-circle" :class="{active: downMBNB}"></span>
           <span class="green-circle" :class="{active: CQXS}"></span>
+          <span class="green-circle" :class="{active: QZMC}"></span>
+          <span class="green-circle" :class="{active: PQS}"></span>
+          <span class="green-circle" :class="{active: HPNS}"></span>
         </span>
           <span style="float: right">{{qdaPC}}</span>
         </div>
@@ -129,7 +133,8 @@
     <div v-if="configShow" class="config-wrap">
       <div class="d-w">
         <div class="red-text">都说风险了，那就倾向卖出，锁仓第一跌不买，建议仓位在5以下</div>
-      <mt-cell-swipe>
+        <div class="red-text b-t">多</div>
+        <mt-cell-swipe>
         <div slot="title">
           <h3>上升时锁仓都买</h3>
         </div>
@@ -155,18 +160,27 @@
         </mt-cell-swipe>
         <mt-cell-swipe>
           <div slot="title">
-            <h3>下降并且月下不买入（用于控制风险）</h3>
-          </div>
-          <div class="right-wrap">
-            <mt-switch v-model="downMBNB" @change="stateChangeHandler"></mt-switch>
-          </div>
-        </mt-cell-swipe>
-        <mt-cell-swipe>
-          <div slot="title">
             <h3>疯牛30线上不会有卖出</h3>
           </div>
           <div class="right-wrap">
             <mt-switch v-model="f30UpNS" @change="stateChangeHandler"></mt-switch>
+          </div>
+        </mt-cell-swipe>
+        <mt-cell-swipe>
+          <div slot="title">
+            <h3>开启跟随买入</h3>
+          </div>
+          <div class="right-wrap">
+            <mt-switch v-model="PQB" @change="stateChangeHandler"></mt-switch>
+          </div>
+        </mt-cell-swipe>
+        <div class="green-text b-t">空</div>
+        <mt-cell-swipe>
+          <div slot="title">
+            <h3>下降并且月下不买入（用于控制风险）</h3>
+          </div>
+          <div class="right-wrap">
+            <mt-switch v-model="downMBNB" @change="stateChangeHandler"></mt-switch>
           </div>
         </mt-cell-swipe>
         <mt-cell-swipe>
@@ -183,14 +197,6 @@
           </div>
           <div class="right-wrap">
             <mt-switch v-model="QZMC" @change="stateChangeHandler"></mt-switch>
-          </div>
-        </mt-cell-swipe>
-        <mt-cell-swipe>
-          <div slot="title">
-            <h3>开启跟随买入</h3>
-          </div>
-          <div class="right-wrap">
-            <mt-switch v-model="PQB" @change="stateChangeHandler"></mt-switch>
           </div>
         </mt-cell-swipe>
         <mt-cell-swipe>
@@ -432,5 +438,9 @@ export default {
     .value {
       float: right;
     }
+  }
+  .b-t{
+    text-align: center;
+    margin-bottom: 10px;
   }
 </style>

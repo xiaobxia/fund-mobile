@@ -68,6 +68,7 @@
             <span v-if="stockIndexPSF && averageQuarter < 0" class="fm-tag s-blue">解控</span>
             <span v-if="lostHighCut" class="fm-tag s-black">砍仓</span>
             <span v-if="lowPBuy" class="fm-tag s-red">强买</span>
+            <span v-if="lowPNoSell" class="fm-tag s-red">留底仓</span>
             <span v-if="downLockSell" class="fm-tag s-black">下锁卖2/3</span>
             <!--执行部分-->
             <span
@@ -171,6 +172,7 @@ const laji = indexType.laji
 const kuanji = indexType.kuanji
 
 const sellFixList = setting.sellFixList
+const badIndexList = setting.badIndexList
 
 export default {
   name: 'OperatingInfoItem',
@@ -185,6 +187,7 @@ export default {
       stockIndexPSF: stockIndexPSF,
       lostHighCut: false,
       lowPBuy: false,
+      lowPNoSell: false,
       downLockSell: false
     }
   },
@@ -1332,6 +1335,7 @@ export default {
       let lostHighCut = false
       let downLockSell = false
       let lowPBuy = false
+      let lowPNoSell = false
       if (!fbs) {
         this.setIndexCanFix()
       }
@@ -1815,14 +1819,26 @@ export default {
         }
       }
       // 强买逻辑
-      if (this.qDiffAvRateIndex > 0.5 && !this.stockIndexPSF) {
+      if (this.qDiffAvRateIndex > 0.5 && !this.stockIndexPSF && this.ifInNoSellStatus()) {
         if (this.hasCount < (this.positionStandard * 0.34 * 0.66)) {
           const PQB = storageUtil.getData('upDownConfig', 'PQB') || false
-          if (PQB) {
+          if (PQB && badIndexList.indexOf(this.indexInfo.key) === -1) {
             if (!fbs) {
               classListF = this.removeSell(classListF)
               classListF.push(buyClass)
               lowPBuy = true
+            }
+          }
+        }
+      }
+      // 留底仓逻辑
+      if (this.qDiffAvRateIndex > 0.5 && !this.stockIndexPSF && this.averageMonthIndex > 0) {
+        if (this.hasCount < (this.positionStandard * 0.34 * 0.66)) {
+          const PLNS = storageUtil.getData('upDownConfig', 'PLNS') || false
+          if (PLNS && badIndexList.indexOf(this.indexInfo.key) === -1) {
+            if (!fbs) {
+              classListF = this.removeSell(classListF)
+              lowPNoSell = true
             }
           }
         }
@@ -1916,6 +1932,7 @@ export default {
         this.lostHighCut = lostHighCut
         this.downLockSell = downLockSell
         this.lowPBuy = lowPBuy
+        this.lowPNoSell = lowPNoSell
         this.setInfo(classListF)
       }
       return classListF

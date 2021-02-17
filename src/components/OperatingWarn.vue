@@ -104,6 +104,7 @@
           <span class="red-circle" :class="{active: upMNS}"></span>
           <span class="red-circle" :class="{active: f30UpNS}"></span>
           <span class="red-circle" :class="{active: PQB}"></span>
+          <span class="red-circle" :class="{active: PLNS}"></span>
           <span class="green-circle" :class="{active: downMBNB}"></span>
           <span class="green-circle" :class="{active: CQXS}"></span>
           <span class="green-circle" :class="{active: QZMC}"></span>
@@ -168,10 +169,18 @@
         </mt-cell-swipe>
         <mt-cell-swipe>
           <div slot="title">
-            <h3>开启跟随买入</h3>
+            <h3>开启偏多仓位跟随</h3>
           </div>
           <div class="right-wrap">
             <mt-switch v-model="PQB" @change="stateChangeHandler"></mt-switch>
+          </div>
+        </mt-cell-swipe>
+        <mt-cell-swipe>
+          <div slot="title">
+            <h3>开启上升低仓不卖</h3>
+          </div>
+          <div class="right-wrap">
+            <mt-switch v-model="PLNS" @change="stateChangeHandler"></mt-switch>
           </div>
         </mt-cell-swipe>
         <div class="green-text b-t">空</div>
@@ -240,6 +249,7 @@ export default {
       CQXS: storageUtil.getData('upDownConfig', 'CQXS') || false,
       QZMC: storageUtil.getData('upDownConfig', 'QZMC') || false,
       PQB: storageUtil.getData('upDownConfig', 'PQB') || false,
+      PLNS: storageUtil.getData('upDownConfig', 'PLNS') || false,
       PQS: storageUtil.getData('upDownConfig', 'PQS') || false,
       HPNS: storageUtil.getData('upDownConfig', 'HPNS') || false
     }
@@ -373,6 +383,7 @@ export default {
       storageUtil.setData('upDownConfig', 'f30UpNS', f30UpNS)
       storageUtil.setData('upDownConfig', 'QZMC', this.QZMC)
       storageUtil.setData('upDownConfig', 'PQB', this.PQB)
+      storageUtil.setData('upDownConfig', 'PLNS', this.PLNS)
       storageUtil.setData('upDownConfig', 'PQS', this.PQS)
       storageUtil.setData('upDownConfig', 'HPNS', this.HPNS)
     }
@@ -425,7 +436,7 @@ export default {
   .ci {
     position: relative;
     top: 6px;
-    margin-left: 100px;
+    margin-left: 60px;
   }
   .img-icon-item {
     background-color: #ccc;

@@ -211,6 +211,11 @@ const routers = [
     component: lazyLoading('Ast')
   },
   {
+    name: 'BtbIndex',
+    path: '/page/btbIndex',
+    component: lazyLoading('BtbIndex')
+  },
+  {
     name: '404',
     path: '*',
     component: lazyLoading('NotMatch')

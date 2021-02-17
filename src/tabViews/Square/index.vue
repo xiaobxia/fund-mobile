@@ -19,6 +19,15 @@
           <div class="bottom">添加</div>
         </div>
       </div>
+      <div class="img-card" @click="toPath('/page/btbIndex')">
+        <div class="container">
+          <div class="content">
+            <img src="../../assets/比特币.png" alt="">
+            <!--<i class="fas fa-book"></i>-->
+          </div>
+          <div class="bottom">比特币</div>
+        </div>
+      </div>
     </div>
   </div>
 </template>

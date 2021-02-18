@@ -111,7 +111,7 @@
           </div>
         </div>
         <div class="warn-wrap">
-          <div class="fm-warn blue">波段标准{{parseFloat(50/indexNumber)}}%</div>
+          <div class="fm-warn blue">波段标准{{parseFloat(50/indexNumber).toFixed(2)}}%</div>
         </div>
         <div class="content">
           <p>波段

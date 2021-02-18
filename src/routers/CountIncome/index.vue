@@ -17,7 +17,8 @@
           v-for="(item, index) in list"
           :key="index"
         >
-          <span>第{{index+1}}年：{{parseInt(item)}}，增加：{{parseInt(item - (list[index-1]|| form.benjin))}}</span>
+          <span>第{{index+1}}年：{{parseInt(item.income)}}，增加：{{parseInt(item.income - ((list[index-1] && list[index-1].income)|| form.benjin))}}</span>
+          <span>，基金收益：{{parseInt(item.jjIncome)}}</span>
         </div>
       </div>
     </div>
@@ -64,13 +65,16 @@ export default {
       const shouru = parseFloat(this.form.shouru) || 0
       const dingtoushouyilv = parseFloat(this.form.dingtoushouyilv) || 1
       const zengliang = parseFloat(this.form.zengliang) || 0
-      return (benjin * nianshouyilv) + (shouru * dingtoushouyilv) + zengliang
+      return {
+        income: (benjin * nianshouyilv) + (shouru * dingtoushouyilv) + zengliang,
+        jjIncome: (benjin * nianshouyilv) + (shouru * dingtoushouyilv) - benjin - shouru
+      }
     },
     okHandler () {
       let last = this.baseCount()
       let list = [last]
       for (let i = 1; i < 20; i++) {
-        last = this.baseCount(last)
+        last = this.baseCount(last.income)
         list.push(last)
       }
       this.list = list

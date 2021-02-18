@@ -116,7 +116,7 @@
         <div class="detail-infoo-wrap" style="padding: 0">
           <div class="item">
             <span class="label">最低仓：</span>
-            <span class="value">{{minPosition}}</span>
+            <span class="value">{{parseInt(minPosition)}}</span>
           </div>
           <div class="item">
             <span class="label">我的仓位：</span>

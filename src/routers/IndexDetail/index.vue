@@ -78,6 +78,56 @@
           <span class="value">{{bondSum}}</span>
         </div>
       </div>
+      <div class="detail-info-wrap">
+        <div class="item">
+          <span class="label">比例：</span>
+          <span class="value">1/18</span>
+        </div>
+        <div class="item">
+          <span class="label">金额：</span>
+          <span class="value">{{parseInt(fixSum / 18)}}</span>
+        </div>
+        <div class="item">
+          <span class="label">比例：</span>
+          <span class="value">1/15</span>
+        </div>
+        <div class="item">
+          <span class="label">金额：</span>
+          <span class="value">{{parseInt(fixSum / 15)}}</span>
+        </div>
+        <div class="item">
+          <span class="label">比例：</span>
+          <span class="value">1/12</span>
+        </div>
+        <div class="item">
+          <span class="label">金额：</span>
+          <span class="value">{{parseInt(fixSum / 12)}}</span>
+        </div>
+        <div class="item">
+          <span class="label">比例：</span>
+          <span class="value">1/10</span>
+        </div>
+        <div class="item">
+          <span class="label">金额：</span>
+          <span class="value">{{parseInt(fixSum / 10)}}</span>
+        </div>
+        <div class="item">
+          <span class="label">比例：</span>
+          <span class="value">1/8</span>
+        </div>
+        <div class="item">
+          <span class="label">金额：</span>
+          <span class="value">{{parseInt(fixSum / 8)}}</span>
+        </div>
+        <div class="item">
+          <span class="label">比例：</span>
+          <span class="value">1/6</span>
+        </div>
+        <div class="item">
+          <span class="label">金额：</span>
+          <span class="value">{{parseInt(fixSum / 6)}}</span>
+        </div>
+      </div>
       <div class="fund-list simple">
         <mt-cell-swipe v-for="(item) in list" :key="item.code" :to="'/page/fundDetail?code='+item.code" :class="item.has?'has-back':''">
           <div slot="title">

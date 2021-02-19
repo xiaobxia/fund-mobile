@@ -13,6 +13,7 @@
       </div>
       <div>总买入金额：{{getAllBuySum()}}</div>
       <div>
+        <span v-if="kuanBuy < 4">不要自作聪明买混合，按规则买</span>
         <span :class="kuanBuy >= 4 ? 'red-text': ''">
           <span v-if="kuanBuy >= 4">可以</span>买入：{{$formatMoney(otherBuyCount(canBuy))}}
         </span>

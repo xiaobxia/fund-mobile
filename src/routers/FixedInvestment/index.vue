@@ -609,16 +609,37 @@ export default {
     // 计算混合
     countHH () {
       this.kuanBuy = 0
+      const map = {}
       this.list.forEach((item, index) => {
-        if (item.ifBuy) {
-          // 是宽基
-          if (kuanji.indexOf(item.key) !== -1) {
-            this.kuanBuy++
-          } else if (['baijiu', 'shengwu', 'dianzi'].indexOf(item.key) !== -1) {
-            this.kuanBuy++
-          }
+        map[item.key] = item.ifBuy
+      })
+      kuanji.forEach((key)=>{
+        if (map[key]) {
+          this.kuanBuy++
         }
       })
+      if (!map['chuangye'] && map['chuangWL']) {
+        this.kuanBuy++
+      }
+      if (map['baijiu'] || map['shipin']) {
+        this.kuanBuy++
+      }
+      if (map['shengwu'] || map['yiliao']) {
+        this.kuanBuy++
+      }
+      if (map['dianzi']) {
+        this.kuanBuy++
+      }
+      // this.list.forEach((item, index) => {
+      //   if (item.ifBuy) {
+      //     // 是宽基
+      //     if (kuanji.indexOf(item.key) !== -1) {
+      //       this.kuanBuy++
+      //     } else if (['baijiu', 'shengwu', 'dianzi'].indexOf(item.key) !== -1) {
+      //       this.kuanBuy++
+      //     }
+      //   }
+      // })
     },
     getRateByCode (code) {
       for (let i = 0; i < this.myFundList.length; i++) {

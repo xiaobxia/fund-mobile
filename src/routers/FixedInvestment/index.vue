@@ -613,7 +613,7 @@ export default {
       this.list.forEach((item, index) => {
         map[item.key] = item.ifBuy
       })
-      kuanji.forEach((key)=>{
+      kuanji.forEach((key) => {
         if (map[key]) {
           this.kuanBuy++
         }

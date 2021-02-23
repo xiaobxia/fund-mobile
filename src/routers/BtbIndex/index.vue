@@ -43,13 +43,13 @@ export default {
         this.close = now.close
       })
     },
-    queryList() {
+    queryList () {
       return this.$http.get('btb/getUserBtbs').then((res) => {
         const list = res.data.list || []
-        list.forEach((v)=>{
+        list.forEach((v) => {
           let shares = 0
           v.position_record = v.position_record || []
-          v.position_record.forEach((p)=>{
+          v.position_record.forEach((p) => {
             shares += p.shares || 0
           })
           v.shares = shares
@@ -60,7 +60,7 @@ export default {
     backHandler () {
       this.$router.history.go(-1)
     },
-    toEdit(item) {
+    toEdit (item) {
       this.$router.push({
         path: '/page/myBtbAdd',
         query: {

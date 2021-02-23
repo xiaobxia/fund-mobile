@@ -608,28 +608,29 @@ export default {
     },
     // 计算混合
     countHH () {
-      this.kuanBuy = 0
+      let kuanBuy = 0
       const map = {}
       this.list.forEach((item, index) => {
         map[item.key] = item.ifBuy
       })
       kuanji.forEach((key) => {
         if (map[key]) {
-          this.kuanBuy++
+          kuanBuy++
         }
       })
       if (!map['chuangye'] && map['chuangWL']) {
-        this.kuanBuy++
+        kuanBuy++
       }
       if (map['baijiu'] || map['shipin']) {
-        this.kuanBuy++
+        kuanBuy++
       }
       if (map['shengwu'] || map['yiliao']) {
-        this.kuanBuy++
+        kuanBuy++
       }
       if (map['dianzi']) {
-        this.kuanBuy++
+        kuanBuy++
       }
+      this.kuanBuy = kuanBuy
       // this.list.forEach((item, index) => {
       //   if (item.ifBuy) {
       //     // 是宽基

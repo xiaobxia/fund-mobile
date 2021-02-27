@@ -562,6 +562,13 @@ export default {
           return true
         }
       }
+      const CPQXB = storageUtil.getData('upDownConfig', 'CPQXB') || false
+      if (CPQXB) {
+        let threeDay = stockAnalysisUtil.countUp(netChangeRatioListLarge, 3, 3)
+        if (threeDay.flag) {
+          return true
+        }
+      }
       return false
     },
     getLockInfo (key) {

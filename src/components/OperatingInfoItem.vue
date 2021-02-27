@@ -1890,8 +1890,16 @@ export default {
         }
       }
       // ----最大最大权限--控制
+      const CPQXB = storageUtil.getData('upDownConfig', 'CPQXB') || false
       const noBuy = storageUtil.getData('noBuySellConfig', 'noBuy') || false
       const noSell = storageUtil.getData('noBuySellConfig', 'noSell') || false
+      // 减仓位取向
+      if (CPQXB) {
+        if (this.ifFourUp) {
+          classListF = this.removeBuy(classListF)
+          classListF.push('sell')
+        }
+      }
       if (noBuy) {
         classListF = this.removeBuy(classListF)
       }
@@ -1981,6 +1989,17 @@ export default {
             key: this.indexInfo.key,
             value: this.getFixSellRate()
           })
+        } else {
+          const CPQXB = storageUtil.getData('upDownConfig', 'CPQXB') || false
+          // 减仓位取向
+          if (CPQXB) {
+            if (this.ifFourUp) {
+              this.$store.commit('updateFixSellMap', {
+                key: this.indexInfo.key,
+                value: this.getFixSellRate()
+              })
+            }
+          }
         }
       }
     },

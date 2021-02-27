@@ -224,6 +224,14 @@
             <mt-switch v-model="HPNS" @change="stateChangeHandler"></mt-switch>
           </div>
         </mt-cell-swipe>
+        <mt-cell-swipe>
+          <div slot="title">
+            <h3>减仓位取向波段</h3>
+          </div>
+          <div class="right-wrap">
+            <mt-switch v-model="CPQXB" @change="stateChangeHandler"></mt-switch>
+          </div>
+        </mt-cell-swipe>
       </div>
     </div>
   </div>
@@ -251,7 +259,8 @@ export default {
       PQB: storageUtil.getData('upDownConfig', 'PQB') || false,
       PLNS: storageUtil.getData('upDownConfig', 'PLNS') || false,
       PQS: storageUtil.getData('upDownConfig', 'PQS') || false,
-      HPNS: storageUtil.getData('upDownConfig', 'HPNS') || false
+      HPNS: storageUtil.getData('upDownConfig', 'HPNS') || false,
+      CPQXB: storageUtil.getData('upDownConfig', 'CPQXB') || false
     }
   },
   props: {
@@ -386,6 +395,7 @@ export default {
       storageUtil.setData('upDownConfig', 'PLNS', this.PLNS)
       storageUtil.setData('upDownConfig', 'PQS', this.PQS)
       storageUtil.setData('upDownConfig', 'HPNS', this.HPNS)
+      storageUtil.setData('upDownConfig', 'CPQXB', this.CPQXB)
     }
   }
 }

@@ -9431,7 +9431,8 @@ const codeMap = {
     mix: true,
     days: 1200,
     topLine: 15,
-    cutDownLine: 30
+    cutDownLine: 30,
+    positionFg: 1.25
   },
   'yiyao': {
     code: 'sh000037',
@@ -9444,7 +9445,8 @@ const codeMap = {
     downTrendLine: -3.3,
     days: 1200,
     topLine: 10,
-    cutDownLine: 19
+    cutDownLine: 19,
+    positionFg: 1
   },
   'jisuanji': {
     code: 'sz399363',
@@ -9458,7 +9460,8 @@ const codeMap = {
     downTrendLine: -3.3,
     days: 1200,
     topLine: 20,
-    cutDownLine: 30
+    cutDownLine: 30,
+    positionFg: 0.875
   },
   'dianzi': {
     code: 'sz399811',
@@ -9472,7 +9475,8 @@ const codeMap = {
     downTrendLine: -3.3,
     days: 1200,
     topLine: 20,
-    cutDownLine: 40
+    cutDownLine: 40,
+    positionFg: 1
   },
   'wulin': {
     code: 'sh000016',
@@ -9486,7 +9490,8 @@ const codeMap = {
     mix: true,
     days: 1200,
     topLine: 14,
-    cutDownLine: 17
+    cutDownLine: 17,
+    positionFg: 1.25
   },
   'yinhang': {
     code: 'sz399986',
@@ -9499,7 +9504,8 @@ const codeMap = {
     downTrendLine: -3.3,
     days: 1000,
     topLine: 7.5,
-    cutDownLine: 14
+    cutDownLine: 14,
+    positionFg: 1
   },
   'shipin': {
     code: 'sz399396',
@@ -9512,7 +9518,8 @@ const codeMap = {
     downTrendLine: -3.3,
     days: 1200,
     topLine: 24,
-    cutDownLine: 30
+    cutDownLine: 30,
+    positionFg: 1.125
   },
   'jungong': {
     code: 'sz399959',
@@ -9526,7 +9533,8 @@ const codeMap = {
     downTrendLine: -3.3,
     days: 1200,
     topLine: 14,
-    cutDownLine: 24
+    cutDownLine: 24,
+    positionFg: 0.875
   },
   'xinxi': {
     code: 'sh000993',
@@ -9540,7 +9548,8 @@ const codeMap = {
     downTrendLine: -3.3,
     days: 1200,
     topLine: 18,
-    cutDownLine: 27
+    cutDownLine: 27,
+    positionFg: 0.875
   },
   'jijian': {
     code: 'sz399995',
@@ -9553,7 +9562,8 @@ const codeMap = {
     downTrendLine: 0,
     days: 1200,
     topLine: 10,
-    cutDownLine: 20
+    cutDownLine: 20,
+    positionFg: 0.6
   },
   'huanbao': {
     code: 'sh000827',
@@ -9566,7 +9576,8 @@ const codeMap = {
     downTrendLine: -3.3,
     days: 1200,
     topLine: 5.5,
-    cutDownLine: 7
+    cutDownLine: 7,
+    positionFg: 0.875
   },
   'qiche': {
     code: 'sz399432',
@@ -9579,7 +9590,8 @@ const codeMap = {
     downTrendLine: -3.3,
     days: 1200,
     topLine: 5,
-    cutDownLine: 7
+    cutDownLine: 7,
+    positionFg: 0.875
   },
   'yiqian': {
     code: 'sh000852',
@@ -9593,7 +9605,8 @@ const codeMap = {
     mix: true,
     days: 1200,
     topLine: 7.5,
-    cutDownLine: 15
+    cutDownLine: 15,
+    positionFg: 1
   },
   'chuanmei': {
     code: 'sz399971',
@@ -9607,7 +9620,8 @@ const codeMap = {
     downTrendLine: 0,
     days: 1200,
     topLine: 12,
-    cutDownLine: 15
+    cutDownLine: 15,
+    positionFg: 0.75
   },
   'zhengquan': {
     code: 'sz399437',
@@ -9620,7 +9634,8 @@ const codeMap = {
     downTrendLine: -3.3,
     days: 1200,
     topLine: 15,
-    cutDownLine: 30
+    cutDownLine: 30,
+    positionFg: 0.875
   },
   'youse': {
     code: 'sh000823',
@@ -9633,7 +9648,8 @@ const codeMap = {
     downTrendLine: 0,
     days: 1200,
     topLine: 8.5,
-    cutDownLine: 11
+    cutDownLine: 11,
+    positionFg: 0.875
   },
   'dichan': {
     code: 'sz399393',
@@ -9647,7 +9663,8 @@ const codeMap = {
     downTrendLine: -3.3,
     days: 1200,
     topLine: 15,
-    cutDownLine: 20
+    cutDownLine: 20,
+    positionFg: 0.75
   },
   'yiliao': {
     code: 'sz399989',
@@ -9661,7 +9678,8 @@ const codeMap = {
     downTrendLine: -3.3,
     days: 1000,
     topLine: 30,
-    cutDownLine: 30
+    cutDownLine: 30,
+    positionFg: 1.125
   },
   'shengwu': {
     code: 'sz399441',
@@ -9675,7 +9693,8 @@ const codeMap = {
     downTrendLine: -3.3,
     days: 1200,
     topLine: 30,
-    cutDownLine: 30
+    cutDownLine: 30,
+    positionFg: 1.125
   },
   'wubai': {
     code: 'sh000905',
@@ -9689,7 +9708,8 @@ const codeMap = {
     mix: true,
     days: 1200,
     topLine: 7.5,
-    cutDownLine: 9
+    cutDownLine: 9,
+    positionFg: 1.25
   },
   'gangtie': {
     code: 'sz399440',
@@ -9702,7 +9722,8 @@ const codeMap = {
     downTrendLine: 0,
     days: 1200,
     topLine: 7,
-    cutDownLine: 7
+    cutDownLine: 7,
+    positionFg: 0.75
   },
   'meitan': {
     code: 'sz399998',
@@ -9715,7 +9736,8 @@ const codeMap = {
     downTrendLine: 0,
     days: 1200,
     topLine: 20,
-    cutDownLine: 20
+    cutDownLine: 20,
+    positionFg: 0.75
   },
   'baoxian': {
     code: 'sz399809',
@@ -9729,7 +9751,8 @@ const codeMap = {
     downTrendLine: -3.3,
     days: 900,
     topLine: 20,
-    cutDownLine: 35
+    cutDownLine: 35,
+    positionFg: 1
   },
   'sanbai': {
     code: 'sh000300',
@@ -9743,7 +9766,8 @@ const codeMap = {
     mix: true,
     days: 1200,
     topLine: 11,
-    cutDownLine: 15
+    cutDownLine: 15,
+    positionFg: 1.25
   },
   'baijiu': {
     code: 'sz399997',
@@ -9761,7 +9785,8 @@ const codeMap = {
     cutDownLine: 60,
     mix: false,
     quarterHotLine: 20,
-    relieveZ45Line: 0
+    relieveZ45Line: 0,
+    positionFg: 1.125
   },
   'chuangWL': {
     key: 'chuangWL',
@@ -9778,7 +9803,8 @@ const codeMap = {
     topLine: 40,
     cutDownLine: 40,
     quarterHotLine: 20,
-    relieveZ45Line: -6
+    relieveZ45Line: -6,
+    positionFg: 1.25
   }
 }
 const fnMap = {

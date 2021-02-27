@@ -54,8 +54,8 @@ function operateStandard () {
 function positionStandard (indexItem) {
   const asset = getUserAsset()
   const positionAsset = asset * (1 - fixedInvestmentRatio)
-  let mix = indexItem.mix ? 1.2 : 1
-  return mix * positionAsset / indexNumber
+  let positionFg = indexItem.positionFg || 1
+  return positionFg * positionAsset / indexNumber
 }
 
 function factorBuyBase (marketInfo) {

@@ -341,6 +341,16 @@ export default {
           code: '004997',
           name: '广发高端制造',
           list: []
+        },
+        {
+          code: '163402',
+          name: '兴全趋势投资',
+          list: []
+        },
+        {
+          code: '161005',
+          name: '富国天惠成长',
+          list: []
         }
       ],
       list: list,

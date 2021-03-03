@@ -1330,6 +1330,7 @@ export default {
       return false
     },
     getItemClass (fbs) {
+      const CHPS = storageUtil.getData('upDownConfig', 'CHPS') || false
       let positionQYHigh = false
       let positionHighSell = false
       let lostHighCut = false
@@ -1483,7 +1484,7 @@ export default {
         if (this.positionHigh) {
           // 高仓，不是大反不是锁仓，涨了就卖
           if (this.rate > 0) {
-            if (!fbs) {
+            if (!fbs && !CHPS) {
               positionHighSell = true
               shouldClass = shouldSellClass
             }
@@ -1507,7 +1508,7 @@ export default {
         if (this.positionHigh) {
           // 高仓，不是大反不是锁仓，涨了就卖
           if (this.rate > 0) {
-            if (!fbs) {
+            if (!fbs && !CHPS) {
               positionHighSell = true
               shouldClass = shouldSellClass
             }

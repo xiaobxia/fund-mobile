@@ -105,6 +105,7 @@
           <span class="red-circle" :class="{active: f30UpNS}"></span>
           <span class="red-circle" :class="{active: PQB}"></span>
           <span class="red-circle" :class="{active: PLNS}"></span>
+          <span class="red-circle" :class="{active: CHPS}"></span>
           <span class="green-circle" :class="{active: downMBNB}"></span>
           <span class="green-circle" :class="{active: CQXS}"></span>
           <span class="green-circle" :class="{active: QZMC}"></span>
@@ -183,6 +184,14 @@
             <mt-switch v-model="PLNS" @change="stateChangeHandler"></mt-switch>
           </div>
         </mt-cell-swipe>
+        <mt-cell-swipe>
+          <div slot="title">
+            <h3>关闭高仓卖</h3>
+          </div>
+          <div class="right-wrap">
+            <mt-switch v-model="CHPS" @change="stateChangeHandler"></mt-switch>
+          </div>
+        </mt-cell-swipe>
         <div class="green-text b-t">空</div>
         <mt-cell-swipe>
           <div slot="title">
@@ -258,6 +267,7 @@ export default {
       QZMC: storageUtil.getData('upDownConfig', 'QZMC') || false,
       PQB: storageUtil.getData('upDownConfig', 'PQB') || false,
       PLNS: storageUtil.getData('upDownConfig', 'PLNS') || false,
+      CHPS: storageUtil.getData('upDownConfig', 'CHPS') || false,
       PQS: storageUtil.getData('upDownConfig', 'PQS') || false,
       HPNS: storageUtil.getData('upDownConfig', 'HPNS') || false,
       CPQXB: storageUtil.getData('upDownConfig', 'CPQXB') || false
@@ -393,6 +403,7 @@ export default {
       storageUtil.setData('upDownConfig', 'QZMC', this.QZMC)
       storageUtil.setData('upDownConfig', 'PQB', this.PQB)
       storageUtil.setData('upDownConfig', 'PLNS', this.PLNS)
+      storageUtil.setData('upDownConfig', 'CHPS', this.CHPS)
       storageUtil.setData('upDownConfig', 'PQS', this.PQS)
       storageUtil.setData('upDownConfig', 'HPNS', this.HPNS)
       storageUtil.setData('upDownConfig', 'CPQXB', this.CPQXB)

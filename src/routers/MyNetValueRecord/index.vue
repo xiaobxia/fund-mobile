@@ -26,6 +26,7 @@
               <span class="item">净值：<span>{{item.net_value}}</span></span>
               <span class="item">仓位：<span>{{item.position}}</span></span>
               <span class="item">当日收益：<span :class="stockNumberClass(item.today_income)">{{item.today_income}}</span></span>
+              <span class="item">头寸：<span>{{countHasSum(item)}}</span></span>
             </p>
           </div>
         </mt-cell-swipe>
@@ -63,6 +64,9 @@ export default{
         }
         this.list = this.list.concat(data.data.list)
       })
+    },
+    countHasSum (item) {
+      return parseInt(item.position * (item.asset - item.today_income))
     },
     loadMore () {
       this.queryData.current++

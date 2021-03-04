@@ -66,7 +66,7 @@ export default{
       })
     },
     countHasSum (item) {
-      return parseInt(item.position * (item.asset - item.today_income))
+      return parseInt(item.position * (item.asset - item.today_income) / 100)
     },
     loadMore () {
       this.queryData.current++

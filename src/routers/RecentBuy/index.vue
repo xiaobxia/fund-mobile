@@ -16,7 +16,7 @@
         </span>
         <span class="item">
           <span class="label">总盈亏：</span>
-          <span class="value" :class="stockNumberClass(allValuation - allCost)">{{$formatMoney(allValuation - allCost)}}</span>
+          <span class="value" :class="stockNumberClass(allValuation - allCost)">{{$formatMoney(allValuation - allCost)}}({{countRate(allValuation - allCost, allCost)}}%)</span>
         </span>
         <span class="item">
           <span class="label">定投买入：</span>
@@ -24,7 +24,7 @@
         </span>
         <span class="item">
           <span class="label">定投盈亏：</span>
-          <span class="value" :class="stockNumberClass(fixValuation - fixCost)">{{$formatMoney(fixValuation - fixCost)}}</span>
+          <span class="value" :class="stockNumberClass(fixValuation - fixCost)">{{$formatMoney(fixValuation - fixCost)}}({{countRate(fixValuation - fixCost, fixCost)}}%)</span>
         </span>
         <span class="item">
           <span class="label">波段买入：</span>
@@ -32,7 +32,7 @@
         </span>
         <span class="item">
           <span class="label">波段盈亏：</span>
-          <span class="value" :class="stockNumberClass(bondValuation - bondCost)">{{$formatMoney(bondValuation - bondCost)}}</span>
+          <span class="value" :class="stockNumberClass(bondValuation - bondCost)">{{$formatMoney(bondValuation - bondCost)}}({{countRate(bondValuation - bondCost, bondCost)}}%)</span>
         </span>
       </div>
       <h4>定投</h4>

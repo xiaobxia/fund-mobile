@@ -1068,8 +1068,8 @@ export default {
       }
       // 平均
       const average = sum / 8
-      // 混合30，定投20
-      return parseInt(average * 1.2)
+      // 只有10只，后面有加入那也按10只的总金额分配
+      return parseInt(average * (10 / this.hhList.length))
     },
     getAllBuySum () {
       let sum = 0

@@ -141,6 +141,15 @@ export default {
           if (userFund.has) {
             this.ifHas = true
             this.type = 'edit'
+            userFund.position_record.sort((a, b) => {
+              if (b.confirm_date > a.confirm_date) {
+                return 1
+              } else if (b.confirm_date < a.confirm_date) {
+                return -1
+              } else {
+                return 0
+              }
+            })
             this.positionRecord = userFund.position_record
             this.form.strategy = userFund.strategy
           } else {

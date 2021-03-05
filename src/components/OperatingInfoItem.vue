@@ -829,15 +829,15 @@ export default {
     },
     getFixSellRate () {
       if (this.yearDiff >= 50) {
-        return '1/8'
+        return '1/4'
       } else if (this.yearDiff >= 40) {
-        return '1/10'
+        return '1/6'
       } else if (this.yearDiff >= 30) {
-        return '1/12'
+        return '1/8'
       } else if (this.yearDiff >= 20) {
-        return '1/15'
+        return '1/10'
       }
-      return '1/18'
+      return '1/12'
     },
     // 复制买卖信号
     copyList (list) {

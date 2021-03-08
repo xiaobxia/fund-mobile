@@ -282,6 +282,16 @@ export default{
               } else {
                 this.fixDistributionSum['混合'] = parseInt(item.sum)
               }
+              item.position_record.forEach((record) => {
+                if (moment().isSame(record.confirm_date, 'month')) {
+                  monthFixCost += record.costSum
+                  monthFix += record.valuationSum
+                }
+                if (moment().isSame(record.confirm_date, 'year')) {
+                  yearFixCost += record.costSum
+                  yearFix += record.valuationSum
+                }
+              })
             }
           }
           let proportionList = []

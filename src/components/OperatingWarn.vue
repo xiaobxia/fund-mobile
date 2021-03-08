@@ -186,7 +186,7 @@
         </mt-cell-swipe>
         <mt-cell-swipe>
           <div slot="title">
-            <h3>关闭高仓卖(少用，跌多了还回继续跌)</h3>
+            <h3>关闭高仓卖(少用，跌多了还回继续跌，报团崩的时候连续吃了好几次亏)</h3>
           </div>
           <div class="right-wrap">
             <mt-switch v-model="CHPS" @change="stateChangeHandler"></mt-switch>

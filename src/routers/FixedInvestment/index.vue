@@ -437,7 +437,7 @@ export default {
         },
         // 白酒
         'sz399997': {
-          buy: 1.15,
+          buy: 1,
           sell: 1,
           a: 40,
           b: -20,
@@ -445,7 +445,7 @@ export default {
         },
         // 食品
         'sz399396': {
-          buy: 1.15,
+          buy: 1,
           sell: 1,
           a: 30,
           b: -20,

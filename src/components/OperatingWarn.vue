@@ -106,11 +106,11 @@
           <span class="red-circle" :class="{active: PQB}"></span>
           <span class="red-circle" :class="{active: PLNS}"></span>
           <span class="red-circle" :class="{active: CHPS}"></span>
+          <span class="red-circle" :class="{active: HPNS}"></span>
           <span class="green-circle" :class="{active: downMBNB}"></span>
           <span class="green-circle" :class="{active: CQXS}"></span>
           <span class="green-circle" :class="{active: QZMC}"></span>
           <span class="green-circle" :class="{active: PQS}"></span>
-          <span class="green-circle" :class="{active: HPNS}"></span>
         </span>
           <span style="float: right">{{qdaPC}}</span>
         </div>
@@ -192,6 +192,14 @@
             <mt-switch v-model="CHPS" @change="stateChangeHandler"></mt-switch>
           </div>
         </mt-cell-swipe>
+        <mt-cell-swipe>
+          <div slot="title">
+            <h3>关闭高仓没买入</h3>
+          </div>
+          <div class="right-wrap">
+            <mt-switch v-model="HPNS" @change="stateChangeHandler"></mt-switch>
+          </div>
+        </mt-cell-swipe>
         <div class="green-text b-t">空</div>
         <mt-cell-swipe>
           <div slot="title">
@@ -223,14 +231,6 @@
           </div>
           <div class="right-wrap">
             <mt-switch v-model="PQS" @change="stateChangeHandler"></mt-switch>
-          </div>
-        </mt-cell-swipe>
-        <mt-cell-swipe>
-          <div slot="title">
-            <h3>转弱时，高仓没买入</h3>
-          </div>
-          <div class="right-wrap">
-            <mt-switch v-model="HPNS" @change="stateChangeHandler"></mt-switch>
           </div>
         </mt-cell-swipe>
         <mt-cell-swipe>

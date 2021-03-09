@@ -1331,6 +1331,8 @@ export default {
     },
     getItemClass (fbs) {
       const CHPS = storageUtil.getData('upDownConfig', 'CHPS') || false
+      // 关闭高仓没买入
+      const HPNS = storageUtil.getData('upDownConfig', 'HPNS') || false
       let positionQYHigh = false
       let positionHighSell = false
       let lostHighCut = false
@@ -1489,6 +1491,12 @@ export default {
               shouldClass = shouldSellClass
             }
           }
+          // 高仓不买了
+          if (!fbs && !HPNS) {
+            if (shouldClass === shouldBuyClass) {
+              shouldClass = ''
+            }
+          }
         }
         // 大跌以后收涨给个卖出
         if (Object.keys(this.kline).length) {
@@ -1511,6 +1519,12 @@ export default {
             if (!fbs && !CHPS) {
               positionHighSell = true
               shouldClass = shouldSellClass
+            }
+          }
+          // 高仓不买了
+          if (!fbs && !HPNS) {
+            if (shouldClass === shouldBuyClass) {
+              shouldClass = ''
             }
           }
         }
@@ -1595,10 +1609,11 @@ export default {
         if (this.averageMonthIndex < 0) {
           if (this.positionHigh) {
             // 不是单底
-            if (!this.isInOneDeep()) {
-              if (!fbs) {
-                classListF = this.removeBuy(classListF)
-              }
+            // if (!this.isInOneDeep()) {
+            //
+            // }
+            if (!fbs) {
+              classListF = this.removeBuy(classListF)
             }
           }
         }
@@ -1878,15 +1893,6 @@ export default {
           const f30UpNS = storageUtil.getData('upDownConfig', 'f30UpNS') || false
           if (f30UpNS) {
             classListF = this.removeSell(classListF)
-          }
-        }
-      }
-      // 转弱时，高仓没买入
-      const HPNS = storageUtil.getData('upDownConfig', 'HPNS') || false
-      if (HPNS) {
-        if (this.positionHigh) {
-          if (!fbs) {
-            classListF = this.removeBuy(classListF)
           }
         }
       }

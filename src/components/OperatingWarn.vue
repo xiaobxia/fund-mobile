@@ -116,18 +116,18 @@
         </div>
         <div class="detail-infoo-wrap" style="padding: 0">
           <div class="item">
-            <span class="label">最低仓：</span>
-            <span class="value">{{parseInt(minPosition)}}</span>
+            <span class="label">建议仓：</span>
+            <span class="value">{{parseInt(userFundAccountInfo.positionConfig)}}</span>
           </div>
           <div class="item">
             <span class="label">我的仓位：</span>
             <span class="value">{{nowPosition}}</span>
           </div>
         </div>
-        <div v-if="nowPosition - minPosition >= 10" class="green-text">
+        <div v-if="nowPosition - userFundAccountInfo.positionConfig >= 20" class="green-text">
           策略倾向卖出
         </div>
-        <div v-if="nowPosition - minPosition <= -10" class="red-text">
+        <div v-if="nowPosition - userFundAccountInfo.positionConfig <= -20" class="red-text">
           策略倾向买入
         </div>
       </div>
@@ -335,7 +335,8 @@ export default {
       'indexBondBuyMap',
       'indexBondSellMap',
       'indexHighSellMap',
-      'fixSellMap'
+      'fixSellMap',
+      'userFundAccountInfo'
     ])
   },
   created () {

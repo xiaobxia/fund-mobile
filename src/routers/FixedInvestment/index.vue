@@ -989,13 +989,13 @@ export default {
           this.klineMap[item.key] = kline
           this.averageDiff[item.key] = diff
           // 和总资金有关，还有数量
-          const rC = 1 / (90)
+          const rC = 1 / (60)
           const user = this.userFundAccountInfo.user
           const myAsset = user.asset
-          let buyS = (myAsset * rC) / 13
+          let buyS = (myAsset * rC) / (10 + 10) // 指数数量 + 混合数量（标准是10个）
           // 中级底放大
           if (isBig) {
-            buyS = buyS * 1.5
+            buyS = buyS * 1.33
           }
           const params = this.indexParams[item.code]
           let buyNumber = 0

@@ -829,10 +829,13 @@ export default {
     },
     getFixSellRate () {
       if (this.yearDiff >= 50) {
+        // 0.3
         return '1/4'
       } else if (this.yearDiff >= 40) {
+        // 0.5
         return '1/6'
       } else if (this.yearDiff >= 30) {
+        // 0.67
         return '1/8'
       } else if (this.yearDiff >= 20) {
         return '1/10'

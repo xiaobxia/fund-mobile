@@ -41,7 +41,10 @@
           <div class="dt">
             <span style="text-align: left" >{{item.key}}</span>
             <span style="text-align: center" >{{$formatMoney(item.cost)}}</span>
-            <span style="text-align: right" :class="stockNumberClass(item.res)">{{$formatMoney(item.res)}}</span>
+            <span style="text-align: right" :class="stockNumberClass(item.res)">
+              {{$formatMoney(item.res)}}
+              ({{countRate(item.res, item.cost)}}%)
+            </span>
           </div>
         </div>
       </div>
@@ -50,7 +53,10 @@
         <div v-for="(item) in bondList" :key="`b${item.key}`" class="dt">
           <span style="text-align: left" >{{item.key}}</span>
           <span style="text-align: center" >{{$formatMoney(item.cost)}}</span>
-          <span style="text-align: right" :class="stockNumberClass(item.res)">{{$formatMoney(item.res)}}</span>
+          <span style="text-align: right" :class="stockNumberClass(item.res)">
+            {{$formatMoney(item.res)}}
+            ({{countRate(item.res, item.cost)}}%)
+          </span>
         </div>
       </div>
       <!--<mt-datetime-picker-->

@@ -1495,11 +1495,11 @@ export default {
             }
           }
           // 高仓不买了
-          if (!fbs && !HPNS) {
-            if (shouldClass === shouldBuyClass) {
-              shouldClass = ''
-            }
-          }
+          // if (!fbs && !HPNS) {
+          //   if (shouldClass === shouldBuyClass) {
+          //     shouldClass = ''
+          //   }
+          // }
         }
         // 大跌以后收涨给个卖出
         if (Object.keys(this.kline).length) {

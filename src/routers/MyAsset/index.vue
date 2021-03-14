@@ -21,6 +21,7 @@
         <mt-field label="资产成本" placeholder="请输入" v-model="form.asset_cost"></mt-field>
         <mt-field label="份额" placeholder="请输入" v-model="form.shares"></mt-field>
         <mt-field label="总收益" placeholder="请输入" v-model="form.income"></mt-field>
+        <div>对应总资产：{{allAsset}}</div>
       </template>
       <template v-if="editType === '申购'">
         <mt-field label="加仓金额" placeholder="请输入" v-model="buyForm.asset"></mt-field>
@@ -80,7 +81,10 @@ export default {
   computed: {
     ...mapGetters([
       'userFundAccountInfo'
-    ])
+    ]),
+    allAsset () {
+      return parseInt(this.form.asset / 0.95)
+    }
   },
   watch: {
   },

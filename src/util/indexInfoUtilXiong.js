@@ -9807,6 +9807,7 @@ const codeMap = {
     positionFg: 1.25
   }
 }
+
 const fnMap = {
   chuangyeBuy: 'ifBuyChuangye',
   chuangyeSell: 'ifSellChuangye',

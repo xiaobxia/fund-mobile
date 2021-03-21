@@ -459,7 +459,11 @@ export default {
           key: key
         })
       }
-      const position = this.userFundAccountInfo.positionConfig
+      let position = this.userFundAccountInfo.positionConfig
+      const minPosition = localStorage.getItem('minPosition') || 0
+      if (minPosition) {
+        position = parseInt((minPosition + position) / 2)
+      }
       if (this.userFundAccountInfo.marketOpen) {
         const date = moment().format('YYYY-MM-DD')
         this.$http.post(`${this.$fbsUrl}/bsSignal/updateSignal`, {

@@ -1,5 +1,6 @@
 export default {
-  indexNumber: 26,
+  // 通过positionFg计算
+  indexNumber: 25.5,
   sellFixList: [
     // 控制10000一下
     // 'shengwu',

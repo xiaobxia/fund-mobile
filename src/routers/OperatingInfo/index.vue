@@ -459,8 +459,8 @@ export default {
           key: key
         })
       }
-      let position = this.userFundAccountInfo.positionConfig
-      const minPosition = localStorage.getItem('minPosition') || 0
+      let position = parseInt(this.userFundAccountInfo.positionConfig || 0) || 0
+      const minPosition = parseInt(localStorage.getItem('minPosition') || 0) || 0
       if (minPosition) {
         position = parseInt((minPosition + position) / 2)
       }

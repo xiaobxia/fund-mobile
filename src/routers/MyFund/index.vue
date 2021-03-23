@@ -20,16 +20,8 @@
           <span class="value">{{myPosition}}%</span>
         </span>
         <span class="item">
-          <span class="label">可卖金额：</span>
-          <span class="value">{{$formatMoney(parseInt(canSellSum))}}</span>
-        </span>
-        <span class="item">
-          <span class="label">锁仓金额：</span>
-          <span class="value">{{$formatMoney(parseInt(lockCostSum))}}</span>
-        </span>
-        <span class="item">
-          <span class="label">锁仓收益：</span>
-          <span :class="['value',stockNumberClass(lockIncome)]">{{$formatMoney(parseInt(lockIncome))}}</span>
+          <span class="label">净值波动：</span>
+          <span :class="['value',stockNumberClass(relativeRate)]">{{relativeRate}}%</span>
         </span>
         <span class="item">
           <span class="label">估算收益：</span>
@@ -40,7 +32,15 @@
           <span :class="['value',stockNumberClass(todayIncomeRatio)]">{{todayIncomeRatio}}%</span>
         </span>
         <span class="item">
-          <span class="label">最新购买：</span>
+          <span class="label">锁仓金额：</span>
+          <span class="value">{{$formatMoney(parseInt(lockCostSum))}}</span>
+        </span>
+        <span class="item">
+          <span class="label">锁仓收益：</span>
+          <span :class="['value',stockNumberClass(lockIncome)]">{{$formatMoney(parseInt(lockIncome))}}</span>
+        </span>
+        <span class="item">
+          <span class="label">新买金额：</span>
           <span class="value">{{$formatMoney(parseInt(lastBuy))}}</span>
         </span>
         <span class="item">
@@ -48,8 +48,8 @@
           <span :class="['value',stockNumberClass(lastBuyChange)]">{{$formatMoney(parseInt(lastBuyChange))}}</span>
         </span>
         <span class="item">
-          <span class="label">净值波动：</span>
-          <span :class="['value',stockNumberClass(relativeRate)]">{{relativeRate}}%</span>
+          <span class="label">可卖金额：</span>
+          <span class="value">{{$formatMoney(parseInt(canSellSum))}}</span>
         </span>
         <span class="item">
           <span class="label">沪深300：</span>

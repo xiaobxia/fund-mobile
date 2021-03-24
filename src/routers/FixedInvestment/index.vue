@@ -1039,7 +1039,7 @@ export default {
       if (this.userFundAccountInfo.marketOpen) {
         const record = []
         this.list.forEach((item) => {
-          if (kuanjiBuy.indexOf(item.key) !== -1 || ['baijiu', 'shengwu', 'dianzi'].indexOf(item.key) !== -1) {
+          if (kuanjiBuy.indexOf(item.key) !== -1 || ['baijiu', 'shengwu'].indexOf(item.key) !== -1) {
             if (item.ifBuy) {
               record.push({
                 key: item.key,

@@ -462,7 +462,7 @@ export default {
       let position = parseInt(this.userFundAccountInfo.positionConfig || 0) || 0
       const minPosition = parseInt(localStorage.getItem('minPosition') || 0) || 0
       if (minPosition) {
-        position = parseInt((minPosition + position) / 2)
+        position = parseInt(minPosition * 0.34 + position * 0.66)
       }
       if (this.userFundAccountInfo.marketOpen) {
         const date = moment().format('YYYY-MM-DD')

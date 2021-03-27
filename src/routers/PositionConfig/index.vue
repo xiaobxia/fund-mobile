@@ -7,7 +7,7 @@
     </mt-header>
     <div class="main-body">
       <div class="warn-wrap">
-        <div class="fm-warn blue">基准仓位：{{parseInt(minPosition)}}%（最高{{parseInt(minPosition)+30}}%，最低{{parseInt(minPosition)-30}}%）</div>
+        <div class="fm-warn blue">基准仓位：{{parseInt(minPosition)}}%（最高{{parseInt(minPosition)+25}}%，最低{{parseInt(minPosition)-25}}%）</div>
       </div>
       <mt-field label="仓位" placeholder="请输入" v-model="position"></mt-field>
     </div>

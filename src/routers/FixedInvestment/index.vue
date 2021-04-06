@@ -566,7 +566,8 @@ export default {
           return true
         }
       }
-      if (sellFixList.indexOf(key) !== -1) {
+      // 想卖定或者季度年危险
+      if (sellFixList.indexOf(key) !== -1 || (this.isBadDown(key) && !this.isInDingtouStatus(key))) {
         let threeDay = stockAnalysisUtil.countUp(netChangeRatioListLarge, 3, 3)
         if (threeDay.flag) {
           return true
@@ -1010,7 +1011,7 @@ export default {
           // 其他
           let buyBaseInfo = 0
           if (['买', '跌少', '跌多'].indexOf(infoList[0]) !== -1) {
-            if (!this.isBadDown(item.key)) {
+            if (!(this.isBadDown(item.key) && !this.isInDingtouStatus(item.key))) {
               item.ifBuy = true
               buyBaseInfo = parseInt(buyNumber / 10)
               item.buyNum = buyBaseInfo

@@ -1736,8 +1736,17 @@ export default {
       }
       // TODO cs-手动类，不用验证
       // TODO 如果见底了那就不卖
-      if (this.isInJiandi) {
-        classListF = this.removeSell(classListF)
+      if (
+        !(this.isBadDown() &&
+          // 不是定投
+          !this.isInDingtouStatus() &&
+          // 不是单日底
+          !this.isInOneDeep()
+        )
+      ) {
+        if (this.isInJiandi) {
+          classListF = this.removeSell(classListF)
+        }
       }
       // TODO cs-回测了表现还行，季度过热以后要解除了才能买
       // TODO 季线危险阶段，又是月下，没有买入信号，因为很可能是无止境得跌

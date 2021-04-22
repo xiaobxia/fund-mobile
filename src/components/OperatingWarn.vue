@@ -194,7 +194,7 @@
         </mt-cell-swipe>
         <mt-cell-swipe>
           <div slot="title">
-            <h3>关闭高仓没买入</h3>
+            <h3>关闭下趋势高仓没买入</h3>
           </div>
           <div class="right-wrap">
             <mt-switch v-model="HPNS" @change="stateChangeHandler"></mt-switch>

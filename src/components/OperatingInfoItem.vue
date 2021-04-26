@@ -65,7 +65,7 @@
             <span v-if="oneDayHigh" class="fm-tag s-black">单日卖1/2</span>
             <span v-if="monthHighSell" class="fm-tag s-black">月火卖1/4,开季危</span>
             <span v-if="!monthHighSell && monthHighSellBig" class="fm-tag s-black">月火卖1/3,开季危</span>
-            <span v-if="stockIndexPSF && averageQuarter < 0" class="fm-tag s-blue">解控</span>
+            <span v-if="stockIndexPSF && averageQuarter < 0 && qDiffAvRateIndex < 0" class="fm-tag s-blue">解控</span>
             <span v-if="lostHighCut" class="fm-tag s-black">砍仓</span>
             <span v-if="lowPBuy" class="fm-tag s-red">强买</span>
             <span v-if="lowPNoSell" class="fm-tag s-red">留底仓</span>

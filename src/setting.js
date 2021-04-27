@@ -8,7 +8,9 @@ export default {
     'yiqian',
     'jisuanji',
     'xinxi',
-    'dianzi'
+    'dianzi',
+    // 生物太多了
+    'shengwu'
   ],
   // 坏指数，不能做仓位跟随
   badIndexList: [

@@ -15,6 +15,10 @@
         <div>以太坊当前价：{{ethClose}}</div>
         <div>5/10偏差：<span :class="stockNumberClass(ethDiff)">{{ethDiff}} ({{ethDiff > 0 ? '买' : '卖'}}，第{{ethday}}天)</span></div>
       </div>
+      <div class="r">
+        <div>狗币当前价：{{dogeClose}}</div>
+        <div>5/10偏差：<span :class="stockNumberClass(dogeDiff)">{{dogeDiff}} ({{dogeDiff > 0 ? '买' : '卖'}}，第{{dogeday}}天)</span></div>
+      </div>
     </div>
   </div>
 </template>
@@ -42,7 +46,10 @@ export default {
       btbDiff: 0,
       ethDiff: 0,
       btbday: 0,
-      ethday: 0
+      ethday: 0,
+      dogeClose: 0,
+      dogeDiff: 0,
+      dogeday: 0
     }
   },
   watch: {
@@ -50,6 +57,7 @@ export default {
   created () {
     this.queryBtbKlines()
     this.queryETHKlines()
+    this.queryDOGEKlines()
   },
   methods: {
     getAverageList (netValue, day) {
@@ -138,6 +146,44 @@ export default {
           }
         }
         this.ethday = day
+      })
+    },
+    queryDOGEKlines () {
+      return this.$http.get('stock/getDOGEKlines').then((res) => {
+        const list = res.data || []
+        const now = list[list.length - 1]
+        this.dogeClose = now.close
+        // 计算
+        const newList = []
+        list.forEach((item) => {
+          item.netChangeRatio = this.countDifferenceRate(item.close, item.open)
+          newList.push(item)
+        })
+        newList.reverse()
+        const list5 = this.getAverageList(newList, 5)
+        const list10 = this.getAverageList(newList, 10)
+        const lastIndex = list5.length - 1
+        this.dogeDiff = this.countDifferenceRate(list5[lastIndex], list10[lastIndex])
+        list5.reverse()
+        list10.reverse()
+        let day = 0
+        for (let i = 0; i < list5.length; i++) {
+          const diff = this.countDifferenceRate(list5[i], list10[i])
+          if (this.dogeDiff > 0) {
+            if (diff >= 0) {
+              day++
+            } else {
+              break
+            }
+          } else if (this.dogeDiff < 0) {
+            if (diff <= 0) {
+              day++
+            } else {
+              break
+            }
+          }
+        }
+        this.dogeday = day
       })
     },
     backHandler () {

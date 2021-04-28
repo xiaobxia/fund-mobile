@@ -9,11 +9,11 @@
       <div>日线是从8点开始的</div>
       <div class="r">
         <div>比特币当前价：{{btbClose}}</div>
-        <div>5/10偏差：<span :class="stockNumberClass(btbDiff)">{{btbDiff}} ({{btbDiff > 0 ? '买' : '卖'}})</span></div>
+        <div>5/10偏差：<span :class="stockNumberClass(btbDiff)">{{btbDiff}} ({{btbDiff > 0 ? '买' : '卖'}}，第{{btbday}}天)</span></div>
       </div>
       <div class="r">
         <div>以太坊当前价：{{ethClose}}</div>
-        <div>5/10偏差：<span :class="stockNumberClass(ethDiff)">{{ethDiff}} ({{ethDiff > 0 ? '买' : '卖'}})</span></div>
+        <div>5/10偏差：<span :class="stockNumberClass(ethDiff)">{{ethDiff}} ({{ethDiff > 0 ? '买' : '卖'}}，第{{ethday}}天)</span></div>
       </div>
     </div>
   </div>
@@ -40,7 +40,9 @@ export default {
       btbClose: 0,
       ethClose: 0,
       btbDiff: 0,
-      ethDiff: 0
+      ethDiff: 0,
+      btbday: 0,
+      ethday: 0
     }
   },
   watch: {
@@ -78,6 +80,26 @@ export default {
         const list10 = this.getAverageList(newList, 10)
         const lastIndex = list5.length - 1
         this.btbDiff = this.countDifferenceRate(list5[lastIndex], list10[lastIndex])
+        list5.reverse()
+        list10.reverse()
+        let day = 0
+        for (let i = 0; i < list5.length; i++) {
+          const diff = this.countDifferenceRate(list5[i], list10[i])
+          if (this.btbDiff > 0) {
+            if (diff >= 0) {
+              day++
+            } else {
+              break
+            }
+          } else if (this.btbDiff < 0) {
+            if (diff <= 0) {
+              day++
+            } else {
+              break
+            }
+          }
+        }
+        this.btbday = day
       })
     },
     queryETHKlines () {
@@ -96,6 +118,26 @@ export default {
         const list10 = this.getAverageList(newList, 10)
         const lastIndex = list5.length - 1
         this.ethDiff = this.countDifferenceRate(list5[lastIndex], list10[lastIndex])
+        list5.reverse()
+        list10.reverse()
+        let day = 0
+        for (let i = 0; i < list5.length; i++) {
+          const diff = this.countDifferenceRate(list5[i], list10[i])
+          if (this.ethDiff > 0) {
+            if (diff >= 0) {
+              day++
+            } else {
+              break
+            }
+          } else if (this.ethDiff < 0) {
+            if (diff <= 0) {
+              day++
+            } else {
+              break
+            }
+          }
+        }
+        this.ethday = day
       })
     },
     backHandler () {

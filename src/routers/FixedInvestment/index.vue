@@ -134,6 +134,7 @@ import { mapGetters } from 'vuex'
 import setting from '@/setting.js'
 moment.tz.setDefault('Asia/Shanghai')
 const sellFixList = setting.sellFixList
+const removeFixList = setting.removeFixList
 
 const codeMap = fixedInvestment.codeMap
 const InfoUtil = fixedInvestment.Util
@@ -481,7 +482,7 @@ export default {
         // 计算机电子类
         // 计算机
         'sz399363': {
-          buy: 0.4,
+          buy: 0.3,
           sell: 1.3,
           a: 25,
           b: -20,
@@ -489,7 +490,7 @@ export default {
         },
         // 信息
         'sh000993': {
-          buy: 0.4,
+          buy: 0.3,
           sell: 1.3,
           a: 25,
           b: -20,
@@ -497,7 +498,7 @@ export default {
         },
         // 电子
         'sz399811': {
-          buy: 0.55,
+          buy: 0.45,
           sell: 1.3,
           a: 25,
           b: -20,
@@ -531,7 +532,7 @@ export default {
   },
   methods: {
     ifRemoveFix (key) {
-      if (['jisuanji', 'xinxi', 'yiqian', 'huangjin', 'dianzi'].indexOf(key) !== -1) {
+      if (removeFixList.indexOf(key) !== -1) {
         return true
       }
       return false

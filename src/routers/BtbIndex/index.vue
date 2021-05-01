@@ -7,8 +7,8 @@
     </mt-header>
     <div class="main-body">
       <div>日线是从8点开始的</div>
-      <div class="red-text">买入8点后操作，相当于是今天的均线，今天的开盘价</div>
-      <div class="green-text">卖出8点前操作，相当于是前一天的均线，前一天的收盘价</div>
+      <div class="red-text">买入8点后操作，相当于是今天的均线，今天的开盘价(上了均线一次满上)</div>
+      <div class="green-text">卖出8点前操作，相当于是前一天的均线，前一天的收盘价(下了均线分两次卖)</div>
       <div class="r">
         <div>比特币当前价：{{btbClose}}</div>
         <div>5/10偏差：<span :class="stockNumberClass(btbDiff)">{{btbDiff}} ({{btbDiff > 0 ? '买' : '卖'}}，第{{btbday}}天)</span></div>

@@ -12,19 +12,19 @@
       <div class="green-text">卖出8点前操作，相当于是前一天的均线，前一天的收盘价(下了均线分两次卖)</div>
       <div class="r">
         <div>比特币当前价：{{btbClose}}</div>
-        <div>5/10偏差：<span :class="stockNumberClass(btbDiff)">{{btbDiff}} ({{btbDiff > 0 ? '买' : '卖'}}，第{{btbday}}天)</span></div>
+        <div>5/10偏差：<span :class="stockNumberClass(btbDiff)">{{btbDiff}} ({{countText(btbDiff,btb5C20 )}}，分{{countDay(btbDiff,btb5C20 )}}天，第{{btbday}}天)</span></div>
       </div>
       <div class="r">
         <div>以太坊当前价：{{ethClose}}</div>
-        <div>5/10偏差：<span :class="stockNumberClass(ethDiff)">{{ethDiff}} ({{ethDiff > 0 ? '买' : '卖'}}，第{{ethday}}天)</span></div>
+        <div>5/10偏差：<span :class="stockNumberClass(ethDiff)">{{ethDiff}} ({{countText(ethDiff,eth5C20 )}}，分{{countDay(ethDiff,eth5C20 )}}天，第{{ethday}}天)</span></div>
       </div>
       <div class="r">
         <div>狗币当前价：{{dogeClose}}</div>
-        <div>5/10偏差：<span :class="stockNumberClass(dogeDiff)">{{dogeDiff}} ({{dogeDiff > 0 ? '买' : '卖'}}，第{{dogeday}}天)</span></div>
+        <div>5/10偏差：<span :class="stockNumberClass(dogeDiff)">{{dogeDiff}} ({{countText(dogeDiff,doge5C20 )}}，分{{countDay(dogeDiff,doge5C20 )}}天，第{{dogeday}}天)</span></div>
       </div>
       <div class="r">
         <div>币安币当前价：{{bnbClose}}</div>
-        <div>5/10偏差：<span :class="stockNumberClass(bnbDiff)">{{bnbDiff}} ({{bnbDiff > 0 ? '买' : '卖'}}，第{{bnbDay}}天)</span></div>
+        <div>5/10偏差：<span :class="stockNumberClass(bnbDiff)">{{bnbDiff}} ({{countText(bnbDiff,bnb5C20 )}}，分{{countDay(bnbDiff,bnb5C20 )}}天，第{{bnbDay}}天)</span></div>
       </div>
     </div>
   </div>
@@ -59,7 +59,11 @@ export default {
       dogeday: 0,
       bnbClose: 0,
       bnbDiff: 0,
-      bnbDay: 0
+      bnbDay: 0,
+      btb5C20: 0,
+      eth5C20: 0,
+      doge5C20: 0,
+      bnb5C20: 0
     }
   },
   watch: {
@@ -71,6 +75,36 @@ export default {
     this.queryBNBKlines()
   },
   methods: {
+    countDay (diff, c520) {
+      if (diff > 0) {
+        if (c520 > 0) {
+          return 1
+        } else {
+          return 2
+        }
+      } else {
+        if (c520 > 0) {
+          return 2
+        } else {
+          return 1
+        }
+      }
+    },
+    countText (diff, c520) {
+      if (diff > 0) {
+        if (c520 > 0) {
+          return '买开盘价'
+        } else {
+          return '买收盘价'
+        }
+      } else {
+        if (c520 > 0) {
+          return '卖收盘价'
+        } else {
+          return '卖开盘价'
+        }
+      }
+    },
     getAverageList (netValue, day) {
       const list = []
       const newList = []
@@ -92,6 +126,7 @@ export default {
         const count = this.getCount(list)
         this.btbDiff = count.diff
         this.btbday = count.day
+        this.btb5C20 = count.diff5C20
       })
     },
     queryETHKlines () {
@@ -103,6 +138,7 @@ export default {
         const count = this.getCount(list)
         this.ethDiff = count.diff
         this.ethday = count.day
+        this.eth5C20 = count.diff5C20
       })
     },
     queryDOGEKlines () {
@@ -114,6 +150,7 @@ export default {
         const count = this.getCount(list)
         this.dogeDiff = count.diff
         this.dogeday = count.day
+        this.doge5C20 = count.diff5C20
       })
     },
     queryBNBKlines () {
@@ -125,6 +162,7 @@ export default {
         const count = this.getCount(list)
         this.bnbDiff = count.diff
         this.bnbDay = count.day
+        this.bnb5C20 = count.diff5C20
       })
     },
     getCount (list) {
@@ -137,8 +175,10 @@ export default {
       newList.reverse()
       const list5 = this.getAverageList(newList, 5)
       const list10 = this.getAverageList(newList, 10)
+      const list20 = this.getAverageList(newList, 20)
       const lastIndex = list5.length - 1
       const diffC = this.countDifferenceRate(list5[lastIndex], list10[lastIndex])
+      const diff5C20 = this.countDifferenceRate(list5[lastIndex], list20[lastIndex])
       list5.reverse()
       list10.reverse()
       let day = 0
@@ -160,7 +200,8 @@ export default {
       }
       return {
         day,
-        diff: diffC
+        diff: diffC,
+        diff5C20
       }
     },
     backHandler () {

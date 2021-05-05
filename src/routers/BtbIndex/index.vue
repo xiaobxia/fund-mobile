@@ -6,6 +6,7 @@
       </mt-button>
     </mt-header>
     <div class="main-body">
+      <div>资产占比控制在4%（1/25）</div>
       <div>日线是从8点开始的</div>
       <div class="red-text">买入8点后操作，相当于是今天的均线，今天的开盘价(上了均线一次满上)</div>
       <div class="green-text">卖出8点前操作，相当于是前一天的均线，前一天的收盘价(下了均线分两次卖)</div>
@@ -20,6 +21,10 @@
       <div class="r">
         <div>狗币当前价：{{dogeClose}}</div>
         <div>5/10偏差：<span :class="stockNumberClass(dogeDiff)">{{dogeDiff}} ({{dogeDiff > 0 ? '买' : '卖'}}，第{{dogeday}}天)</span></div>
+      </div>
+      <div class="r">
+        <div>币安币当前价：{{bnbClose}}</div>
+        <div>5/10偏差：<span :class="stockNumberClass(bnbDiff)">{{bnbDiff}} ({{bnbDiff > 0 ? '买' : '卖'}}，第{{bnbDay}}天)</span></div>
       </div>
     </div>
   </div>
@@ -51,7 +56,10 @@ export default {
       ethday: 0,
       dogeClose: 0,
       dogeDiff: 0,
-      dogeday: 0
+      dogeday: 0,
+      bnbClose: 0,
+      bnbDiff: 0,
+      bnbDay: 0
     }
   },
   watch: {
@@ -60,6 +68,7 @@ export default {
     this.queryBtbKlines()
     this.queryETHKlines()
     this.queryDOGEKlines()
+    this.queryBNBKlines()
   },
   methods: {
     getAverageList (netValue, day) {
@@ -80,36 +89,9 @@ export default {
         const now = list[list.length - 1]
         this.btbClose = now.close
         // 计算
-        const newList = []
-        list.forEach((item) => {
-          item.netChangeRatio = this.countDifferenceRate(item.close, item.open)
-          newList.push(item)
-        })
-        newList.reverse()
-        const list5 = this.getAverageList(newList, 5)
-        const list10 = this.getAverageList(newList, 10)
-        const lastIndex = list5.length - 1
-        this.btbDiff = this.countDifferenceRate(list5[lastIndex], list10[lastIndex])
-        list5.reverse()
-        list10.reverse()
-        let day = 0
-        for (let i = 0; i < list5.length; i++) {
-          const diff = this.countDifferenceRate(list5[i], list10[i])
-          if (this.btbDiff > 0) {
-            if (diff >= 0) {
-              day++
-            } else {
-              break
-            }
-          } else if (this.btbDiff < 0) {
-            if (diff <= 0) {
-              day++
-            } else {
-              break
-            }
-          }
-        }
-        this.btbday = day
+        const count = this.getCount(list)
+        this.btbDiff = count.diff
+        this.btbday = count.day
       })
     },
     queryETHKlines () {
@@ -118,36 +100,9 @@ export default {
         const now = list[list.length - 1]
         this.ethClose = now.close
         // 计算
-        const newList = []
-        list.forEach((item) => {
-          item.netChangeRatio = this.countDifferenceRate(item.close, item.open)
-          newList.push(item)
-        })
-        newList.reverse()
-        const list5 = this.getAverageList(newList, 5)
-        const list10 = this.getAverageList(newList, 10)
-        const lastIndex = list5.length - 1
-        this.ethDiff = this.countDifferenceRate(list5[lastIndex], list10[lastIndex])
-        list5.reverse()
-        list10.reverse()
-        let day = 0
-        for (let i = 0; i < list5.length; i++) {
-          const diff = this.countDifferenceRate(list5[i], list10[i])
-          if (this.ethDiff > 0) {
-            if (diff >= 0) {
-              day++
-            } else {
-              break
-            }
-          } else if (this.ethDiff < 0) {
-            if (diff <= 0) {
-              day++
-            } else {
-              break
-            }
-          }
-        }
-        this.ethday = day
+        const count = this.getCount(list)
+        this.ethDiff = count.diff
+        this.ethday = count.day
       })
     },
     queryDOGEKlines () {
@@ -156,37 +111,57 @@ export default {
         const now = list[list.length - 1]
         this.dogeClose = now.close
         // 计算
-        const newList = []
-        list.forEach((item) => {
-          item.netChangeRatio = this.countDifferenceRate(item.close, item.open)
-          newList.push(item)
-        })
-        newList.reverse()
-        const list5 = this.getAverageList(newList, 5)
-        const list10 = this.getAverageList(newList, 10)
-        const lastIndex = list5.length - 1
-        this.dogeDiff = this.countDifferenceRate(list5[lastIndex], list10[lastIndex])
-        list5.reverse()
-        list10.reverse()
-        let day = 0
-        for (let i = 0; i < list5.length; i++) {
-          const diff = this.countDifferenceRate(list5[i], list10[i])
-          if (this.dogeDiff > 0) {
-            if (diff >= 0) {
-              day++
-            } else {
-              break
-            }
-          } else if (this.dogeDiff < 0) {
-            if (diff <= 0) {
-              day++
-            } else {
-              break
-            }
+        const count = this.getCount(list)
+        this.dogeDiff = count.diff
+        this.dogeday = count.day
+      })
+    },
+    queryBNBKlines () {
+      return this.$http.get('stock/getBNBKlines').then((res) => {
+        const list = res.data || []
+        const now = list[list.length - 1]
+        this.bnbClose = now.close
+        // 计算
+        const count = this.getCount(list)
+        this.bnbDiff = count.diff
+        this.bnbDay = count.day
+      })
+    },
+    getCount (list) {
+      // 计算
+      const newList = []
+      list.forEach((item) => {
+        item.netChangeRatio = this.countDifferenceRate(item.close, item.open)
+        newList.push(item)
+      })
+      newList.reverse()
+      const list5 = this.getAverageList(newList, 5)
+      const list10 = this.getAverageList(newList, 10)
+      const lastIndex = list5.length - 1
+      const diffC = this.countDifferenceRate(list5[lastIndex], list10[lastIndex])
+      list5.reverse()
+      list10.reverse()
+      let day = 0
+      for (let i = 0; i < list5.length; i++) {
+        const diff = this.countDifferenceRate(list5[i], list10[i])
+        if (diffC > 0) {
+          if (diff >= 0) {
+            day++
+          } else {
+            break
+          }
+        } else if (diffC < 0) {
+          if (diff <= 0) {
+            day++
+          } else {
+            break
           }
         }
-        this.dogeday = day
-      })
+      }
+      return {
+        day,
+        diff: diffC
+      }
     },
     backHandler () {
       this.$router.history.go(-1)

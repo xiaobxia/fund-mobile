@@ -10,21 +10,9 @@
       <div>日线是从8点开始的</div>
       <div class="red-text">买入8点后操作，相当于是今天的均线，今天的开盘价(上了均线一次满上)</div>
       <div class="green-text">卖出8点前操作，相当于是前一天的均线，前一天的收盘价(下了均线分两次卖)</div>
-      <div class="r">
-        <div>比特币当前价：{{btbClose}}</div>
-        <div>5/10偏差：<span :class="stockNumberClass(btbDiff)">{{btbDiff}} ({{countText(btbDiff,btb5C20 )}}，分{{countDay(btbDiff,btb5C20 )}}天，第{{btbday}}天)</span></div>
-      </div>
-      <div class="r">
-        <div>以太坊当前价：{{ethClose}}</div>
-        <div>5/10偏差：<span :class="stockNumberClass(ethDiff)">{{ethDiff}} ({{countText(ethDiff,eth5C20 )}}，分{{countDay(ethDiff,eth5C20 )}}天，第{{ethday}}天)</span></div>
-      </div>
-      <div class="r">
-        <div>狗币当前价：{{dogeClose}}</div>
-        <div>5/10偏差：<span :class="stockNumberClass(dogeDiff)">{{dogeDiff}} ({{countText(dogeDiff,doge5C20 )}}，分{{countDay(dogeDiff,doge5C20 )}}天，第{{dogeday}}天)</span></div>
-      </div>
-      <div class="r">
-        <div>币安币当前价：{{bnbClose}}</div>
-        <div>5/10偏差：<span :class="stockNumberClass(bnbDiff)">{{bnbDiff}} ({{countText(bnbDiff,bnb5C20 )}}，分{{countDay(bnbDiff,bnb5C20 )}}天，第{{bnbDay}}天)</span></div>
+      <div v-for="(item, index) in dataList" :key="index" class="r">
+        <div>{{item.name}}当前价：{{item.close}}</div>
+        <div>5/10偏差：<span :class="stockNumberClass(item.diff)">{{item.diff}} ({{countText(item.diff,item.diff5C20 )}}，分{{countDay(item.diff,item.diff5C20 )}}天，第{{item.day}}天)</span></div>
       </div>
     </div>
   </div>
@@ -44,35 +32,52 @@ function getAverage (netValue, day, index) {
   return numberUtil.keepTwoDecimals(count / (index + 1 - start))
 }
 
+const biList = [
+  {
+    name: '比特币',
+    keyName: 'BTC'
+  },
+  {
+    name: '以太坊',
+    keyName: 'ETH'
+  },
+  {
+    name: '币安币',
+    keyName: 'BNB'
+  },
+  {
+    name: '狗狗币',
+    keyName: 'DOGE'
+  },
+  {
+    name: 'ETC',
+    keyName: 'ETC'
+  }
+]
+
 export default {
   name: 'BtbIndex',
   data () {
+    const dataList = []
+    biList.forEach((v) => {
+      dataList.push({
+        ...v,
+        close: 0,
+        diff: 0,
+        day: 0,
+        diff5C20: 0
+      })
+    })
     return {
-      btbClose: 0,
-      ethClose: 0,
-      btbDiff: 0,
-      ethDiff: 0,
-      btbday: 0,
-      ethday: 0,
-      dogeClose: 0,
-      dogeDiff: 0,
-      dogeday: 0,
-      bnbClose: 0,
-      bnbDiff: 0,
-      bnbDay: 0,
-      btb5C20: 0,
-      eth5C20: 0,
-      doge5C20: 0,
-      bnb5C20: 0
+      dataList
     }
   },
   watch: {
   },
   created () {
-    this.queryBtbKlines()
-    this.queryETHKlines()
-    this.queryDOGEKlines()
-    this.queryBNBKlines()
+    this.dataList.forEach((v) => {
+      this.queryBIKlines(v)
+    })
   },
   methods: {
     countDay (diff, c520) {
@@ -117,52 +122,18 @@ export default {
       })
       return list
     },
-    queryBtbKlines () {
-      return this.$http.get('stock/getBtbKlines').then((res) => {
+    queryBIKlines (item) {
+      return this.$http.get('stock/getBIKlines', {
+        name: item.keyName
+      }).then((res) => {
         const list = res.data || []
         const now = list[list.length - 1]
-        this.btbClose = now.close
+        item.close = now.close
         // 计算
         const count = this.getCount(list)
-        this.btbDiff = count.diff
-        this.btbday = count.day
-        this.btb5C20 = count.diff5C20
-      })
-    },
-    queryETHKlines () {
-      return this.$http.get('stock/getETHKlines').then((res) => {
-        const list = res.data || []
-        const now = list[list.length - 1]
-        this.ethClose = now.close
-        // 计算
-        const count = this.getCount(list)
-        this.ethDiff = count.diff
-        this.ethday = count.day
-        this.eth5C20 = count.diff5C20
-      })
-    },
-    queryDOGEKlines () {
-      return this.$http.get('stock/getDOGEKlines').then((res) => {
-        const list = res.data || []
-        const now = list[list.length - 1]
-        this.dogeClose = now.close
-        // 计算
-        const count = this.getCount(list)
-        this.dogeDiff = count.diff
-        this.dogeday = count.day
-        this.doge5C20 = count.diff5C20
-      })
-    },
-    queryBNBKlines () {
-      return this.$http.get('stock/getBNBKlines').then((res) => {
-        const list = res.data || []
-        const now = list[list.length - 1]
-        this.bnbClose = now.close
-        // 计算
-        const count = this.getCount(list)
-        this.bnbDiff = count.diff
-        this.bnbDay = count.day
-        this.bnb5C20 = count.diff5C20
+        item.diff = count.diff
+        item.day = count.day
+        item.diff5C20 = count.diff5C20
       })
     },
     getCount (list) {

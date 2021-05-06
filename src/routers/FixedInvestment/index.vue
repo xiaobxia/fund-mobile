@@ -1006,6 +1006,10 @@ export default {
           } else {
             buyNumber = parseInt(getBuyRate(diff, params.a, params.b, params.c) * buyS * params.buy / 10) * 10
           }
+          // 季度年不是定投那要减少金额
+          if ((this.isBadDown(item.key) && !this.isInDingtouStatus(item.key))) {
+            buyNumber = buyNumber * 0.34
+          }
           this.canBuy[item.key] = buyNumber
           this.canSell[item.key] = parseInt((buyS * (1 - buyS / buyNumber)) / 10) * 10
           this.allInfo[item.key] = infoList

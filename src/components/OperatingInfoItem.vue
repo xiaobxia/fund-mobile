@@ -1131,6 +1131,13 @@ export default {
           (a4.flag && (a4.rate < -(4 * this.indexInfo.rate))) ||
           (a5.flag && (a5.rate < -(5 * this.indexInfo.rate)))
     },
+    // 超级底
+    tooBigDi () {
+      const a1 = stockAnalysisUtil.countDown(this.netChangeRatioListLarge, 9, 8).flag
+      const a12 = stockAnalysisUtil.countDown(this.netChangeRatioListLarge, 8, 8).flag
+      const a13 = stockAnalysisUtil.countDown(this.netChangeRatioListLarge, 7, 7).flag
+      return a1 || a12 || a13
+    },
     // 今天达成大反条件
     isToBeDafanToday () {
       // 一天5rate
@@ -1565,7 +1572,10 @@ export default {
             // 不是月上
             this.averageMonthIndex < 0
         ) {
-          classListF = this.removeBuy(classListF)
+          // 判断超大反，7,8,9这种
+          if (!this.tooBigDi()) {
+            classListF = this.removeBuy(classListF)
+          }
           // 仓位不能太高
           if (this.hasCount > (this.positionStandard * 0.34)) {
             positionQYHigh = true

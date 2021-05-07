@@ -574,6 +574,7 @@ export default {
           return true
         }
       }
+      // 想要降低仓位
       const CPQXB = storageUtil.getData('upDownConfig', 'CPQXB') || false
       if (CPQXB) {
         let threeDay = stockAnalysisUtil.countUp(netChangeRatioListLarge, 3, 3)

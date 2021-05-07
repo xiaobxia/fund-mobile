@@ -29,6 +29,21 @@ Vue.prototype.stockNumberClass = function (number) {
   return number < 0 ? 'green-text' : 'red-text'
 }
 
+Vue.prototype.biNumberClass = function (number) {
+  if (!number) {
+    return 'yellow-text'
+  }
+  if (number < 0) {
+    return 'green-text'
+  } else {
+    if (number >= 0.2) {
+      return 'red-text'
+    } else {
+      return 'yellow-text'
+    }
+  }
+}
+
 Vue.prototype.numberBgClass = function (number) {
   if (!number) {
     return ''

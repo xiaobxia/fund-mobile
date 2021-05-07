@@ -12,7 +12,7 @@
       <div class="green-text">卖出8点前操作，相当于是前一天的均线，前一天的收盘价(下了均线分两次卖)</div>
       <div v-for="(item, index) in dataList" :key="index" class="r">
         <div>{{item.name}}当前价：{{item.close}}</div>
-        <div>5/10偏差：<span :class="stockNumberClass(item.diff)">{{item.diff}} ({{countText(item.diff,item.diff5C20 )}}，分{{countDay(item.diff,item.diff5C20 )}}天，第{{item.day}}天)</span></div>
+        <div>5/10偏差：<span :class="biNumberClass(item.diff)">{{item.diff}} ({{countText(item.diff,item.diff5C20 )}}，分{{countDay(item.diff,item.diff5C20 )}}天，第{{item.day}}天)</span></div>
       </div>
     </div>
   </div>
@@ -52,6 +52,10 @@ const biList = [
   {
     name: 'ETC',
     keyName: 'ETC'
+  },
+  {
+    name: 'EOS',
+    keyName: 'EOS'
   }
 ]
 

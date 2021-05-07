@@ -540,10 +540,10 @@ export default {
     if (year === 2021 && month === 6) {
       factor = 0.7
     }
-    // 7月之后可以乐观一点
-    if (year === 2021 && month >= 7) {
-      factor = 0.9
-    }
+    // // 7月之后可以乐观一点
+    // if (year === 2021 && month >= 7) {
+    //   factor = 0.9
+    // }
     // 你现在需要做的很简单，保持耐心，我们一起等未来出现一个三年级别的大顶部，早晚会有降仓的动作，但不是现在。——毕竟A股历史上，没有一次顶部不是以泡沫化收场的。
     factor = buyReFormat(factor)
     if (buySell === 'buy') {

@@ -216,6 +216,11 @@ const routers = [
     component: lazyLoading('BtbIndex')
   },
   {
+    name: 'BtbCount',
+    path: '/page/btbCount',
+    component: lazyLoading('BtbCount')
+  },
+  {
     name: 'MyBtbAdd',
     path: '/page/myBtbAdd',
     component: lazyLoading('MyBtbAdd')

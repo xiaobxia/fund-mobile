@@ -6,6 +6,7 @@
       </mt-button>
     </mt-header>
     <div class="main-body">
+      <div>严格执行，不要主观提前操作（已亲身经历）</div>
       <div>资产占比控制在4%（1/25）</div>
       <div>日线是从8点开始的</div>
       <div class="red-text">买入8点后操作，相当于是今天的均线，今天的开盘价(上了均线一次满上)</div>

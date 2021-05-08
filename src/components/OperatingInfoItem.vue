@@ -1339,6 +1339,19 @@ export default {
       }
       return false
     },
+    isInBadDown () {
+      if (this.isBadDown()) {
+        if (
+          // 不是定投
+          !this.isInDingtouStatus() &&
+          // 不是单日底
+          !this.isInOneDeep()
+        ) {
+          return true
+        }
+      }
+      return false
+    },
     getItemClass (fbs) {
       const CHPS = storageUtil.getData('upDownConfig', 'CHPS') || false
       // 关闭高仓没买入
@@ -1873,7 +1886,8 @@ export default {
       if (this.qDiffAvRateIndex > 0.5 && !this.stockIndexPSF && this.averageMonthIndex > 0) {
         if (this.hasCount < (this.positionStandard * 0.34 * 0.66)) {
           const PLNS = storageUtil.getData('upDownConfig', 'PLNS') || false
-          if (PLNS && badIndexList.indexOf(this.indexInfo.key) === -1) {
+          // 不处于坏情况
+          if (PLNS && !this.isInBadDown()) {
             if (!fbs) {
               classListF = this.removeSell(classListF)
               lowPNoSell = true

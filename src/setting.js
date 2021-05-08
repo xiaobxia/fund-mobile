@@ -23,6 +23,10 @@ export default {
   ],
   // 坏指数，不能做仓位跟随
   badIndexList: [
-    'meitan', 'gangtie', 'chuanmei', 'jijian', 'dichan'
+    // 'meitan',
+    // 'gangtie',
+    'chuanmei',
+    'jijian',
+    'dichan'
   ]
 }

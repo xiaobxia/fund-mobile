@@ -27,12 +27,12 @@ const biList = [
   {
     name: '比特币',
     keyName: 'BTC',
-    count: 1.5
+    count: 2
   },
   {
     name: '以太坊',
     keyName: 'ETH',
-    count: 1.5
+    count: 2
   },
   {
     name: '币安币',

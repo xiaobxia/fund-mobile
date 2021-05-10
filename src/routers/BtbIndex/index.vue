@@ -6,6 +6,7 @@
       </mt-button>
     </mt-header>
     <div class="main-body">
+      <div>小时K线操作，收益率回测出来还没日K的高</div>
       <div>严格执行，不要主观提前操作（已亲身经历）</div>
       <div>资产占比控制在4%（1/25）</div>
       <div>日线是从8点开始的</div>

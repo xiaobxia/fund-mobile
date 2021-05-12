@@ -44,6 +44,10 @@ const biList = [
     keyName: 'ETH'
   },
   {
+    name: '莱特币',
+    keyName: 'LTC'
+  },
+  {
     name: '币安币',
     keyName: 'BNB'
   },

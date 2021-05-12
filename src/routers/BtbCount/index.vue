@@ -35,6 +35,11 @@ const biList = [
     count: 2
   },
   {
+    name: '莱特币',
+    keyName: 'LTC',
+    count: 2
+  },
+  {
     name: '币安币',
     keyName: 'BNB',
     count: 1

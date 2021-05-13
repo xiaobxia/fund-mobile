@@ -14,8 +14,16 @@
       <div class="green-text">卖出8点前操作，相当于是前一天的均线，前一天的收盘价(下了均线分两次卖)</div>
       <div v-for="(item, index) in dataList" :key="index" class="r">
         <div>{{item.name}}当前价：{{item.close}}</div>
-        <div>5/10偏差：<span :class="biNumberClass(item.diff)">{{item.diff}}</span></div>
-        <div>macd：<span :class="stockNumberClass(item.macd)">{{parseFloat(item.macd).toFixed(2)}}</span></div>
+        <div>5/10偏差：
+          <span :class="biNumberClass(item.diff)">{{item.diff}}</span>
+          <span v-if="item.info.isDiff5to10ValToUp">，转红（操作）</span>
+          <span v-if="item.info.isDiff5to10ValToDown">，转绿（操作）</span>
+        </div>
+        <div>macd：
+          <span :class="stockNumberClass(item.macd)">{{parseFloat(item.macd).toFixed(2)}}</span>
+          <span v-if="item.info.ismacdValToUp">，转红（操作）</span>
+          <span v-if="item.info.ismacdValToDown">，转绿（操作）</span>
+        </div>
         <div>{{getText(item.info)}}</div>
       </div>
     </div>
@@ -118,7 +126,7 @@ export default {
         }
       }
       if (f1) {
-        return `${f1}，${f2}(开盘是第二买)，分${f3}天`
+        return `${f1}，${f2}(开盘是第二天)，分${f3}天`
       }
       return ''
     },

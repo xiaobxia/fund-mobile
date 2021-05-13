@@ -12,17 +12,25 @@
       <div>日线是从8点开始的</div>
       <div class="red-text">买入8点后操作，相当于是今天的均线，今天的开盘价(上了均线一次满上)</div>
       <div class="green-text">卖出8点前操作，相当于是前一天的均线，前一天的收盘价(下了均线分两次卖)</div>
-      <div v-for="(item, index) in dataList" :key="index" class="r">
+      <div
+        v-for="(item, index) in dataList"
+        :key="index"
+        class="r"
+        :class="{
+          'green-bg-a': getText(item.info).indexOf('卖') !== -1,
+          'red-bg-a': getText(item.info).indexOf('买') !== -1
+        }"
+      >
         <div>{{item.name}}当前价：{{item.close}}</div>
         <div>5/10偏差：
           <span :class="biNumberClass(item.diff)">{{item.diff}}</span>
-          <span v-if="item.info.isDiff5to10ValToUp">，转红（操作）</span>
-          <span v-if="item.info.isDiff5to10ValToDown">，转绿（操作）</span>
+          <span class="red-text" v-if="item.info.isDiff5to10ValToUp">，转红（操作）</span>
+          <span class="green-text" v-if="item.info.isDiff5to10ValToDown">，转绿（操作）</span>
         </div>
         <div>macd：
           <span :class="stockNumberClass(item.macd)">{{parseFloat(item.macd).toFixed(2)}}</span>
-          <span v-if="item.info.ismacdValToUp">，转红（操作）</span>
-          <span v-if="item.info.ismacdValToDown">，转绿（操作）</span>
+          <span class="red-text" v-if="item.info.ismacdValToUp">，转红（操作）</span>
+          <span class="green-text" v-if="item.info.ismacdValToDown">，转绿（操作）</span>
         </div>
         <div>{{getText(item.info)}}</div>
       </div>
@@ -126,7 +134,7 @@ export default {
         }
       }
       if (f1) {
-        return `${f1}，${f2}(开盘是第二天)，分${f3}天`
+        return `${f1}，${f2}，分${f3}天，第${f2.indexOf('开') !== -1 ? 2 : 1}天`
       }
       return ''
     },

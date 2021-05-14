@@ -18,7 +18,7 @@
           <span>期望总计：{{parseFloat(getCount(item.proportion)).toFixed(2)}}，期望市值：{{usdtCountMoney(getCount(item.proportion))}}</span>
         </div>
         <div>
-          <span>实际总计：{{parseFloat(item.count).toFixed(2)}}，实际市值：{{usdtCountMoney(item.count)}}</span>
+          <span>实际总计：{{parseFloat(item.count).toFixed(2)}}，实际市值：{{usdtCountMoney(item.count)}}，仓位：{{countRate(item.count, getCount(item.proportion))}}%</span>
         </div>
       </div>
     </div>

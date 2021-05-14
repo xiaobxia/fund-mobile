@@ -7,13 +7,18 @@
     </mt-header>
     <div class="main-body">
       <div>炒就炒近期成交量大的币就行了</div>
-      <mt-field label="资金" placeholder="请输入" v-model="money"></mt-field>
-      <div>总计：{{allCount}}</div>
-      <div v-for="(item, index) in dataList" :key="index" class="r">
+      <mt-field label="USDT价格" placeholder="请输入" v-model="usdtMoney"></mt-field>
+      <div class="r">总计：{{parseFloat(usdtAll).toFixed(2)}}，市值：{{usdtCountMoney(usdtAll)}}</div>
+      <div v-for="(item, index) in list" :key="index" class="r">
         <div>
-          <span>{{item.name}}，</span>
-          <span>占比：{{item.count}}，</span>
-          <span>资金：{{countMoney(item.count)}}</span>
+          <span>{{item.code}}，</span>
+          <span>占比：{{item.proportion}}，</span>
+        </div>
+        <div>
+          <span>期望总计：{{parseFloat(getCount(item.proportion)).toFixed(2)}}，期望市值：{{usdtCountMoney(getCount(item.proportion))}}</span>
+        </div>
+        <div>
+          <span>实际总计：{{parseFloat(item.count).toFixed(2)}}，实际市值：{{usdtCountMoney(item.count)}}</span>
         </div>
       </div>
     </div>
@@ -75,20 +80,38 @@ export default {
     return {
       dataList,
       allCount,
-      money: localStorage.getItem('btbMoney') || 0
+      usdtMoney: localStorage.getItem('usdtMoney') || 0,
+      usdtAll: 0,
+      proportionAll: 0
     }
   },
   watch: {
-    money (val) {
-      localStorage.setItem('btbMoney', val || 0)
+    usdtMoney (val) {
+      localStorage.setItem('usdtMoney', val || 0)
     }
   },
   created () {
+    this.$http.get('btbIndex/getMyBalanceInfo').then((res) => {
+      const data = res.data || {}
+      let all = data['ALL'].count
+      let proportionAll = 0
+      let list = []
+      for (let key in data) {
+        if (key !== 'ALL') {
+          list.push({
+            code: key,
+            count: data[key].count,
+            proportion: data[key].proportion
+          })
+          proportionAll += data[key].proportion
+        }
+      }
+      this.list = list
+      this.proportionAll = proportionAll
+      this.usdtAll = all
+    })
   },
   methods: {
-    countMoney (count) {
-      return parseInt((count / this.allCount) * this.money)
-    },
     backHandler () {
       this.$router.history.go(-1)
     },
@@ -99,6 +122,13 @@ export default {
           type: item.type
         }
       })
+    },
+    usdtCountMoney (count) {
+      const usdtMoney = parseFloat(this.usdtMoney || 0) || 0
+      return parseInt((count) * usdtMoney)
+    },
+    getCount (proportion) {
+      return this.usdtAll * (proportion / this.proportionAll)
     }
   }
 }
@@ -109,7 +139,9 @@ export default {
     margin-bottom: 60px;
   }
   .r {
+    background-color: #eee;
     padding: 20px;
+    margin-bottom: 10px;
     div {
       margin-bottom: 10px;
     }

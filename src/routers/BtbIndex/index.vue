@@ -6,14 +6,10 @@
       </mt-button>
     </mt-header>
     <div class="main-body">
-      <div>小时K线操作，收益率回测出来还没日K的高</div>
-      <div>严格执行，不要主观提前操作（已亲身经历）</div>
-      <div>资产占比控制在4%（1/25）</div>
-      <div>日线是从8点开始的</div>
-      <div class="red-text">买入8点后操作，相当于是今天的均线，今天的开盘价(上了均线一次满上)</div>
-      <div class="green-text">卖出8点前操作，相当于是前一天的均线，前一天的收盘价(下了均线分两次卖)</div>
+      <mt-field label="USDT价格" placeholder="请输入" v-model="usdtMoney"></mt-field>
+      <div class="r">总计：{{parseFloat(usdtAll).toFixed(2)}}，市值：{{usdtCountMoney(usdtAll)}}</div>
       <div
-        v-for="(item, index) in dataList"
+        v-for="(item, index) in list"
         :key="index"
         class="r"
         :class="{
@@ -21,18 +17,82 @@
           'red-bg-a': getText(item.info).indexOf('买') !== -1
         }"
       >
-        <div>{{item.name}}当前价：{{item.close}}</div>
-        <div>5/10偏差：
-          <span :class="biNumberClass(item.diff)">{{item.diff}}</span>
-          <span class="red-text" v-if="item.info.isDiff5to10ValToUp">，转红（操作）</span>
-          <span class="green-text" v-if="item.info.isDiff5to10ValToDown">，转绿（操作）</span>
+        <div>
+          <van-row>
+            <van-col span="12">{{item.code}}</van-col>
+            <van-col span="12">当前价：{{item.close}}</van-col>
+          </van-row>
         </div>
-        <div>macd：
-          <span :class="stockNumberClass(item.macd)">{{parseFloat(item.macd).toFixed(2)}}</span>
-          <span class="red-text" v-if="item.info.ismacdValToUp">，转红（操作）</span>
-          <span class="green-text" v-if="item.info.ismacdValToDown">，转绿（操作）</span>
+        <div>
+          <span>占比：{{item.proportion}}</span>
         </div>
-        <div>{{getText(item.info)}}</div>
+        <div>
+          <span>期望总计：{{parseFloat(getCountUsdt(item.proportion)).toFixed(2)}}，期望市值：{{usdtCountMoney(getCountUsdt(item.proportion))}}</span>
+        </div>
+        <div>
+          <span>实际总计：{{parseFloat(item.count).toFixed(2)}}，实际市值：{{usdtCountMoney(item.count)}}</span>
+        </div>
+        <div>
+          <span>仓位：{{countRate(item.count, getCountUsdt(item.proportion))}}%</span>
+        </div>
+        <template v-if="item.code !== 'USDT'">
+          <div>
+            <span>5/10偏差：<span :class="biNumberClass(item.diff)">{{item.diff}}</span></span>
+            <span class="red-text" v-if="item.info.isDiff5to10ValToUp">，转红（操作）</span>
+            <span class="green-text" v-if="item.info.isDiff5to10ValToDown">，转绿（操作）</span>
+          </div>
+          <div>
+            <span>macd：<span :class="stockNumberClass(item.macd)">{{parseFloat(item.macd).toFixed(2)}}</span></span>
+            <span class="red-text" v-if="item.info.ismacdValToUp">，转红（操作）</span>
+            <span class="green-text" v-if="item.info.ismacdValToDown">，转绿（操作）</span>
+          </div>
+          <div>{{getText(item.info)}}</div>
+          <van-row>
+            <van-col span="12">
+              <div>
+                <mt-switch v-model="item.indexDetail.condition_buy_status" @change="stChange(item.indexDetail)">条件买策略</mt-switch>
+              </div>
+            </van-col>
+            <van-col span="12">
+              <div>
+                <van-radio-group
+                  direction="horizontal"
+                  v-model="item.indexDetail.condition_buy_number"
+                >
+                  <van-radio :name="0.5">1/2</van-radio>
+                  <van-radio :name="1">1</van-radio>
+                </van-radio-group>
+              </div>
+            </van-col>
+          </van-row>
+          <div>
+            <van-row>
+              <van-col span="12">
+                <div>
+                  <mt-switch v-model="item.indexDetail.condition_sell_status"  @change="stChange(item.indexDetail)">条件卖策略</mt-switch>
+                </div>
+              </van-col>
+              <van-col span="12">
+                <div>
+                  <van-radio-group
+                    direction="horizontal"
+                    v-model="item.indexDetail.condition_sell_number"
+                  >
+                    <van-radio :name="0.5">1/2</van-radio>
+                    <van-radio :name="1">1</van-radio>
+                  </van-radio-group>
+                </div>
+              </van-col>
+            </van-row>
+          </div>
+          <!--<div>-->
+          <!--<mt-radio-->
+          <!--title="卖条件数量"-->
+          <!--v-model="item.indexDetail.condition_sell_number"-->
+          <!--:options="[0.5, 1]">-->
+          <!--</mt-radio>-->
+          <!--</div>-->
+        </template>
       </div>
     </div>
   </div>
@@ -53,60 +113,53 @@ function getAverage (netValue, day, index) {
   return numberUtil.keepTwoDecimals(count / (index + 1 - start))
 }
 
-const biList = [
-  {
-    name: '比特币',
-    keyName: 'BTC'
-  },
-  {
-    name: '以太坊',
-    keyName: 'ETH'
-  },
-  {
-    name: '莱特币',
-    keyName: 'LTC'
-  },
-  {
-    name: '币安币',
-    keyName: 'BNB'
-  },
-  {
-    name: '狗狗币',
-    keyName: 'DOGE'
-  },
-  {
-    name: 'ETC',
-    keyName: 'ETC'
-  },
-  {
-    name: 'EOS',
-    keyName: 'EOS'
-  }
-]
-
 export default {
   name: 'BtbIndex',
   data () {
-    const dataList = []
-    biList.forEach((v) => {
-      dataList.push({
-        ...v,
-        close: 0,
-        diff: 0,
-        macd: 0,
-        diff5C20: 0,
-        info: {}
-      })
-    })
     return {
-      dataList
+      list: [],
+      proportionAll: 0,
+      usdtAll: 0,
+      usdtMoney: localStorage.getItem('usdtMoney') || 0
     }
   },
   watch: {
+    usdtMoney (val) {
+      localStorage.setItem('usdtMoney', val || 0)
+    }
   },
   created () {
-    this.dataList.forEach((v) => {
-      this.queryBIKlines(v)
+    this.$http.get('btbIndex/getMyBalanceInfo').then((res) => {
+      const data = res.data || {}
+      let all = data['ALL'].count
+      let proportionAll = 0
+      let list = []
+      for (let key in data) {
+        if (key !== 'ALL') {
+          list.push({
+            code: key,
+            count: data[key].count,
+            proportion: data[key].proportion,
+            close: 0,
+            diff: 0,
+            macd: 0,
+            diff5C20: 0,
+            info: {},
+            indexDetail: {}
+          })
+          proportionAll += data[key].proportion
+        }
+      }
+      this.list = list
+      this.proportionAll = proportionAll
+      this.usdtAll = all
+    }).then(() => {
+      this.list.forEach((v) => {
+        if (v.code !== 'USDT') {
+          this.queryBIKlines(v)
+          this.queryDetail(v)
+        }
+      })
     })
   },
   methods: {
@@ -152,7 +205,7 @@ export default {
     },
     queryBIKlines (item) {
       return this.$http.get('stock/getBIKlines', {
-        name: item.keyName
+        name: item.code
       }).then((res) => {
         const list = res.data || []
         const now = list[list.length - 1]
@@ -163,6 +216,15 @@ export default {
         item.macd = count.macd
         item.diff5C20 = count.diff5C20
         item.info = count
+      })
+    },
+    queryDetail (item) {
+      return this.$http.get('btbIndex/getBtbIndexByCode', {
+        code: item.code
+      }).then((res) => {
+        item.indexDetail = res.data || {}
+        item.indexDetail.condition_buy_status = !!item.indexDetail.condition_buy_status
+        item.indexDetail.condition_sell_status = !!item.indexDetail.condition_sell_status
       })
     },
     getCount (list) {
@@ -208,6 +270,22 @@ export default {
           type: item.type
         }
       })
+    },
+    stChange (item) {
+      this.$http.post('btbIndex/updateBtbIndex', {
+        _id: item._id,
+        condition_buy_status: item.condition_buy_status ? 1 : 0,
+        condition_sell_status: item.condition_sell_status ? 1 : 0,
+        condition_buy_number: item.condition_buy_number,
+        condition_sell_number: item.condition_sell_number
+      })
+    },
+    usdtCountMoney (count) {
+      const usdtMoney = parseFloat(this.usdtMoney || 0) || 0
+      return parseInt((count) * usdtMoney)
+    },
+    getCountUsdt (proportion) {
+      return this.usdtAll * (proportion / this.proportionAll)
     }
   }
 }

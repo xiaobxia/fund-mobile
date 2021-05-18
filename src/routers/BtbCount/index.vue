@@ -31,58 +31,10 @@
 <script>
 import {Indicator} from 'mint-ui'
 
-const biList = [
-  {
-    name: '比特币',
-    keyName: 'BTC',
-    count: 2
-  },
-  {
-    name: '以太坊',
-    keyName: 'ETH',
-    count: 2
-  },
-  {
-    name: '莱特币',
-    keyName: 'LTC',
-    count: 2
-  },
-  {
-    name: '币安币',
-    keyName: 'BNB',
-    count: 1
-  },
-  {
-    name: '狗狗币',
-    keyName: 'DOGE',
-    count: 1
-  },
-  {
-    name: 'ETC',
-    keyName: 'ETC',
-    count: 1
-  },
-  {
-    name: 'EOS',
-    keyName: 'EOS',
-    count: 1
-  }
-]
-
 export default {
   name: 'BtbIndex',
   data () {
-    let allCount = 0
-    const dataList = []
-    biList.forEach((v) => {
-      allCount += v.count
-      dataList.push({
-        ...v
-      })
-    })
     return {
-      dataList,
-      allCount,
       usdtMoney: localStorage.getItem('usdtMoney') || 0,
       usdtAll: 0,
       proportionAll: 0

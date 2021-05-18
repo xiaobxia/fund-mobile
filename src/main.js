@@ -2,6 +2,7 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import MintUI from 'mint-ui'
+import Vant from 'vant'
 import router from './router/index'
 import App from './App'
 import './style/main.scss'
@@ -17,6 +18,7 @@ environmentUtil.setAdaptive()
 
 Vue.use(MintUI)
 Vue.use(VCharts)
+Vue.use(Vant)
 
 Vue.config.productionTip = false
 

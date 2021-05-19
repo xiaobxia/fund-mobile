@@ -8,7 +8,14 @@
     <div class="main-body">
       <div v-for="(item, index) in list" :key="index" class="r">
         <div>
-          <span>{{item.code}}</span>
+          <van-row>
+            <van-col span="12">
+              <span>{{item.code}}</span>
+            </van-col>
+            <van-col span="12">
+              <span>成交：{{item.sort_val || 0}}</span>
+            </van-col>
+          </van-row>
         </div>
         <div  :class="stockNumberClass(item.diff5To10_val)">
           <van-row>

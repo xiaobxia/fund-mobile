@@ -95,7 +95,7 @@ export default {
       const countFilter = parseInt(this.countFilter || 0) || 0
       this.list.forEach((v) => {
         if (countFilter) {
-          if (v.sort_val >= countFilter) {
+          if (v.sort_val <= countFilter) {
             newList.push(v)
           }
         } else {

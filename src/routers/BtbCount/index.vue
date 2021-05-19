@@ -6,7 +6,8 @@
       </mt-button>
     </mt-header>
     <div class="main-body">
-      <div v-for="(item, index) in list" :key="index" class="r">
+      <mt-field label="过滤成交" placeholder="请输入" v-model="countFilter"></mt-field>
+      <div v-for="(item, index) in showList" :key="index" class="r">
         <div>
           <van-row>
             <van-col span="12">
@@ -50,11 +51,17 @@ export default {
   data () {
     return {
       list: [],
+      showList: [],
       usdtAll: 0,
-      proportionAll: 0
+      proportionAll: 0,
+      countFilter: localStorage.getItem('countFilter') || 0
     }
   },
   watch: {
+    countFilter (val) {
+      localStorage.setItem('countFilter', val || 0)
+      this.filterList()
+    }
   },
   created () {
     this.$http.get('btbIndex/getBtbMonitor').then((res) => {
@@ -73,9 +80,24 @@ export default {
         return b.val - a.val
       })
       this.list = list
+      this.filterList()
     })
   },
   methods: {
+    filterList () {
+      const newList = []
+      const countFilter = parseInt(this.countFilter || 0) || 0
+      this.list.forEach((v) => {
+        if (countFilter) {
+          if (v.sort_val >= countFilter) {
+            newList.push(v)
+          }
+        } else {
+          newList.push(v)
+        }
+      })
+      this.showList = newList
+    },
     backHandler () {
       this.$router.history.go(-1)
     },

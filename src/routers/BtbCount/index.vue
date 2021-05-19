@@ -14,7 +14,7 @@
               <span>{{item.code}}</span>
             </van-col>
             <van-col span="12">
-              <span>成交：{{item.sort_val || 0}}</span>
+              <span>上市：{{item.sort_val || 0}}</span>
             </van-col>
           </van-row>
         </div>
@@ -70,9 +70,15 @@ export default {
         let val = 0
         if (v.diff5To10_val > 0) {
           val = val + 1000
+          val = val + v.diff5To10_days
+        } else {
+          val = val - v.diff5To10_days
         }
         if (v.macd_val > 0) {
           val = val + 1000
+          val = val + v.macd_days
+        } else {
+          val = val - v.macd_days
         }
         v.val = val
       })

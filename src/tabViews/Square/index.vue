@@ -28,15 +28,15 @@
           <div class="bottom">比特币</div>
         </div>
       </div>
-      <!--<div class="img-card" @click="toPath('/page/btbCount')">-->
-        <!--<div class="container">-->
-          <!--<div class="content">-->
-            <!--<img src="../../assets/比特币.png" alt="">-->
-            <!--&lt;!&ndash;<i class="fas fa-book"></i>&ndash;&gt;-->
-          <!--</div>-->
-          <!--<div class="bottom">比特币资金</div>-->
-        <!--</div>-->
-      <!--</div>-->
+      <div class="img-card" @click="toPath('/page/btbCount')">
+        <div class="container">
+          <div class="content">
+            <img src="../../assets/比特币.png" alt="">
+            <!--<i class="fas fa-book"></i>-->
+          </div>
+          <div class="bottom">比特币监控</div>
+        </div>
+      </div>
     </div>
   </div>
 </template>

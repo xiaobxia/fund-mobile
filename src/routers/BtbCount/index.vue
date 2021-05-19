@@ -1,27 +1,34 @@
 <template>
   <div>
-    <mt-header title="比特币资金比例" :fixed="true">
+    <mt-header title="监控" :fixed="true">
       <mt-button slot="left" @click="backHandler">
         <i class="fas fa-chevron-left"></i>
       </mt-button>
     </mt-header>
     <div class="main-body">
-      <div>炒就炒近期成交量大的币就行了</div>
-      <mt-field label="USDT价格" placeholder="请输入" v-model="usdtMoney"></mt-field>
-      <div class="r">总计：{{parseFloat(usdtAll).toFixed(2)}}，市值：{{usdtCountMoney(usdtAll)}}</div>
       <div v-for="(item, index) in list" :key="index" class="r">
         <div>
-          <span>{{item.code}}，</span>
-          <span>占比：{{item.proportion}}，</span>
+          <span>{{item.code}}</span>
         </div>
-        <div>
-          <span>期望总计：{{parseFloat(getCount(item.proportion)).toFixed(2)}}，期望市值：{{usdtCountMoney(getCount(item.proportion))}}</span>
+        <div  :class="stockNumberClass(item.diff5To10_val)">
+          <van-row>
+            <van-col span="12">
+              <span>diff5to10: {{getCount(item.diff5To10_val)}}</span>
+            </van-col>
+            <van-col span="12">
+              <span>天数: {{item.diff5To10_days}}</span>
+            </van-col>
+          </van-row>
         </div>
-        <div>
-          <span>实际总计：{{parseFloat(item.count).toFixed(2)}}，实际市值：{{usdtCountMoney(item.count)}}</span>
-        </div>
-        <div>
-          <span>仓位：{{countRate(item.count, getCount(item.proportion))}}%</span>
+        <div  :class="stockNumberClass(item.macd_val)">
+          <van-row>
+            <van-col span="12">
+              <span>macd: {{getCount(item.macd_val)}}</span>
+            </van-col>
+            <van-col span="12">
+              <span>天数: {{item.macd_days}}</span>
+            </van-col>
+          </van-row>
         </div>
       </div>
     </div>
@@ -35,35 +42,30 @@ export default {
   name: 'BtbIndex',
   data () {
     return {
-      usdtMoney: localStorage.getItem('usdtMoney') || 0,
+      list: [],
       usdtAll: 0,
       proportionAll: 0
     }
   },
   watch: {
-    usdtMoney (val) {
-      localStorage.setItem('usdtMoney', val || 0)
-    }
   },
   created () {
-    this.$http.get('btbIndex/getMyBalanceInfo').then((res) => {
-      const data = res.data || {}
-      let all = data['ALL'].count
-      let proportionAll = 0
-      let list = []
-      for (let key in data) {
-        if (key !== 'ALL') {
-          list.push({
-            code: key,
-            count: data[key].count,
-            proportion: data[key].proportion
-          })
-          proportionAll += data[key].proportion
+    this.$http.get('btbIndex/getBtbMonitor').then((res) => {
+      const list = res.data || []
+      list.forEach((v) => {
+        let val = 0
+        if (v.diff5To10_val > 0) {
+          val = val + 1000
         }
-      }
+        if (v.macd_val > 0) {
+          val = val + 1000
+        }
+        v.val = val
+      })
+      list.sort((a, b) => {
+        return b.val - a.val
+      })
       this.list = list
-      this.proportionAll = proportionAll
-      this.usdtAll = all
     })
   },
   methods: {
@@ -82,8 +84,8 @@ export default {
       const usdtMoney = parseFloat(this.usdtMoney || 0) || 0
       return parseInt((count) * usdtMoney)
     },
-    getCount (proportion) {
-      return this.usdtAll * (proportion / this.proportionAll)
+    getCount (val) {
+      return val > 0 ? '正' : '负'
     }
   }
 }

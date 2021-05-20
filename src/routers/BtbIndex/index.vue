@@ -7,7 +7,7 @@
     </mt-header>
     <div class="main-body">
       <mt-field label="USDT价格" placeholder="请输入" v-model="usdtMoney"></mt-field>
-      <div class="r">总计：{{parseFloat(usdtAll).toFixed(2)}}，市值：{{usdtCountMoney(usdtAll)}}</div>
+      <div class="r">总计：{{parseFloat(usdtAll).toFixed(2)}}，市值：{{usdtCountMoney(usdtAll)}}，仓位：{{countRate(positionAll, usdtAll)}}%</div>
       <div
         v-for="(item, index) in list"
         :key="index"
@@ -55,13 +55,14 @@
             </van-col>
             <van-col span="12">
               <div>
-                <van-radio-group
-                  direction="horizontal"
-                  v-model="item.indexDetail.condition_buy_number"
-                >
-                  <van-radio :name="0.5">1/2</van-radio>
-                  <van-radio :name="1">1</van-radio>
-                </van-radio-group>
+                {{item.indexDetail.condition_buy_number}}
+                <!--<van-radio-group-->
+                  <!--direction="horizontal"-->
+                  <!--v-model="item.indexDetail.condition_buy_number"-->
+                <!--&gt;-->
+                  <!--<van-radio :name="0.5">1/2</van-radio>-->
+                  <!--<van-radio :name="1">1</van-radio>-->
+                <!--</van-radio-group>-->
               </div>
             </van-col>
           </van-row>
@@ -74,13 +75,14 @@
               </van-col>
               <van-col span="12">
                 <div>
-                  <van-radio-group
-                    direction="horizontal"
-                    v-model="item.indexDetail.condition_sell_number"
-                  >
-                    <van-radio :name="0.5">1/2</van-radio>
-                    <van-radio :name="1">1</van-radio>
-                  </van-radio-group>
+                  {{item.indexDetail.condition_sell_number}}
+                  <!--<van-radio-group-->
+                    <!--direction="horizontal"-->
+                    <!--v-model="item.indexDetail.condition_sell_number"-->
+                  <!--&gt;-->
+                    <!--<van-radio :name="0.5">1/2</van-radio>-->
+                    <!--<van-radio :name="1">1</van-radio>-->
+                  <!--</van-radio-group>-->
                 </div>
               </van-col>
             </van-row>
@@ -120,7 +122,8 @@ export default {
       list: [],
       proportionAll: 0,
       usdtAll: 0,
-      usdtMoney: localStorage.getItem('usdtMoney') || 0
+      usdtMoney: localStorage.getItem('usdtMoney') || 0,
+      positionAll: 0
     }
   },
   watch: {
@@ -133,9 +136,13 @@ export default {
       const data = res.data || {}
       let all = data['ALL'].count
       let proportionAll = 0
+      let positionAll = 0
       let list = []
       for (let key in data) {
         if (key !== 'ALL') {
+          if (key !== 'USDT') {
+            positionAll += data[key].count
+          }
           list.push({
             code: key,
             count: data[key].count,
@@ -153,6 +160,7 @@ export default {
       this.list = list
       this.proportionAll = proportionAll
       this.usdtAll = all
+      this.positionAll = positionAll
     }).then(() => {
       this.list.forEach((v) => {
         if (v.code !== 'USDT') {

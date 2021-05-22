@@ -7,6 +7,16 @@
     </mt-header>
     <div class="main-body">
       <mt-field label="过滤成交" placeholder="请输入" v-model="countFilter"></mt-field>
+      <div>
+        <van-row>
+          <van-col span="12">
+            <span>5/10：{{diff5to10Up}}/{{listAll}}({{countRate(diff5to10Up,listAll )}}%)</span>
+          </van-col>
+          <van-col span="12">
+            <span>macd：{{macdUp}}/{{listAll}}({{countRate(macdUp,listAll )}}%)</span>
+          </van-col>
+        </van-row>
+      </div>
       <div v-for="(item, index) in showList" :key="index" class="r">
         <div>
           <van-row>
@@ -54,7 +64,10 @@ export default {
       showList: [],
       usdtAll: 0,
       proportionAll: 0,
-      countFilter: localStorage.getItem('countFilter') || 0
+      countFilter: localStorage.getItem('countFilter') || 0,
+      listAll: 0,
+      diff5to10Up: 0,
+      macdUp: 0
     }
   },
   watch: {
@@ -92,16 +105,33 @@ export default {
   methods: {
     filterList () {
       const newList = []
+      let diff5to10Up = 0
+      let macdUp = 0
       const countFilter = parseInt(this.countFilter || 0) || 0
       this.list.forEach((v) => {
         if (countFilter) {
           if (v.sort_val <= countFilter) {
             newList.push(v)
+            if (v.diff5To10_val > 0) {
+              diff5to10Up++
+            }
+            if (v.macd_val > 0) {
+              macdUp++
+            }
           }
         } else {
           newList.push(v)
+          if (v.diff5To10_val > 0) {
+            diff5to10Up++
+          }
+          if (v.macd_val > 0) {
+            macdUp++
+          }
         }
       })
+      this.diff5to10Up = diff5to10Up
+      this.macdUp = macdUp
+      this.listAll = newList.length
       this.showList = newList
     },
     backHandler () {

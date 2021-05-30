@@ -8,6 +8,7 @@
     <div class="main-body">
       <mt-field label="USDT价格" placeholder="请输入" v-model="usdtMoney"></mt-field>
       <div class="r">总计：{{parseFloat(usdtAll).toFixed(2)}}，市值：{{usdtCountMoney(usdtAll)}}，仓位：{{countRate(positionAll, usdtAll)}}%</div>
+      <div>上穿时macd必须是红的</div>
       <div
         v-for="(item, index) in list"
         :key="index"

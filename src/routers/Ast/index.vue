@@ -6,10 +6,8 @@
       </mt-button>
     </mt-header>
     <div class="main-body">
-      <mt-button :disabled="!(isUp || isDown)" type="primary" @click="xiaban" class="main-btn">
-        <span v-if="isUp">上班打卡</span>
-        <span v-else-if="isDown">下班打卡</span>
-        <span v-else>禁</span>
+      <mt-button type="primary" @click="xiaban" class="main-btn">
+        <span>打卡</span>
       </mt-button>
       <mt-button type="primary" @click="xiabanSch" class="main-btn cc">
         <span>定时上班打卡</span>

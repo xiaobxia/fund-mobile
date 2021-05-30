@@ -540,6 +540,7 @@ export default {
     if (year === 2021 && month === 6) {
       factor = 0.7
     }
+    // 2021的10月到2022年春有机会
     // // 7月之后可以乐观一点
     // if (year === 2021 && month >= 7) {
     //   factor = 0.9

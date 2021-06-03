@@ -111,6 +111,7 @@
           <span class="green-circle" :class="{active: CQXS}"></span>
           <span class="green-circle" :class="{active: QZMC}"></span>
           <span class="green-circle" :class="{active: PQS}"></span>
+          <span class="green-circle" :class="{active: CPQXB}"></span>
         </span>
           <span style="float: right">{{qdaPC}}</span>
         </div>

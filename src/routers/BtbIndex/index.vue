@@ -21,8 +21,13 @@
         <div>
           <van-row>
             <van-col span="12">{{item.code}}</van-col>
-            <van-col span="12">当前价：{{item.close}}</van-col>
+            <van-col span="12">
+              <span>仓位：{{countRate(item.count, getCountUsdt(item.proportion))}}%</span>
+            </van-col>
           </van-row>
+        </div>
+        <div>
+          <span>当前价：{{item.close}}</span>
         </div>
         <div>
           <span>占比：{{item.proportion}}</span>
@@ -34,7 +39,6 @@
           <span>实际总计：{{parseFloat(item.count).toFixed(2)}}，实际市值：{{usdtCountMoney(item.count)}}</span>
         </div>
         <div>
-          <span>仓位：{{countRate(item.count, getCountUsdt(item.proportion))}}%</span>
         </div>
         <template v-if="item.code !== 'USDT'">
           <div>
@@ -48,46 +52,46 @@
             <span class="green-text" v-if="item.info.ismacdValToDown">，转绿（操作）</span>
           </div>
           <div>{{getText(item.info)}}</div>
-          <van-row>
-            <van-col span="12">
-              <div>
-                <mt-switch v-model="item.indexDetail.condition_buy_status" @change="stChange(item.indexDetail)">条件买策略</mt-switch>
-              </div>
-            </van-col>
-            <van-col span="12">
-              <div>
-                {{item.indexDetail.condition_buy_number}}
-                <!--<van-radio-group-->
-                  <!--direction="horizontal"-->
-                  <!--v-model="item.indexDetail.condition_buy_number"-->
-                <!--&gt;-->
-                  <!--<van-radio :name="0.5">1/2</van-radio>-->
-                  <!--<van-radio :name="1">1</van-radio>-->
-                <!--</van-radio-group>-->
-              </div>
-            </van-col>
-          </van-row>
-          <div>
-            <van-row>
-              <van-col span="12">
-                <div>
-                  <mt-switch v-model="item.indexDetail.condition_sell_status"  @change="stChange(item.indexDetail)">条件卖策略</mt-switch>
-                </div>
-              </van-col>
-              <van-col span="12">
-                <div>
-                  {{item.indexDetail.condition_sell_number}}
-                  <!--<van-radio-group-->
-                    <!--direction="horizontal"-->
-                    <!--v-model="item.indexDetail.condition_sell_number"-->
-                  <!--&gt;-->
-                    <!--<van-radio :name="0.5">1/2</van-radio>-->
-                    <!--<van-radio :name="1">1</van-radio>-->
-                  <!--</van-radio-group>-->
-                </div>
-              </van-col>
-            </van-row>
-          </div>
+          <!--<van-row>-->
+            <!--<van-col span="12">-->
+              <!--<div>-->
+                <!--<mt-switch v-model="item.indexDetail.condition_buy_status" @change="stChange(item.indexDetail)">条件买策略</mt-switch>-->
+              <!--</div>-->
+            <!--</van-col>-->
+            <!--<van-col span="12">-->
+              <!--<div>-->
+                <!--{{item.indexDetail.condition_buy_number}}-->
+                <!--&lt;!&ndash;<van-radio-group&ndash;&gt;-->
+                  <!--&lt;!&ndash;direction="horizontal"&ndash;&gt;-->
+                  <!--&lt;!&ndash;v-model="item.indexDetail.condition_buy_number"&ndash;&gt;-->
+                <!--&lt;!&ndash;&gt;&ndash;&gt;-->
+                  <!--&lt;!&ndash;<van-radio :name="0.5">1/2</van-radio>&ndash;&gt;-->
+                  <!--&lt;!&ndash;<van-radio :name="1">1</van-radio>&ndash;&gt;-->
+                <!--&lt;!&ndash;</van-radio-group>&ndash;&gt;-->
+              <!--</div>-->
+            <!--</van-col>-->
+          <!--</van-row>-->
+          <!--<div>-->
+            <!--<van-row>-->
+              <!--<van-col span="12">-->
+                <!--<div>-->
+                  <!--<mt-switch v-model="item.indexDetail.condition_sell_status"  @change="stChange(item.indexDetail)">条件卖策略</mt-switch>-->
+                <!--</div>-->
+              <!--</van-col>-->
+              <!--<van-col span="12">-->
+                <!--<div>-->
+                  <!--{{item.indexDetail.condition_sell_number}}-->
+                  <!--&lt;!&ndash;<van-radio-group&ndash;&gt;-->
+                    <!--&lt;!&ndash;direction="horizontal"&ndash;&gt;-->
+                    <!--&lt;!&ndash;v-model="item.indexDetail.condition_sell_number"&ndash;&gt;-->
+                  <!--&lt;!&ndash;&gt;&ndash;&gt;-->
+                    <!--&lt;!&ndash;<van-radio :name="0.5">1/2</van-radio>&ndash;&gt;-->
+                    <!--&lt;!&ndash;<van-radio :name="1">1</van-radio>&ndash;&gt;-->
+                  <!--&lt;!&ndash;</van-radio-group>&ndash;&gt;-->
+                <!--</div>-->
+              <!--</van-col>-->
+            <!--</van-row>-->
+          <!--</div>-->
           <!--<div>-->
           <!--<mt-radio-->
           <!--title="卖条件数量"-->

@@ -86,6 +86,7 @@
             <span v-if="isInDingtouStatus(item.key)" class="fm-tag s-red">定投</span>
             <span v-if="isBadDown(item.key)" class="fm-tag s-black">年季危，卖出</span>
             <span v-if="ifRemoveFix(item.key)" class="fm-tag s-black">不再定投</span>
+            <span v-if="ifSellShow(item.key)" class="fm-tag s-black">卖1/10</span>
             <span v-if="item.key === 'baijiu' && baijiuwarn" class="fm-tag s-green">{{baijiuwarn}}</span>
             <span style="float: right" :class="stockNumberClass(rateInfo[item.key])">{{rateInfo[item.key]}}%</span>
           </h3>

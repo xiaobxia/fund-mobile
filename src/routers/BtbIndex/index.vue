@@ -6,6 +6,7 @@
       </mt-button>
     </mt-header>
     <div class="main-body">
+      <mt-field label="仓位" placeholder="请输入" v-model="position"></mt-field>
       <mt-field label="USDT价格" placeholder="请输入" v-model="usdtMoney"></mt-field>
       <div class="r">总计：{{parseFloat(usdtAll).toFixed(2)}}，市值：{{usdtCountMoney(usdtAll)}}，仓位：{{countRate(positionAll, usdtAll)}}%</div>
       <div>上穿时macd必须是红的</div>
@@ -128,15 +129,20 @@ export default {
       proportionAll: 0,
       usdtAll: 0,
       usdtMoney: localStorage.getItem('usdtMoney') || 0,
-      positionAll: 0
+      positionAll: 0,
+      position: 0
     }
   },
   watch: {
     usdtMoney (val) {
       localStorage.setItem('usdtMoney', val || 0)
+    },
+    position (val) {
+      this.positionChange()
     }
   },
   created () {
+    this.queryPosition()
     this.$http.get('btbIndex/getMyBalanceInfo').then((res) => {
       const data = res.data || {}
       let all = data['ALL'].count
@@ -299,6 +305,21 @@ export default {
     },
     getCountUsdt (proportion) {
       return this.usdtAll * (proportion / this.proportionAll)
+    },
+    queryPosition () {
+      this.$http.get('sys/getDictionaryByKey', {
+        key: 'btbPositionConfig'
+      }).then((res) => {
+        const data = res.data || {}
+        const value = parseInt(data.value || 0) || 0
+        this.position = value
+      })
+    },
+    positionChange () {
+      this.$http.post('sys/updateDictionaryByKey', {
+        key: 'btbPositionConfig',
+        value: this.position
+      })
     }
   }
 }

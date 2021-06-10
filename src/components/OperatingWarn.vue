@@ -139,7 +139,7 @@
         <div class="red-text b-t">多</div>
         <mt-cell-swipe>
         <div slot="title">
-          <h3>上升时锁仓都买</h3>
+          <h3><span style="color: red">增仓</span>上升时锁仓都买</h3>
         </div>
         <div class="right-wrap">
           <mt-switch v-model="upNoSell" @change="stateChangeHandler"></mt-switch>
@@ -147,7 +147,7 @@
       </mt-cell-swipe>
         <mt-cell-swipe>
           <div slot="title">
-            <h3>上升时不锁仓月上也有买（但也不是随便买）</h3>
+            <h3><span style="color: red">增仓</span>上升时不锁仓月上也有买（但也不是随便买）</h3>
           </div>
           <div class="right-wrap">
             <mt-switch v-model="upMUB" @change="stateChangeHandler"></mt-switch>
@@ -155,7 +155,7 @@
         </mt-cell-swipe>
         <mt-cell-swipe>
           <div slot="title">
-            <h3>上升时月上不随便卖（并不是都不卖）</h3>
+            <h3><span style="color: red">增仓</span>上升时月上不随便卖（并不是都不卖）</h3>
           </div>
           <div class="right-wrap">
             <mt-switch v-model="upMNS" @change="stateChangeHandler"></mt-switch>
@@ -171,7 +171,7 @@
         </mt-cell-swipe>
         <mt-cell-swipe>
           <div slot="title">
-            <h3>开启偏多仓位跟随</h3>
+            <h3><span style="color: red">增仓</span>开启偏多仓位跟随</h3>
           </div>
           <div class="right-wrap">
             <mt-switch v-model="PQB" @change="stateChangeHandler"></mt-switch>
@@ -195,7 +195,7 @@
         </mt-cell-swipe>
         <mt-cell-swipe>
           <div slot="title">
-            <h3>关闭下趋势高仓没买入</h3>
+            <h3><span style="color: red">增仓</span>关闭下趋势高仓没买入</h3>
           </div>
           <div class="right-wrap">
             <mt-switch v-model="HPNS" @change="stateChangeHandler"></mt-switch>
@@ -212,7 +212,7 @@
         </mt-cell-swipe>
         <mt-cell-swipe>
           <div slot="title">
-            <h3>策略取向偏卖出</h3>
+            <h3><span style="color: green">减仓</span>策略取向偏卖出</h3>
           </div>
           <div class="right-wrap">
             <mt-switch v-model="CQXS" @change="stateChangeHandler"></mt-switch>
@@ -220,7 +220,7 @@
         </mt-cell-swipe>
         <mt-cell-swipe>
           <div slot="title">
-            <h3>强制卖出</h3>
+            <h3><span style="color: green">减仓</span>强制卖出</h3>
           </div>
           <div class="right-wrap">
             <mt-switch v-model="QZMC" @change="stateChangeHandler"></mt-switch>
@@ -228,7 +228,7 @@
         </mt-cell-swipe>
         <mt-cell-swipe>
           <div slot="title">
-            <h3>开启砍仓卖出</h3>
+            <h3><span style="color: green">减仓</span>开启砍仓卖出</h3>
           </div>
           <div class="right-wrap">
             <mt-switch v-model="PQS" @change="stateChangeHandler"></mt-switch>
@@ -236,7 +236,7 @@
         </mt-cell-swipe>
         <mt-cell-swipe>
           <div slot="title">
-            <h3>减仓位取向波段</h3>
+            <h3><span style="color: green">减仓</span>减仓位取向波段</h3>
           </div>
           <div class="right-wrap">
             <mt-switch v-model="CPQXB" @change="stateChangeHandler"></mt-switch>

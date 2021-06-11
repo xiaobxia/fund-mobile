@@ -6,6 +6,7 @@
       </mt-button>
     </mt-header>
     <div class="main-body">
+      <mt-switch v-model="btbOpen" @change="openChange">是否开启策略</mt-switch>
       <mt-field label="仓位" placeholder="请输入" v-model="position"></mt-field>
       <mt-field label="USDT价格" placeholder="请输入" v-model="usdtMoney"></mt-field>
       <div class="r">总计：{{parseFloat(usdtAll).toFixed(2)}}，市值：{{usdtCountMoney(usdtAll)}}，仓位：{{countRate(positionAll, usdtAll)}}%</div>
@@ -130,7 +131,8 @@ export default {
       usdtAll: 0,
       usdtMoney: localStorage.getItem('usdtMoney') || 0,
       positionAll: 0,
-      position: 0
+      position: 0,
+      btbOpen: false
     }
   },
   watch: {
@@ -143,6 +145,7 @@ export default {
   },
   created () {
     this.queryPosition()
+    this.queryOpen()
     this.$http.get('btbIndex/getMyBalanceInfo').then((res) => {
       const data = res.data || {}
       let all = data['ALL'].count
@@ -315,10 +318,24 @@ export default {
         this.position = value
       })
     },
+    queryOpen () {
+      this.$http.get('sys/getDictionaryByKey', {
+        key: 'btbOpen'
+      }).then((res) => {
+        const data = res.data || {}
+        this.btbOpen = data.value === 'true'
+      })
+    },
     positionChange () {
       this.$http.post('sys/updateDictionaryByKey', {
         key: 'btbPositionConfig',
         value: this.position
+      })
+    },
+    openChange () {
+      this.$http.post('sys/updateDictionaryByKey', {
+        key: 'btbOpen',
+        value: `${this.btbOpen}`
       })
     }
   }

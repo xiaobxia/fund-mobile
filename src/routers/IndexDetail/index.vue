@@ -65,8 +65,17 @@
           :grid="grid">
         </ve-line>
       </div>
-      <div class="index-rate">
-        <span :class="stockNumberClass(indexChangeRatio)">{{indexChangeRatio}}%</span>
+      <div class="detail-info-wrap">
+        <div class="item">
+          <span class="label">幅度：</span>
+          <span class="value">
+              <span :class="stockNumberClass(indexChangeRatio)">{{indexChangeRatio}}%</span>
+          </span>
+        </div>
+        <div class="item">
+          <span class="label">定卖：</span>
+          <span class="value">{{$route.query.fsr}}</span>
+        </div>
       </div>
       <div class="detail-info-wrap">
         <div class="item">

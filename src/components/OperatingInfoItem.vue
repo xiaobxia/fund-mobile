@@ -767,7 +767,10 @@ export default {
     },
     toPath (path) {
       this.$router.push({
-        path: path
+        path: path,
+        query: {
+          fsr: this.getFixSellRate()
+        }
       })
     },
     tagdTShow () {

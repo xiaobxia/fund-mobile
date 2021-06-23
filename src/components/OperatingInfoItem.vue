@@ -1890,7 +1890,8 @@ export default {
         if (this.hasCount < (this.positionStandard * 0.34 * 0.66)) {
           const PLNS = storageUtil.getData('upDownConfig', 'PLNS') || false
           // 不处于坏情况
-          if (PLNS && !this.isInBadDown()) {
+          // if (PLNS && !this.isInBadDown()) {
+          if (PLNS) {
             if (!fbs) {
               classListF = this.removeSell(classListF)
               lowPNoSell = true

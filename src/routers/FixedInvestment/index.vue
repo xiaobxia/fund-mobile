@@ -452,7 +452,7 @@ export default {
         },
         // 食品
         'sz399396': {
-          buy: 1,
+          buy: 0.7,
           sell: 1,
           a: 30,
           b: -20,

@@ -9505,7 +9505,7 @@ const codeMap = {
     days: 1000,
     topLine: 7.5,
     cutDownLine: 14,
-    positionFg: 1
+    positionFg: 0.875
   },
   'shipin': {
     code: 'sz399396',
@@ -9752,7 +9752,7 @@ const codeMap = {
     days: 900,
     topLine: 20,
     cutDownLine: 35,
-    positionFg: 1
+    positionFg: 0.875
   },
   'sanbai': {
     code: 'sh000300',

@@ -20,6 +20,7 @@
         <div>
           <span v-if="kuanBuy >= 4" class="red-text">本金追加{{getAppMoney()}}</span>
         </div>
+        <div>混合：{{hhList.length}}只</div>
         <div class="small-10">
           <mt-cell-swipe v-for="(item) in hhList" :key="item.code">
             <div slot="title">

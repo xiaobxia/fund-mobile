@@ -137,6 +137,7 @@
       <div class="d-w">
         <div class="red-text">都说风险了，那就倾向卖出，锁仓第一跌不买，建议仓位在5以下</div>
         <div class="red-text b-t">多</div>
+        <div>锁仓买关了影响挣钱，最好是通过金额来控制</div>
         <mt-cell-swipe>
         <div slot="title">
           <h3><span style="color: red">增仓</span>上升时锁仓都买</h3>

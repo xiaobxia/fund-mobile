@@ -142,6 +142,10 @@
               <span class="label">持仓盈亏：</span>
               <span class="value" :class="stockNumberClass(fundNowIncome)">{{fundNowIncome}}%</span>
             </span>
+          <span class="item">
+              <span class="label">底仓线：</span>
+              <span class="value">{{$formatMoney(positionStandard * 0.34)}}</span>
+            </span>
         </div>
       </div>
       <div class="tip-b" @click="tagdTShow"></div>

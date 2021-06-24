@@ -69,7 +69,7 @@
             <span v-if="lostHighCut" class="fm-tag s-black">砍仓</span>
             <span v-if="lowPBuy" class="fm-tag s-red">强买</span>
             <span v-if="lowPNoSell" class="fm-tag s-red">留底仓</span>
-            <span v-if="downLockSell" class="fm-tag s-black">下锁卖2/3</span>
+            <span v-if="downLockSell" class="fm-tag s-black">下锁卖2/3，也卖定</span>
             <!--执行部分-->
             <span
               v-if="ifQuarterHotCut()"

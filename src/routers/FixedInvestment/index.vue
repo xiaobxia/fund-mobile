@@ -20,6 +20,16 @@
         <div>
           <span v-if="kuanBuy >= 4" class="red-text">本金追加{{getAppMoney()}}</span>
         </div>
+        <div>组合：{{zhList.length}}只， 买入金额是两倍</div>
+        <div>
+          <mt-cell-swipe v-for="(item) in zhList" :key="item.name">
+            <div slot="title">
+              <h3>
+                <span class="index-name">{{item.name}}</span>
+              </h3>
+            </div>
+          </mt-cell-swipe>
+        </div>
         <div>混合：{{hhList.length}}只</div>
         <div class="small-10">
           <mt-cell-swipe v-for="(item) in hhList" :key="item.code">
@@ -283,6 +293,12 @@ export default {
           list: []
         }
       ],
+      zhList: [
+        {
+          name: '中欧股票全明星组合',
+          list: []
+        }
+      ],
       // 混合
       hhList: [
         {
@@ -419,7 +435,7 @@ export default {
         },
         // 上证50
         'sh000016': {
-          buy: 1.15,
+          buy: 1,
           sell: 0.7,
           a: 20,
           b: -10,
@@ -429,7 +445,7 @@ export default {
         // 这东西很危险压根就不能定投，但是现在属于出清了一次，所以又拿出来投
         // 出清线是年线-20
         'sz399006': {
-          buy: 0.85,
+          buy: 1,
           sell: 1.15,
           a: 25,
           b: -20,
@@ -1082,8 +1098,8 @@ export default {
       }
       // 平均
       const average = sum / 8
-      // 只有10只，后面有加入那也按10只的总金额分配
-      return parseInt(average * (10 / this.hhList.length))
+      // 只有16只，后面有加入那也按16只的总金额分配
+      return parseInt(average * (16 / (this.hhList.length + this.zhList.length)))
     },
     getAllBuySum () {
       let sum = 0

@@ -125,6 +125,7 @@
             <span class="value">{{nowPosition}}</span>
           </div>
         </div>
+        <div v-if="nowPosition < 60" class="red-text">小于6层就不用太倾向于卖出了</div>
         <div v-if="nowPosition - userFundAccountInfo.positionConfig >= 20" class="green-text">
           策略倾向卖出
         </div>

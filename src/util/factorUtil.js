@@ -528,6 +528,7 @@ export default {
     }
   },
   getDaVFactor: function (indexKey, buySell) {
+    // TODO 这个因子不能偏离1超过0.15
     let factor = 1
     const d = dateUtil.getDate()
     const day = d.getDate()
@@ -535,7 +536,7 @@ export default {
     const year = d.getFullYear()
     // 2021大概率上影线
     if (year === 2021 && month >= 2) {
-      factor = 0.85
+      // factor = 0.9
     }
     // if (year === 2021 && month === 6) {
     //   factor = 0.7

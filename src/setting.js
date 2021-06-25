@@ -28,5 +28,21 @@ export default {
     'chuanmei',
     'jijian',
     'dichan'
+  ],
+  highRate: [
+    // 'chuanmei',
+    // 'youse',
+    // 'dichan',
+    // 'baoxian',
+    // 'qiche',
+    // 'yiliao',
+    // 'baijiu'
+  ],
+  kuanji: [
+    'sanbai',
+    'wubai',
+    'wulin',
+    'yiqian',
+    'chuangye'
   ]
 }

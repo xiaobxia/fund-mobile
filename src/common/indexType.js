@@ -1,6 +1,7 @@
 import indexList from '@/common/indexList.js'
 import dateUtil from '@/util/dateUtil'
 import storageUtil from '@/util/storageUtil.js'
+import setting from '@/setting.js'
 
 // 机构指数
 let jigou = []
@@ -39,24 +40,10 @@ if (month < 11) {
 }
 
 // 高费率指数
-const highRate = [
-  'chuanmei',
-  'youse',
-  'dichan',
-  'baoxian',
-  'qiche',
-  'yiliao',
-  'baijiu'
-]
+const highRate = setting.highRate
 
 // 宽指数
-const kuanji = [
-  'sanbai',
-  'wubai',
-  'wulin',
-  'yiqian',
-  'chuangye'
-]
+const kuanji = setting.kuanji
 
 function keyToName (keyList) {
   const list = []

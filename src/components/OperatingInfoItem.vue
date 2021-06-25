@@ -1657,12 +1657,13 @@ export default {
       // 锁仓的指数太少也危险，很有可能是假的稳定
       const manyToLess = storageUtil.getData('noBuySellConfig', 'manyToLess') || false
       if (this.ifInNoSellStatus()) {
-        // 因为信仰关系
+        // 如果是食品和白酒
         if (['shipin', 'baijiu'].indexOf(this.indexInfo.key) !== -1) {
           ifNoSellF = true
           // 锁仓了
           // 研究过了，季度线上和季度线下，没什么区别
           if (this.rate < 0) {
+            // 如果是减仓取向或者控仓或则下降趋势
             if (this.CQXS || this.stockIndexPSF) {
               if (this.ifTwoDown) {
                 classListF.push('should-buy')
@@ -1697,7 +1698,9 @@ export default {
             // 锁仓了
             // 研究过了，季度线上和季度线下，没什么区别
             if (this.rate < 0) {
+              // 如果是减仓取向或者控仓
               if (this.CQXS || this.stockIndexPSF) {
+                // 第二次买
                 if (this.ifTwoDown) {
                   classListF.push('should-buy')
                   if (this.ifHasBuy(classListF)) {

@@ -1657,8 +1657,11 @@ export default {
       // 锁仓的指数太少也危险，很有可能是假的稳定
       const manyToLess = storageUtil.getData('noBuySellConfig', 'manyToLess') || false
       if (this.ifInNoSellStatus()) {
-        // 如果是食品和白酒
-        if (['shipin', 'baijiu'].indexOf(this.indexInfo.key) !== -1) {
+        // 如果是食品和白酒，或则仓位小
+        if (
+          ['shipin', 'baijiu'].indexOf(this.indexInfo.key) !== -1 ||
+          this.hasCount < (this.positionStandard * 0.34 * 0.66)
+        ) {
           ifNoSellF = true
           // 锁仓了
           // 研究过了，季度线上和季度线下，没什么区别

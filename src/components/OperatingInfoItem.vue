@@ -1896,8 +1896,12 @@ export default {
         }
       }
       // 留底仓逻辑
-      if (this.qDiffAvRateIndex > 0.5 && !this.stockIndexPSF && this.averageMonthIndex > 0) {
-        if (this.hasCount < (this.positionStandard * 0.34)) {
+      if (this.qDiffAvRateIndex > 0.5 && this.averageMonthIndex > 0) {
+        let lr = 0.34
+        if (this.stockIndexPSF) {
+          lr = 0.34
+        }
+        if (this.hasCount < (this.positionStandard * lr)) {
           const PLNS = storageUtil.getData('upDownConfig', 'PLNS') || false
           // 不处于坏情况
           // if (PLNS && !this.isInBadDown()) {

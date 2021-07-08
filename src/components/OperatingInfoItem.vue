@@ -1823,6 +1823,7 @@ export default {
         // 加入卖出
         classListF.push(sellClass)
       }
+      // 见顶逻辑
       // TODO 本来大涨，结果下跌，一般是见顶了，是在锁仓策略定投策略之上的
       if (this.ifHighDown()) {
         // 没有任何买入

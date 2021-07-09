@@ -1787,7 +1787,7 @@ export default {
       // TODO cs-回测了表现还行，季度过热以后要解除了才能买
       // TODO 季线危险阶段，又是月下，没有买入信号，因为很可能是无止境得跌
       if (this.isInQuarterHotToday) {
-        if (this.averageMonthIndex < 0) {
+        if (this.averageMonthIndex < 0 && this.qDiffAvRateIndex < 0) {
           classListF = this.removeBuy(classListF)
           // // 高仓的话还要卖出
           // if (this.positionHigh) {
